@@ -11,6 +11,7 @@ import {api} from "/scripts/api.js";
 import {app} from "/scripts/app.js";
 import {launchMessage} from "./app-mode.js";
 import {installTextClipboard} from "./clipboard.js";
+import {syncGuidedBranch,syncGuidedOutputs} from './guided/graph.js';
 
 export class FoundryShell {
     constructor(host,node) {
@@ -47,6 +48,13 @@ export class FoundryShell {
             if(typeof id==='string'&&/^[a-f0-9]{32}$/.test(id))this.openHairWizard({runId:id});
         };
         api.addEventListener('mumblebox-foundry-hair',this.agentHairHandler);
+        // Native processing belongs to the selected graph, not a particular
+        // wizard page. Navigation within Foundry must not disconnect Rocket.
+        this.guidedBindHandler=e=>this.bindGuided(e.detail).catch(error=>this.message(error.message,true));
+        api.addEventListener('guided.bind',this.guidedBindHandler);
+        this.guidedHeartbeat=setInterval(()=>{
+            if(this.node.properties.foundryGuided?.id)this.guidedLive().catch(()=>{});
+        },15000);
     }
     build() {
         this.version=el("small",{},"Interface loading");
@@ -84,6 +92,8 @@ export class FoundryShell {
     async bootstrap() {
         try {
             this.data=await request("bootstrap");
+            if(!this.node.graph._nodes.some(n=>n.properties?.guidedOwner===this.node.id))
+                syncGuidedBranch(await request('guided/template'),this.node);
             this.version.textContent="v"+this.data.version;
             this.root.dataset.motion=this.data.preferences.busy_motion||"system";
             if(this.data.preferences.theme) await this.setTheme(this.data.preferences.theme,false);
@@ -166,6 +176,60 @@ export class FoundryShell {
         }catch(error){wizard?.dispose();this.content.replaceChildren(el("p",{role:"alert","data-connection-error":String(error.code==="FOUNDRY_OFFLINE")},error.message));}
     }
 
+    chooseMesh(handoff,origin){
+        this.pendingMeshHandoff=handoff;this.meshOrigin=origin;
+        return this.open('Choose a Workflow');
+    }
+    async guidedLive(requestId,jobId=this.node.properties.foundryGuided?.id){
+        if(this.node.graph!==app.graph||!this.host.isConnected)return;
+        if(requestId)this.guidedBinding=requestId;
+        return request('guided/live',{selected:true,job_id:jobId||null,client_id:api.clientId||'',
+            workflow:app.extensionManager.workflow.activeWorkflow.path,request_id:this.guidedBinding||null});
+    }
+    async bindGuided(data){
+        if(this.node.graph!==app.graph||!this.host.isConnected||data.job_id&&data.job_id!==this.node.properties.foundryGuided?.id)return;
+        syncGuidedBranch(data.canvas_graph||data.graph,this.node,{offset:data.offset||(data.finishing?200000:100000),replace:!data.finishing});
+        syncGuidedOutputs(data.saved_outputs,this.node);
+        await this.guidedLive(data.request_id);
+    }
+    async openMeshMethod(method){
+        const handoff=this.pendingMeshHandoff;
+        if(method==='guided'){
+            if(await this.openGuidedWizard({handoff})===false)return;
+        }
+        else{
+            await this.openWizard({resume:!!this.meshOrigin});
+            const w=this.wizard;
+            if(handoff&&w){Object.assign(w.draft,{name:handoff.name,category:handoff.category,references:handoff.references,image_creation:handoff.image_creation});w.runId=null;w.run=null;w.go(1);}
+        }
+        this.pendingMeshHandoff=null;this.meshOrigin=null;
+    }
+    async openGuidedWizard(options={}){
+        const current=this.node.properties?.foundryGuided?.id;
+        if(current&&!options.resume){
+            try{
+                const run=await request('guided/runs/'+current);
+                if(run.active||run.preparing||run.finishing?.active){
+                    this.message('The current 3D-Guided asset is still running. Resume it, or wait before starting another object.',true);
+                    return false;
+                }
+            }catch(error){this.message(error.message,true);return false;}
+        }
+        this.viewDispose?.();this.viewDispose=null;
+        const sequence=this.sequence=(this.sequence||0)+1;
+        this.tab='Choose a Workflow';this.content.replaceChildren(hint('Opening the independent 3D-Guided workflow…'));
+        let wizard;
+        try{
+            const {GuidedWizard}=await import('./guided/controller.js');wizard=new GuidedWizard(this,options);
+            const element=await wizard.init();
+            if(sequence!==this.sequence){wizard.dispose();return;}
+            this.content.replaceChildren(element);this.content.scrollTop=0;this.guidedWizard=wizard;
+            this.viewDispose=()=>wizard.dispose();this.content.setAttribute('aria-label','3D-Guided wizard');
+            [...this.nav.children].forEach((n,i)=>n.setAttribute('aria-selected',String(i===0)));
+            return true;
+        }catch(error){wizard?.dispose();this.content.replaceChildren(el('p',{role:'alert'},error.message));return false;}
+    }
+
     async openHairWizard(options={}) {
         this.viewDispose?.();this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;
@@ -184,5 +248,5 @@ export class FoundryShell {
         try{const module=await import("./views/settings.js");return module.render(this,options);}
         catch(error){this.message(error.message,true);}
     }
-    dispose() {this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
+    dispose() {clearInterval(this.guidedHeartbeat);api.removeEventListener('guided.bind',this.guidedBindHandler);this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
 }

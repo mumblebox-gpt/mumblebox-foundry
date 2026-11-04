@@ -1,5 +1,5 @@
 import {el,hint} from "../dom.js";
-export async function mountMesh(container,url,module) {
+export async function mountMesh(container,url,module,filename) {
     let factory=window.comfyAPI?.createLoad3d?.createLoad3d;
     if(!factory&&module)factory=(await import(module.url))[module.export];
     if(!factory)throw Error("The native Comfy 3D viewer is not available.");
@@ -14,7 +14,10 @@ export async function mountMesh(container,url,module) {
     const releaseInput=controls?installOrbitInput(container,controls):()=>{};
     const dispose=()=>{disposed=true;events.abort();releaseInput();resize.disconnect();viewer.remove?.();viewer.dispose?.();};
     try{
-        await viewer.loadModel(url);
+        // Native loaders infer format from a filename query or this explicit
+        // name. Owned artifact routes have neither a filename nor an extension.
+        const status=await viewer.loadModel(url,filename,{silent:true});
+        if(status&&status!=='loaded')throw Error('The mesh preview could not load: '+status);
         if(disposed)return dispose;
         viewer.handleResize();viewer.fitToViewer();
         // Apply the native viewer's intended light multiplier, which its bare

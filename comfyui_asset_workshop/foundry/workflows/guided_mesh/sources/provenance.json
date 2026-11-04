@@ -1,0 +1,15 @@
+{
+  "source_root": "C:\\Dev\\mumblebox-foundry\\comfyui_asset_workshop",
+  "source_commit": "8ff4fb9fbcc56af502de5c04ccc040ff80e67834",
+  "source_hashes": {
+    "foundry/workflows/image_to_3d/template.json": "0a6ad546f6ddc9b64796fbcada5ad3a9a2978909eb616d69334e58a736215e52",
+    "models.lock.json": "25363729b61cd403c09d5ec92b5c304696626b5805a1dd77a98b6d2edd7fea53",
+    "foundry/workflows/image_to_3d/prompts.py": "53d79f0de173dddf926e1218de7cab89cadabb0e58795649d0dc8394c693bede"
+  },
+  "license": "Apache-2.0 for original Foundry code; retain upstream model terms",
+  "upstream": [
+    "https://github.com/mumblebox-gpt/mumblebox-foundry",
+    "https://github.com/pixelartistry/PixelArtistry-Pixal3D-Multiview",
+    "https://huggingface.co/lilylilith/QI_2.1_AnyAngle"
+  ]
+}

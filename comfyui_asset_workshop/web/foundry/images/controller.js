@@ -70,11 +70,7 @@ export class ImageCreator{
         else if(destination==='3d'){
             const handoff=await request('images/'+this.id+'/handoff',{});
             const origin=this.shell.imageOrigin;delete this.shell.imageOrigin;
-            await this.shell.openWizard({resume:!!origin});
-            const w=this.shell.wizard;
-            if(w?.run?.active)throw Error('The 3D wizard is busy. Your image pair is saved in Gallery.');
-            Object.assign(w.draft,{name:handoff.name,category:handoff.category,references:handoff.references,image_creation:handoff.image_creation});
-            w.runId=null;w.run=null;w.go(1);
+            await this.shell.chooseMesh(handoff,origin);
         }
     }
     async edit(side){const {editImage}=await import('./editor.js');return editImage(this,side);}

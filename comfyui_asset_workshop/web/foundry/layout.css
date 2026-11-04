@@ -162,3 +162,28 @@ dl {display:grid;grid-template-columns:140px 1fr;gap:8px 16px;}dt {color:var(--m
 @container (max-width:620px){.civitai-heading{flex-wrap:wrap;}.civitai-heading h2{font-size:24px;}}
 
 .update-notice{display:flex;align-items:center;flex-wrap:wrap;gap:4px 14px;padding:4px 20px;background:var(--soft);border-bottom:1px solid var(--border);font-size:14px}.update-notice[hidden]{display:none}.update-settings .choice{display:flex;align-items:center;gap:10px;min-height:44px}.update-settings input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}.release-notes{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;font-size:14px;margin-top:16px}
+/* Compact workflow navigation. Half each image dimension is about one quarter
+   of the previous artwork area; controls and text keep readable dimensions. */
+.mesh-category{border:1px solid var(--border);border-radius:12px;background:var(--panel);overflow:hidden}
+.mesh-category>summary{cursor:pointer;list-style:none;border:0;border-radius:0;grid-template-columns:155px minmax(0,1fr)}
+.mesh-category>summary::-webkit-details-marker{display:none}
+.mesh-category>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
+.mesh-category>summary .workflow-art{height:150px;min-height:150px}
+.mesh-category>summary .workflow-art img{height:150px;object-fit:cover}
+.mesh-category .card-body{padding:16px 20px}
+.mesh-category .card-body h3{margin:5px 0;font-size:23px}
+.mesh-category .card-body p{margin:7px 0}
+.method-disclosure{display:inline-block;font-weight:600;margin-top:7px}
+.mesh-category[open] .method-disclosure{color:var(--accent)}
+.mesh-methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:16px;border-top:1px solid var(--border)}
+.mesh-method{border:1px solid var(--border);border-radius:10px;padding:16px;background:var(--panel)}
+.mesh-method h3{font-size:20px;margin:10px 0}
+.mesh-method .actions{flex-wrap:wrap}.mesh-method button{min-height:44px}
+.foundry .future-workflows{margin-top:18px;gap:12px}
+.foundry .planned-workflow{grid-template-columns:75px minmax(0,1fr)}
+.foundry .planned-workflow>img{height:90px;min-height:0;object-fit:contain;align-self:start}
+.foundry .planned-workflow>div{padding:12px}
+.guided-view-choice{border:1px solid var(--border);border-radius:8px;padding:10px}
+.guided-wizard .image-preview>img{max-height:300px;object-fit:contain}
+.guided-wizard .image-preview{max-width:100%}
+@container foundry (max-width:780px){.mesh-methods{grid-template-columns:1fr}.mesh-category>summary{grid-template-columns:100px minmax(0,1fr)}.mesh-category>summary .workflow-art,.mesh-category>summary .workflow-art img{height:120px;min-height:120px}.mesh-category .card-body{padding:12px}.mesh-category .card-body h3{font-size:19px}.foundry .planned-workflow{grid-template-columns:75px minmax(0,1fr)}}

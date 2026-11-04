@@ -197,6 +197,7 @@ def install(root,source=None,repair=False):
     install_extension(layout,blender,source)
     # Probe software imports without loading weights or allocating GPU models.
     run([layout.host_python,'-c','import torch,torchvision,trimesh,keyring; print("Host imports OK",torch.__version__)'])
+    run([layout.host_python,'-c','import sys; sys.path.insert(0,sys.argv[1]); from comfy.ldm.moge.model import MoGeModel; from PIL import Image; import numpy,psutil; print("Guided camera/render adapter imports OK")',layout.comfy])
     run([layout.worker_python,'-c','import torch,cumesh,flex_gemm,nvdiffrast,nvdiffrec_render,o_voxel,pymeshlab,meshlib; print("Finishing imports OK",torch.__version__)'])
     # Import the real texture entry point, including its ComfyUI dependencies.
     # A native-wheel-only probe misses libraries inherited from developer installs.

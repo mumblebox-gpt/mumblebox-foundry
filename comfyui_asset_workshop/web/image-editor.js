@@ -2,7 +2,7 @@ import {imageMagnet} from './image-selection.js';
 // Selection tools and review stay in this dialog while the visible graph executes.
 export async function openImageEditor({element:el, sourceURL, title, model, generate, accept, stop, progress, download,
                                       mode="image", initialMaskURL=null, prepareMask=null, keepLabel=null,
-                                      container=document.body,comparison=null,onSwitch=null}) {
+                                      container=document.body,comparison=null,onSwitch=null,settingsSummary=null}) {
     const foreground=mode==="foreground";
     container.querySelector(".aw-image-editor")?.close();
     const source = new Image();
@@ -142,7 +142,7 @@ export async function openImageEditor({element:el, sourceURL, title, model, gene
                 foreground?null:el("p",{class:"hint"},"Turn on to remove or rebuild a part. Leave off to keep its shape while changing its color or material."),
                 el("div",{class:"editor-sliders"},brushControl.element,softnessControl.element),
                 el("p",{class:"hint"},foreground?"Edge softness fades the cutout inward. Start at 0 to preserve thin parts and the automatic mask's soft edges.":"Edge softness blends inward from your selection. Pixels outside it stay unchanged."),
-                el("p",{class:"hint"},foreground?"This changes transparency only. It does not redraw the object or load an image generator.":`Using ${model} and your current steps, CFG, seed and LoRAs. Try again uses a new seed.`),
+                el("p",{class:"hint"},foreground?"This changes transparency only. It does not redraw the object or load an image generator.":settingsSummary??`Using ${model} and your current steps, CFG, seed and LoRAs. Try again uses a new seed.`),
                 status,progressBar,el("div",{class:"row"},generateButton,stopButton),
                 el("div",{class:"row"},keep,retry),
                 el("p",{class:"hint"},foreground?"Your original image stays unchanged. Keeping the cutout saves its transparency.":"Your original stays in use until you choose Keep this edit."),

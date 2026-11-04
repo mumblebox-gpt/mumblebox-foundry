@@ -1,0 +1,2016 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 56,
+      "steps": 12,
+      "cfg": 7.5,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "108",
+        0
+      ],
+      "positive": [
+        "324",
+        0
+      ],
+      "negative": [
+        "324",
+        1
+      ],
+      "latent_image": [
+        "87",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "15": {
+    "inputs": {
+      "clip_name": "dino_v3_L_naf_fp32.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision"
+    }
+  },
+  "18": {
+    "inputs": {
+      "seed": 42,
+      "steps": 20,
+      "cfg": 7.5,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "126",
+        0
+      ],
+      "positive": [
+        "91",
+        0
+      ],
+      "negative": [
+        "91",
+        1
+      ],
+      "latent_image": [
+        "91",
+        2
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "23": {
+    "inputs": {
+      "seed": 42,
+      "steps": 12,
+      "cfg": 7.5,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "126",
+        0
+      ],
+      "positive": [
+        "94",
+        0
+      ],
+      "negative": [
+        "94",
+        1
+      ],
+      "latent_image": [
+        "94",
+        2
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler"
+    }
+  },
+  "87": {
+    "inputs": {
+      "batch_size": 1
+    },
+    "class_type": "EmptyTrellis2LatentStructure",
+    "_meta": {
+      "title": "Empty Trellis2 Latent Structure"
+    }
+  },
+  "91": {
+    "inputs": {
+      "positive": [
+        "324",
+        0
+      ],
+      "negative": [
+        "324",
+        1
+      ],
+      "voxel": [
+        "119",
+        0
+      ]
+    },
+    "class_type": "Trellis2ShapeStage",
+    "_meta": {
+      "title": "Trellis2 Shape Stage"
+    }
+  },
+  "92": {
+    "inputs": {
+      "samples": [
+        "23",
+        0
+      ],
+      "vae": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "VaeDecodeShapeTrellis",
+    "_meta": {
+      "title": "Decoded detailed geometry - preserve original"
+    }
+  },
+  "94": {
+    "inputs": {
+      "target_resolution": 1024,
+      "positive": [
+        "91",
+        0
+      ],
+      "negative": [
+        "91",
+        1
+      ],
+      "shape_latent": [
+        "18",
+        0
+      ],
+      "vae": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "Trellis2UpsampleStage",
+    "_meta": {
+      "title": "Shape detail - 1024 initial profile"
+    }
+  },
+  "108": {
+    "inputs": {
+      "shift": 5,
+      "model": [
+        "125",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3"
+    }
+  },
+  "117": {
+    "inputs": {
+      "vae_name": "trellis_2_shape_vae_bf16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "119": {
+    "inputs": {
+      "resolution": "32",
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "VaeDecodeStructureTrellis2",
+    "_meta": {
+      "title": "Trellis2 VAE Decode Structure"
+    }
+  },
+  "125": {
+    "inputs": {
+      "multiplier": 0.7,
+      "model": [
+        "199",
+        0
+      ]
+    },
+    "class_type": "RescaleCFG",
+    "_meta": {
+      "title": "RescaleCFG"
+    }
+  },
+  "126": {
+    "inputs": {
+      "multiplier": 0.5,
+      "model": [
+        "279",
+        0
+      ]
+    },
+    "class_type": "RescaleCFG",
+    "_meta": {
+      "title": "RescaleCFG"
+    }
+  },
+  "192": {
+    "inputs": {
+      "bg_removal_model": [
+        "193",
+        0
+      ],
+      "image": [
+        "338",
+        0
+      ]
+    },
+    "class_type": "RemoveBackground",
+    "_meta": {
+      "title": "Remove Background"
+    }
+  },
+  "193": {
+    "inputs": {
+      "bg_removal_name": "birefnet.safetensors"
+    },
+    "class_type": "LoadBackgroundRemovalModel",
+    "_meta": {
+      "title": "Load Background Removal Model"
+    }
+  },
+  "199": {
+    "inputs": {
+      "cfg": 1,
+      "start_percent": 0.667,
+      "end_percent": 1,
+      "model": [
+        "319",
+        0
+      ]
+    },
+    "class_type": "CFGOverride",
+    "_meta": {
+      "title": "CFG Override"
+    }
+  },
+  "279": {
+    "inputs": {
+      "cfg": 1,
+      "start_percent": 0.769,
+      "end_percent": 1,
+      "model": [
+        "319",
+        0
+      ]
+    },
+    "class_type": "CFGOverride",
+    "_meta": {
+      "title": "CFG Override"
+    }
+  },
+  "312": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "pad_factor": 1.1,
+      "grow_mask": 0,
+      "background": "#000000",
+      "images": [
+        "338",
+        0
+      ],
+      "masks": [
+        "192",
+        0
+      ]
+    },
+    "class_type": "ImageCropToMask",
+    "_meta": {
+      "title": "Crop Image to Mask"
+    }
+  },
+  "319": {
+    "inputs": {
+      "unet_name": "pixal3d_multiview_bf16.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Installed Pixal3D MULTIVIEW - BF16"
+    }
+  },
+  "324": {
+    "inputs": {
+      "fov": 20,
+      "clip_vision_model": [
+        "15",
+        0
+      ],
+      "front": [
+        "340",
+        0
+      ],
+      "left": [
+        "344",
+        0
+      ],
+      "back": [
+        "343",
+        0
+      ],
+      "right": [
+        "346",
+        0
+      ]
+    },
+    "class_type": "Pixal3DMultiViewConditioning",
+    "_meta": {
+      "title": "Pixal3D Multi-View Conditioning"
+    }
+  },
+  "338": {
+    "inputs": {
+      "crop_region": {
+        "x": 0,
+        "y": 0,
+        "width": 1024,
+        "height": 2688
+      },
+      "image": [
+        "1557",
+        0
+      ]
+    },
+    "class_type": "ImageCropV2",
+    "_meta": {
+      "title": "Crop front (x=0)"
+    }
+  },
+  "340": {
+    "inputs": {
+      "filename_prefix": "foundry-template/340",
+      "format": "png",
+      "format.bit_depth": "8-bit",
+      "format.input_color_space": "sRGB",
+      "images": [
+        "312",
+        0
+      ]
+    },
+    "class_type": "SaveImageAdvanced",
+    "_meta": {
+      "title": "FRONT - cropped input preview"
+    }
+  },
+  "341": {
+    "inputs": {
+      "crop_region": {
+        "x": 1179,
+        "y": 8,
+        "width": 746,
+        "height": 2680
+      },
+      "image": [
+        "1557",
+        0
+      ]
+    },
+    "class_type": "ImageCropV2",
+    "_meta": {
+      "title": "Crop left (x=1179)"
+    }
+  },
+  "342": {
+    "inputs": {
+      "crop_region": {
+        "x": 1973,
+        "y": 0,
+        "width": 1149,
+        "height": 2688
+      },
+      "image": [
+        "1557",
+        0
+      ]
+    },
+    "class_type": "ImageCropV2",
+    "_meta": {
+      "title": "Crop back (x=1973)"
+    }
+  },
+  "343": {
+    "inputs": {
+      "filename_prefix": "foundry-template/343",
+      "format": "png",
+      "format.bit_depth": "8-bit",
+      "format.input_color_space": "sRGB",
+      "images": [
+        "350",
+        0
+      ]
+    },
+    "class_type": "SaveImageAdvanced",
+    "_meta": {
+      "title": "BACK - cropped input preview"
+    }
+  },
+  "344": {
+    "inputs": {
+      "filename_prefix": "foundry-template/344",
+      "format": "png",
+      "format.bit_depth": "8-bit",
+      "format.input_color_space": "sRGB",
+      "images": [
+        "349",
+        0
+      ]
+    },
+    "class_type": "SaveImageAdvanced",
+    "_meta": {
+      "title": "LEFT - cropped input preview"
+    }
+  },
+  "345": {
+    "inputs": {
+      "crop_region": {
+        "x": 3225,
+        "y": 0,
+        "width": 752,
+        "height": 2688
+      },
+      "image": [
+        "1557",
+        0
+      ]
+    },
+    "class_type": "ImageCropV2",
+    "_meta": {
+      "title": "Crop right (x=3225)"
+    }
+  },
+  "346": {
+    "inputs": {
+      "filename_prefix": "foundry-template/346",
+      "format": "png",
+      "format.bit_depth": "8-bit",
+      "format.input_color_space": "sRGB",
+      "images": [
+        "352",
+        0
+      ]
+    },
+    "class_type": "SaveImageAdvanced",
+    "_meta": {
+      "title": "RIGHT - cropped input preview"
+    }
+  },
+  "348": {
+    "inputs": {
+      "bg_removal_model": [
+        "193",
+        0
+      ],
+      "image": [
+        "341",
+        0
+      ]
+    },
+    "class_type": "RemoveBackground",
+    "_meta": {
+      "title": "Remove Background"
+    }
+  },
+  "349": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "pad_factor": 1.1,
+      "grow_mask": 0,
+      "background": "#000000",
+      "images": [
+        "341",
+        0
+      ],
+      "masks": [
+        "348",
+        0
+      ]
+    },
+    "class_type": "ImageCropToMask",
+    "_meta": {
+      "title": "Crop Image to Mask"
+    }
+  },
+  "350": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "pad_factor": 1.1,
+      "grow_mask": 0,
+      "background": "#000000",
+      "images": [
+        "342",
+        0
+      ],
+      "masks": [
+        "351",
+        0
+      ]
+    },
+    "class_type": "ImageCropToMask",
+    "_meta": {
+      "title": "Crop Image to Mask"
+    }
+  },
+  "351": {
+    "inputs": {
+      "bg_removal_model": [
+        "193",
+        0
+      ],
+      "image": [
+        "342",
+        0
+      ]
+    },
+    "class_type": "RemoveBackground",
+    "_meta": {
+      "title": "Remove Background"
+    }
+  },
+  "352": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "pad_factor": 1.1,
+      "grow_mask": 0,
+      "background": "#000000",
+      "images": [
+        "345",
+        0
+      ],
+      "masks": [
+        "353",
+        0
+      ]
+    },
+    "class_type": "ImageCropToMask",
+    "_meta": {
+      "title": "Crop Image to Mask"
+    }
+  },
+  "353": {
+    "inputs": {
+      "bg_removal_model": [
+        "193",
+        0
+      ],
+      "image": [
+        "345",
+        0
+      ]
+    },
+    "class_type": "RemoveBackground",
+    "_meta": {
+      "title": "Remove Background"
+    }
+  },
+  "381": {
+    "inputs": {
+      "mesh": [
+        "92",
+        0
+      ]
+    },
+    "class_type": "MeshToFile3D",
+    "_meta": {
+      "title": "01 - DECODED MASTER - before remesh - GLB"
+    }
+  },
+  "382": {
+    "inputs": {
+      "filename_prefix": "foundry-template/382",
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 3.799999999999999,
+            "y": 3.5,
+            "z": 10.4
+          },
+          "target": {
+            "x": 0,
+            "y": 2.5,
+            "z": 0
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.04433073118285891,
+            "y": 0.174086157830089,
+            "z": 0.007845237828654018,
+            "w": 0.9837007919932577
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": [
+          {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "quaternion": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        ]
+      },
+      "width": 768,
+      "height": 768,
+      "model_3d": [
+        "381",
+        0
+      ]
+    },
+    "class_type": "Save3DAdvanced",
+    "_meta": {
+      "title": "1 - BEFORE Hi3D - 3,945,436 triangles"
+    }
+  },
+  "412": {
+    "inputs": {
+      "filename_prefix": "foundry-template/412",
+      "format": "png",
+      "format.bit_depth": "8-bit",
+      "format.input_color_space": "sRGB",
+      "images": [
+        "1557",
+        0
+      ]
+    },
+    "class_type": "SaveImageAdvanced",
+    "_meta": {
+      "title": "2 - TURNAROUND SHEET - generated once, wired to all four crops"
+    }
+  },
+  "900": {
+    "inputs": {
+      "image": ""
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "1 - APPROVED IMAGE - only manual image input"
+    }
+  },
+  "901": {
+    "inputs": {
+      "filename_prefix": "foundry-template/901",
+      "format": "png",
+      "format.bit_depth": "8-bit",
+      "format.input_color_space": "sRGB",
+      "images": [
+        "900",
+        0
+      ]
+    },
+    "class_type": "SaveImageAdvanced",
+    "_meta": {
+      "title": "Approved image - preserved"
+    }
+  },
+  "1551": {
+    "inputs": {
+      "unet_name": "qwen_image_2.1_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Load Diffusion Model"
+    }
+  },
+  "1553": {
+    "inputs": {
+      "clip_name": "qwen3vl_8b_int8_convrot.safetensors",
+      "type": "qwen_image",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "Load CLIP"
+    }
+  },
+  "1554": {
+    "inputs": {
+      "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE"
+    }
+  },
+  "1556": {
+    "inputs": {
+      "width": 4096,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage",
+    "_meta": {
+      "title": "Empty Latent Image"
+    }
+  },
+  "1557": {
+    "inputs": {
+      "samples": [
+        "1558",
+        0
+      ],
+      "vae": [
+        "1554",
+        0
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE Decode"
+    }
+  },
+  "1558": {
+    "inputs": {
+      "seed": 939810832464276,
+      "steps": 25,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "1569",
+        0
+      ],
+      "positive": [
+        "1574",
+        0
+      ],
+      "negative": [
+        "1574",
+        1
+      ],
+      "latent_image": [
+        "1556",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "Qwen sampler - published 25 steps / CFG 1"
+    }
+  },
+  "1569": {
+    "inputs": {
+      "device": "auto",
+      "dtype": "default",
+      "model": [
+        "1551",
+        0
+      ]
+    },
+    "class_type": "QwenImage21Cache",
+    "_meta": {
+      "title": "Qwen cache - published auto / default"
+    }
+  },
+  "1574": {
+    "inputs": {
+      "prompt": "Turn the character in <image1> into an orthographic 3D modeling reference sheet: a single horizontal row of four equal-width panels, evenly spaced. From left to right: 1) front view. 2) left side view, an exact 90° profile, snout pointing to the left edge of the image, only one eye visible, the near arm pointing straight at the camera and strongly foreshortened, the far arm hidden behind the body. 3) back view, exactly 180°. 4) right side view, an exact 90° profile, snout pointing to the right edge of the image, only one eye visible, near arm foreshortened toward the camera, far arm hidden. The camera orbits a completely static character: same T-pose and same head direction in every view, the character never turns toward the camera. Identical outfit, colors, proportions and scale in all views, each character centered in its panel, feet on the same baseline, no overlap between views. Flat, even lighting, solid black background, no text, no labels.",
+      "negative_prompt": "",
+      "resolution": 0,
+      "clip": [
+        "1553",
+        0
+      ],
+      "images.image_1": [
+        "900",
+        0
+      ],
+      "vae": [
+        "1554",
+        0
+      ]
+    },
+    "class_type": "TextEncodeQwenImage21",
+    "_meta": {
+      "title": "Qwen turnaround instruction - published prompt unchanged"
+    }
+  },
+  "2001": {
+    "inputs": {
+      "url": ""
+    },
+    "class_type": "Hi3DBackend",
+    "_meta": {
+      "title": "Hi3D — existing local backend"
+    }
+  },
+  "2002": {
+    "inputs": {
+      "target_face_count": 4500000,
+      "placement_mode": "midpoint",
+      "mesh": [
+        "92",
+        0
+      ]
+    },
+    "class_type": "DecimateMesh",
+    "_meta": {
+      "title": "Hi3D intake copy — at most 4.5M triangles"
+    }
+  },
+  "2003": {
+    "inputs": {
+      "resolution": 1536,
+      "steps": 25,
+      "seed": 42,
+      "cpu_offload": true,
+      "attention": "sdpa",
+      "backend": [
+        "2001",
+        0
+      ],
+      "image": [
+        "2022",
+        0
+      ],
+      "mesh": [
+        "2002",
+        0
+      ]
+    },
+    "class_type": "Hi3DRefine",
+    "_meta": {
+      "title": "REFINE ONCE — 1536 / 25 steps / seed 42"
+    }
+  },
+  "2004": {
+    "inputs": {
+      "mesh": [
+        "2003",
+        0
+      ]
+    },
+    "class_type": "MeshToFile3D",
+    "_meta": {
+      "title": "Unmodified Hi3D master"
+    }
+  },
+  "2005": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2005",
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 3.799999999999999,
+            "y": 3.5,
+            "z": 10.4
+          },
+          "target": {
+            "x": 0,
+            "y": 2.5,
+            "z": 0
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.04433073118285891,
+            "y": 0.174086157830089,
+            "z": 0.007845237828654018,
+            "w": 0.9837007919932577
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": [
+          {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "quaternion": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        ]
+      },
+      "width": 768,
+      "height": 768,
+      "model_3d": [
+        "2004",
+        0
+      ]
+    },
+    "class_type": "Save3DAdvanced",
+    "_meta": {
+      "title": "2 - AFTER Hi3D - 1,999,999 triangles"
+    }
+  },
+  "2006": {
+    "inputs": {
+      "mesh": [
+        "2003",
+        0
+      ],
+      "source_mesh": [
+        "2002",
+        0
+      ]
+    },
+    "class_type": "Hi3DAlignToSource",
+    "_meta": {
+      "title": "Restore source scale/position — no rotation"
+    }
+  },
+  "2007": {
+    "inputs": {
+      "span": 0.96,
+      "mesh": [
+        "2006",
+        0
+      ]
+    },
+    "class_type": "Hi3DNormalizeMesh",
+    "_meta": {
+      "title": "Normalize repair working copy"
+    }
+  },
+  "2008": {
+    "inputs": {
+      "epsilon_rel": 1E-05,
+      "epsilon_abs": 0,
+      "mesh": [
+        "2007",
+        0
+      ]
+    },
+    "class_type": "WeldVertices",
+    "_meta": {
+      "title": "Repair 1 — weld nearby vertices"
+    }
+  },
+  "2009": {
+    "inputs": {
+      "max_perimeter": 0.03,
+      "weld_epsilon_rel": 0,
+      "max_vertices": 16,
+      "fill_chains": false,
+      "mesh": [
+        "2008",
+        0
+      ]
+    },
+    "class_type": "FillHoles",
+    "_meta": {
+      "title": "Repair 2 — fill small holes"
+    }
+  },
+  "2010": {
+    "inputs": {
+      "mesh": [
+        "2009",
+        0
+      ]
+    },
+    "class_type": "Hi3DNeedsSolidRepair",
+    "_meta": {
+      "title": "Does connectivity require solid remesh?"
+    }
+  },
+  "2011": {
+    "inputs": {
+      "resolution": 512,
+      "sign_mode": "solid",
+      "sign_mode.fill": 20,
+      "sign_mode.qef": false,
+      "band": 1,
+      "project_back": 0,
+      "fix_poles": false,
+      "smooth_iters": 0,
+      "drop_small_components": 0,
+      "precluster_max_verts": 20000000,
+      "mesh": [
+        "2009",
+        0
+      ]
+    },
+    "class_type": "RemeshMesh",
+    "_meta": {
+      "title": "Repair 3 — solid remesh only when needed"
+    }
+  },
+  "2012": {
+    "inputs": {
+      "switch": [
+        "2010",
+        0
+      ],
+      "on_false": [
+        "2009",
+        0
+      ],
+      "on_true": [
+        "2011",
+        0
+      ]
+    },
+    "class_type": "ComfySwitchNode",
+    "_meta": {
+      "title": "Automatic repair choice — retain detail when already closed"
+    }
+  },
+  "2013": {
+    "inputs": {
+      "mesh": [
+        "2012",
+        0
+      ],
+      "original_frame": [
+        "2007",
+        1
+      ]
+    },
+    "class_type": "Hi3DRestoreMeshFrame",
+    "_meta": {
+      "title": "Restore pre-cleanup coordinate frame"
+    }
+  },
+  "2014": {
+    "inputs": {
+      "mesh": [
+        "2013",
+        0
+      ]
+    },
+    "class_type": "Hi3DRemoveZeroEdges",
+    "_meta": {
+      "title": "Remove exact connected zero edges"
+    }
+  },
+  "2015": {
+    "inputs": {
+      "run_name": "foundry-template/2015",
+      "mesh": [
+        "2014",
+        0
+      ]
+    },
+    "class_type": "Hi3DMeshAudit",
+    "_meta": {
+      "title": "Audit final geometry before UVs"
+    }
+  },
+  "2016": {
+    "inputs": {
+      "mesh": [
+        "2015",
+        0
+      ]
+    },
+    "class_type": "MeshToFile3D",
+    "_meta": {
+      "title": "Clean geometry file"
+    }
+  },
+  "2017": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2017",
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 10,
+            "y": 10,
+            "z": 10.000000000000002
+          },
+          "target": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.2798481423331213,
+            "y": 0.3647051996310008,
+            "z": 0.11591689595929511,
+            "w": 0.8804762392171493
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": [
+          {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "quaternion": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        ]
+      },
+      "width": 768,
+      "height": 768,
+      "model_3d": [
+        "2016",
+        0
+      ]
+    },
+    "class_type": "Save3DAdvanced",
+    "_meta": {
+      "title": "03 — CLEAN MASTER — before textures"
+    }
+  },
+  "2020": {
+    "inputs": {
+      "bg_removal_model": [
+        "193",
+        0
+      ],
+      "image": [
+        "312",
+        0
+      ]
+    },
+    "class_type": "RemoveBackground",
+    "_meta": {
+      "title": "Matching cropped front — foreground mask"
+    }
+  },
+  "2021": {
+    "inputs": {
+      "mask": [
+        "2020",
+        0
+      ]
+    },
+    "class_type": "InvertMask",
+    "_meta": {
+      "title": "Convert foreground selection to alpha mask"
+    }
+  },
+  "2022": {
+    "inputs": {
+      "image": [
+        "312",
+        0
+      ],
+      "alpha": [
+        "2021",
+        0
+      ]
+    },
+    "class_type": "JoinImageWithAlpha",
+    "_meta": {
+      "title": "Matching FRONT RGBA for refinement and texture"
+    }
+  },
+  "2023": {
+    "inputs": {
+      "seed": 42,
+      "steps": 20,
+      "resolution": 1024,
+      "texture_size": 4096,
+      "guidance": 3,
+      "filename_prefix": "foundry-template/2023",
+      "sampler": "euler",
+      "guidance_rescale": 0.2,
+      "reference_lock": 0,
+      "reference_substeps": 2,
+      "mesh": [
+        "2015",
+        0
+      ],
+      "image": [
+        "2022",
+        0
+      ]
+    },
+    "class_type": "Hi3DTrellis2TextureMesh",
+    "_meta": {
+      "title": "TRELLIS.2 — texture FINAL cleaned geometry"
+    }
+  },
+  "2024": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2024",
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 3.802604916236812,
+            "y": 3.4955371254930214,
+            "z": 10.399476029169834
+          },
+          "target": {
+            "x": -5.413535695872501E-11,
+            "y": 2.5000000003445915,
+            "z": -8.525073405212532E-11
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.044131562161011655,
+            "y": 0.1742044038371286,
+            "z": 0.007815388879961508,
+            "w": 0.9836890517849806
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": [
+          {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "quaternion": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        ]
+      },
+      "width": 768,
+      "height": 768,
+      "model_3d": [
+        "2023",
+        0
+      ]
+    },
+    "class_type": "Save3DAdvanced",
+    "_meta": {
+      "title": "3 - CLEANED + TEXTURED - 735,580 triangles"
+    }
+  },
+  "2025": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2025",
+      "images": [
+        "2023",
+        1
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Final base-color atlas"
+    }
+  },
+  "2026": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2026",
+      "images": [
+        "2023",
+        2
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Final metallic / roughness atlas"
+    }
+  },
+  "2030": {
+    "inputs": {
+      "texture_source_path": "",
+      "method": "quadric",
+      "target_triangles": 250000,
+      "texture_size": 4096,
+      "planar_quadric": false,
+      "run_name": "foundry-template/2030",
+      "mesh": [
+        "2015",
+        0
+      ],
+      "textured_glb": [
+        "2023",
+        0
+      ]
+    },
+    "class_type": "Hi3DOptimizeAndRebake",
+    "_meta": {
+      "title": "GAME 250K — reduce and rebake color/PBR"
+    }
+  },
+  "2031": {
+    "inputs": {
+      "resolution": 4096,
+      "cage_distance": 0.01,
+      "ignore_backfaces": true,
+      "low_poly": [
+        "2030",
+        0
+      ],
+      "high_poly": [
+        "2015",
+        0
+      ]
+    },
+    "class_type": "BakeNormalMapFromMesh",
+    "_meta": {
+      "title": "Bake high-detail master shading"
+    }
+  },
+  "2032": {
+    "inputs": {
+      "mesh": [
+        "2030",
+        0
+      ],
+      "base_color": [
+        "2030",
+        1
+      ],
+      "normal_map": [
+        "2031",
+        0
+      ]
+    },
+    "class_type": "ApplyTextureToMesh",
+    "_meta": {
+      "title": "Attach baked normal detail"
+    }
+  },
+  "2033": {
+    "inputs": {
+      "mesh": [
+        "2032",
+        0
+      ]
+    },
+    "class_type": "MeshToFile3D",
+    "_meta": {
+      "title": "Game export container"
+    }
+  },
+  "2034": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2034",
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 10,
+            "y": 10,
+            "z": 10.000000000000002
+          },
+          "target": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.2798481423331213,
+            "y": 0.3647051996310008,
+            "z": 0.11591689595929511,
+            "w": 0.8804762392171493
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": [
+          {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "quaternion": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        ]
+      },
+      "width": 768,
+      "height": 768,
+      "model_3d": [
+        "2033",
+        0
+      ]
+    },
+    "class_type": "Save3DAdvanced",
+    "_meta": {
+      "title": "GAME — 250K textured + baked normals"
+    }
+  },
+  "2035": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2035",
+      "images": [
+        "2031",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Normal map sidecar"
+    }
+  },
+  "2040": {
+    "inputs": {
+      "texture_source_path": "",
+      "method": "quadric",
+      "target_triangles": 100000,
+      "texture_size": 4096,
+      "planar_quadric": false,
+      "run_name": "foundry-template/2040",
+      "mesh": [
+        "2015",
+        0
+      ],
+      "textured_glb": [
+        "2023",
+        0
+      ]
+    },
+    "class_type": "Hi3DOptimizeAndRebake",
+    "_meta": {
+      "title": "GAME 100K — reduce and rebake color/PBR"
+    }
+  },
+  "2041": {
+    "inputs": {
+      "resolution": 4096,
+      "cage_distance": 0.01,
+      "ignore_backfaces": true,
+      "low_poly": [
+        "2040",
+        0
+      ],
+      "high_poly": [
+        "2015",
+        0
+      ]
+    },
+    "class_type": "BakeNormalMapFromMesh",
+    "_meta": {
+      "title": "Bake high-detail master shading"
+    }
+  },
+  "2042": {
+    "inputs": {
+      "mesh": [
+        "2040",
+        0
+      ],
+      "base_color": [
+        "2040",
+        1
+      ],
+      "normal_map": [
+        "2041",
+        0
+      ]
+    },
+    "class_type": "ApplyTextureToMesh",
+    "_meta": {
+      "title": "Attach baked normal detail"
+    }
+  },
+  "2043": {
+    "inputs": {
+      "mesh": [
+        "2042",
+        0
+      ]
+    },
+    "class_type": "MeshToFile3D",
+    "_meta": {
+      "title": "Game export container"
+    }
+  },
+  "2044": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2044",
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 10,
+            "y": 10,
+            "z": 10.000000000000002
+          },
+          "target": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.2798481423331213,
+            "y": 0.3647051996310008,
+            "z": 0.11591689595929511,
+            "w": 0.8804762392171493
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": [
+          {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "quaternion": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        ]
+      },
+      "width": 768,
+      "height": 768,
+      "model_3d": [
+        "2043",
+        0
+      ]
+    },
+    "class_type": "Save3DAdvanced",
+    "_meta": {
+      "title": "GAME — 100K textured + baked normals"
+    }
+  },
+  "2045": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2045",
+      "images": [
+        "2041",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Normal map sidecar"
+    }
+  },
+  "2050": {
+    "inputs": {
+      "height_mm": 100,
+      "filename_prefix": "foundry-template/2050",
+      "mesh": [
+        "2015",
+        0
+      ]
+    },
+    "class_type": "Hi3DPrintCandidate",
+    "_meta": {
+      "title": "PRINT CANDIDATE — 100mm, Z up, geometry STL"
+    }
+  },
+  "2051": {
+    "inputs": {
+      "filename_prefix": "foundry-template/2051",
+      "images": [
+        "2022",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "Prepared reference used by Hi3D and TRELLIS"
+    }
+  },
+  "3000": {
+    "inputs": {
+      "use_saved_checkpoint": false,
+      "saved_clean_mesh": "",
+      "saved_texture_mesh": "",
+      "mesh": [
+        "2015",
+        0
+      ],
+      "textured_source": [
+        "2023",
+        0
+      ]
+    },
+    "class_type": "Hi3DFinishingSource",
+    "_meta": {
+      "title": "11 — Finishing source: saved alien / live pipeline"
+    }
+  },
+  "3001": {
+    "inputs": {
+      "enabled": true,
+      "target_quads": 25000,
+      "texture_size": 4096,
+      "method": "quadriflow",
+      "guide_triangles": 100000,
+      "cage_distance": 0.01,
+      "run_name": "foundry-template/3001",
+      "reuse_geometry": true,
+      "after": "",
+      "mesh": [
+        "3000",
+        0
+      ],
+      "textured_source": [
+        "3000",
+        1
+      ]
+    },
+    "class_type": "Hi3DQuadFinish",
+    "_meta": {
+      "title": "OPTIONAL QUADS — qualified 25K preset / UV + bake + export"
+    }
+  },
+  "3002": {
+    "inputs": {
+      "filename_prefix": "foundry-template/3002",
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 3.802604916236812,
+            "y": 3.4955371254930214,
+            "z": 10.399476029169834
+          },
+          "target": {
+            "x": -5.413535695872501E-11,
+            "y": 2.5000000003445915,
+            "z": -8.525073405212532E-11
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.044131562161011655,
+            "y": 0.1742044038371286,
+            "z": 0.007815388879961508,
+            "w": 0.9836890517849806
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": [
+          {
+            "position": {
+              "x": -0.025312401517533445,
+              "y": 2.475337422255029,
+              "z": 0.007229270361786888
+            },
+            "quaternion": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 5.129256078198732,
+              "y": 5.129256078198732,
+              "z": 5.129256078198732
+            }
+          }
+        ]
+      },
+      "width": 768,
+      "height": 768,
+      "model_3d": [
+        "3001",
+        0
+      ]
+    },
+    "class_type": "Save3DAdvanced",
+    "_meta": {
+      "title": "QUAD VERSION — 24,674 quads + 38 caps (GLB preview)"
+    }
+  },
+  "3003": {
+    "inputs": {
+      "filename_prefix": "foundry-template/3003",
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 3.802604916236812,
+            "y": 3.4955371254930214,
+            "z": 10.399476029169834
+          },
+          "target": {
+            "x": -5.413535695872501E-11,
+            "y": 2.5000000003445915,
+            "z": -8.525073405212532E-11
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.044131562161011655,
+            "y": 0.1742044038371286,
+            "z": 0.007815388879961508,
+            "w": 0.9836890517849806
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": [
+          {
+            "position": {
+              "x": -0.02575712495577709,
+              "y": 2.4753732841780387,
+              "z": 0.007136252225507345
+            },
+            "quaternion": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 5.129173280974066,
+              "y": 5.129173280974066,
+              "z": 5.129173280974066
+            }
+          }
+        ]
+      },
+      "width": 1024,
+      "height": 1024,
+      "model_3d": [
+        "3000",
+        1
+      ]
+    },
+    "class_type": "Save3DAdvanced",
+    "_meta": {
+      "title": "BASELINE — original detailed textured alien"
+    }
+  },
+  "3005": {
+    "inputs": {
+      "filename_prefix": "foundry-template/3005",
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 3.802604916236812,
+            "y": 3.4955371254930214,
+            "z": 10.399476029169834
+          },
+          "target": {
+            "x": -5.413535695872501E-11,
+            "y": 2.5000000003445915,
+            "z": -8.525073405212532E-11
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.044131562161011655,
+            "y": 0.1742044038371286,
+            "z": 0.007815388879961508,
+            "w": 0.9836890517849806
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": [
+          {
+            "position": {
+              "x": -0.025665316965961305,
+              "y": 2.475377905955575,
+              "z": 0.007173390054576567
+            },
+            "quaternion": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 5.129277248372782,
+              "y": 5.129277248372782,
+              "z": 5.129277248372782
+            }
+          }
+        ]
+      },
+      "width": 768,
+      "height": 768,
+      "model_3d": [
+        "2044",
+        0
+      ]
+    },
+    "class_type": "Save3DAdvanced",
+    "_meta": {
+      "title": "EXISTING GAME EXPORT — 100,000 triangles"
+    }
+  },
+  "3010": {
+    "inputs": {
+      "use_saved_variants": false,
+      "saved_balanced": "",
+      "saved_compact": "",
+      "saved_print": "",
+      "run_name": "foundry-template/3010",
+      "quad_light": [
+        "3001",
+        1
+      ],
+      "quad_detail": "",
+      "asset_name": "Gray Alien",
+      "selection_json": "",
+      "metadata_json": "",
+      "detailed": [
+        "3000",
+        1
+      ],
+      "balanced": [
+        "2034",
+        0
+      ],
+      "compact": [
+        "2044",
+        0
+      ],
+      "print_stl": [
+        "2050",
+        0
+      ]
+    },
+    "class_type": "Hi3DExportBundle",
+    "_meta": {
+      "title": "12 — ASSET PACKAGE: selected exports + directory README + ZIP"
+    }
+  }
+}

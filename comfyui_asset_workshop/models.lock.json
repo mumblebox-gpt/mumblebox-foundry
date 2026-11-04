@@ -440,6 +440,18 @@
       "sha256": "4234637cb80c998f41e348e6a6cb6bc20d8d038b2b0f256b6129b3b5e353eef7",
       "license": "creativeml-openrail-m",
       "license_url": "https://huggingface.co/nerijs/pixel-art-xl/blob/8bf4a4d9ea283e00a51fafda8e0539f8248ea037/README.md"
+    },
+    "qwen21_union": {
+      "name": "qwen_image_2.1_fun_controlnet_union_int8_convrot.safetensors",
+      "category": "model_patches",
+      "size": 3779298944,
+      "sha256": "07aa961570ac0e03d4ca936aecd76854d077a33cde69b5092399afba01b3715d",
+      "source": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1",
+      "revision": "aacf31a6d48e707f352ecba714cee0680da3479b",
+      "license": "qwen-research",
+      "repo": "Comfy-Org/Qwen-Image-2.1",
+      "file": "model_patches/qwen_image_2.1_fun_controlnet_union_int8_convrot.safetensors",
+      "license_url": "https://huggingface.co/alibaba-pai/Qwen-Image-2.1-Fun-Controlnet-Union/blob/main/LICENSE"
     }
   },
   "pipeline_resources": [

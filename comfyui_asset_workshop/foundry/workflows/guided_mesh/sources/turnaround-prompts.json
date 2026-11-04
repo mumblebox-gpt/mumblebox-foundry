@@ -1,0 +1,24 @@
+{
+  "CHARACTER_PROMPT": "Turn the character in <image1> into an orthographic 3D modeling reference sheet: a single horizontal row of four equal-width panels, evenly spaced. From left to right: 1) front view. 2) left side view, an exact 90° profile, snout pointing to the left edge of the image, only one eye visible, the near arm pointing straight at the camera and strongly foreshortened, the far arm hidden behind the body. 3) back view, exactly 180°. 4) right side view, an exact 90° profile, snout pointing to the right edge of the image, only one eye visible, near arm foreshortened toward the camera, far arm hidden. The camera orbits a completely static character: same T-pose and same head direction in every view, the character never turns toward the camera. Identical outfit, colors, proportions and scale in all views, each character centered in its panel, feet on the same baseline, no overlap between views. Flat, even lighting, solid black background, no text, no labels.",
+  "SOURCE": "https://github.com/pixelartistry/PixelArtistry-Pixal3D-Multiview",
+  "OBJECT_PROMPT": "Turn the {subject} in <image1> into an orthographic 3D modeling reference sheet: a single horizontal row of four equal-width panels, evenly spaced. From left to right: 1) front view. 2) left side view, an exact 90-degree profile. 3) back view, exactly 180 degrees. 4) right side view, an exact 90-degree profile. The camera orbits a completely static {subject}: same orientation and shape in every view. Identical details, colors, materials, proportions and scale in all views, each subject centered in its panel with generous empty margins, aligned to the same baseline, no overlap between views. Flat, even lighting, solid black background, no text, no labels.",
+  "SUBJECTS": {
+    "creatures": "creature",
+    "vehicles": "vehicle",
+    "props": "object",
+    "environment": "environment piece"
+  },
+  "CATEGORY_DETAILS": {
+    "creatures": "Preserve the creature's actual anatomy, limb count, natural stance and all existing tails, wings or horns. Keep limbs and appendages in the same position while the camera orbits; do not humanize its body or add parts. Side views show the true profile, with hidden far-side parts naturally occluded.",
+    "vehicles": "Keep the chassis, wheel count, wheelbase, wings, landing gear and attached components fixed. Preserve actual left-right asymmetry; do not mirror markings or invent wheels. Side views show the full length and true depth; the rear shows the corresponding rear construction, not a second front.",
+    "props": "Keep all attached components, handles, fasteners and openings in their fixed locations. Side views show the object's real thickness and depth. The back must be the corresponding rear surface and construction, not a mirrored front. Use a supplied rear reference for unseen construction when available.",
+    "environment": "Show a single isolated, coherent environment piece. Preserve its footprint, roofline, openings, overhangs and structural features in all views. Keep vegetation and attached details fixed. Do not turn the image into a landscape, scene layout or collection of separate objects."
+  },
+  "ROLE_TEXT": {
+    "back": "Rear of the same asset; use for rear construction.",
+    "face": "Face or identity reference; preserve the primary asset's other features.",
+    "component": "Component reference; apply only as described.",
+    "style": "Visual style reference; preserve the primary asset's structure.",
+    "detail": "Detail reference; apply only as described."
+  }
+}

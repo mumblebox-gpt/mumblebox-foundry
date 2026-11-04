@@ -31,7 +31,8 @@ class DraftConditioningTests(unittest.TestCase):
                      torch.tensor([.3, .3]), torch.ones(1))
 
     def run_scope(self, scope):
-        with patch.dict(sys.modules, {"comfy_extras.nodes_trellis2": self.native}):
+        with patch.dict(sys.modules, {"comfy_extras": types.ModuleType("comfy_extras"),
+                                     "comfy_extras.nodes_trellis2": self.native}):
             return module.build_conditioning(*self.args, num_views=2, scope=scope)
 
     def test_geometry_keeps_native_shape_features_and_global_averaging(self):

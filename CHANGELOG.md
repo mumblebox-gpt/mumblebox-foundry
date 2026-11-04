@@ -1,5 +1,48 @@
 # Changelog
 
+## 0.1.0-preview.11 — Turnaround and 3D-Guided
+
+### Two independent mesh methods
+
+- Add **3D-Guided**, an Objects workflow with its own six-page wizard, saved sessions and processing branch. Keep **Turnaround**, its wizard and generation settings independent.
+- Build the rough mesh from one original image. Keep the concept turnaround for appearance guidance, then render the actual working mesh in Blender to obtain four measured camera views and depth guides.
+- Enhance the views together on a sheet with fixed black separators, split it into four images, and offer a checkbox for each image before reconstruction. Any nonempty subset keeps its corresponding numerical cameras.
+- Feed selected views into measured-camera reconstruction, followed by Hi3D refinement, geometry cleanup and final texturing. Preserve the reconstructed, raw-refined, cleaned and textured checkpoints for comparison.
+
+### Wizard and navigation
+
+- Group mesh creation under a collapsible method chooser with provisional names and factual descriptions. Reduce workflow artwork to roughly one quarter of its previous area and tighten spacing; retain HairDeck and the other workflow entries.
+- Include reference upload/drop, webcam entry, the existing image creator handoff, object description, special instructions, optional appearance references, generation settings and model/license notices.
+- Reuse the selection editor for concept-area corrections: preview an edit, compare it with the original, then explicitly keep it. Preserve the original canvas dimensions and every pixel outside the selected mask.
+- Make **Rocket Mode** unattended through remaining generation and selected exports. Manual mode retains stage reviews and view selection. Only cancellation or an actual failure stops Rocket.
+- Restore saved jobs after frontend/backend recovery without silently repeating completed stages. Protect a running asset's live binding when another draft is opened, and retain pending image handoffs.
+- Refresh failure/retry controls after background cleanup releases a job, so a failed export does not leave the wizard visibly locked in its busy state.
+- Keep completed generation available when finishing is cancelled, and clear cancellation before resumed resource preparation.
+
+### Exports and retained files
+
+- Reuse the established output selector for detailed meshes, balanced/compact triangle meshes and print geometry in 3D-Guided. Keep GLB/FBX mesh exports, matching texture maps, triangle targets and print-height/STL controls.
+- Hide quad retopology from the 3D-Guided wizard, its Rocket selector and output previews. Remove stale saved quad selections and disable the retained quad nodes. A single method feature flag preserves the route for future re-enabling; the server also rejects quad requests while disabled.
+- Preserve Turnaround's existing output choices and published remeshing implementation. Retain the experimental quad repairs locally for later work.
+- Include method identity, selected views and numerical camera records in the asset catalog and generated README. Camera records describe the Blender targets; enhanced-image adherence still requires visual review.
+- Keep the generated README file inventory unique, including the new camera record, and verify its links against the ZIP catalog.
+- Add an explicitly labeled private production archive for original references, concepts and edits, intermediate geometry, prompts, camera records and execution files. Keep private source files separate from the shareable asset ZIP.
+- Preserve high-detail masters and completed outputs while releasing generation resources between heavy stages. Prepare the selected workflow's dependencies before generation.
+
+### Compatibility and repairs
+
+- Package the measured-view engine independently of the experimental repository. Use the configured Blender, isolated finishing worker and Hi3D service; no Blender MCP add-on is required.
+- Pin the Union control model and include MoGe licensing/provenance. Extend software import probes without downloading model weights during installation.
+- Correct the wide concept-editor encoding path, missing editor reference binding and native mesh-viewer file addressing. Report viewer load failures instead of leaving an apparently successful empty grid.
+- Fix quad finishing's checkpoint variable collision so the mesh extractor remains callable. Retrying an interrupted export reuses completed generation and reduced-mesh checkpoints.
+- Initially qualify 3D-Guided for solid standalone Objects. Vehicle and character presets, comparative quality rankings and lower-memory hardware remain separate work.
+
+### Validation and limits
+
+- Complete one fresh chest through the installed wizard, final texturing, detailed GLB/FBX, and balanced/compact GLB exports. Verify the 39-file asset ZIP, unique README inventory, notices, numerical cameras and separate private production download.
+- The optional chest STL was rejected by its existing shape-preservation guard and excluded from this package. Quad retopology is disabled in 3D-Guided. Some enhanced side/rear materials vary from the front; broader categories and comparative benchmarks remain unqualified.
+- Record the installed behavior, regression results and remaining limits in `docs/RELEASE-VALIDATION.md`.
+
 ## 0.1.0-preview.10
 
 - Add **Create Rigged Hair with HairDeck**, a separately grouped workflow with its own artwork and six-page wizard. Existing image and image-to-3D workflows stay independent.

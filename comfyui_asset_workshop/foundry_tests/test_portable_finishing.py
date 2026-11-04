@@ -1,4 +1,5 @@
 import ast
+import dis
 import sys
 import unittest
 from pathlib import Path
@@ -6,6 +7,23 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 
 class PortableFinishingTests(unittest.TestCase):
+    def test_guided_camera_file_is_listed_once_in_readme(self):
+        import re
+        from finishing.package_catalog import PackageCatalog,FileRecord
+        from finishing.package_readme import render_readme
+        catalog=PackageCatalog('mumblebox.asset-package/1','Prop','test','2026-11-04','test',
+            [FileRecord('Metadata/cameras.json','metadata',None,'Measured cameras','json','cameras')],[],[],{},
+            production={'method':'3d-guided/v1','selected_view_ids':['front'],'reference_view_id':'front'})
+        links=re.findall(r'\]\((Metadata/cameras\.json)\)',render_readme(catalog))
+        self.assertEqual(links,['Metadata/cameras.json'])
+
+    def test_quad_checkpoint_loading_does_not_shadow_mesh_extractor(self):
+        from finishing.quad_nodes import Hi3DQuadFinish
+        reads=[op for op in dis.get_instructions(Hi3DQuadFinish.finish)
+               if op.argval=='arrays' and op.opname.startswith('LOAD_')]
+        self.assertEqual(reads[0].opname,'LOAD_GLOBAL',
+                         'The mesh extractor must remain callable before loading baked arrays.')
+
     def test_finishing_is_shipped_without_developer_paths(self):
         folder=ROOT/'finishing'
         self.assertTrue((folder/'nodes.py').is_file())

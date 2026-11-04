@@ -1,0 +1,28 @@
+{
+  "commit": "13de04982a60f4c0bf33498706b6fbcbb106af11",
+  "purpose": "Independent packaged measured-view engine; node namespace adapted to G3D_",
+  "source_sha256": {
+    "fvb/blender_render.py": "ffe2f4ee80dd02986d2313c4b7b3bbaa9002c8b984e76093bce7618b4854b291",
+    "fvb/camera_math.py": "7ab30531cc385c5f9998a94af4d2a37a58c6bced7b530fd847b34572def6e40d",
+    "fvb/contracts.py": "11c25c15612fe999a9202dd444745186ecf34628f56bb47978455a3b3a69fd8d",
+    "fvb/control.py": "0ece834e91159551a570d5910c8ed8482b07e1fa32231f881e1a0797662ed8e6",
+    "fvb/journal.py": "0b1a4d3a921cd1ac5b26d938fe58b0e928730dd99c364fd0c9485ff3c6a46f82",
+    "fvb/nodes.py": "eb5f39c7a29733b9ebec4e5f8d3985e45b8faa8e1e8d538f0d7eab333907538d",
+    "fvb/prompts.py": "fa5edccc8b9c381eab28b0c8e5bbf18a517489fce687659c9e502559b546d965",
+    "fvb/proxy.py": "925cf9a9a3eda6f474aecb72e4fcd35323ceb7e33cad3d6cae9f80e719f7017e",
+    "fvb/proxy_nodes.py": "d3cbfcd5dd695f9db063dd9b3ab87771f4e7aa16066c28000266fcef6139289d",
+    "fvb/recipes.py": "2827bca91bc345b3bf00aac75b9efaab2bade1ff25fef5663267134d4d29d231",
+    "fvb/repair.py": "8dd7dc756709a24a3bc9947537005ca24ee56e950407ae192e009302bc6f9352",
+    "fvb/repair_nodes.py": "6d7a192034268c6f860843bd0bdf29046250723d4ceb64158a441110d2073d52",
+    "fvb/runner.py": "1f03d8a202daf422914a85cf65a124c11a0b7af67733399b44debb3a0b7f670e",
+    "fvb/runtime.py": "1faf5431477b8b13daa258076b40756cb7faba589240804b6deb64723179cc8b",
+    "fvb/service.py": "730f6d532766231763f3e1e66b3304596ee3cd0cb9a3241299cd6e04569352be",
+    "fvb/sheet.py": "e5aec76feff8f94ff6362a6bea3bbf3edde0e08f864643690b23af8f29c1137d",
+    "fvb/sheet_nodes.py": "b4251294b394c75a9c843b215d4d31473da9a3ad721f5d6b8ac28f82ea05cace",
+    "fvb/__init__.py": "eb435314cf4aa7a2916b7d4baed2cc76c2fda371386a05aae6fd35f2013b6d9a",
+    "sources/foundry-template.api.json": "0a6ad546f6ddc9b64796fbcada5ad3a9a2978909eb616d69334e58a736215e52",
+    "sources/models.lock.json": "d16d65fd985fea13f824302c05445b1b3fc456f9bc0424a2ea76877b928945aa",
+    "sources/provenance.json": "de61fd5082c793942e997e678bb9950ff8c92d6b42759e7218e9c5e7ec44a569",
+    "sources/turnaround-prompts.json": "b4625500ce32b3773d9dacdccd6bd0506438a12bf0ac8c0988088e41b6a82342"
+  }
+}

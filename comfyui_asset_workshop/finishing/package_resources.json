@@ -397,5 +397,33 @@
     "license_url": "https://github.com/saturday06/VRM-Addon-for-Blender/blob/main/LICENSE",
     "license_summary": "Separate export-tool licenses. Software binaries are not included in the asset package.",
     "notices": []
+  },
+  "qwen21_union": {
+    "id": "qwen21_union",
+    "stage": "Depth-controlled sheet enhancement",
+    "name": "Qwen Image 2.1 Fun ControlNet Union",
+    "version": "aacf31a6d48e707f352ecba714cee0680da3479b",
+    "source": "https://huggingface.co/alibaba-pai/Qwen-Image-2.1-Fun-Controlnet-Union",
+    "notices": [
+      "Qwen-Image-2.1-LICENSE.txt",
+      "Qwen-Image-2.1-NOTICE.txt"
+    ],
+    "note": "Qwen Image 2.1 model use is governed by the retained research license. This package does not assert commercial authorization.",
+    "license": "Qwen Research License",
+    "license_url": "https://huggingface.co/alibaba-pai/Qwen-Image-2.1-Fun-Controlnet-Union/blob/main/LICENSE",
+    "license_summary": "The retained model license covers research and evaluation use; commercial authorization is not asserted by this package."
+  },
+  "moge2": {
+    "id": "moge2",
+    "name": "MoGe 2",
+    "stage": "Original-image camera estimation",
+    "version": "39c4d5e957afe587e04eec59dc2bcc3be5ecd968",
+    "source": "https://github.com/microsoft/MoGe",
+    "license": "MIT",
+    "license_url": "https://github.com/microsoft/MoGe/blob/main/LICENSE",
+    "notices": [
+      "MoGe-LICENSE.txt"
+    ],
+    "license_summary": "See the model and software source for applicable terms."
   }
 }

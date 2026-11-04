@@ -196,13 +196,13 @@ function resultActions(w,position){
         button("Choose another workflow",()=>w.shell.open("Choose a Workflow")));
 }
 
-function measurements(w){
+export function measurements(w){
     const cards=Object.entries(w.run.measurements||{}).map(([id,v])=>{
         const m=v.measurements;const stats=[];
         for(const [group,data] of Object.entries(m)){
             if(!data||typeof data!=="object"||Array.isArray(data))continue;
             for(const key of ["vertices","triangles","quads","polygons","dimensions","units","boundary_edges","nonmanifold_edges","watertight"]){
-                if(data[key]===undefined)continue;
+                if(data[key]===undefined||key==='quads'&&w.showQuads===false)continue;
                 const value=Array.isArray(data[key])?data[key].map(x=>Number(x).toPrecision(4)).join(" × "):typeof data[key]==="number"?data[key].toLocaleString():String(data[key]);
                 stats.push(el("div",{},el("dt",{},title(group)+" · "+title(key)),el("dd",{},value)));
             }

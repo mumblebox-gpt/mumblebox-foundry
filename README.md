@@ -8,19 +8,19 @@ Hair software is installed with Foundry. Approximately 6.4 GB of model weights a
 
 A local ComfyUI interface for turning reference images into textured 3D assets. A guided workflow connects four-view image generation, Pixal3D/TRELLIS.2 geometry, Hi3D refinement, measured cleanup, texturing and selected exports.
 
-**Preview 0.1.0-preview.10 — Windows / NVIDIA beta.** Install through [Pinokio](docs/PINOKIO.md) for automated software setup, or use the [manual installation](INSTALL.md). Pinokio opens the Foundry interface directly. Original Foundry code is Apache-2.0; models and third-party tools retain their own terms. Read [third-party notices](THIRD-PARTY.md), particularly before commercial use.
+**Preview 0.1.0-preview.11 — Windows / NVIDIA.** Install through [Pinokio](docs/PINOKIO.md) for automated software setup, or use the [manual installation](INSTALL.md). Pinokio opens the Foundry interface directly. Original Foundry code is Apache-2.0; models and third-party tools retain their own terms. Read [third-party notices](THIRD-PARTY.md), particularly before commercial use.
 
 ## Included
 
-- One working image-to-3D wizard, accepting an overall reference plus optional described references.
+- Two independent mesh methods and wizards, selected under **Create a Mesh from an Image**: **Turnaround** and **3D-Guided**.
 - A separate image creator: front/back pairs for assets, or single background/general images. References, compatible installed LoRAs and model defaults are available on one scrolling page.
 - Side-by-side image editing with rectangle, ellipse, brush, erase, polygon and magnetic selections. Edits are previews until accepted; original revisions remain available.
 - Image Gallery with grouped pairs, filters, revision restore, download and confirmed removal. Deleting entries and deleting their files are separate choices.
 - Save an accepted pair and send it into the 3D wizard, retaining reference roles and generation provenance.
 - Supported Qwen, FLUX and Klein turnaround choices with model-specific settings and license information.
 - Four-view review, mesh/refinement controls, final mesh preview, export choices and a downloadable package.
-- Detailed and reduced triangle meshes, optional quad retopology, UVs and detail baking. Available formats: GLB, FBX, OBJ, BLEND, STL, PNG and ZIP.
-- Rocket Mode continues from the current step using your settings and selected output versions.
+- Detailed and reduced triangle meshes, UVs and detail baking. Turnaround retains optional quad retopology and its authoring formats. 3D-Guided exports detailed/reduced GLB or FBX and print STL; its retained quad branch is disabled for this release.
+- Rocket Mode runs remaining stages and selected exports without optional review stops. Use the manual wizard when you want to inspect stages and deselect inconsistent views.
 - A package README, file catalog, measurements and resources/licensing record that reflect the selected outputs.
 - Asset history, light/dark themes, system telemetry, model unloading and first-use model downloads.
 - A Civitai browser for installing image models and LoRAs. These are initial-image resources; downloads do not expand the supported turnaround models.
@@ -30,15 +30,19 @@ Future workflow cards are labeled Coming soon. Standalone mesh repair, video rec
 
 ## Workflow
 
-Supply images → generate/review four views → build the fully decoded mesh → refine with Hi3D → clean geometry → texture and bake selected versions → export.
+**Turnaround:** supply references → generate/review four views → build the fully decoded mesh → refine with Hi3D → clean geometry → texture and bake selected versions → export.
 
-The detailed master is retained. Optional quad retopology provides an editing starting point, not a rig or an animation-ready guarantee. GLB uses triangles; quad-preserving authoring formats are available. A print export includes geometry checks, but physical printability still depends on dimensions, material and printer.
+**3D-Guided (Objects):** supply one original image and a description → generate an appearance concept sheet → build a rough mesh from the original image alone → prepare the actual working proxy → render four measured Blender views → enhance a depth-guided sheet using the concept for appearance → split and select usable views → reconstruct using the matching numerical cameras → refine, clean, texture and export. This method currently targets solid standalone props readable from front, back and both sides; people and vehicles need separately qualified presets. It does not promise better quality for every object.
+
+The manual 3D-Guided wizard includes selected-area concept editing and four image checkboxes before reconstruction. Selected images retain their camera identity. Asset packages include numerical camera records; the separate private production archive contains original images, prompts and intermediate files. Review that private archive before sharing it.
+
+The detailed master is retained. Turnaround's optional quad retopology provides an editing starting point, not a rig or an animation-ready guarantee. GLB uses triangles; Turnaround's quad-preserving authoring formats remain available. A print export includes geometry checks, but physical printability still depends on dimensions, material and printer.
 
 ## Get started
 
 1. In Pinokio, install this repository: https://github.com/mumblebox-gpt/mumblebox-foundry
 2. Choose **Install**, then **Start Foundry**. **Open Foundry** shows the interface inside Pinokio.
-3. Select **Open Wizard** and supply your own image, or **Images → Create Images** to create starting references first.
+3. Expand **Create a Mesh from an Image**, choose a method and supply your image. Each wizard also offers **Create an image** when you need a starting reference.
 
 The [Pinokio guide](docs/PINOKIO.md) covers installation, updates, repair and MCP setup. Existing ComfyUI users can follow [INSTALL.md](INSTALL.md) and open the packaged `Mumblebox 3D Asset Foundry.json` workflow instead.
 

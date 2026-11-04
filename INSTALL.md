@@ -86,11 +86,13 @@ Restart ComfyUI, then open:
 
 `custom_nodes/comfyui_asset_workshop/workflows/Mumblebox 3D Asset Foundry.json`
 
-The interface appears in the same graph as the pipeline. Use **Open Wizard** for a new asset. The graph has empty input fields; no sample alien assets are bundled.
+The interface appears in the same graph as the pipeline. Expand **Create a Mesh from an Image** and choose **Turnaround** or **3D-Guided**. Each method has its own wizard and processing branch. The graph has empty input fields; no sample assets or saved production sessions are bundled.
+
+3D-Guided uses Blender for measured views and requires the pinned core's native `LoadMoGeModel`, `MoGeInference`, `TextEncodeQwenImage21` and `ZImageFunControlnet` nodes. The Pinokio installer probes the MoGe model import and render-adapter dependencies. The method uses the same configured Blender, worker and Hi3D service as the existing workflow; no Blender MCP add-on or separate experimental repository is required.
 
 ## 5. First use and updates
 
-Only the selected stage's models download. The interface shows the first-use message and transfer progress. Native models are stored in ComfyUI's model directories; isolated texture snapshots use the configured texture-model directory; Hi3D owns its own model directory. Model weights are downloaded from upstream providers, not from this project's GitHub archive or another user's PC.
+Required resources for the selected workflow are prepared before generation. The interface shows first-use messages and transfer progress. Native models are stored in ComfyUI's model directories; isolated texture snapshots use the configured texture-model directory; Hi3D owns its own model directory. Models are loaded and released by stage. Model weights are downloaded from upstream providers, not from this project's GitHub archive or another user's PC.
 
 Enter a Hugging Face token in Settings for gated resources. For Civitai downloads, the browser's API-key help links to the account settings and explains where to paste the key. Downloaded Civitai resources are for initial image creation only.
 

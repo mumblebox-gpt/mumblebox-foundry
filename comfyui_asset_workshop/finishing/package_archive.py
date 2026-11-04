@@ -101,6 +101,12 @@ def build_archive(sources,selection,identity,metadata,output_root,worker,check_i
         production.write_text(json.dumps(metadata["production"],indent=2,ensure_ascii=False),encoding="utf-8")
         files.append(FileRecord("Metadata/production.json","metadata",None,
             "Actual run settings, ordered reference hashes, selected outputs and completed stage identities.","json","production"))
+        if metadata['production'].get('method')=='3d-guided/v1':
+            cameras=root/'Metadata/cameras.json'
+            cameras.write_text(json.dumps(metadata['production']['camera_manifest'],indent=2),encoding='utf-8')
+            files.append(FileRecord('Metadata/cameras.json','metadata',None,
+                'Measured Blender cameras and inherited enhanced-view calibration. Enhancement camera adherence requires visual review.',
+                'json','cameras'))
     variants=[VariantRecord(**v) for v in report["variants"]]
     # Accept existing final-stage receipts only when their input file digest matches.
     metadata=copy.deepcopy(metadata);warnings=[];resource_ids={"blender","comfyui"}
@@ -148,7 +154,7 @@ def build_archive(sources,selection,identity,metadata,output_root,worker,check_i
     else:warnings.append("Mumblebox terms have not been supplied.")
     files.append(FileRecord(MANIFEST,"metadata",None,"Structured inventory, relationships, measured specifications, production resources and file checksums.","json","manifest"))
     meta={"asset_name":asset,"export_id":ident,"created_utc":datetime.now(timezone.utc).isoformat(timespec="seconds"),"workflow_version":metadata.get("workflow_version"),"warnings":warnings,
-          "production":{key:metadata["production"][key] for key in ("category","turnaround") if key in metadata.get("production",{})}}
+          "production":{key:metadata["production"][key] for key in ("category","turnaround","method","selected_view_ids","reference_view_id","camera_manifest","source_download") if key in metadata.get("production",{})}}
     catalog=build_catalog(files,variants,resources,identity,meta)
     # Native verification is run against a relocated copy before the final ZIP is published.
     relocated=job/"relocated";shutil.copytree(root,relocated)

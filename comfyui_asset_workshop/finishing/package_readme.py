@@ -58,6 +58,13 @@ def render_readme(catalog):
         else:lines+=["- Included documents: "+str(len(fs))+".","- Retained source texts are not rewritten by the catalog."]
         lines+=[""]
     lines+=["## Production record",""]
+    if c.production.get('method')=='3d-guided/v1':
+        lines+=['### 3D-Guided method','',
+            'A single-image rough mesh supplied measured Blender views and depth guides. Enhanced views were selected for reconstruction, followed by refinement, cleanup and final texturing.','',
+            '- Selected views: '+text(', '.join(c.production.get('selected_view_ids',[])))+'.',
+            '- Finishing reference: '+text(c.production.get('reference_view_id','Not recorded'))+'.',
+            '- Numerical camera records are listed in the Metadata directory. These describe the renderer targets; camera adherence after enhancement requires visual review.',
+            '- Original references, concept edits, prompts and intermediate meshes are retained locally. The separate private production download includes those files.','']
     creation=c.production.get('image_creation')
     if creation:
         lines += ['### Originating reference images','','Accepted images created in Foundry and used as references for this asset.','',

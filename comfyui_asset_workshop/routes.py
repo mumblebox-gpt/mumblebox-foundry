@@ -113,7 +113,8 @@ def idle():
     from .foundry.workflows.image_to_3d.runs import busy as foundry_busy
     from .foundry.workflows.image_creation.runs import busy as image_busy
     from .foundry.workflows.hair_creation.runs import busy as hair_busy
-    if single_image_jobs_active() or foundry_busy() or image_busy() or hair_busy():
+    from .foundry.workflows.guided_mesh.runs import busy as guided_busy
+    if single_image_jobs_active() or foundry_busy() or image_busy() or hair_busy() or guided_busy():
         raise JobConflict("A Mumblebox job is still active. Wait for it to finish or stop it before changing the library or History.")
     if description_helper.STATE.get("running"):
         raise ValueError("The description assistant is working. Wait for it or stop it before generating an image.")

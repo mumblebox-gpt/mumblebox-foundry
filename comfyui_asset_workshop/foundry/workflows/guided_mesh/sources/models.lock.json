@@ -1,0 +1,725 @@
+{
+  "schema": 1,
+  "models": {
+    "qwen21": {
+      "repo": "Comfy-Org/Qwen-Image-2.1",
+      "file": "diffusion_models/qwen_image_2.1_int8_convrot.safetensors",
+      "revision": "a8342359c61979b06a8dafb1a47991fe1f30e994",
+      "sha256": "cb74113cb03faecd79611b01fd7fd642f0aa60d6f0b95086abee214d75eaa57d",
+      "size": 7256783064,
+      "category": "diffusion_models",
+      "name": "qwen_image_2.1_int8_convrot.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/blob/a8342359c61979b06a8dafb1a47991fe1f30e994/README.md"
+    },
+    "qwen21_clip": {
+      "repo": "Comfy-Org/Qwen-Image-2.1",
+      "file": "text_encoders/qwen3vl_8b_int8_convrot.safetensors",
+      "revision": "a8342359c61979b06a8dafb1a47991fe1f30e994",
+      "sha256": "8bfd0f6e12abf2d2d697ecc888e5e90b0d6741d6708f05799f53afa560452e8f",
+      "size": 9350798360,
+      "category": "text_encoders",
+      "name": "qwen3vl_8b_int8_convrot.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/blob/a8342359c61979b06a8dafb1a47991fe1f30e994/README.md"
+    },
+    "qwen21_vae": {
+      "repo": "Comfy-Org/Qwen-Image-2.1",
+      "file": "vae/qwen_image_2.1_vae_bf16.safetensors",
+      "revision": "a8342359c61979b06a8dafb1a47991fe1f30e994",
+      "sha256": "bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9",
+      "size": 675509688,
+      "category": "vae",
+      "name": "qwen_image_2.1_vae_bf16.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/blob/a8342359c61979b06a8dafb1a47991fe1f30e994/README.md"
+    },
+    "qwen21_bf16": {
+      "repo": "Comfy-Org/Qwen-Image-2.1",
+      "file": "diffusion_models/qwen_image_2.1_bf16.safetensors",
+      "revision": "a8342359c61979b06a8dafb1a47991fe1f30e994",
+      "sha256": "89f4158d066cc33906a199fca85634f766892dd78f49b6698dabf187ac86c4bc",
+      "size": 14230280616,
+      "category": "diffusion_models",
+      "name": "qwen_image_2.1_bf16.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/blob/a8342359c61979b06a8dafb1a47991fe1f30e994/README.md"
+    },
+    "qwen2511": {
+      "repo": "Comfy-Org/Qwen-Image-Edit_ComfyUI",
+      "file": "split_files/diffusion_models/qwen_image_edit_2511_fp8mixed.safetensors",
+      "revision": "f68ace85e60b4a02a323e394253731947657b7d2",
+      "sha256": "c9fdc158e46d3b61ef75f21ae866ca2fe808bf4a53643120d1c1e87c19280a4e",
+      "size": 20533762817,
+      "category": "diffusion_models",
+      "name": "qwen_image_edit_2511_fp8mixed.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI/blob/f68ace85e60b4a02a323e394253731947657b7d2/README.md"
+    },
+    "qwen2511_clip": {
+      "repo": "Comfy-Org/HunyuanVideo_1.5_repackaged",
+      "file": "split_files/text_encoders/qwen_2.5_vl_7b_fp8_scaled.safetensors",
+      "revision": "1405a2b738c29b890cf6d03fc038d8d3e92eeed7",
+      "sha256": "cb5636d852a0ea6a9075ab1bef496c0db7aef13c02350571e388aea959c5c0b4",
+      "size": 9384670680,
+      "category": "text_encoders",
+      "name": "qwen_2.5_vl_7b_fp8_scaled.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/Comfy-Org/HunyuanVideo_1.5_repackaged/blob/1405a2b738c29b890cf6d03fc038d8d3e92eeed7/README.md"
+    },
+    "qwen2511_vae": {
+      "repo": "Comfy-Org/Qwen-Image_ComfyUI",
+      "file": "split_files/vae/qwen_image_vae.safetensors",
+      "revision": "1f12b17be14c89b026c51a91d67c32f84bb047bc",
+      "sha256": "a70580f0213e67967ee9c95f05bb400e8fb08307e017a924bf3441223e023d1f",
+      "size": 253806246,
+      "category": "vae",
+      "name": "qwen_image_vae.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Comfy-Org/Qwen-Image_ComfyUI/blob/1f12b17be14c89b026c51a91d67c32f84bb047bc/README.md"
+    },
+    "klein_base": {
+      "repo": "black-forest-labs/FLUX.2-klein-base-9b-fp8",
+      "file": "flux-2-klein-base-9b-fp8.safetensors",
+      "revision": "9ecf2143d71542449960c5584340269c6d401449",
+      "sha256": "a9f5028c24a7a96f4f45beb883aad287d9bccc246227a6803edc898ddda42cf4",
+      "size": 9567278472,
+      "category": "diffusion_models",
+      "name": "flux-2-klein-base-9b-fp8.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-9b-fp8/blob/9ecf2143d71542449960c5584340269c6d401449/README.md"
+    },
+    "klein_distilled": {
+      "repo": "black-forest-labs/FLUX.2-klein-9b-fp8",
+      "file": "flux-2-klein-9b-fp8.safetensors",
+      "revision": "902d9d510b51533e07729f19211414a3648b77d2",
+      "sha256": "865ba09f5b4c3cbd3468a4bd3acb9fcb2f8740c54317482f0bcd4ed1d3655cee",
+      "size": 9433061528,
+      "category": "diffusion_models",
+      "name": "flux-2-klein-9b-fp8.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/black-forest-labs/FLUX.2-klein-9b-fp8/blob/902d9d510b51533e07729f19211414a3648b77d2/README.md"
+    },
+    "klein_kv": {
+      "repo": "black-forest-labs/FLUX.2-klein-9b-kv-fp8",
+      "file": "flux-2-klein-9b-kv-fp8.safetensors",
+      "revision": "8430c03ee457ea86907ed31a009cd56280df003d",
+      "sha256": "33f7da5625a00798349a719742999d3c7dd20c1a7eda14663922c363640728f1",
+      "size": 9818935984,
+      "category": "diffusion_models",
+      "name": "flux-2-klein-9b-kv-fp8.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/black-forest-labs/FLUX.2-klein-9b-kv-fp8/blob/8430c03ee457ea86907ed31a009cd56280df003d/README.md"
+    },
+    "klein_clip": {
+      "repo": "Comfy-Org/flux2-klein-9B",
+      "file": "split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors",
+      "revision": "3f62d9d8ae1fec33c6e91453d5c712855b096b55",
+      "sha256": "abad16806e0cbabc54e0325d6565847443fe396d5f0be38bb3cd3fe75a1201d6",
+      "size": 8664848742,
+      "category": "text_encoders",
+      "name": "qwen_3_8b_fp8mixed.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/Comfy-Org/flux2-klein-9B/blob/3f62d9d8ae1fec33c6e91453d5c712855b096b55/README.md"
+    },
+    "flux3_base": {
+      "repo": "black-forest-labs/flux-3-image-klein-comfy",
+      "file": "diffusion_models/flux3-image-klein-base-int8-convrot.safetensors",
+      "revision": "feef60b0aaf63a4773ace96636ebbcf43b881312",
+      "sha256": "8949ecfc1bf3871b08be02cf43ec7276a4914e1a86eade6b5eb8f4204426bc92",
+      "size": 5807427339,
+      "category": "diffusion_models",
+      "name": "flux3-image-klein-base-int8-convrot.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy/blob/feef60b0aaf63a4773ace96636ebbcf43b881312/README.md"
+    },
+    "flux3_distilled": {
+      "repo": "black-forest-labs/flux-3-image-klein-comfy",
+      "file": "diffusion_models/flux3-image-klein-int8-convrot.safetensors",
+      "revision": "feef60b0aaf63a4773ace96636ebbcf43b881312",
+      "sha256": "847d8933548afd93df4af2cac2498e70891bf28d9dae06d695f536992e168fe2",
+      "size": 5827874779,
+      "category": "diffusion_models",
+      "name": "flux3-image-klein-int8-convrot.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy/blob/feef60b0aaf63a4773ace96636ebbcf43b881312/README.md"
+    },
+    "flux3_base_bf16": {
+      "repo": "black-forest-labs/flux-3-image-klein-comfy",
+      "file": "diffusion_models/flux3-image-klein-base-bf16.safetensors",
+      "revision": "feef60b0aaf63a4773ace96636ebbcf43b881312",
+      "sha256": "5c921759dc03663dbb67df11d8e3d317d2d5b893b31b969c95dc77ebf861b19c",
+      "size": 11076957072,
+      "category": "diffusion_models",
+      "name": "flux3-image-klein-base-bf16.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy/blob/feef60b0aaf63a4773ace96636ebbcf43b881312/README.md"
+    },
+    "flux3_distilled_bf16": {
+      "repo": "black-forest-labs/flux-3-image-klein-comfy",
+      "file": "diffusion_models/flux3-image-klein-bf16.safetensors",
+      "revision": "feef60b0aaf63a4773ace96636ebbcf43b881312",
+      "sha256": "c3e9813cdd049c831c836b2e9db61150e49a93fc1a4c63b256494642fee0bd7c",
+      "size": 11097404512,
+      "category": "diffusion_models",
+      "name": "flux3-image-klein-bf16.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy/blob/feef60b0aaf63a4773ace96636ebbcf43b881312/README.md"
+    },
+    "flux3_clip": {
+      "repo": "black-forest-labs/flux-3-image-klein-comfy",
+      "file": "text_encoders/qwen3vl_4b_int8_convrot.safetensors",
+      "revision": "feef60b0aaf63a4773ace96636ebbcf43b881312",
+      "sha256": "32de113cbf8282b02cbff0794b637b9d6676da09314a1db5a30bcea9bf4ee01c",
+      "size": 4858559240,
+      "category": "text_encoders",
+      "name": "qwen3vl_4b_int8_convrot.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/black-forest-labs/flux-3-image-klein-comfy/blob/feef60b0aaf63a4773ace96636ebbcf43b881312/README.md"
+    },
+    "flux_vae": {
+      "repo": "Comfy-Org/flux2-dev",
+      "file": "split_files/vae/flux2-vae.safetensors",
+      "revision": "ed33133cd56476eac818c0943b6f9419b3e4a3a1",
+      "sha256": "d64f3a68e1cc4f9f4e29b6e0da38a0204fe9a49f2d4053f0ec1fa1ca02f9c4b5",
+      "size": 336213556,
+      "category": "vae",
+      "name": "flux2-vae-comfy.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/Comfy-Org/flux2-dev/blob/ed33133cd56476eac818c0943b6f9419b3e4a3a1/README.md"
+    },
+    "qwen2511_angles": {
+      "repo": "fal/Qwen-Image-Edit-2511-Multiple-Angles-LoRA",
+      "file": "qwen-image-edit-2511-multiple-angles-lora.safetensors",
+      "revision": "e3066224ab74263f4a5b6179cd1a3b0a15577e44",
+      "sha256": "42426ded4e25fd22879d9e198b857556445ef4ca56e8da3246d0345155bb6765",
+      "size": 295140688,
+      "category": "loras",
+      "name": "qwen-image-edit-2511-multiple-angles-lora.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/fal/Qwen-Image-Edit-2511-Multiple-Angles-LoRA/blob/e3066224ab74263f4a5b6179cd1a3b0a15577e44/README.md"
+    },
+    "qwen21_angles": {
+      "repo": "akhaliq/Qwen-Image-2.1-Multiple-Angles-LoRA",
+      "file": "checkpoints_v2/angles_v2_full_qwen21_multiple_angles_v2_qwen21_multiple_angles_v2_000001500.safetensors",
+      "revision": "175b29b6eb41307473eebc363fca8fc198216b60",
+      "sha256": "548c57977c3f1c09c2c9e5f4e83e930cbc6f719c878a576ab8666ce29fef39b6",
+      "size": 318819792,
+      "category": "loras",
+      "name": "angles_v2_full_qwen21_multiple_angles_v2_qwen21_multiple_angles_v2_000001500.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/akhaliq/Qwen-Image-2.1-Multiple-Angles-LoRA/blob/175b29b6eb41307473eebc363fca8fc198216b60/README.md"
+    },
+    "flux3_angles": {
+      "repo": "akhaliq/flux-3-image-klein-angles-lora",
+      "file": "pytorch_lora_weights.safetensors",
+      "revision": "41425f3e32cc0509293e9aa8d04c0c89f9a90190",
+      "sha256": "ef3a69f012413354a68da8c9cd306b48b6b55e35a947ba5aa2f4d1b66047b20c",
+      "size": 80386192,
+      "category": "loras",
+      "name": "flux3-klein-base-angles.safetensors",
+      "license": "other",
+      "license_url": "https://huggingface.co/akhaliq/flux-3-image-klein-angles-lora/blob/41425f3e32cc0509293e9aa8d04c0c89f9a90190/README.md"
+    },
+    "klein_angles": {
+      "repo": "Alexali/multiple-angles-flux2K",
+      "file": "multiple-angles-flux-klein-9b.safetensors",
+      "revision": "32bf2cdbebb47e7c88b929c7b0e9698ce61b2cd7",
+      "sha256": "3dc50269a94c29d679f9e5b52868cea1b26542cf32e8976ee74d8ce16c98d692",
+      "size": 87070312,
+      "category": "loras",
+      "name": "multiple-angles-flux-klein-9b.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Alexali/multiple-angles-flux2K/blob/32bf2cdbebb47e7c88b929c7b0e9698ce61b2cd7/README.md"
+    },
+    "pixal_multiview": {
+      "repo": "Comfy-Org/Pixal3D",
+      "file": "diffusion_models/pixal3d_multiview_bf16.safetensors",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "sha256": "302d00adb453f089c87ea083ebde2c9087bc259170d17910136ad1d8231f49a3",
+      "size": 10999317704,
+      "category": "diffusion_models",
+      "name": "pixal3d_multiview_bf16.safetensors",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/Pixal3D/blob/f37641be376725d324c56626007cc477f1249a69/README.md"
+    },
+    "pixal_single": {
+      "repo": "Comfy-Org/Pixal3D",
+      "file": "diffusion_models/pixal3d_bf16.safetensors",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "sha256": "5f3cd67b7ff9104d810754bcd89e47a6c2393e41f8c0a808d0dead37802d85fe",
+      "size": 10999317704,
+      "category": "diffusion_models",
+      "name": "pixal3d_bf16.safetensors",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/Pixal3D/blob/f37641be376725d324c56626007cc477f1249a69/README.md"
+    },
+    "shape_vae": {
+      "repo": "Comfy-Org/Pixal3D",
+      "file": "vae/trellis_2_shape_vae_bf16.safetensors",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "sha256": "de0cb4949a76c59ee5c091a995a69bcc8c51d5aeda939f0c641a50d2a72341f4",
+      "size": 1095844024,
+      "category": "vae",
+      "name": "trellis_2_shape_vae_bf16.safetensors",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/Pixal3D/blob/f37641be376725d324c56626007cc477f1249a69/README.md"
+    },
+    "texture_vae": {
+      "repo": "Comfy-Org/Pixal3D",
+      "file": "vae/trellis_2_texture_vae_bf16.safetensors",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "sha256": "714e5ebf094a610e12a8e3b5175c18a62f37f6ea4218acb6073644456b73ab0e",
+      "size": 948461364,
+      "category": "vae",
+      "name": "trellis_2_texture_vae_bf16.safetensors",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/Pixal3D/blob/f37641be376725d324c56626007cc477f1249a69/README.md"
+    },
+    "dino": {
+      "repo": "Comfy-Org/Pixal3D",
+      "file": "clip_vision/dino_v3_L_naf_fp32.safetensors",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "sha256": "4ad2ec4e0879a5b5b04cd97325cc37da954a7b6edca5170b86510f17f2b2290f",
+      "size": 1215214176,
+      "category": "clip_vision",
+      "name": "dino_v3_L_naf_fp32.safetensors",
+      "license": "dinov3-license",
+      "license_url": "https://github.com/facebookresearch/dinov3/blob/ffb4bb89c6558ca3244655c25a3955d01788b732/LICENSE.md"
+    },
+    "birefnet": {
+      "repo": "Comfy-Org/BiRefNet",
+      "file": "background_removal/birefnet.safetensors",
+      "revision": "25511f8787e51912e1480706b4e47b8f467fbf72",
+      "sha256": "9ab37426bf4de0567af6b5d21b16151357149139362e6e8992021b8ce356a154",
+      "size": 444473596,
+      "category": "background_removal",
+      "name": "birefnet.safetensors",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/BiRefNet/blob/25511f8787e51912e1480706b4e47b8f467fbf72/README.md"
+    },
+    "trellis2": {
+      "repo": "Comfy-Org/TRELLIS.2",
+      "file": "diffusion_models/trellis_2_bf16.safetensors",
+      "revision": "430a9d09b2416687018c8fe8edced2ad4858a439",
+      "sha256": "bf8ebe29f2d73722ca8a17b7aa65ef07650eb26d04799ae600482058f96921b5",
+      "size": 10338297616,
+      "category": "diffusion_models",
+      "name": "trellis_2_bf16.safetensors",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/TRELLIS.2/blob/430a9d09b2416687018c8fe8edced2ad4858a439/README.md"
+    },
+    "klein4": {
+      "repo": "black-forest-labs/FLUX.2-klein-4b-fp8",
+      "file": "flux-2-klein-4b-fp8.safetensors",
+      "revision": "5b4408e59397a4a37ccb46afe426d8ed86379441",
+      "sha256": "97ed34fe0567e436200f2faee3939b88f2b5d99f8af2a4dc16532c4245c0ccb6",
+      "size": 4070624520,
+      "category": "diffusion_models",
+      "name": "flux-2-klein-4b-fp8.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/black-forest-labs/FLUX.2-klein-4b-fp8/blob/5b4408e59397a4a37ccb46afe426d8ed86379441/README.md"
+    },
+    "klein4_clip": {
+      "repo": "Comfy-Org/flux2-klein-4B",
+      "file": "split_files/text_encoders/qwen_3_4b_fp4_flux2.safetensors",
+      "revision": "5f526678002e43af5551dadb73ce2e8c91b43afe",
+      "sha256": "3eab03a77adb0ee5304a4e677d5c10ac22f9049c1d7c894adca4f8bb39206ca8",
+      "size": 3848213998,
+      "category": "text_encoders",
+      "name": "qwen_3_4b_fp4_flux2.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/Comfy-Org/flux2-klein-4B/blob/5f526678002e43af5551dadb73ce2e8c91b43afe/README.md"
+    },
+    "klein4_base": {
+      "repo": "black-forest-labs/FLUX.2-klein-base-4b-fp8",
+      "file": "flux-2-klein-base-4b-fp8.safetensors",
+      "revision": "103db268c10d4d3921101b46057671f9ac460da6",
+      "sha256": "44bab3a86fe98b85d21dd2a4729ebdc3ae51fb8a39f76e457e18c724219e6840",
+      "size": 4089498488,
+      "category": "diffusion_models",
+      "name": "flux-2-klein-base-4b-fp8.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/black-forest-labs/FLUX.2-klein-base-4b-fp8/blob/103db268c10d4d3921101b46057671f9ac460da6/README.md"
+    },
+    "klein4_depth": {
+      "repo": "thedeoxen/refcontrol-FLUX.2-klein-4B-reference-depth-lora",
+      "file": "flux2_klein_4b_refcontrol_depth.safetensors",
+      "revision": "0ae1ef7f9acc4e55ec2237360943c3c3032d3583",
+      "sha256": "65ec4c71fa7538b2201481928609a5836773f0dc06a4041b2d28abd05826c401",
+      "size": 92426784,
+      "category": "loras",
+      "name": "flux2_klein_4b_refcontrol_depth.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/thedeoxen/refcontrol-FLUX.2-klein-4B-reference-depth-lora/blob/0ae1ef7f9acc4e55ec2237360943c3c3032d3583/README.md"
+    },
+    "klein9_depth": {
+      "repo": "thedeoxen/refcontrol-FLUX.2-klein-9B-reference-depth-lora",
+      "file": "flux2_klein_9b_refcontrol_depth.safetensors",
+      "revision": "6a3cfaeac4125428486b10a2eabc103b0f119d40",
+      "sha256": "d627631d39a6a7c7b2951b029a1a0c72b40809b27d4049b708129e1832c9bb8d",
+      "size": 165704480,
+      "category": "loras",
+      "name": "flux2_klein_9b_refcontrol_depth.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/thedeoxen/refcontrol-FLUX.2-klein-9B-reference-depth-lora/blob/6a3cfaeac4125428486b10a2eabc103b0f119d40/README.md"
+    },
+    "moge2": {
+      "repo": "Ruicheng/moge-2-vitl",
+      "file": "model.pt",
+      "revision": "39c4d5e957afe587e04eec59dc2bcc3be5ecd968",
+      "sha256": "3eefd4abb2102f38f12b2d1992e5ff15e4923e5431c67dd494afe157e0111cd5",
+      "size": 1305030700,
+      "category": "geometry_estimation",
+      "name": "moge2_vitl.pt",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Ruicheng/moge-2-vitl/blob/39c4d5e957afe587e04eec59dc2bcc3be5ecd968/README.md"
+    },
+    "qwen21_anyangle": {
+      "repo": "lilylilith/QI_2.1_AnyAngle",
+      "file": "QI2.1_AnyAngle.safetensors",
+      "revision": "35b746e4121e1e9fc6a3e334fd8036ba1a9560d0",
+      "sha256": "e4d7a0d44a45ed62daabd0f2484a1a59046618a4c47e76b1eab5e386a7a35d8a",
+      "size": 119590312,
+      "category": "loras",
+      "name": "QI2.1_AnyAngle.safetensors",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/lilylilith/QI_2.1_AnyAngle/blob/35b746e4121e1e9fc6a3e334fd8036ba1a9560d0/README.md"
+    },
+    "sdxl_base": {
+      "repo": "stabilityai/stable-diffusion-xl-base-1.0",
+      "revision": "462165984030d82259a11f4367a4eed129e94a7b",
+      "file": "sd_xl_base_1.0.safetensors",
+      "category": "checkpoints",
+      "name": "sd_xl_base_1.0.safetensors",
+      "size": 6938078334,
+      "sha256": "31e35c80fc4829d14f90153f4c74cd59c90b779f6afe05a74cd6120b893f7e5b",
+      "license": "openrail++",
+      "license_url": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/462165984030d82259a11f4367a4eed129e94a7b/README.md"
+    },
+    "sdxl_juggernaut": {
+      "repo": "RunDiffusion/Juggernaut-XL-v9",
+      "revision": "cf419233522daa0b9ea36c3aff98fa2cab1fb0fb",
+      "file": "Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors",
+      "category": "checkpoints",
+      "name": "Juggernaut-XL_v9_RunDiffusionPhoto_v2.safetensors",
+      "size": 7105348188,
+      "sha256": "c9e3e68f89b8e38689e1097d4be4573cf308de4e3fd044c64ca697bdb4aa8bca",
+      "license": "creativeml-openrail-m",
+      "license_url": "https://huggingface.co/RunDiffusion/Juggernaut-XL-v9/blob/cf419233522daa0b9ea36c3aff98fa2cab1fb0fb/README.md"
+    },
+    "sdxl_ipadapter": {
+      "repo": "h94/IP-Adapter",
+      "revision": "018e402774aeeddd60609b4ecdb7e298259dc729",
+      "file": "sdxl_models/ip-adapter-plus_sdxl_vit-h.safetensors",
+      "category": "ipadapter",
+      "name": "ip-adapter-plus_sdxl_vit-h.safetensors",
+      "size": 847517512,
+      "sha256": "3f5062b8400c94b7159665b21ba5c62acdcd7682262743d7f2aefedef00e6581",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/h94/IP-Adapter/blob/018e402774aeeddd60609b4ecdb7e298259dc729/README.md"
+    },
+    "sdxl_vision": {
+      "repo": "h94/IP-Adapter",
+      "revision": "018e402774aeeddd60609b4ecdb7e298259dc729",
+      "file": "models/image_encoder/model.safetensors",
+      "category": "clip_vision",
+      "name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+      "size": 2528373448,
+      "sha256": "6ca9667da1ca9e0b0f75e46bb030f7e011f44f86cbfb8d5a36590fcd7507b030",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/h94/IP-Adapter/blob/018e402774aeeddd60609b4ecdb7e298259dc729/README.md"
+    },
+    "sdxl_pixel_art": {
+      "repo": "nerijs/pixel-art-xl",
+      "revision": "8bf4a4d9ea283e00a51fafda8e0539f8248ea037",
+      "file": "pixel-art-xl.safetensors",
+      "category": "loras",
+      "name": "sdxl-pixel-art-xl.safetensors",
+      "size": 170543052,
+      "sha256": "4234637cb80c998f41e348e6a6cb6bc20d8d038b2b0f256b6129b3b5e353eef7",
+      "license": "creativeml-openrail-m",
+      "license_url": "https://huggingface.co/nerijs/pixel-art-xl/blob/8bf4a4d9ea283e00a51fafda8e0539f8248ea037/README.md"
+    },
+    "qwen21_union": {
+      "name": "qwen_image_2.1_fun_controlnet_union_int8_convrot.safetensors",
+      "category": "model_patches",
+      "size": 3779298944,
+      "sha256": "07aa961570ac0e03d4ca936aecd76854d077a33cde69b5092399afba01b3715d",
+      "source": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1",
+      "revision": "aacf31a6d48e707f352ecba714cee0680da3479b",
+      "license": "qwen-research"
+    }
+  },
+  "pipeline_resources": [
+    {
+      "id": "trellis2-final-mesh-texture",
+      "model": "microsoft/TRELLIS.2-4B",
+      "source": "https://github.com/microsoft/TRELLIS.2",
+      "wrapper": "https://github.com/visualbruno/ComfyUI-Trellis2",
+      "wrapper_revision": "b0e84c0f29857a444e8bcb5b9be2ea218e96efd0",
+      "license": "MIT",
+      "license_url": "https://github.com/microsoft/TRELLIS.2/blob/main/LICENSE",
+      "isolation": "Configured worker Python; never install its torch into the host"
+    },
+    {
+      "id": "stable-materials",
+      "model": "gvecchio/StableMaterials",
+      "revision": "4d452731535bd5c74261d6645623a573326f6f36",
+      "source": "https://huggingface.co/gvecchio/StableMaterials",
+      "license": "OpenRAIL; see model card and repository license",
+      "license_url": "https://huggingface.co/gvecchio/StableMaterials",
+      "mode": "LCM4step",
+      "isolation": "Configured worker Python"
+    },
+    {
+      "id": "hi3d-refine",
+      "source": "https://github.com/hi3d-official/Hi3Dv1.0",
+      "revision": "23dcc684bc6e1fab86ecafb99ec5270edad122f9",
+      "model_revision": "705fc0901c5d896cdcbf1dbf1feaa173e62bdd3a",
+      "isolation": "Configured local Hi3D workbench service",
+      "model_source": "https://huggingface.co/t8star/Hi3d-Comfy",
+      "license": "Hi3D Open License Agreement Version 1.0",
+      "license_url": "https://github.com/hi3d-official/Hi3Dv1.0/blob/23dcc684bc6e1fab86ecafb99ec5270edad122f9/LICENSE",
+      "notice": "Powered by Hi3D 1.0 - http://hi3d.ai/"
+    },
+    {
+      "id": "hairdeck",
+      "model": "hyz317/HairDeck",
+      "revision": "129ad77fba42edfb79a59246f43b11d3fc64c6d1",
+      "source": "https://github.com/hyz317/HairDeck",
+      "wrapper": "https://github.com/FengLairh/ComfyUI-HairDeck",
+      "wrapper_revision": "ad27f3433169ca6e1f61396525d30d6ca55428be",
+      "isolation": "Native ComfyUI host with pinned requirements-hair-windows.txt; weights and VRM tools on first workflow use only",
+      "files": [
+        {
+          "path": "ckpt/image_model/model.safetensors",
+          "role": "native image workflow",
+          "bytes": 729268136,
+          "sha256": "7348fa7f1595a4560e836ae0db7fe2a14d2abfe7730db5665f9c976f942997be",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/ckpt/image_model/model.safetensors",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "ckpt/card_vae/model.safetensors",
+          "role": "native image workflow",
+          "bytes": 32284540,
+          "sha256": "c19a8149ca07ea0710729475543cdc21f2bc35fbac684b21adb23671cd2c6fd8",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/ckpt/card_vae/model.safetensors",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "ckpt/chain_model/model.safetensors",
+          "role": "native image workflow",
+          "bytes": 122107892,
+          "sha256": "4d2b44ea9c9b81fb5c9973e050ffecd32b5dc13a7e47c5ca6ecf903cd83d31bf",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/ckpt/chain_model/model.safetensors",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "ckpt/card_vae/stats.json",
+          "role": "native image workflow",
+          "bytes": 181,
+          "sha256": "a59083fbeff3151e9bbb24b029f0e520e59226adc0861706922893162dc6bd28",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/ckpt/card_vae/stats.json",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "ckpt/card_vae/latent_stats_head.json",
+          "role": "native image workflow",
+          "bytes": 1330,
+          "sha256": "85a8470491342675c5fd2b026d060efb8c2fa1cc67a0ee2a158d5244d92f0263",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/ckpt/card_vae/latent_stats_head.json",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "data/token_stats_head.json",
+          "role": "native image workflow",
+          "bytes": 366,
+          "sha256": "c7a1babaac873afd989f25c0f2b8b2d178499df31a4b70653973be3aaab070e2",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/data/token_stats_head.json",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "data/head_frame_train.npz",
+          "role": "native image workflow",
+          "bytes": 620712,
+          "sha256": "c5ba440bfa91c3c28ad1f1c9971d4d0826c28ff34b54279c9a28ed622a36de23",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/data/head_frame_train.npz",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "data/spring/chain_stats_head.json",
+          "role": "native image workflow",
+          "bytes": 1176,
+          "sha256": "059b051ef2f3e9dd8980f95f08c3c7d067c05fcf3e705b2294beb77171f5b70b",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/data/spring/chain_stats_head.json",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "data/avatar/body.json",
+          "role": "VRM example/profile",
+          "bytes": 1198,
+          "sha256": "1a5ca0464d5964d85c06d89bde93bee74eb8a9cde167aee3db90b12e1b66054c",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/data/avatar/body.json",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "data/avatar/avatar.vrm",
+          "role": "VRM example/profile",
+          "bytes": 13355440,
+          "sha256": "458ad23b573140331317f25a27e83496cce06d8c5cc4efd2ec23474b5a845b8d",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/data/avatar/avatar.vrm",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "data/avatar/hair.glb",
+          "role": "VRM example/profile",
+          "bytes": 519944,
+          "sha256": "72a5f25f5300c909eb072d1fddbc340922d3625d5b62823bf092237feeda18d5",
+          "source": "https://huggingface.co/hyz317/HairDeck/resolve/129ad77fba42edfb79a59246f43b11d3fc64c6d1/data/avatar/hair.glb",
+          "license": "Apache-2.0 per HairDeck release; retain avatar metadata",
+          "acquisition": "public model repository"
+        },
+        {
+          "path": "third_party/weights/sam3/sam3.pt",
+          "bytes": 3450062241,
+          "sha256": "9999e2341ceef5e136daa386eecb55cb414446a00ac2b55eb2dfd2f7c3cf8c9e",
+          "source": "https://modelscope.cn/api/v1/models/facebook/sam3/repo?Revision=f8ee5d16d5c30d0e87b1d22cbd358ce97761df56&FilePath=sam3.pt",
+          "license": "SAM License",
+          "acquisition": "official HairDeck documented ModelScope option; anonymous HEAD 200"
+        },
+        {
+          "path": "third_party/weights/dinov3/model.safetensors",
+          "bytes": 1212559808,
+          "sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+          "source": "https://modelscope.cn/api/v1/models/facebook/dinov3-vitl16-pretrain-lvd1689m/repo?Revision=bab39f7f4023c45534a5326e9378edc5b2016e48&FilePath=model.safetensors",
+          "license": "DINOv3 License",
+          "acquisition": "official HairDeck documented ModelScope option; anonymous HEAD 200"
+        },
+        {
+          "path": "third_party/weights/birefnet_matting/model.safetensors",
+          "bytes": 884878856,
+          "sha256": "a9875de5b1e6c8eb5fdaa8c727a82927ce442cdc87ba3abee6a77e6fa46c25bb",
+          "source": "https://huggingface.co/ZhengPeng7/BiRefNet-matting/resolve/eccde0a8cbdce7ac5fecfeb06340fe7b949e85d9/model.safetensors",
+          "license": "MIT",
+          "acquisition": "public repository; anonymous HEAD 200"
+        }
+      ]
+    }
+  ],
+  "worker_models": {
+    "trellis_texture": [
+      {
+        "name": "microsoft/TRELLIS.2-4B/ckpts/shape_enc_next_dc_f16c32_fp16.json",
+        "category": "worker",
+        "repo": "microsoft/TRELLIS.2-4B",
+        "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+        "file": "ckpts/shape_enc_next_dc_f16c32_fp16.json",
+        "size": 653,
+        "sha256": "5a960a5c419d70f8d4a7a6b6e52ae689cd948c88bd7ed92346adfbf82cd12007",
+        "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+      },
+      {
+        "name": "microsoft/TRELLIS.2-4B/ckpts/shape_enc_next_dc_f16c32_fp16.safetensors",
+        "category": "worker",
+        "repo": "microsoft/TRELLIS.2-4B",
+        "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+        "file": "ckpts/shape_enc_next_dc_f16c32_fp16.safetensors",
+        "size": 708797208,
+        "sha256": "f37c5ff5b983b68e9946060000f09bc131f3e84318a2c8b7430a81e4b4636c41",
+        "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+      },
+      {
+        "name": "microsoft/TRELLIS.2-4B/ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.json",
+        "category": "worker",
+        "repo": "microsoft/TRELLIS.2-4B",
+        "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+        "file": "ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.json",
+        "size": 458,
+        "sha256": "31f4fdad9974930e5e9324ac9dfb6ef7de6b30cea51854ba515ef827a8d353b2",
+        "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+      },
+      {
+        "name": "microsoft/TRELLIS.2-4B/ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.safetensors",
+        "category": "worker",
+        "repo": "microsoft/TRELLIS.2-4B",
+        "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+        "file": "ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.safetensors",
+        "size": 2584672728,
+        "sha256": "580401269059a339b8318ab9ced459a13ba63391721c83a6c383198c29e77686",
+        "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+      },
+      {
+        "name": "microsoft/TRELLIS.2-4B/ckpts/tex_dec_next_dc_f16c32_fp16.json",
+        "category": "worker",
+        "repo": "microsoft/TRELLIS.2-4B",
+        "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+        "file": "ckpts/tex_dec_next_dc_f16c32_fp16.json",
+        "size": 705,
+        "sha256": "22074e4ab5b28e2b72d33a3fe61bf416134b89e12d0fc5c729f37da75da0c4d1",
+        "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+      },
+      {
+        "name": "microsoft/TRELLIS.2-4B/ckpts/tex_dec_next_dc_f16c32_fp16.safetensors",
+        "category": "worker",
+        "repo": "microsoft/TRELLIS.2-4B",
+        "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+        "file": "ckpts/tex_dec_next_dc_f16c32_fp16.safetensors",
+        "size": 948458812,
+        "sha256": "97ea69addea2ecd9312910f5f548234665eef51c088386180b7cd5b258645e3c",
+        "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+      },
+      {
+        "name": "microsoft/TRELLIS.2-4B/pipeline.json",
+        "category": "worker",
+        "repo": "microsoft/TRELLIS.2-4B",
+        "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+        "file": "pipeline.json",
+        "size": 4186,
+        "sha256": "222c359ab1ed9bc6735a640a34f95d47f8681b9bc4aaa101bfb80274676253c6",
+        "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+      },
+      {
+        "name": "facebook/dinov3-vitl16-pretrain-lvd1689m/config.json",
+        "category": "worker",
+        "repo": "visualbruno/dinov3-vitl16-pretrain-lvd1689m",
+        "revision": "8463e34549282813c2cbf67241b27c6fe8fa6321",
+        "file": "config.json",
+        "size": 745,
+        "sha256": "135ecd23e34a70b6fbed8b083fdecb319b7e3a54e3d849258bbe4ddcf1783bb5",
+        "license_url": "https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m/blob/ea8dc2863c51be0a264bab82070e3e8836b02d51/README.md"
+      },
+      {
+        "name": "facebook/dinov3-vitl16-pretrain-lvd1689m/model.safetensors",
+        "category": "worker",
+        "repo": "visualbruno/dinov3-vitl16-pretrain-lvd1689m",
+        "revision": "8463e34549282813c2cbf67241b27c6fe8fa6321",
+        "file": "model.safetensors",
+        "size": 1212559808,
+        "sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+        "license_url": "https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m/blob/ea8dc2863c51be0a264bab82070e3e8836b02d51/README.md"
+      },
+      {
+        "name": "facebook/dinov3-vitl16-pretrain-lvd1689m/preprocessor_config.json",
+        "category": "worker",
+        "repo": "visualbruno/dinov3-vitl16-pretrain-lvd1689m",
+        "revision": "8463e34549282813c2cbf67241b27c6fe8fa6321",
+        "file": "preprocessor_config.json",
+        "size": 585,
+        "sha256": "960c41d1f3a7778b936365769a2d90550b318a6c0a53a0296957adacfe5e0dd7",
+        "license_url": "https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m/blob/ea8dc2863c51be0a264bab82070e3e8836b02d51/README.md"
+      }
+    ]
+  }
+}
