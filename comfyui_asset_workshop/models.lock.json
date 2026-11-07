@@ -452,6 +452,50 @@
       "repo": "Comfy-Org/Qwen-Image-2.1",
       "file": "model_patches/qwen_image_2.1_fun_controlnet_union_int8_convrot.safetensors",
       "license_url": "https://huggingface.co/alibaba-pai/Qwen-Image-2.1-Fun-Controlnet-Union/blob/main/LICENSE"
+    },
+    "idol": {
+      "repo": "Comfy-Org/Idol",
+      "file": "diffusion_models/idol_fp16.safetensors",
+      "revision": "3d050f4bc705ca1202a0ae4d21d2d97987521307",
+      "sha256": "9abf6a99fc6bdad701901b12de8fe1b256f02cae4948f7489d25d86b11b52a93",
+      "size": 741106994,
+      "category": "diffusion_models",
+      "name": "idol_fp16.safetensors",
+      "license": "Apache-2.0",
+      "license_url": "https://huggingface.co/Comfy-Org/Idol/blob/3d050f4bc705ca1202a0ae4d21d2d97987521307/README.md"
+    },
+    "idol_dino": {
+      "repo": "Comfy-Org/Idol",
+      "file": "clip_vision/dino_v3_vit_h_bf16.safetensors",
+      "revision": "3d050f4bc705ca1202a0ae4d21d2d97987521307",
+      "sha256": "a29ef35101a16966972a0d50732a6f3a608ff7cfffb2afa9bbe9007cb842cc53",
+      "size": 1681247696,
+      "category": "clip_vision",
+      "name": "dino_v3_vit_h_bf16.safetensors",
+      "license": "Meta DINOv3 license",
+      "license_url": "https://huggingface.co/Comfy-Org/Idol/blob/3d050f4bc705ca1202a0ae4d21d2d97987521307/README.md"
+    },
+    "idol_decoder": {
+      "repo": "Comfy-Org/Idol",
+      "file": "vae/idol_decoder_fp16.safetensors",
+      "revision": "3d050f4bc705ca1202a0ae4d21d2d97987521307",
+      "sha256": "6a146a1e6b2653f74422f7ea835eb8715c547c7de8fc4545051f15c247ae54a9",
+      "size": 576148442,
+      "category": "vae",
+      "name": "idol_decoder_fp16.safetensors",
+      "license": "Apache-2.0",
+      "license_url": "https://huggingface.co/Comfy-Org/Idol/blob/3d050f4bc705ca1202a0ae4d21d2d97987521307/README.md"
+    },
+    "idol_image_vae": {
+      "repo": "Comfy-Org/Idol",
+      "file": "vae/flux2-vae.safetensors",
+      "revision": "3d050f4bc705ca1202a0ae4d21d2d97987521307",
+      "sha256": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3",
+      "size": 336211292,
+      "category": "vae",
+      "name": "flux2-vae.safetensors",
+      "license": "Apache-2.0",
+      "license_url": "https://huggingface.co/Comfy-Org/Idol/blob/3d050f4bc705ca1202a0ae4d21d2d97987521307/README.md"
     }
   },
   "pipeline_resources": [

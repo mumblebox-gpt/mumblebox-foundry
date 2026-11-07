@@ -16,7 +16,7 @@ from .receipts import sync
 
 PREFIX = "/mumblebox-foundry/v1"
 
-def register(routes, library, preferences, wizard_factory=None, resources=None, updates=None, image_factory=None, image_notify=None, hair_factory=None, hair_notify=None, guided_factory=None):
+def register(routes, library, preferences, wizard_factory=None, resources=None, updates=None, image_factory=None, image_notify=None, hair_factory=None, hair_notify=None, guided_factory=None, splat_factory=None):
     def endpoint(function):
         async def wrapped(request):
             origin = request.headers.get("Origin")
@@ -34,6 +34,9 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
                 return web.json_response({"error": "The Foundry operation could not finish. Your workflow has not been changed."}, status=500)
         return wrapped
 
+    if splat_factory:
+        from .workflows.splat_solid.routes import register as splat_routes
+        splat_routes(routes,splat_factory,endpoint)
     if guided_factory:
         from .workflows.guided_mesh.routes import register as guided_routes
         guided_routes(routes,guided_factory,endpoint)
@@ -60,7 +63,7 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
         @routes.get(PREFIX + "/resources")
         @endpoint
         async def resource_list(request):
-            return await asyncio.to_thread(resources.list)
+            return await asyncio.to_thread(resources.list,request.query.get("cursor",0),request.query.get("limit",100))
 
         @routes.post(PREFIX + "/resources/delete-preview")
         @endpoint
@@ -284,7 +287,7 @@ def install():
             from ..finishing.package_catalog import VARIANTS,parse_selection
             runs.ACTIVE=runs.WizardRuns(state/"wizard-runs",folder_paths.get_input_directory(),
                 folder_paths.get_output_directory(),NativeQueue(PromptServer.instance.prompt_queue),
-                resources,lambda:has_active_jobs() or image_busy() or hair_busy() or guided_busy(),parse_selection,VARIANTS)
+                resources,lambda:has_active_jobs() or image_busy() or hair_busy() or guided_busy() or splat_busy(),parse_selection,VARIANTS)
             runs.ACTIVE.library=library
             from .workflows.image_creation.lineage import resolve_handoff
             runs.ACTIVE.image_source_resolver=lambda source,refs:resolve_handoff(state/'image-creation',source,refs)
@@ -293,6 +296,7 @@ def install():
     from .workflows.image_creation.runs import busy as image_busy
     from .workflows.hair_creation.runs import busy as hair_busy
     from .workflows.guided_mesh.runs import busy as guided_busy
+    from .workflows.splat_solid.runs import busy as splat_busy
     def image_factory():
         from .workflows.image_creation import runs
         if runs.ACTIVE is None:
@@ -301,7 +305,7 @@ def install():
             from ..routes import resources
             runs.ACTIVE=runs.ImageRuns(ImageLibrary(state/'image-creation',folder_paths.get_output_directory()),
                 folder_paths.get_input_directory(),NativeQueue(PromptServer.instance.prompt_queue),
-                resources,lambda:has_active_jobs() or busy() or hair_busy() or guided_busy())
+                resources,lambda:has_active_jobs() or busy() or hair_busy() or guided_busy() or splat_busy())
         return runs.ACTIVE
     def hair_factory():
         from .workflows.hair_creation import runs
@@ -310,7 +314,7 @@ def install():
             from ..routes import resources
             runs.ACTIVE=runs.HairRuns(state/'hair-runs',folder_paths.get_input_directory(),
                 folder_paths.get_output_directory(),NativeQueue(PromptServer.instance.prompt_queue),
-                resources,lambda:has_active_jobs() or busy() or image_busy() or guided_busy(),library)
+                resources,lambda:has_active_jobs() or busy() or image_busy() or guided_busy() or splat_busy(),library)
         return runs.ACTIVE
     def guided_factory():
         from .workflows.guided_mesh import runs
@@ -320,10 +324,19 @@ def install():
             from ..finishing.package_catalog import VARIANTS,parse_selection
             runs.ACTIVE=runs.GuidedRuns(state/'guided',folder_paths.get_input_directory(),folder_paths.get_output_directory(),
                 NativeQueue(PromptServer.instance.prompt_queue),resources,
-                lambda:has_active_jobs() or busy() or image_busy() or hair_busy(),parse_selection,VARIANTS)
+                lambda:has_active_jobs() or busy() or image_busy() or hair_busy() or splat_busy(),parse_selection,VARIANTS)
             runs.ACTIVE.finisher.library=library
         return runs.ACTIVE
-    library.busy=lambda:PromptServer.instance.prompt_queue.get_tasks_remaining()>0 or busy() or image_busy() or hair_busy() or guided_busy()
+    def splat_factory():
+        from .workflows.splat_solid import runs
+        if runs.ACTIVE is None:
+            from ..single_image_routes import NativeQueue,has_active_jobs
+            from ..routes import resources
+            runs.ACTIVE=runs.SplatRuns(state/'splat-runs',folder_paths.get_input_directory(),folder_paths.get_output_directory(),
+                NativeQueue(PromptServer.instance.prompt_queue),resources,
+                lambda:has_active_jobs() or busy() or image_busy() or hair_busy() or guided_busy(),library)
+        return runs.ACTIVE
+    library.busy=lambda:PromptServer.instance.prompt_queue.get_tasks_remaining()>0 or busy() or image_busy() or hair_busy() or guided_busy() or splat_busy()
     from .resources import ResourceInventory
     from .. import models,description_helper
     import comfy.model_management as memory
@@ -333,10 +346,11 @@ def install():
         return (library.busy() or has_active_jobs() or bool(memory.current_loaded_models)
                 or description_helper.PROCESS is not None or models.DOWNLOAD.get("status")=="running"
                 or DOWNLOADS.status().get("status")=="running")
-    resource_inventory=ResourceInventory(models.MODEL_ROOT,resources_in_use)
+    from .model_locations import registered_locations,invalidate_model_lists
+    resource_inventory=ResourceInventory(models.MODEL_ROOT,resources_in_use,registered_locations,models.MODELS,invalidate_model_lists)
     from .updates import ReleaseUpdates
     preferences = Preferences(state/"preferences.json")
     updates = ReleaseUpdates(state/"updates.json", preferences)
     register(PromptServer.instance.routes, library, preferences, wizard_factory, resource_inventory, updates,
              image_factory,lambda ident:PromptServer.instance.send_sync('mumblebox-foundry-image',{'id':ident}),
-             hair_factory,lambda ident:PromptServer.instance.send_sync('mumblebox-foundry-hair',{'id':ident}),guided_factory)
+             hair_factory,lambda ident:PromptServer.instance.send_sync('mumblebox-foundry-hair',{'id':ident}),guided_factory,splat_factory)

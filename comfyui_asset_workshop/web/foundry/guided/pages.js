@@ -37,7 +37,7 @@ export function startingPage(w){
     })});
     const category=el('select',{'aria-label':'Object type'},el('option',{value:'props'},'Objects'),
         el('option',{disabled:true},'People · future preset'),el('option',{disabled:true},'Vehicles · future presets'));
-    return el('div',{},hint('3D-Guided builds one rough shape, photographs it in Blender, and uses those measured views to guide the finished images.'),
+    return el('div',{},hint('3D-Guided combines Pixal3D geometry, MoGe 2 camera estimation, Blender rendering and Qwen depth guidance. Measured views provide structure while your references guide appearance.'),
         el('div',{class:'wizard-columns'},field('Asset name',el('input',{value:w.draft.name,'aria-label':'Asset name',maxLength:100,disabled:!!w.id,oninput:e=>{w.draft.name=e.target.value;w.remember();}})),
             field('What are you making?',category,'Objects only in this version. Best suited to solid standalone props readable from front, back and both sides. The treasure chest is the completed example.')),
         file,el('div',{class:'upload-zone',ondragover:e=>e.preventDefault(),ondrop:e=>{e.preventDefault();w.act(()=>take(e.dataTransfer.files[0]));}},el('strong',{},'Drop one starting image here'),

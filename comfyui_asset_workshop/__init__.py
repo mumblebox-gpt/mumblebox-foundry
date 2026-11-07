@@ -34,6 +34,8 @@ from .foundry.workflows.image_creation.nodes import NODE_CLASS_MAPPINGS as IMAGE
 NODE_CLASS_MAPPINGS.update(IMAGE_CREATION_NODES)
 from .foundry.workflows.hair_creation.nodes import NODE_CLASS_MAPPINGS as HAIR_CREATION_NODES
 NODE_CLASS_MAPPINGS.update(HAIR_CREATION_NODES)
+from .foundry.workflows.splat_solid.nodes import NODE_CLASS_MAPPINGS as SPLAT_SOLID_NODES
+NODE_CLASS_MAPPINGS.update(SPLAT_SOLID_NODES)
 from .foundry.workflows.guided_mesh.fvb.nodes import NODE_CLASS_MAPPINGS as GUIDED_NODES
 NODE_CLASS_MAPPINGS.update(GUIDED_NODES)
 from .foundry.workflows.guided_mesh.editor import NODES as GUIDED_EDITOR_NODES

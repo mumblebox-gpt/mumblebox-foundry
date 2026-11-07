@@ -48,6 +48,8 @@ export class FoundryShell {
             if(typeof id==='string'&&/^[a-f0-9]{32}$/.test(id))this.openHairWizard({runId:id});
         };
         api.addEventListener('mumblebox-foundry-hair',this.agentHairHandler);
+        this.agentSplatHandler=e=>{if(this.node.graph===app.graph&&this.host.isConnected&&/^[a-f0-9]{32}$/.test(e.detail?.id||''))this.openSplatWizard({runId:e.detail.id});};
+        api.addEventListener('mumblebox-foundry-splat',this.agentSplatHandler);
         // Native processing belongs to the selected graph, not a particular
         // wizard page. Navigation within Foundry must not disconnect Rocket.
         this.guidedBindHandler=e=>this.bindGuided(e.detail).catch(error=>this.message(error.message,true));
@@ -194,7 +196,10 @@ export class FoundryShell {
     }
     async openMeshMethod(method){
         const handoff=this.pendingMeshHandoff;
-        if(method==='guided'){
+        if(method==='splat'){
+            if(await this.openSplatWizard({handoff})===false)return;
+        }
+        else if(method==='guided'){
             if(await this.openGuidedWizard({handoff})===false)return;
         }
         else{
@@ -230,6 +235,24 @@ export class FoundryShell {
         }catch(error){wizard?.dispose();this.content.replaceChildren(el('p',{role:'alert'},error.message));return false;}
     }
 
+    async openSplatWizard(options={}) {
+        const current=this.node.properties.foundrySplat?.runId;
+        if(current&&!options.resume){
+            const active=await request('splat/runs/'+current);
+            if(active.active){this.message('Resume the running splat asset before starting another.',true);return false;}
+        }
+        this.viewDispose?.();this.viewDispose=null;
+        const sequence=this.sequence=(this.sequence||0)+1;this.tab='Choose a Workflow';
+        this.content.replaceChildren(hint('Opening Splat & Solid…'));
+        let wizard;
+        try {
+            const {SplatWizard}=await import('./splat/controller.js');wizard=new SplatWizard(this,options);
+            const element=await wizard.init();if(sequence!==this.sequence){wizard.dispose();return false;}
+            this.content.replaceChildren(element);this.content.scrollTop=0;this.splatWizard=wizard;
+            this.viewDispose=()=>wizard.dispose();this.content.setAttribute('aria-label','Splat & Solid wizard');return true;
+        } catch(error){wizard?.dispose();this.content.replaceChildren(el('p',{role:'alert'},error.message));return false;}
+    }
+
     async openHairWizard(options={}) {
         this.viewDispose?.();this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;
@@ -248,5 +271,5 @@ export class FoundryShell {
         try{const module=await import("./views/settings.js");return module.render(this,options);}
         catch(error){this.message(error.message,true);}
     }
-    dispose() {clearInterval(this.guidedHeartbeat);api.removeEventListener('guided.bind',this.guidedBindHandler);this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
+    dispose() {api.removeEventListener('mumblebox-foundry-splat',this.agentSplatHandler);clearInterval(this.guidedHeartbeat);api.removeEventListener('guided.bind',this.guidedBindHandler);this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
 }

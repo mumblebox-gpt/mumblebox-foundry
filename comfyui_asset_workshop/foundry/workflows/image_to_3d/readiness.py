@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from ...artifacts import digest
 
-MODELS = {"guided":("pixal_single","moge2","qwen21_union"),
+MODELS = {"splat":("idol","idol_dino","idol_decoder","idol_image_vae","birefnet"), "guided":("pixal_single","moge2","qwen21_union"),
           "turnaround":("qwen21","qwen21_clip","qwen21_vae","birefnet"),
           "geometry":("pixal_multiview","shape_vae","dino"),
           "refinement":("birefnet",), "texture":("birefnet",)}

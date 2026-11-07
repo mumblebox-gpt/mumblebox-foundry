@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.0-preview.12 — Splat & Solid
+
+- Add **Splat & Solid**, powered by Idol from Sperid Labs, as the third independent method under Create a Mesh from an Image. Its six-page wizard supports upload/drop, camera and Gallery, real Advanced controls, Rocket Mode, saved checkpoints, resume and History.
+- Preserve Idol's Gaussian splat and extracted mesh; optionally refine with Hi3D before native cleanup. Export a closed master and a lightweight companion in the splat's frame, plus selected SPZ/GLB/MP4/PNG files, catalog, README, checksums and upstream notices.
+- Add a linked geometry comparison: rotate/zoom both meshes together, inspect triangle and shell counts, switch wireframe and reset the views. Show processing as creating the asset, with bounded overall progress through remaining stages.
+- Audit the actual exported geometry for closure, winding, finite coordinates, nonmanifold topology, duplicate/zero-area faces and self-intersections before accepting a package. Closed geometry does not certify engine collision, physical printing or rigging.
+- Extend Installed models across registered ComfyUI, Hi3D, TRELLIS, HairDeck and model-cache locations. Review exact-file deletion, preserve shared cache data, invalidate listings and restore missing selected resources before workflow processing.
+- Give original researchers visible credit throughout the chooser and relevant workflow help; add Idol and MoGe to About and preserve component notices in exports.
+- Add matching MCP tools, native-module/audit import probes and Pinokio model-location registration. Keep the archive compatible with older Pinokio updaters by placing hair installer requirements under scripts/.
+
+
 ## 0.1.0-preview.11 — Turnaround and 3D-Guided
 
 ### Two independent mesh methods

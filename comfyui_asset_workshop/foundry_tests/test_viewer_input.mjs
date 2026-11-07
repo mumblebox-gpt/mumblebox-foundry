@@ -1,6 +1,32 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {installOrbitInput} from "../web/foundry/wizard/preview.js";
+import {installOrbitInput,createModelHost,mountMesh} from "../web/foundry/wizard/preview.js";
+
+test('embedded native viewers announce readiness so asynchronous splats can paint',async()=>{
+    const oldWindow=globalThis.window,oldResize=globalThis.ResizeObserver,events=[];
+    const viewer={loadModel:async()=>{events.push('loaded');return 'loaded';},handleResize(){},fitToViewer(){},setLightIntensity(){},forceRender(){},emitModelReady(){events.push('ready');},dispose(){events.push('disposed');},updateStatusMouseOnViewer(){}};
+    globalThis.window=new EventTarget();window.comfyAPI={createLoad3d:{createLoad3d:()=>viewer}};
+    globalThis.ResizeObserver=class{observe(){}disconnect(){}};
+    try{
+        const dispose=await mountMesh(new EventTarget(),'/owned/asset.spz',null,'asset.spz');
+        assert.deepEqual(events,['loaded','ready']);dispose();assert.equal(events.at(-1),'disposed');
+    }finally{globalThis.window=oldWindow;globalThis.ResizeObserver=oldResize;}
+});
+
+test('native model requests retain the owning artifact endpoint without changing other requests',async()=>{
+    const original=globalThis.fetch,requests=[],hostCalls=[];
+    globalThis.fetch=async(...args)=>{requests.push(args);return 'owned';};
+    try{
+        const host={fetchApi:async(...args)=>{hostCalls.push(args);return 'native';}};
+        const first=createModelHost(host,'/owned/first?path=model.glb','model.glb');
+        const second=createModelHost(host,'/owned/second?path=model.glb','model.glb');
+        assert.equal(await first.fetchApi('api/view?filename=model.glb&type=output'),'owned');
+        assert.equal(await second.fetchApi('api/view?filename=model.glb&type=output'),'owned');
+        assert.deepEqual(requests.map(r=>r[0]),['/owned/first?path=model.glb','/owned/second?path=model.glb']);
+        assert.equal(await first.fetchApi('/api/view?filename=other.glb'),'native');
+        assert.equal(hostCalls.length,1);assert.notEqual(first.fetchApi,host.fetchApi);
+    }finally{globalThis.fetch=original;}
+});
 
 function input(target,type,values={}){
     const event=new Event(type);Object.assign(event,values);target.dispatchEvent(event);

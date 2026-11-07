@@ -20,6 +20,8 @@ The texture worker obtains DINOv3 from the public distribution used by its upstr
 
 Software comes from its published repositories and package hosts. Model weights come from their upstream providers. Neither downloads assets from the developer's PC.
 
+Splat & Solid uses Idol by Sperid Labs through the pinned Comfy-Org native distribution. Its complete selected resources, including optional Hi3D dependencies, are prepared before generation. Settings → Installed models covers registered native and worker locations; deleting a supported model makes that workflow acquire it again before use. The export audit uses the existing finishing environment.
+
 ## Stop, restart, update and repair
 
 - **Stop:** use Pinokio's stop control for the running startup script. It stops this installation's owned services. Cancel an active generation first if you want to retain a clean stage checkpoint.

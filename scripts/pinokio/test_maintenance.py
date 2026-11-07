@@ -55,6 +55,23 @@ class MaintenanceTests(unittest.TestCase):
             inventory.write_text(json.dumps({'.pinokio/data/output/asset.glb':'0'*64}))
             with self.assertRaisesRegex(ValueError,'ownership'):maintenance.verify_bundle(root)
 
+    def test_full_release_inventory_is_accepted_by_existing_update_policy(self):
+        # Older published updaters allow application directories but only their
+        # original root filenames. Keep new installer resources under scripts/.
+        import importlib.util,shutil
+        source=Path(__file__).resolve().parents[2]
+        spec=importlib.util.spec_from_file_location('release_builder',source/'scripts/build_release.py')
+        builder=importlib.util.module_from_spec(spec);spec.loader.exec_module(builder)
+        with tempfile.TemporaryDirectory() as directory:
+            target=Path(directory);hashes={}
+            for file in builder.inventory():
+                name=file.relative_to(source).as_posix();dest=target/name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(file,dest)
+                hashes[name]=hashlib.sha256(dest.read_bytes()).hexdigest()
+            (target/'SHA256SUMS.json').write_text(json.dumps(hashes),encoding='utf-8')
+            self.assertEqual(maintenance.verify_bundle(target),hashes)
+            self.assertIn('scripts/requirements-hair-windows.txt',hashes)
+            self.assertNotIn('requirements-hair-windows.txt',hashes)
+
     def test_local_source_changes_prevent_update(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);(root/'.git').mkdir()

@@ -86,9 +86,11 @@ Restart ComfyUI, then open:
 
 `custom_nodes/comfyui_asset_workshop/workflows/Mumblebox 3D Asset Foundry.json`
 
-The interface appears in the same graph as the pipeline. Expand **Create a Mesh from an Image** and choose **Turnaround** or **3D-Guided**. Each method has its own wizard and processing branch. The graph has empty input fields; no sample assets or saved production sessions are bundled.
+The interface appears in the same graph as the pipeline. Expand **Create a Mesh from an Image** and choose **Turnaround**, **3D-Guided** or **Splat & Solid**. Each method has its own wizard and processing branch. The graph has empty input fields; no sample assets or saved production sessions are bundled.
 
 3D-Guided uses Blender for measured views and requires the pinned core's native `LoadMoGeModel`, `MoGeInference`, `TextEncodeQwenImage21` and `ZImageFunControlnet` nodes. The Pinokio installer probes the MoGe model import and render-adapter dependencies. The method uses the same configured Blender, worker and Hi3D service as the existing workflow; no Blender MCP add-on or separate experimental repository is required.
+
+Splat & Solid requires the pinned core's native Idol/TripoSplat, Gaussian splat and mesh-processing modules. The existing finishing worker owns its NumPy/trimesh/PyMeshLab audit. The installer probes these actual entry points. Pass `--hi3d-models` with an external Hi3D weights directory to include it in Settings model management; Pinokio registers its own location automatically. See [Splat & Solid](docs/SPLAT-SOLID.md).
 
 ## 5. First use and updates
 

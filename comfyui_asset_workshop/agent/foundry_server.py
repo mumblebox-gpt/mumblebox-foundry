@@ -91,6 +91,8 @@ def create_server(client):
     register_images(server,client,checked)
     from hair_tools import register as register_hair
     register_hair(server,client,checked)
+    from splat_tools import register as register_splat
+    register_splat(server,client,checked)
     return server
 
 def main():

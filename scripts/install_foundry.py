@@ -28,6 +28,11 @@ def install(args):
     config=user/"asset-workshop.json"
     existing=json.loads(config.read_text(encoding="utf-8")) if config.exists() else {}
     existing.setdefault("pipeline_runtime",{}).update(runtime)
+    hi3d_models=getattr(args,'hi3d_models',None)
+    if hi3d_models:
+        model_root=Path(hi3d_models).resolve()
+        if 'onedrive' in str(model_root).lower():raise ValueError('Use local model storage outside OneDrive')
+        existing.setdefault('model_locations',{})['Hi3D models']=str(model_root)
     backup.mkdir(parents=True)
     if config.exists():shutil.copy2(config,backup/"asset-workshop.json")
     changed=[]
@@ -56,6 +61,7 @@ if __name__=="__main__":
     parser.add_argument("--user-directory",help="Only for a custom ComfyUI --user-directory")
     for key in ("worker-python","trellis-repo","trellis-models","blender"):parser.add_argument("--"+key,required=True)
     parser.add_argument("--hi3d-url",default="http://127.0.0.1:8378")
+    parser.add_argument('--hi3d-models',help='The existing Hi3D model directory, included in installed-model management.')
     parser.add_argument('--host-python',help='The ComfyUI host interpreter (required when it has no local .venv).')
     parser.add_argument('--skip-hair-software',action='store_true',help=argparse.SUPPRESS)
     install(parser.parse_args())

@@ -43,7 +43,7 @@ export const roadmap = [
         id: "integration", title: "Architecture & integration", summary: "Shared requirements for future workflow additions and releases.",
         items: [
             {title: "Independent workflows, shared services", description: "Give each workflow a dedicated graph section and cohesive code ownership. Reuse shared model, resource, gallery and export services without creating one tangled graph."},
-            {title: "Memory profiles that affect the workflow", description: "Keep the working default profile. Qualify additional hardware profiles across each workflow later, with explicit user choices taking precedence and clear memory recommendations."},
+            {title: "Memory profiles that affect the workflow", description: "Keep the working default profile, including the tested Splat & Solid path. Qualify additional hardware profiles across each workflow later, with explicit user choices taking precedence and clear memory recommendations."},
             {title: "MCP and export documentation parity", description: "Expose new workflow choices to agents and keep package README contents, file descriptions, model provenance and license links aligned with the outputs actually selected."},
             {title: "Portable updates and first-use preparation", description: "Trace dependencies for every runtime when adding features. Check access and prepare all selected workflow resources before generation, download models only on first use, and keep ComfyUI and Pinokio releases consistent."},
         ],

@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0-preview.11",
+  "version": "0.1.0-preview.12",
   "platform": "Windows NVIDIA",
   "reference_hardware": {
     "gpu": "RTX 4080 SUPER",
@@ -36,7 +36,7 @@
     "revision": "ad27f3433169ca6e1f61396525d30d6ca55428be",
     "upstream_revision": "5f1c18a32e622cb8d1acec2a856694fb43375c1a",
     "weights_revision": "129ad77fba42edfb79a59246f43b11d3fc64c6d1",
-    "requirements": "requirements-hair-windows.txt",
+    "requirements": "scripts/requirements-hair-windows.txt",
     "weights_downloaded_during_install": false,
     "export_tools": "Pinned Blender 4.2.23 and VRM Add-on 4.10.2; acquired on first use of rigged output"
   },

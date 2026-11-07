@@ -137,7 +137,8 @@ def install_extension(layout,blender,source,port=8378):
     run([sys.executable,source/'scripts'/'install_foundry.py','--comfy',layout.comfy,
          '--user-directory',layout.data/'user','--worker-python',layout.worker_python,
          '--trellis-repo',layout.trellis,'--trellis-models',layout.data/'trellis-models',
-         '--blender',blender,'--host-python',layout.host_python,'--hi3d-url',f'http://127.0.0.1:{port}'])
+         '--blender',blender,'--host-python',layout.host_python,'--hi3d-url',f'http://127.0.0.1:{port}',
+         '--hi3d-models',layout.hi3d/'models'])
 
 
 def install(root,source=None,repair=False):
@@ -199,6 +200,8 @@ def install(root,source=None,repair=False):
     run([layout.host_python,'-c','import torch,torchvision,trimesh,keyring; print("Host imports OK",torch.__version__)'])
     run([layout.host_python,'-c','import sys; sys.path.insert(0,sys.argv[1]); from comfy.ldm.moge.model import MoGeModel; from PIL import Image; import numpy,psutil; print("Guided camera/render adapter imports OK")',layout.comfy])
     run([layout.worker_python,'-c','import torch,cumesh,flex_gemm,nvdiffrast,nvdiffrec_render,o_voxel,pymeshlab,meshlib; print("Finishing imports OK",torch.__version__)'])
+    run([layout.host_python,'-c','import sys; sys.path.insert(0,sys.argv[1]); import comfy_extras.nodes_triposplat,comfy_extras.nodes_gaussian_splat,comfy_extras.nodes_mesh_postprocess,comfy_extras.nodes_mesh_io; print("Native Idol splat, mesh extraction and cleanup imports OK")',layout.comfy])
+    run([layout.worker_python,'-c','import runpy,sys; runpy.run_path(sys.argv[1],run_name="splat_quality_probe"); import numpy,trimesh,pymeshlab; print("Splat geometry audit imports OK")',layout.comfy/'custom_nodes/comfyui_asset_workshop/foundry/workflows/splat_solid/quality.py'])
     # Import the real texture entry point, including its ComfyUI dependencies.
     # A native-wheel-only probe misses libraries inherited from developer installs.
     texture_probe=layout.state/'texture-probe.json'

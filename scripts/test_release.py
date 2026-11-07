@@ -39,7 +39,7 @@ class InstallTests(unittest.TestCase):
                      'repair.js', 'icon.png', 'scripts/pinokio/bootstrap.py',
                      'scripts/pinokio/runtime.py', 'scripts/pinokio/maintenance.py',
                      'scripts/pinokio/connect_agent.py', 'docs/PINOKIO.md',
-                     'requirements-hair-windows.txt','scripts/install_hairdeck.py',
+                     'scripts/requirements-hair-windows.txt','scripts/install_hairdeck.py',
                      'scripts/probe_hairdeck.py','docs/HAIR-WORKFLOW.md',
                      'comfyui_asset_workshop/web/assets/foundry/hair.png'):
             self.assertIn(name,names)

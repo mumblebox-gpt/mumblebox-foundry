@@ -114,7 +114,8 @@ def idle():
     from .foundry.workflows.image_creation.runs import busy as image_busy
     from .foundry.workflows.hair_creation.runs import busy as hair_busy
     from .foundry.workflows.guided_mesh.runs import busy as guided_busy
-    if single_image_jobs_active() or foundry_busy() or image_busy() or hair_busy() or guided_busy():
+    from .foundry.workflows.splat_solid.runs import busy as splat_busy
+    if single_image_jobs_active() or foundry_busy() or image_busy() or hair_busy() or guided_busy() or splat_busy():
         raise JobConflict("A Mumblebox job is still active. Wait for it to finish or stop it before changing the library or History.")
     if description_helper.STATE.get("running"):
         raise ValueError("The description assistant is working. Wait for it or stop it before generating an image.")
@@ -177,7 +178,7 @@ async def status(request):
     workers=worker_snapshot()
     residencies=host_residency(list(memory.current_loaded_models))+workers
     workflow_activity=[]
-    for name in ('image_to_3d','image_creation','hair_creation'):
+    for name in ('image_to_3d','image_creation','hair_creation','splat_solid'):
         owner=__import__(__package__+'.foundry.workflows.'+name+'.runs',fromlist=['ACTIVE']).ACTIVE
         if owner:
             for ident in list(owner.tasks):
@@ -193,7 +194,7 @@ async def status(request):
         "workflow_activity":workflow_activity,
         "loaded_models": len(memory.current_loaded_models),
         "helper_loaded": description_helper.PROCESS is not None and description_helper.PROCESS.poll() is None,
-        "running": queue().get_tasks_remaining() > 0 or any(__import__(__package__+".foundry.workflows."+name+".runs",fromlist=["busy"]).busy() for name in ('image_to_3d','image_creation')), "root": configuration()["root"],
+        "running": queue().get_tasks_remaining() > 0 or any(__import__(__package__+".foundry.workflows."+name+".runs",fromlist=["busy"]).busy() for name in ('image_to_3d','image_creation','hair_creation','guided_mesh','splat_solid')), "root": configuration()["root"],
         "download": dict(models.DOWNLOAD), "profiles": PROFILES,
         "resource_download": DOWNLOADS.status(),
         "startup_vram_reserve_gb": memory.extra_reserved_memory() / 1024**3,

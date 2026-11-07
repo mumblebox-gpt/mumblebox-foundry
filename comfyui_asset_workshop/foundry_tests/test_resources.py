@@ -31,15 +31,26 @@ class ResourcesTests(unittest.TestCase):
             with self.assertRaises(ValueError):inventory.preview(item['id'])
             self.assertTrue(p.exists())
 
-    def test_arbitrary_id_cannot_delete_an_external_file_and_hardlinks_are_protected(self):
+    def test_shared_file_is_explicitly_removable_without_deleting_other_links(self):
         import os
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);(root/'loras').mkdir();p=root/'outside.safetensors';p.write_bytes(b'preserve')
-            os.link(p,root/'loras/shared.safetensors')
-            inventory=self.inventory(root);item=inventory.list()['items'][0]
-            self.assertFalse(item['deletable'])
+            linked=root/'loras/shared.safetensors';os.link(p,linked)
+            inventory=self.inventory(root);item=next(i for i in inventory.list()['items'] if i['name']=='shared.safetensors')
+            self.assertTrue(item['deletable'])
             with self.assertRaises(ValueError):inventory.preview(str(p))
-            with self.assertRaises(ValueError):inventory.preview(item['id'])
-            self.assertTrue(p.exists())
+            preview=inventory.preview(item['id']);self.assertEqual(preview['shared_links'],2)
+            inventory.remove(preview['token']);self.assertTrue(p.exists());self.assertFalse(linked.exists())
+
+    def test_runtime_components_and_pagination(self):
+        from foundry.resources import ResourceInventory
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);a=root/'comfy';b=root/'worker';a.mkdir();b.mkdir()
+            (a/'vae.safetensors').write_bytes(b'one');(b/'model.onnx').write_bytes(b'two')
+            inventory=ResourceInventory(a,lambda:False,lambda:[dict(path=str(b),label='Hi3D',workflows=['Hi3D'])])
+            first=inventory.list(limit=1);self.assertEqual(first['total'],2)
+            second=inventory.list(first['next_cursor'],1);self.assertEqual(len(second['items']),1)
+            item=next(i for i in inventory.list()['items'] if i['name']=='model.onnx')
+            inventory.remove(inventory.preview(item['id'])['token']);self.assertFalse((b/'model.onnx').exists());self.assertTrue((a/'vae.safetensors').exists())
 
 if __name__=='__main__':unittest.main()

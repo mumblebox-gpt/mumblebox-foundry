@@ -342,7 +342,7 @@
   },
   "flux_vae": {
     "id": "flux_vae",
-    "stage": "Turnaround image encoding and decoding",
+    "stage": "Reference image encoding and decoding",
     "name": "FLUX.2 autoencoder",
     "version": "flux2-vae; exact hash in production record",
     "source": "https://github.com/black-forest-labs/flux2#flux2-autoencoder",
@@ -425,5 +425,34 @@
       "MoGe-LICENSE.txt"
     ],
     "license_summary": "See the model and software source for applicable terms."
+  },
+  "idol": {
+    "id": "idol",
+    "name": "Idol",
+    "stage": "Single-image Gaussian splat and extracted mesh",
+    "version": "Comfy-Org revision 3d050f4bc705ca1202a0ae4d21d2d97987521307",
+    "source": "https://huggingface.co/speridlabs/idol",
+    "notices": [
+      "Apache-2.0.txt",
+      "Idol-model-card.md",
+      "Idol-Comfy-model-card.md"
+    ],
+    "license": "Apache-2.0",
+    "license_url": "https://huggingface.co/speridlabs/idol",
+    "license_summary": "Idol by Sperid Labs; repackaged for ComfyUI by Comfy-Org. Encoders retain their own terms."
+  },
+  "idol_dino": {
+    "id": "idol_dino",
+    "stage": "Idol reference feature conditioning",
+    "name": "DINOv3 ViT-H+/16",
+    "version": "dino_v3_vit_h_bf16.safetensors; Comfy-Org Idol revision 3d050f4bc705ca1202a0ae4d21d2d97987521307",
+    "source": "https://github.com/facebookresearch/dinov3",
+    "notices": [
+      "DINOv3-LICENSE.md"
+    ],
+    "license": "DINOv3 License",
+    "license_url": "https://github.com/facebookresearch/dinov3/blob/ffb4bb89c6558ca3244655c25a3955d01788b732/LICENSE.md",
+    "license_summary": "Custom terms govern the DINOv3 material; consult the retained agreement.",
+    "license_revision": "ffb4bb89c6558ca3244655c25a3955d01788b732"
   }
 }

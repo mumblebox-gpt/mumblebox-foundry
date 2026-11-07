@@ -1,8 +1,8 @@
 {
   "id": "6c419aea-6f6c-4151-a885-b0973634c9a1",
   "revision": 0,
-  "last_node_id": 108803,
-  "last_link_id": 466,
+  "last_node_id": 400100,
+  "last_link_id": 531,
   "nodes": [
     {
       "id": 3,
@@ -19986,6 +19986,4373 @@
         "width": 1024,
         "height": 1024
       }
+    },
+    {
+      "id": 400000,
+      "type": "RemeshMesh",
+      "pos": [
+        22416.7515625,
+        4665
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 180,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 467
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sign_mode",
+          "name": "sign_mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "sign_mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fill",
+          "name": "sign_mode.fill",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sign_mode.fill"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "qef",
+          "name": "sign_mode.qef",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "sign_mode.qef"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "band",
+          "name": "band",
+          "type": "FLOAT",
+          "widget": {
+            "name": "band"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "project_back",
+          "name": "project_back",
+          "type": "FLOAT",
+          "widget": {
+            "name": "project_back"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fix_poles",
+          "name": "fix_poles",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "fix_poles"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "smooth_iters",
+          "name": "smooth_iters",
+          "type": "INT",
+          "widget": {
+            "name": "smooth_iters"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "drop_small_components",
+          "name": "drop_small_components",
+          "type": "FLOAT",
+          "widget": {
+            "name": "drop_small_components"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "precluster_max_verts",
+          "name": "precluster_max_verts",
+          "type": "INT",
+          "widget": {
+            "name": "precluster_max_verts"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            468,
+            528
+          ]
+        }
+      ],
+      "title": "Splat & Solid · RemeshMesh",
+      "properties": {
+        "Node name for S&R": "RemeshMesh",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        384,
+        "solid",
+        20,
+        false,
+        1,
+        0,
+        true,
+        3,
+        0,
+        20000000
+      ],
+      "widgets_values_named": {
+        "resolution": 384,
+        "sign_mode": "solid",
+        "sign_mode.fill": 20,
+        "sign_mode.qef": false,
+        "band": 1,
+        "project_back": 0,
+        "fix_poles": true,
+        "smooth_iters": 3,
+        "drop_small_components": 0,
+        "precluster_max_verts": 20000000
+      }
+    },
+    {
+      "id": 400001,
+      "type": "DecimateMesh",
+      "pos": [
+        22896.7515625,
+        4665
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 202,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 468
+        },
+        {
+          "localized_name": "target_face_count",
+          "name": "target_face_count",
+          "type": "INT",
+          "widget": {
+            "name": "target_face_count"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "placement_mode",
+          "name": "placement_mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "placement_mode"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            469,
+            516,
+            530
+          ]
+        }
+      ],
+      "title": "Splat & Solid · DecimateMesh",
+      "properties": {
+        "Node name for S&R": "DecimateMesh",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        20000,
+        "midpoint"
+      ],
+      "widgets_values_named": {
+        "target_face_count": 20000,
+        "placement_mode": "midpoint"
+      }
+    },
+    {
+      "id": 400002,
+      "type": "RemeshMesh",
+      "pos": [
+        23376.7515625,
+        4665
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 223,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 469
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sign_mode",
+          "name": "sign_mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "sign_mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fill",
+          "name": "sign_mode.fill",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sign_mode.fill"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "qef",
+          "name": "sign_mode.qef",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "sign_mode.qef"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "band",
+          "name": "band",
+          "type": "FLOAT",
+          "widget": {
+            "name": "band"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "project_back",
+          "name": "project_back",
+          "type": "FLOAT",
+          "widget": {
+            "name": "project_back"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fix_poles",
+          "name": "fix_poles",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "fix_poles"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "smooth_iters",
+          "name": "smooth_iters",
+          "type": "INT",
+          "widget": {
+            "name": "smooth_iters"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "drop_small_components",
+          "name": "drop_small_components",
+          "type": "FLOAT",
+          "widget": {
+            "name": "drop_small_components"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "precluster_max_verts",
+          "name": "precluster_max_verts",
+          "type": "INT",
+          "widget": {
+            "name": "precluster_max_verts"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            531
+          ]
+        }
+      ],
+      "title": "Splat & Solid · RemeshMesh",
+      "properties": {
+        "Node name for S&R": "RemeshMesh",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        56,
+        "solid",
+        20,
+        false,
+        0.5,
+        0,
+        true,
+        2,
+        0.001,
+        20000000
+      ],
+      "widgets_values_named": {
+        "resolution": 56,
+        "sign_mode": "solid",
+        "sign_mode.fill": 20,
+        "sign_mode.qef": false,
+        "band": 0.5,
+        "project_back": 0,
+        "fix_poles": true,
+        "smooth_iters": 2,
+        "drop_small_components": 0.001,
+        "precluster_max_verts": 20000000
+      }
+    },
+    {
+      "id": 400003,
+      "type": "DecimateMesh",
+      "pos": [
+        22416.7515625,
+        3105
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 142,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 470
+        },
+        {
+          "localized_name": "target_face_count",
+          "name": "target_face_count",
+          "type": "INT",
+          "widget": {
+            "name": "target_face_count"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "placement_mode",
+          "name": "placement_mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "placement_mode"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            476,
+            479
+          ]
+        }
+      ],
+      "title": "Splat & Solid · DecimateMesh",
+      "properties": {
+        "Node name for S&R": "DecimateMesh",
+        "splatOwner": "3012",
+        "splatStage": "refinement"
+      },
+      "widgets_values": [
+        4500000,
+        "midpoint"
+      ],
+      "widgets_values_named": {
+        "target_face_count": 4500000,
+        "placement_mode": "midpoint"
+      }
+    },
+    {
+      "id": 400004,
+      "type": "LoadBackgroundRemovalModel",
+      "pos": [
+        22896.7515625,
+        3105
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 81,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "bg_removal_name",
+          "name": "bg_removal_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "bg_removal_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "bg_model",
+          "name": "bg_model",
+          "type": "BACKGROUND_REMOVAL",
+          "links": [
+            471
+          ]
+        }
+      ],
+      "title": "Splat & Solid · LoadBackgroundRemovalModel",
+      "properties": {
+        "Node name for S&R": "LoadBackgroundRemovalModel",
+        "splatOwner": "3012",
+        "splatStage": "refinement"
+      },
+      "widgets_values": [
+        "birefnet.safetensors"
+      ],
+      "widgets_values_named": {
+        "bg_removal_name": "birefnet.safetensors"
+      }
+    },
+    {
+      "id": 400005,
+      "type": "RemoveBackground",
+      "pos": [
+        23376.7515625,
+        3105
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 139,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "bg_removal_model",
+          "name": "bg_removal_model",
+          "type": "BACKGROUND_REMOVAL",
+          "link": 471
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 472
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            473
+          ]
+        }
+      ],
+      "title": "Splat & Solid · RemoveBackground",
+      "properties": {
+        "Node name for S&R": "RemoveBackground",
+        "splatOwner": "3012",
+        "splatStage": "refinement"
+      }
+    },
+    {
+      "id": 400006,
+      "type": "InvertMask",
+      "pos": [
+        23856.7515625,
+        3105
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 178,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "link": 473
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MASK",
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            477
+          ]
+        }
+      ],
+      "title": "Splat & Solid · InvertMask",
+      "properties": {
+        "Node name for S&R": "InvertMask",
+        "splatOwner": "3012",
+        "splatStage": "refinement"
+      }
+    },
+    {
+      "id": 400007,
+      "type": "Hi3DBackend",
+      "pos": [
+        22416.7515625,
+        3565
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 82,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "url",
+          "name": "url",
+          "type": "STRING",
+          "widget": {
+            "name": "url"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "HI3D_BACKEND",
+          "name": "HI3D_BACKEND",
+          "type": "HI3D_BACKEND",
+          "links": [
+            474
+          ]
+        }
+      ],
+      "title": "Splat & Solid · Hi3DBackend",
+      "properties": {
+        "Node name for S&R": "Hi3DBackend",
+        "splatOwner": "3012",
+        "splatStage": "refinement"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "url": ""
+      }
+    },
+    {
+      "id": 400008,
+      "type": "Hi3DRefine",
+      "pos": [
+        22896.7515625,
+        3565
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 200,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "backend",
+          "name": "backend",
+          "type": "HI3D_BACKEND",
+          "link": 474
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 475
+        },
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 476
+        },
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": 477
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cpu_offload",
+          "name": "cpu_offload",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "cpu_offload"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "attention",
+          "name": "attention",
+          "type": "COMBO",
+          "widget": {
+            "name": "attention"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "refined_mesh",
+          "name": "refined_mesh",
+          "type": "MESH",
+          "links": [
+            478,
+            480
+          ]
+        },
+        {
+          "localized_name": "report_json",
+          "name": "report_json",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "localized_name": "job_id",
+          "name": "job_id",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "title": "Splat & Solid · Hi3DRefine",
+      "properties": {
+        "Node name for S&R": "Hi3DRefine",
+        "splatOwner": "3012",
+        "splatStage": "refinement"
+      },
+      "widgets_values": [
+        1536,
+        25,
+        42,
+        "fixed",
+        true,
+        "sdpa"
+      ],
+      "widgets_values_named": {
+        "resolution": 1536,
+        "steps": 25,
+        "seed": 42,
+        "control_after_generate": "fixed",
+        "cpu_offload": true,
+        "attention": "sdpa"
+      }
+    },
+    {
+      "id": 400009,
+      "type": "Hi3DAlignToSource",
+      "pos": [
+        23376.7515625,
+        3565
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 220,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 478
+        },
+        {
+          "localized_name": "source_mesh",
+          "name": "source_mesh",
+          "type": "MESH",
+          "link": 479
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh_in_source_frame",
+          "name": "mesh_in_source_frame",
+          "type": "MESH",
+          "links": [
+            481,
+            521
+          ]
+        },
+        {
+          "localized_name": "alignment_report",
+          "name": "alignment_report",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "title": "Splat & Solid · Hi3DAlignToSource",
+      "properties": {
+        "Node name for S&R": "Hi3DAlignToSource",
+        "splatOwner": "3012",
+        "splatStage": "refinement"
+      }
+    },
+    {
+      "id": 400010,
+      "type": "SaveGLB",
+      "pos": [
+        23856.7515625,
+        3565
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 221,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 480
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "PREVIEW_3D",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "title": "Splat & Solid · SaveGLB",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "refinement",
+        "Last Time Model File": "foundry-splat\\83a3b254293d4663bc75e73a5db213e9\\refined-raw/asset_00001_.glb",
+        "Last Time Model Folder": "output",
+        "Camera Config": {
+          "cameraType": "perspective",
+          "fov": 35,
+          "hasCustomUp": false
+        },
+        "Light Config": {
+          "intensity": 3,
+          "hdri": {
+            "enabled": false,
+            "hdriPath": "",
+            "showAsBackground": false,
+            "intensity": 1
+          }
+        },
+        "Scene Config": {
+          "showGrid": true,
+          "backgroundColor": "#282828",
+          "backgroundImage": "",
+          "backgroundRenderMode": "tiled",
+          "models": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "Model Config": {
+          "upDirection": "original",
+          "materialMode": "original",
+          "showSkeleton": false,
+          "gizmo": {
+            "enabled": false,
+            "mode": "translate",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      },
+      "widgets_values": [
+        "foundry-splat/preview/refined-raw/asset",
+        ""
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/refined-raw/asset",
+        "image": ""
+      }
+    },
+    {
+      "id": 400011,
+      "type": "SaveGLB",
+      "pos": [
+        22416.7515625,
+        4025
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 246,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 481
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "PREVIEW_3D",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "title": "Splat & Solid · SaveGLB",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "refinement",
+        "Last Time Model File": "foundry-splat\\83a3b254293d4663bc75e73a5db213e9\\refined/asset_00001_.glb",
+        "Last Time Model Folder": "output",
+        "Camera Config": {
+          "cameraType": "perspective",
+          "fov": 35,
+          "hasCustomUp": false
+        },
+        "Light Config": {
+          "intensity": 3,
+          "hdri": {
+            "enabled": false,
+            "hdriPath": "",
+            "showAsBackground": false,
+            "intensity": 1
+          }
+        },
+        "Scene Config": {
+          "showGrid": true,
+          "backgroundColor": "#282828",
+          "backgroundImage": "",
+          "backgroundRenderMode": "tiled",
+          "models": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "Model Config": {
+          "upDirection": "original",
+          "materialMode": "original",
+          "showSkeleton": false,
+          "gizmo": {
+            "enabled": false,
+            "mode": "translate",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      },
+      "widgets_values": [
+        "foundry-splat/preview/refined/asset",
+        ""
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/refined/asset",
+        "image": ""
+      }
+    },
+    {
+      "id": 400012,
+      "type": "SaveGLB",
+      "pos": [
+        23856.7515625,
+        4665
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 225,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 482
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "PREVIEW_3D",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "title": "Splat & Solid · SaveGLB",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "cleanup",
+        "Last Time Model File": "foundry-splat\\83a3b254293d4663bc75e73a5db213e9\\master/asset_00001_.glb",
+        "Last Time Model Folder": "output",
+        "Camera Config": {
+          "cameraType": "perspective",
+          "fov": 35,
+          "hasCustomUp": false
+        },
+        "Light Config": {
+          "intensity": 3,
+          "hdri": {
+            "enabled": false,
+            "hdriPath": "",
+            "showAsBackground": false,
+            "intensity": 1
+          }
+        },
+        "Scene Config": {
+          "showGrid": true,
+          "backgroundColor": "#282828",
+          "backgroundImage": "",
+          "backgroundRenderMode": "tiled",
+          "models": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "Model Config": {
+          "upDirection": "original",
+          "materialMode": "original",
+          "showSkeleton": false,
+          "gizmo": {
+            "enabled": false,
+            "mode": "translate",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      },
+      "widgets_values": [
+        "foundry-splat/preview/master/asset",
+        ""
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/master/asset",
+        "image": ""
+      }
+    },
+    {
+      "id": 400013,
+      "type": "SaveGLB",
+      "pos": [
+        22416.7515625,
+        5125
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 280,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 483
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "PREVIEW_3D",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "title": "Splat & Solid · SaveGLB",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "cleanup",
+        "Last Time Model File": "foundry-splat\\83a3b254293d4663bc75e73a5db213e9\\companion/asset_00001_.glb",
+        "Last Time Model Folder": "output",
+        "Camera Config": {
+          "cameraType": "perspective",
+          "fov": 35,
+          "hasCustomUp": false
+        },
+        "Light Config": {
+          "intensity": 3,
+          "hdri": {
+            "enabled": false,
+            "hdriPath": "",
+            "showAsBackground": false,
+            "intensity": 1
+          }
+        },
+        "Scene Config": {
+          "showGrid": true,
+          "backgroundColor": "#282828",
+          "backgroundImage": "",
+          "backgroundRenderMode": "tiled",
+          "models": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "Model Config": {
+          "upDirection": "original",
+          "materialMode": "original",
+          "showSkeleton": false,
+          "gizmo": {
+            "enabled": false,
+            "mode": "translate",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      },
+      "widgets_values": [
+        "foundry-splat/preview/companion/asset",
+        ""
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/companion/asset",
+        "image": ""
+      }
+    },
+    {
+      "id": 400014,
+      "type": "JoinImageWithAlpha",
+      "pos": [
+        22896.7515625,
+        4025
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 141,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 484
+        },
+        {
+          "localized_name": "alpha",
+          "name": "alpha",
+          "type": "MASK",
+          "link": 485
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            475
+          ]
+        }
+      ],
+      "title": "Splat & Solid · JoinImageWithAlpha",
+      "properties": {
+        "Node name for S&R": "JoinImageWithAlpha",
+        "splatOwner": "3012",
+        "splatStage": "refinement"
+      }
+    },
+    {
+      "id": 400015,
+      "type": "SaveGLB",
+      "pos": [
+        22896.7515625,
+        5125
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 249,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 486
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "PREVIEW_3D",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "title": "Splat & Solid · SaveGLB",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "cleanup",
+        "Last Time Model File": "foundry-splat\\83a3b254293d4663bc75e73a5db213e9\\presentation/master_00001_.glb",
+        "Last Time Model Folder": "output",
+        "Camera Config": {
+          "cameraType": "perspective",
+          "fov": 35,
+          "hasCustomUp": false
+        },
+        "Light Config": {
+          "intensity": 3,
+          "hdri": {
+            "enabled": false,
+            "hdriPath": "",
+            "showAsBackground": false,
+            "intensity": 1
+          }
+        },
+        "Scene Config": {
+          "showGrid": true,
+          "backgroundColor": "#282828",
+          "backgroundImage": "",
+          "backgroundRenderMode": "tiled",
+          "models": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "Model Config": {
+          "upDirection": "original",
+          "materialMode": "original",
+          "showSkeleton": false,
+          "gizmo": {
+            "enabled": false,
+            "mode": "translate",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      },
+      "widgets_values": [
+        "foundry-splat/preview/presentation/master",
+        ""
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/presentation/master",
+        "image": ""
+      }
+    },
+    {
+      "id": 400016,
+      "type": "SaveGLB",
+      "pos": [
+        23376.7515625,
+        5125
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 290,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 487
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "PREVIEW_3D",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "title": "Splat & Solid · SaveGLB",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "cleanup",
+        "Last Time Model File": "foundry-splat\\83a3b254293d4663bc75e73a5db213e9\\presentation/companion_00001_.glb",
+        "Last Time Model Folder": "output",
+        "Camera Config": {
+          "cameraType": "perspective",
+          "fov": 35,
+          "hasCustomUp": false
+        },
+        "Light Config": {
+          "intensity": 3,
+          "hdri": {
+            "enabled": false,
+            "hdriPath": "",
+            "showAsBackground": false,
+            "intensity": 1
+          }
+        },
+        "Scene Config": {
+          "showGrid": true,
+          "backgroundColor": "#282828",
+          "backgroundImage": "",
+          "backgroundRenderMode": "tiled",
+          "models": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "Model Config": {
+          "upDirection": "original",
+          "materialMode": "original",
+          "showSkeleton": false,
+          "gizmo": {
+            "enabled": false,
+            "mode": "translate",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      },
+      "widgets_values": [
+        "foundry-splat/preview/presentation/companion",
+        ""
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/presentation/companion",
+        "image": ""
+      }
+    },
+    {
+      "id": 400017,
+      "type": "CreateVideo",
+      "pos": [
+        22416.7515625,
+        165
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 287,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 488
+        },
+        {
+          "localized_name": "audio",
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "localized_name": "fps",
+          "name": "fps",
+          "type": "FLOAT",
+          "widget": {
+            "name": "fps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "bit_depth",
+          "name": "bit_depth",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "bit_depth"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "color_space",
+          "name": "color_space",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "color_space"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VIDEO",
+          "name": "VIDEO",
+          "type": "VIDEO",
+          "links": [
+            489
+          ]
+        }
+      ],
+      "title": "Splat & Solid · CreateVideo",
+      "properties": {
+        "Node name for S&R": "CreateVideo",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        25,
+        "auto",
+        "sRGB",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "fps": 25,
+        "bit_depth": "auto",
+        "color_space": "sRGB",
+        "codec": "auto"
+      }
+    },
+    {
+      "id": 400018,
+      "type": "SaveVideo",
+      "pos": [
+        22896.7515625,
+        165
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 298,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "link": 489
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "format.codec",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "format.codec"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "codec",
+          "name": "codec",
+          "shape": 7,
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "codec"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "video",
+          "name": "video",
+          "type": "VIDEO",
+          "links": null
+        }
+      ],
+      "title": "Splat & Solid · SaveVideo",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "foundry-splat/preview/orbit/asset",
+        "auto",
+        "auto",
+        "auto"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/orbit/asset",
+        "format": "auto",
+        "format.codec": "auto",
+        "codec": "auto"
+      }
+    },
+    {
+      "id": 400019,
+      "type": "SaveGLB",
+      "pos": [
+        23376.7515625,
+        165
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 289,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 490
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "PREVIEW_3D",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "title": "Splat & Solid · SaveGLB",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "generation",
+        "Last Time Model File": "foundry-splat\\83a3b254293d4663bc75e73a5db213e9\\splat/asset_00001_.spz",
+        "Last Time Model Folder": "output",
+        "Camera Config": {
+          "cameraType": "perspective",
+          "fov": 35,
+          "hasCustomUp": false
+        },
+        "Light Config": {
+          "intensity": 3,
+          "hdri": {
+            "enabled": false,
+            "hdriPath": "",
+            "showAsBackground": false,
+            "intensity": 1
+          }
+        },
+        "Scene Config": {
+          "showGrid": true,
+          "backgroundColor": "#282828",
+          "backgroundImage": "",
+          "backgroundRenderMode": "tiled",
+          "models": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "Model Config": {
+          "upDirection": "original",
+          "materialMode": "original",
+          "showSkeleton": false,
+          "gizmo": {
+            "enabled": false,
+            "mode": "translate",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      },
+      "widgets_values": [
+        "foundry-splat/preview/splat/asset",
+        ""
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/splat/asset",
+        "image": ""
+      }
+    },
+    {
+      "id": 400020,
+      "type": "SaveGLB",
+      "pos": [
+        23856.7515625,
+        165
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 288,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH,FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_OBJ,FILE_3D_FBX,FILE_3D_STL,FILE_3D_USDZ,FILE_3D_PLY,FILE_3D_SPLAT,FILE_3D_SPZ,FILE_3D_KSPLAT,FILE_3D_SPLAT_ANY,FILE_3D_POINT_CLOUD_ANY,FILE_3D",
+          "link": 491
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "PREVIEW_3D",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [],
+      "title": "Splat & Solid · SaveGLB",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "generation",
+        "Last Time Model File": "foundry-splat\\83a3b254293d4663bc75e73a5db213e9\\raw/asset_00001_.glb",
+        "Last Time Model Folder": "output",
+        "Camera Config": {
+          "cameraType": "perspective",
+          "fov": 35,
+          "hasCustomUp": false
+        },
+        "Light Config": {
+          "intensity": 3,
+          "hdri": {
+            "enabled": false,
+            "hdriPath": "",
+            "showAsBackground": false,
+            "intensity": 1
+          }
+        },
+        "Scene Config": {
+          "showGrid": true,
+          "backgroundColor": "#282828",
+          "backgroundImage": "",
+          "backgroundRenderMode": "tiled",
+          "models": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "Model Config": {
+          "upDirection": "original",
+          "materialMode": "original",
+          "showSkeleton": false,
+          "gizmo": {
+            "enabled": false,
+            "mode": "translate",
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            }
+          }
+        }
+      },
+      "widgets_values": [
+        "foundry-splat/preview/raw/asset",
+        ""
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/raw/asset",
+        "image": ""
+      }
+    },
+    {
+      "id": 400021,
+      "type": "RenderSplat",
+      "pos": [
+        22416.7515625,
+        625
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 277,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "splat",
+          "name": "splat",
+          "type": "SPLAT",
+          "link": 492
+        },
+        {
+          "localized_name": "bg_image",
+          "name": "bg_image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "shape": 7,
+          "type": "LOAD3D_CAMERA",
+          "link": 493
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "frames",
+          "name": "frames",
+          "type": "INT",
+          "widget": {
+            "name": "frames"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "splat_scale",
+          "name": "splat_scale",
+          "type": "FLOAT",
+          "widget": {
+            "name": "splat_scale"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sharpen",
+          "name": "sharpen",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sharpen"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "headlight_shading",
+          "name": "headlight_shading",
+          "type": "FLOAT",
+          "widget": {
+            "name": "headlight_shading"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "opacity_threshold",
+          "name": "opacity_threshold",
+          "type": "FLOAT",
+          "widget": {
+            "name": "opacity_threshold"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "render_style",
+          "name": "render_style",
+          "type": "COMBO",
+          "widget": {
+            "name": "render_style"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "background",
+          "name": "background",
+          "type": "COLOR",
+          "widget": {
+            "name": "background"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            488
+          ]
+        },
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "title": "Splat & Solid · RenderSplat",
+      "properties": {
+        "Node name for S&R": "RenderSplat",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        1536,
+        1536,
+        75,
+        1,
+        2,
+        0,
+        0,
+        "color",
+        "#848484"
+      ],
+      "widgets_values_named": {
+        "width": 1536,
+        "height": 1536,
+        "frames": 75,
+        "splat_scale": 1,
+        "sharpen": 2,
+        "headlight_shading": 0,
+        "opacity_threshold": 0,
+        "render_style": "color",
+        "background": "#848484"
+      }
+    },
+    {
+      "id": 400022,
+      "type": "SplatToMesh",
+      "pos": [
+        22896.7515625,
+        625
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 278,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "splat",
+          "name": "splat",
+          "type": "SPLAT",
+          "link": 494
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "kernel",
+          "name": "kernel",
+          "type": "INT",
+          "widget": {
+            "name": "kernel"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "smooth",
+          "name": "smooth",
+          "type": "INT",
+          "widget": {
+            "name": "smooth"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "level",
+          "name": "level",
+          "type": "FLOAT",
+          "widget": {
+            "name": "level"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "min_component",
+          "name": "min_component",
+          "type": "INT",
+          "widget": {
+            "name": "min_component"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "min_opacity",
+          "name": "min_opacity",
+          "type": "FLOAT",
+          "widget": {
+            "name": "min_opacity"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "color_sharpen",
+          "name": "color_sharpen",
+          "type": "FLOAT",
+          "widget": {
+            "name": "color_sharpen"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            470,
+            491
+          ]
+        }
+      ],
+      "title": "Splat & Solid · SplatToMesh",
+      "properties": {
+        "Node name for S&R": "SplatToMesh",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        512,
+        5,
+        0,
+        0.6,
+        500,
+        0.02,
+        2
+      ],
+      "widgets_values_named": {
+        "resolution": 512,
+        "kernel": 5,
+        "smooth": 0,
+        "level": 0.6,
+        "min_component": 500,
+        "min_opacity": 0.02,
+        "color_sharpen": 2
+      }
+    },
+    {
+      "id": 400023,
+      "type": "CreateCameraInfo",
+      "pos": [
+        23376.7515625,
+        625
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 83,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mode",
+          "name": "mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "yaw",
+          "name": "mode.yaw",
+          "type": "FLOAT",
+          "widget": {
+            "name": "mode.yaw"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "pitch",
+          "name": "mode.pitch",
+          "type": "FLOAT",
+          "widget": {
+            "name": "mode.pitch"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "distance",
+          "name": "mode.distance",
+          "type": "FLOAT",
+          "widget": {
+            "name": "mode.distance"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target_x",
+          "name": "target_x",
+          "type": "FLOAT",
+          "widget": {
+            "name": "target_x"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target_y",
+          "name": "target_y",
+          "type": "FLOAT",
+          "widget": {
+            "name": "target_y"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target_z",
+          "name": "target_z",
+          "type": "FLOAT",
+          "widget": {
+            "name": "target_z"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "roll",
+          "name": "roll",
+          "type": "FLOAT",
+          "widget": {
+            "name": "roll"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fov",
+          "name": "fov",
+          "type": "FLOAT",
+          "widget": {
+            "name": "fov"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "zoom",
+          "name": "zoom",
+          "type": "FLOAT",
+          "widget": {
+            "name": "zoom"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "camera_type",
+          "name": "camera_type",
+          "type": "COMBO",
+          "widget": {
+            "name": "camera_type"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "camera_info_state",
+          "name": "camera_info_state",
+          "shape": 7,
+          "type": "CAMERA_INFO_STATE",
+          "widget": {
+            "name": "camera_info_state"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "type": "LOAD3D_CAMERA",
+          "links": [
+            493
+          ]
+        }
+      ],
+      "title": "Splat & Solid · CreateCameraInfo",
+      "properties": {
+        "Node name for S&R": "CreateCameraInfo",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "orbit",
+        35,
+        20,
+        2.35,
+        0,
+        0,
+        0,
+        0,
+        35,
+        1,
+        "perspective"
+      ],
+      "widgets_values_named": {
+        "mode": "orbit",
+        "mode.yaw": 35,
+        "mode.pitch": 20,
+        "mode.distance": 2.35,
+        "target_x": 0,
+        "target_y": 0,
+        "target_z": 0,
+        "roll": 0,
+        "fov": 35,
+        "zoom": 1,
+        "camera_type": "perspective"
+      }
+    },
+    {
+      "id": 400024,
+      "type": "VAELoader",
+      "pos": [
+        23856.7515625,
+        625
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 84,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "vae_name",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            503,
+            514
+          ]
+        }
+      ],
+      "title": "Splat & Solid · VAELoader",
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "idol_decoder_fp16.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "idol_decoder_fp16.safetensors"
+      }
+    },
+    {
+      "id": 400025,
+      "type": "UNETLoader",
+      "pos": [
+        22416.7515625,
+        1085
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 85,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "unet_name",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "weight_dtype",
+          "name": "weight_dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "weight_dtype"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            511,
+            513
+          ]
+        }
+      ],
+      "title": "Splat & Solid · UNETLoader",
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "idol_fp16.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "idol_fp16.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+    {
+      "id": 400026,
+      "type": "TripoSplatPreprocessImage",
+      "pos": [
+        22896.7515625,
+        1085
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 201,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 495
+        },
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "link": 496
+        },
+        {
+          "localized_name": "erode_radius",
+          "name": "erode_radius",
+          "type": "INT",
+          "widget": {
+            "name": "erode_radius"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "size",
+          "name": "size",
+          "type": "INT",
+          "widget": {
+            "name": "size"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            499
+          ]
+        }
+      ],
+      "title": "Splat & Solid · TripoSplatPreprocessImage",
+      "properties": {
+        "Node name for S&R": "TripoSplatPreprocessImage",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        1,
+        1024
+      ],
+      "widgets_values_named": {
+        "erode_radius": 1,
+        "size": 1024
+      }
+    },
+    {
+      "id": 400027,
+      "type": "TripoSplatConditioning",
+      "pos": [
+        23376.7515625,
+        1085
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 222,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "clip_vision",
+          "name": "clip_vision",
+          "type": "CLIP_VISION",
+          "link": 497
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 498
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 499
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            505
+          ]
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            506
+          ]
+        },
+        {
+          "localized_name": "latent",
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            507
+          ]
+        }
+      ],
+      "title": "Splat & Solid · TripoSplatConditioning",
+      "properties": {
+        "Node name for S&R": "TripoSplatConditioning",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      }
+    },
+    {
+      "id": 400028,
+      "type": "ComfySwitchNode",
+      "pos": [
+        23856.7515625,
+        1085
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 179,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "on_false",
+          "name": "on_false",
+          "shape": 7,
+          "type": "MASK",
+          "link": 500
+        },
+        {
+          "localized_name": "on_true",
+          "name": "on_true",
+          "shape": 7,
+          "type": "MASK",
+          "link": 501
+        },
+        {
+          "localized_name": "switch",
+          "name": "switch",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "switch"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "output",
+          "name": "output",
+          "type": "MASK",
+          "links": [
+            496
+          ]
+        }
+      ],
+      "title": "Splat & Solid · ComfySwitchNode",
+      "properties": {
+        "Node name for S&R": "ComfySwitchNode",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        true
+      ],
+      "widgets_values_named": {
+        "switch": true
+      }
+    },
+    {
+      "id": 400029,
+      "type": "VAEDecodeTripoSplat",
+      "pos": [
+        22416.7515625,
+        1545
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 265,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 502
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 503
+        },
+        {
+          "localized_name": "num_gaussians",
+          "name": "num_gaussians",
+          "type": "INT",
+          "widget": {
+            "name": "num_gaussians"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "splat",
+          "name": "splat",
+          "type": "SPLAT",
+          "links": [
+            492,
+            494,
+            515
+          ]
+        }
+      ],
+      "title": "Splat & Solid · VAEDecodeTripoSplat",
+      "properties": {
+        "Node name for S&R": "VAEDecodeTripoSplat",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        262144,
+        790219963981395,
+        "fixed"
+      ],
+      "widgets_values_named": {
+        "num_gaussians": 262144,
+        "seed": 790219963981395,
+        "control_after_generate": "fixed"
+      }
+    },
+    {
+      "id": 400030,
+      "type": "KSampler",
+      "pos": [
+        22896.7515625,
+        1545
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 247,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 504
+        },
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 505
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 506
+        },
+        {
+          "localized_name": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 507
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "scheduler",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            502
+          ]
+        }
+      ],
+      "title": "Splat & Solid · KSampler",
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        46,
+        "fixed",
+        20,
+        3,
+        "dpmpp_2m",
+        "simple",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 46,
+        "control_after_generate": "fixed",
+        "steps": 20,
+        "cfg": 3,
+        "sampler_name": "dpmpp_2m",
+        "scheduler": "simple",
+        "denoise": 1
+      }
+    },
+    {
+      "id": 400031,
+      "type": "CLIPVisionLoader",
+      "pos": [
+        23376.7515625,
+        1545
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 86,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "clip_name",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CLIP_VISION",
+          "name": "CLIP_VISION",
+          "type": "CLIP_VISION",
+          "links": [
+            497
+          ]
+        }
+      ],
+      "title": "Splat & Solid · CLIPVisionLoader",
+      "properties": {
+        "Node name for S&R": "CLIPVisionLoader",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "dino_v3_vit_h_bf16.safetensors"
+      ],
+      "widgets_values_named": {
+        "clip_name": "dino_v3_vit_h_bf16.safetensors"
+      }
+    },
+    {
+      "id": 400032,
+      "type": "VAELoader",
+      "pos": [
+        23856.7515625,
+        1545
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 87,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "vae_name",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            498
+          ]
+        }
+      ],
+      "title": "Splat & Solid · VAELoader",
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "flux2-vae.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "flux2-vae.safetensors"
+      }
+    },
+    {
+      "id": 400033,
+      "type": "RemoveBackground",
+      "pos": [
+        22416.7515625,
+        2005
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 138,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "bg_removal_model",
+          "name": "bg_removal_model",
+          "type": "BACKGROUND_REMOVAL",
+          "link": 508
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 509
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            501
+          ]
+        }
+      ],
+      "title": "Splat & Solid · RemoveBackground",
+      "properties": {
+        "Node name for S&R": "RemoveBackground",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      }
+    },
+    {
+      "id": 400034,
+      "type": "LoadBackgroundRemovalModel",
+      "pos": [
+        22896.7515625,
+        2005
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 88,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "bg_removal_name",
+          "name": "bg_removal_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "bg_removal_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "bg_model",
+          "name": "bg_model",
+          "type": "BACKGROUND_REMOVAL",
+          "links": [
+            508
+          ]
+        }
+      ],
+      "title": "Splat & Solid · LoadBackgroundRemovalModel",
+      "properties": {
+        "Node name for S&R": "LoadBackgroundRemovalModel",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "birefnet.safetensors"
+      ],
+      "widgets_values_named": {
+        "bg_removal_name": "birefnet.safetensors"
+      }
+    },
+    {
+      "id": 400035,
+      "type": "InvertMask",
+      "pos": [
+        23376.7515625,
+        2005
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 140,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "link": 510
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MASK",
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            500
+          ]
+        }
+      ],
+      "title": "Splat & Solid · InvertMask",
+      "properties": {
+        "Node name for S&R": "InvertMask",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      }
+    },
+    {
+      "id": 400036,
+      "type": "ComfySwitchNode",
+      "pos": [
+        23856.7515625,
+        2005
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 177,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "on_false",
+          "name": "on_false",
+          "shape": 7,
+          "type": "MODEL",
+          "link": 511
+        },
+        {
+          "localized_name": "on_true",
+          "name": "on_true",
+          "shape": 7,
+          "type": "MODEL",
+          "link": 512
+        },
+        {
+          "localized_name": "switch",
+          "name": "switch",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "switch"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "output",
+          "name": "output",
+          "type": "MODEL",
+          "links": [
+            504
+          ]
+        }
+      ],
+      "title": "Splat & Solid · ComfySwitchNode",
+      "properties": {
+        "Node name for S&R": "ComfySwitchNode",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        true
+      ],
+      "widgets_values_named": {
+        "switch": true
+      }
+    },
+    {
+      "id": 400037,
+      "type": "TripoSplatSamplingPreview",
+      "pos": [
+        22416.7515625,
+        2465
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 137,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 513
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 514
+        },
+        {
+          "localized_name": "octree_level",
+          "name": "octree_level",
+          "type": "INT",
+          "widget": {
+            "name": "octree_level"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "num_gaussians",
+          "name": "num_gaussians",
+          "type": "INT",
+          "widget": {
+            "name": "num_gaussians"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "yaw",
+          "name": "yaw",
+          "type": "FLOAT",
+          "widget": {
+            "name": "yaw"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "pitch",
+          "name": "pitch",
+          "type": "FLOAT",
+          "widget": {
+            "name": "pitch"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "point_size",
+          "name": "point_size",
+          "type": "INT",
+          "widget": {
+            "name": "point_size"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            512
+          ]
+        }
+      ],
+      "title": "Splat & Solid · TripoSplatSamplingPreview",
+      "properties": {
+        "Node name for S&R": "TripoSplatSamplingPreview",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        5,
+        16384,
+        90,
+        15,
+        2
+      ],
+      "widgets_values_named": {
+        "octree_level": 5,
+        "num_gaussians": 16384,
+        "yaw": 90,
+        "pitch": 15,
+        "point_size": 2
+      }
+    },
+    {
+      "id": 400038,
+      "type": "SplatToFile3D",
+      "pos": [
+        22896.7515625,
+        2465
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 279,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "splat",
+          "name": "splat",
+          "type": "SPLAT",
+          "link": 515
+        },
+        {
+          "localized_name": "format",
+          "name": "format",
+          "type": "COMBO",
+          "widget": {
+            "name": "format"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_SPLAT_ANY",
+          "links": [
+            490
+          ]
+        }
+      ],
+      "title": "Splat & Solid · SplatToFile3D",
+      "properties": {
+        "Node name for S&R": "SplatToFile3D",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "spz"
+      ],
+      "widgets_values_named": {
+        "format": "spz"
+      }
+    },
+    {
+      "id": 400039,
+      "type": "FoundryLoadCreationImage",
+      "pos": [
+        23376.7515625,
+        2465
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 89,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "filename",
+          "name": "filename",
+          "type": "STRING",
+          "widget": {
+            "name": "filename"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sha256",
+          "name": "sha256",
+          "type": "STRING",
+          "widget": {
+            "name": "sha256"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            472,
+            484,
+            495,
+            509
+          ]
+        },
+        {
+          "localized_name": "MASK",
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            485,
+            510
+          ]
+        }
+      ],
+      "title": "Splat & Solid · FoundryLoadCreationImage",
+      "properties": {
+        "Node name for S&R": "FoundryLoadCreationImage",
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "",
+        ""
+      ],
+      "widgets_values_named": {
+        "filename": "",
+        "sha256": ""
+      }
+    },
+    {
+      "id": 400040,
+      "type": "CreateCameraInfo",
+      "pos": [
+        23856.7515625,
+        5125
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 90,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mode",
+          "name": "mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "yaw",
+          "name": "mode.yaw",
+          "type": "FLOAT",
+          "widget": {
+            "name": "mode.yaw"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "pitch",
+          "name": "mode.pitch",
+          "type": "FLOAT",
+          "widget": {
+            "name": "mode.pitch"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "distance",
+          "name": "mode.distance",
+          "type": "FLOAT",
+          "widget": {
+            "name": "mode.distance"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target_x",
+          "name": "target_x",
+          "type": "FLOAT",
+          "widget": {
+            "name": "target_x"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target_y",
+          "name": "target_y",
+          "type": "FLOAT",
+          "widget": {
+            "name": "target_y"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target_z",
+          "name": "target_z",
+          "type": "FLOAT",
+          "widget": {
+            "name": "target_z"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "roll",
+          "name": "roll",
+          "type": "FLOAT",
+          "widget": {
+            "name": "roll"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fov",
+          "name": "fov",
+          "type": "FLOAT",
+          "widget": {
+            "name": "fov"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "zoom",
+          "name": "zoom",
+          "type": "FLOAT",
+          "widget": {
+            "name": "zoom"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "camera_type",
+          "name": "camera_type",
+          "type": "COMBO",
+          "widget": {
+            "name": "camera_type"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "camera_info_state",
+          "name": "camera_info_state",
+          "shape": 7,
+          "type": "CAMERA_INFO_STATE",
+          "widget": {
+            "name": "camera_info_state"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "type": "LOAD3D_CAMERA",
+          "links": [
+            523,
+            525
+          ]
+        }
+      ],
+      "title": "Splat & Solid · CreateCameraInfo",
+      "properties": {
+        "Node name for S&R": "CreateCameraInfo",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        "orbit",
+        35,
+        20,
+        2.35,
+        0,
+        0,
+        0,
+        0,
+        35,
+        1,
+        "perspective"
+      ],
+      "widgets_values_named": {
+        "mode": "orbit",
+        "mode.yaw": 35,
+        "mode.pitch": 20,
+        "mode.distance": 2.35,
+        "target_x": 0,
+        "target_y": 0,
+        "target_z": 0,
+        "roll": 0,
+        "fov": 35,
+        "zoom": 1,
+        "camera_type": "perspective"
+      }
+    },
+    {
+      "id": 400041,
+      "type": "Hi3DNeedsSolidRepair",
+      "pos": [
+        22416.7515625,
+        5585
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 224,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 516
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "needs_solid_repair",
+          "name": "needs_solid_repair",
+          "type": "BOOLEAN",
+          "links": null
+        },
+        {
+          "localized_name": "connectivity_report",
+          "name": "connectivity_report",
+          "type": "STRING",
+          "links": null
+        }
+      ],
+      "title": "Splat & Solid · Hi3DNeedsSolidRepair",
+      "properties": {
+        "Node name for S&R": "Hi3DNeedsSolidRepair",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      }
+    },
+    {
+      "id": 400042,
+      "type": "SaveImage",
+      "pos": [
+        22896.7515625,
+        5585
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 299,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 517
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "Splat & Solid · SaveImage",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        "foundry-splat/preview/previews/companion"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/previews/companion"
+      }
+    },
+    {
+      "id": 400043,
+      "type": "SaveImage",
+      "pos": [
+        23376.7515625,
+        5585
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 267,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 518
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "title": "Splat & Solid · SaveImage",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        "foundry-splat/preview/previews/master"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-splat/preview/previews/master"
+      }
+    },
+    {
+      "id": 400046,
+      "type": "MeshSmoothNormals",
+      "pos": [
+        23856.7515625,
+        5585
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 281,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 519
+        },
+        {
+          "localized_name": "crease_angle",
+          "name": "crease_angle",
+          "type": "FLOAT",
+          "widget": {
+            "name": "crease_angle"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            487,
+            522
+          ]
+        }
+      ],
+      "title": "Splat & Solid · MeshSmoothNormals",
+      "properties": {
+        "Node name for S&R": "MeshSmoothNormals",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        45
+      ],
+      "widgets_values_named": {
+        "crease_angle": 45
+      }
+    },
+    {
+      "id": 400047,
+      "type": "MeshSmoothNormals",
+      "pos": [
+        22416.7515625,
+        6045
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 226,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 520
+        },
+        {
+          "localized_name": "crease_angle",
+          "name": "crease_angle",
+          "type": "FLOAT",
+          "widget": {
+            "name": "crease_angle"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            486,
+            524
+          ]
+        }
+      ],
+      "title": "Splat & Solid · MeshSmoothNormals",
+      "properties": {
+        "Node name for S&R": "MeshSmoothNormals",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        45
+      ],
+      "widgets_values_named": {
+        "crease_angle": 45
+      }
+    },
+    {
+      "id": 400048,
+      "type": "Hi3DNormalizeMesh",
+      "pos": [
+        22896.7515625,
+        6045
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 143,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 521
+        },
+        {
+          "localized_name": "span",
+          "name": "span",
+          "type": "FLOAT",
+          "widget": {
+            "name": "span"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "normalized_mesh",
+          "name": "normalized_mesh",
+          "type": "MESH",
+          "links": [
+            467
+          ]
+        },
+        {
+          "localized_name": "original_frame",
+          "name": "original_frame",
+          "type": "HI3D_MESH_FRAME",
+          "links": [
+            527,
+            529
+          ]
+        }
+      ],
+      "title": "Splat & Solid · Hi3DNormalizeMesh",
+      "properties": {
+        "Node name for S&R": "Hi3DNormalizeMesh",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        0.96
+      ],
+      "widgets_values_named": {
+        "span": 0.96
+      }
+    },
+    {
+      "id": 400049,
+      "type": "RenderMesh",
+      "pos": [
+        23376.7515625,
+        6045
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 291,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 522
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "shape": 7,
+          "type": "LOAD3D_MODEL_INFO",
+          "link": null
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "shape": 7,
+          "type": "LOAD3D_CAMERA",
+          "link": 523
+        },
+        {
+          "localized_name": "mode",
+          "name": "mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "background",
+          "name": "background",
+          "type": "COLOR",
+          "widget": {
+            "name": "background"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            517
+          ]
+        },
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "title": "Splat & Solid · RenderMesh",
+      "properties": {
+        "Node name for S&R": "RenderMesh",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        "solid",
+        1536,
+        1536,
+        "#50565c"
+      ],
+      "widgets_values_named": {
+        "mode": "solid",
+        "width": 1536,
+        "height": 1536,
+        "background": "#50565c"
+      }
+    },
+    {
+      "id": 400050,
+      "type": "RenderMesh",
+      "pos": [
+        23856.7515625,
+        6045
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 250,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 524
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "shape": 7,
+          "type": "LOAD3D_MODEL_INFO",
+          "link": null
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "shape": 7,
+          "type": "LOAD3D_CAMERA",
+          "link": 525
+        },
+        {
+          "localized_name": "mode",
+          "name": "mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "background",
+          "name": "background",
+          "type": "COLOR",
+          "widget": {
+            "name": "background"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            518
+          ]
+        },
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "title": "Splat & Solid · RenderMesh",
+      "properties": {
+        "Node name for S&R": "RenderMesh",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        "solid",
+        1536,
+        1536,
+        "#50565c"
+      ],
+      "widgets_values_named": {
+        "mode": "solid",
+        "width": 1536,
+        "height": 1536,
+        "background": "#50565c"
+      }
+    },
+    {
+      "id": 400051,
+      "type": "Hi3DRestoreMeshFrame",
+      "pos": [
+        22416.7515625,
+        6505
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 266,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 526
+        },
+        {
+          "localized_name": "original_frame",
+          "name": "original_frame",
+          "type": "HI3D_MESH_FRAME",
+          "link": 527
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MESH",
+          "name": "MESH",
+          "type": "MESH",
+          "links": [
+            483,
+            519
+          ]
+        }
+      ],
+      "title": "Splat & Solid · Hi3DRestoreMeshFrame",
+      "properties": {
+        "Node name for S&R": "Hi3DRestoreMeshFrame",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      }
+    },
+    {
+      "id": 400052,
+      "type": "Hi3DRestoreMeshFrame",
+      "pos": [
+        22896.7515625,
+        6505
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 203,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 528
+        },
+        {
+          "localized_name": "original_frame",
+          "name": "original_frame",
+          "type": "HI3D_MESH_FRAME",
+          "link": 529
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MESH",
+          "name": "MESH",
+          "type": "MESH",
+          "links": [
+            482,
+            520
+          ]
+        }
+      ],
+      "title": "Splat & Solid · Hi3DRestoreMeshFrame",
+      "properties": {
+        "Node name for S&R": "Hi3DRestoreMeshFrame",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      }
+    },
+    {
+      "id": 400053,
+      "type": "ComfySwitchNode",
+      "pos": [
+        23376.7515625,
+        6505
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 248,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "on_false",
+          "name": "on_false",
+          "shape": 7,
+          "type": "MESH",
+          "link": 530
+        },
+        {
+          "localized_name": "on_true",
+          "name": "on_true",
+          "shape": 7,
+          "type": "MESH",
+          "link": 531
+        },
+        {
+          "localized_name": "switch",
+          "name": "switch",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "switch"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "output",
+          "name": "output",
+          "type": "MESH",
+          "links": [
+            526
+          ]
+        }
+      ],
+      "title": "Splat & Solid · ComfySwitchNode",
+      "properties": {
+        "Node name for S&R": "ComfySwitchNode",
+        "splatOwner": "3012",
+        "splatStage": "cleanup"
+      },
+      "widgets_values": [
+        true
+      ],
+      "widgets_values_named": {
+        "switch": true
+      }
+    },
+    {
+      "id": 400100,
+      "type": "MarkdownNote",
+      "pos": [
+        23856.7515625,
+        2465
+      ],
+      "size": [
+        440,
+        400
+      ],
+      "flags": {},
+      "order": 93,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [],
+      "title": "Splat & Solid / Original research and workflow",
+      "properties": {
+        "splatOwner": "3012",
+        "splatStage": "generation"
+      },
+      "widgets_values": [
+        "## Splat & Solid\n\n**Idol by Sperid Labs**, native ComfyUI integration by Comfy-Org and contributors. Optional image-guided refinement: **Hi3D**. Native mesh cleanup/rendering: **ComfyUI**; independent exported-file checks: **PyMeshLab and trimesh**. DINOv3, FLUX.2 autoencoder and BiRefNet retain their original credits and terms.\n\nOne image → splat + original mesh → optional refinement → closed master + lightweight companion. Appearance lives in the splat; the companion is separate geometry in its frame. Thin features may be lost. Closed geometry does not certify engine collision or physical printing.\n\nThis branch is independent of Turnaround, 3D-Guided and HairDeck. The wizard queues only its selected stage; nodes stay disabled for the global Run button. Saved loaders resume completed stages. Original files are preserved.\n\nhttps://huggingface.co/speridlabs/idol\nhttps://github.com/Comfy-Org/ComfyUI\nhttps://github.com/hi3d-official/Hi3Dv1.0"
+      ],
+      "widgets_values_named": {
+        "text": "## Splat & Solid\n\n**Idol by Sperid Labs**, native ComfyUI integration by Comfy-Org and contributors. Optional image-guided refinement: **Hi3D**. Native mesh cleanup/rendering: **ComfyUI**; independent exported-file checks: **PyMeshLab and trimesh**. DINOv3, FLUX.2 autoencoder and BiRefNet retain their original credits and terms.\n\nOne image → splat + original mesh → optional refinement → closed master + lightweight companion. Appearance lives in the splat; the companion is separate geometry in its frame. Thin features may be lost. Closed geometry does not certify engine collision or physical printing.\n\nThis branch is independent of Turnaround, 3D-Guided and HairDeck. The wizard queues only its selected stage; nodes stay disabled for the global Run button. Saved loaders resume completed stages. Original files are preserved.\n\nhttps://huggingface.co/speridlabs/idol\nhttps://github.com/Comfy-Org/ComfyUI\nhttps://github.com/hi3d-official/Hi3Dv1.0"
+      },
+      "color": "#432",
+      "bgcolor": "#653"
     }
   ],
   "links": [
@@ -22684,6 +27051,526 @@
       108803,
       0,
       "FILE_3D"
+    ],
+    [
+      467,
+      400048,
+      0,
+      400000,
+      0,
+      "MESH"
+    ],
+    [
+      468,
+      400000,
+      0,
+      400001,
+      0,
+      "MESH"
+    ],
+    [
+      469,
+      400001,
+      0,
+      400002,
+      0,
+      "MESH"
+    ],
+    [
+      470,
+      400022,
+      0,
+      400003,
+      0,
+      "MESH"
+    ],
+    [
+      471,
+      400004,
+      0,
+      400005,
+      0,
+      "BACKGROUND_REMOVAL"
+    ],
+    [
+      472,
+      400039,
+      0,
+      400005,
+      1,
+      "IMAGE"
+    ],
+    [
+      473,
+      400005,
+      0,
+      400006,
+      0,
+      "MASK"
+    ],
+    [
+      474,
+      400007,
+      0,
+      400008,
+      0,
+      "HI3D_BACKEND"
+    ],
+    [
+      475,
+      400014,
+      0,
+      400008,
+      1,
+      "IMAGE"
+    ],
+    [
+      476,
+      400003,
+      0,
+      400008,
+      2,
+      "MESH"
+    ],
+    [
+      477,
+      400006,
+      0,
+      400008,
+      3,
+      "MASK"
+    ],
+    [
+      478,
+      400008,
+      0,
+      400009,
+      0,
+      "MESH"
+    ],
+    [
+      479,
+      400003,
+      0,
+      400009,
+      1,
+      "MESH"
+    ],
+    [
+      480,
+      400008,
+      0,
+      400010,
+      0,
+      "MESH"
+    ],
+    [
+      481,
+      400009,
+      0,
+      400011,
+      0,
+      "MESH"
+    ],
+    [
+      482,
+      400052,
+      0,
+      400012,
+      0,
+      "MESH"
+    ],
+    [
+      483,
+      400051,
+      0,
+      400013,
+      0,
+      "MESH"
+    ],
+    [
+      484,
+      400039,
+      0,
+      400014,
+      0,
+      "IMAGE"
+    ],
+    [
+      485,
+      400039,
+      1,
+      400014,
+      1,
+      "MASK"
+    ],
+    [
+      486,
+      400047,
+      0,
+      400015,
+      0,
+      "MESH"
+    ],
+    [
+      487,
+      400046,
+      0,
+      400016,
+      0,
+      "MESH"
+    ],
+    [
+      488,
+      400021,
+      0,
+      400017,
+      0,
+      "IMAGE"
+    ],
+    [
+      489,
+      400017,
+      0,
+      400018,
+      0,
+      "VIDEO"
+    ],
+    [
+      490,
+      400038,
+      0,
+      400019,
+      0,
+      "FILE_3D_SPLAT_ANY"
+    ],
+    [
+      491,
+      400022,
+      0,
+      400020,
+      0,
+      "MESH"
+    ],
+    [
+      492,
+      400029,
+      0,
+      400021,
+      0,
+      "SPLAT"
+    ],
+    [
+      493,
+      400023,
+      0,
+      400021,
+      2,
+      "LOAD3D_CAMERA"
+    ],
+    [
+      494,
+      400029,
+      0,
+      400022,
+      0,
+      "SPLAT"
+    ],
+    [
+      495,
+      400039,
+      0,
+      400026,
+      0,
+      "IMAGE"
+    ],
+    [
+      496,
+      400028,
+      0,
+      400026,
+      1,
+      "MASK"
+    ],
+    [
+      497,
+      400031,
+      0,
+      400027,
+      0,
+      "CLIP_VISION"
+    ],
+    [
+      498,
+      400032,
+      0,
+      400027,
+      1,
+      "VAE"
+    ],
+    [
+      499,
+      400026,
+      0,
+      400027,
+      2,
+      "IMAGE"
+    ],
+    [
+      500,
+      400035,
+      0,
+      400028,
+      0,
+      "MASK"
+    ],
+    [
+      501,
+      400033,
+      0,
+      400028,
+      1,
+      "MASK"
+    ],
+    [
+      502,
+      400030,
+      0,
+      400029,
+      0,
+      "LATENT"
+    ],
+    [
+      503,
+      400024,
+      0,
+      400029,
+      1,
+      "VAE"
+    ],
+    [
+      504,
+      400036,
+      0,
+      400030,
+      0,
+      "MODEL"
+    ],
+    [
+      505,
+      400027,
+      0,
+      400030,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      506,
+      400027,
+      1,
+      400030,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      507,
+      400027,
+      2,
+      400030,
+      3,
+      "LATENT"
+    ],
+    [
+      508,
+      400034,
+      0,
+      400033,
+      0,
+      "BACKGROUND_REMOVAL"
+    ],
+    [
+      509,
+      400039,
+      0,
+      400033,
+      1,
+      "IMAGE"
+    ],
+    [
+      510,
+      400039,
+      1,
+      400035,
+      0,
+      "MASK"
+    ],
+    [
+      511,
+      400025,
+      0,
+      400036,
+      0,
+      "MODEL"
+    ],
+    [
+      512,
+      400037,
+      0,
+      400036,
+      1,
+      "MODEL"
+    ],
+    [
+      513,
+      400025,
+      0,
+      400037,
+      0,
+      "MODEL"
+    ],
+    [
+      514,
+      400024,
+      0,
+      400037,
+      1,
+      "VAE"
+    ],
+    [
+      515,
+      400029,
+      0,
+      400038,
+      0,
+      "SPLAT"
+    ],
+    [
+      516,
+      400001,
+      0,
+      400041,
+      0,
+      "MESH"
+    ],
+    [
+      517,
+      400049,
+      0,
+      400042,
+      0,
+      "IMAGE"
+    ],
+    [
+      518,
+      400050,
+      0,
+      400043,
+      0,
+      "IMAGE"
+    ],
+    [
+      519,
+      400051,
+      0,
+      400046,
+      0,
+      "MESH"
+    ],
+    [
+      520,
+      400052,
+      0,
+      400047,
+      0,
+      "MESH"
+    ],
+    [
+      521,
+      400009,
+      0,
+      400048,
+      0,
+      "MESH"
+    ],
+    [
+      522,
+      400046,
+      0,
+      400049,
+      0,
+      "MESH"
+    ],
+    [
+      523,
+      400040,
+      0,
+      400049,
+      2,
+      "LOAD3D_CAMERA"
+    ],
+    [
+      524,
+      400047,
+      0,
+      400050,
+      0,
+      "MESH"
+    ],
+    [
+      525,
+      400040,
+      0,
+      400050,
+      2,
+      "LOAD3D_CAMERA"
+    ],
+    [
+      526,
+      400053,
+      0,
+      400051,
+      0,
+      "MESH"
+    ],
+    [
+      527,
+      400048,
+      1,
+      400051,
+      1,
+      "HI3D_MESH_FRAME"
+    ],
+    [
+      528,
+      400000,
+      0,
+      400052,
+      0,
+      "MESH"
+    ],
+    [
+      529,
+      400048,
+      1,
+      400052,
+      1,
+      "HI3D_MESH_FRAME"
+    ],
+    [
+      530,
+      400001,
+      0,
+      400053,
+      0,
+      "MESH"
+    ],
+    [
+      531,
+      400002,
+      0,
+      400053,
+      1,
+      "MESH"
     ]
   ],
   "groups": [
@@ -23082,6 +27969,42 @@
       ],
       "color": "#365f59",
       "flags": {}
+    },
+    {
+      "id": 366,
+      "title": "Splat & Solid / generation",
+      "bounding": [
+        22391.7515625,
+        100,
+        1950,
+        2840
+      ],
+      "color": "#496d65",
+      "flags": {}
+    },
+    {
+      "id": 367,
+      "title": "Splat & Solid / refinement",
+      "bounding": [
+        22391.7515625,
+        3040,
+        1950,
+        1460
+      ],
+      "color": "#496d65",
+      "flags": {}
+    },
+    {
+      "id": 368,
+      "title": "Splat & Solid / cleanup",
+      "bounding": [
+        22391.7515625,
+        4600,
+        1950,
+        2380
+      ],
+      "color": "#496d65",
+      "flags": {}
     }
   ],
   "config": {},
@@ -23121,6 +28044,10 @@
       "owner": "3012",
       "offset": 100000,
       "finishing_offset": 200000
+    },
+    "splat_method": {
+      "method": "splat-solid/v1",
+      "owner": "3012"
     }
   },
   "version": 0.4

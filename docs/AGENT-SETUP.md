@@ -48,6 +48,10 @@ Read capabilities first; do not invent identifiers or format combinations. Label
 
 Model licenses vary. A successful file export is not proof of animation suitability or physical printability. Inspection tools such as Blender remain useful for reviewing the actual result.
 
+## Splat & Solid
+
+`foundry_splat_capabilities`, `foundry_splat_create`, `foundry_splat_status`, `foundry_splat_start`, `foundry_splat_cancel` and `foundry_splat_show` use the same durable run owner as the wizard. Import a reference first; pass its returned filename as `image`. Start `generation`, `cleanup`, `export` or `rocket` with a unique `request_id`; reuse it only for the same retry. Cleanup reuses unchanged saved stages. Selected models are prepared before processing. Show opens the asset in the existing Foundry interface. SPZ stores appearance; GLB stores separate polygon geometry.
+
 ## Image creation and Gallery
 
 The image tools use a separate workflow in the same open graph. They share the interface's job runner, revisions and resource management.

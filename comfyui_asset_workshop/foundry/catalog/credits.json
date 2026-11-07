@@ -117,5 +117,15 @@
     "id": "sam3",
     "creator": "Meta and the SAM 3 researchers",
     "observation": "Semantic segmentation gives the hairstyle and face their own explicit regions before 3D generation."
+  },
+  {
+    "id": "idol",
+    "creator": "Sperid Labs; Comfy-Org native integration",
+    "observation": "One reference becomes an explorable Gaussian splat, preserving appearance alongside independently useful geometry."
+  },
+  {
+    "id": "moge2",
+    "creator": "Microsoft Research and collaborators",
+    "observation": "Estimating a camera from the source image gives controlled reconstruction a measurable starting point."
   }
 ]
