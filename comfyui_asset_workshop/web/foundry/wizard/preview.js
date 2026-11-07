@@ -1,5 +1,10 @@
 import {el,hint} from "../dom.js";
 export async function mountMesh(container,url,module,filename) {
+    // Earlier wizards supply owned URLs, without a separate display filename.
+    // Keep that contract: the current native host needs the extension explicitly
+    // to select a loader and to match the per-viewer artifact request.
+    const artifact=new URL(url,'http://native.invalid/');
+    filename??=(artifact.searchParams.get('filename')||artifact.searchParams.get('path')||artifact.pathname).split('/').at(-1);
     let factory=window.comfyAPI?.createLoad3d?.createLoad3d;
     if(!factory&&module)factory=(await import(module.url))[module.export];
     if(!factory)throw Error("The native Comfy 3D viewer is not available.");

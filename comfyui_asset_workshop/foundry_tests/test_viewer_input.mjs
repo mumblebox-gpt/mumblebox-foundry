@@ -2,6 +2,21 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {installOrbitInput,createModelHost,mountMesh} from "../web/foundry/wizard/preview.js";
 
+test('existing HairDeck and Turnaround previews infer the filename needed by the native host',async()=>{
+    const previous={window:globalThis.window,ResizeObserver:globalThis.ResizeObserver,fetch:globalThis.fetch};
+    const loads=[],requests=[];
+    const viewer={async loadModel(url,name){loads.push({url,name});await this.host.fetchApi('/api/view?filename='+encodeURIComponent(name));return 'loaded';},handleResize(){},fitToViewer(){},forceRender(){},updateStatusMouseOnViewer(){},dispose(){}};
+    globalThis.window={comfyAPI:{createLoad3d:{createLoad3d:(container,host)=>({...viewer,host})},load3dHost:{load3dHost:{fetchApi:()=>{throw Error('Wrong native endpoint');}}}}};
+    globalThis.ResizeObserver=class{observe(){}disconnect(){}};
+    globalThis.fetch=async url=>{requests.push(url);return {};};
+    try{
+        for(const [url,name] of [['/hair/file?path=variant%2Fhair_00001_.glb','hair_00001_.glb'],['/view?filename=mesh.glb&type=output','mesh.glb']]){
+            const dispose=await mountMesh(new EventTarget(),url,{host:true});
+            assert.equal(loads.at(-1).name,name);assert.equal(requests.at(-1),url);dispose();
+        }
+    }finally{Object.assign(globalThis,previous);}
+});
+
 test('embedded native viewers announce readiness so asynchronous splats can paint',async()=>{
     const oldWindow=globalThis.window,oldResize=globalThis.ResizeObserver,events=[];
     const viewer={loadModel:async()=>{events.push('loaded');return 'loaded';},handleResize(){},fitToViewer(){},setLightIntensity(){},forceRender(){},emitModelReady(){events.push('ready');},dispose(){events.push('disposed');},updateStatusMouseOnViewer(){}};

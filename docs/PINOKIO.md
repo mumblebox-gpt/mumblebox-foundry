@@ -32,6 +32,8 @@ Splat & Solid uses Idol by Sperid Labs through the pinned Comfy-Org native distr
 
 Updates save a checkpoint of the previous extension and private configuration. If a staged update fails, those files are restored and startup asks for Repair. Dependency changes are not promised to roll back automatically; do not describe that checkpoint as a full environment snapshot.
 
+Preview.13 repairs HairDeck's missing DINOv3/review-renderer dependencies through this same Update path. Installation now checks the lazy model-loader and renderer imports as well as node registration. After updating, reload an already-open Foundry page to apply the restored 3D previews and Retry controls. Saved hair and mesh results remain reusable.
+
 ## Files and ownership
 
 Paths below are relative to the Pinokio repository folder:

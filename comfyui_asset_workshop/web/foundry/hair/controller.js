@@ -50,7 +50,7 @@ export class HairWizard {
             if(this.runId){
                 const next=await request('hair/runs/'+this.runId);
                 if(this.disposed)return;
-                const changed=JSON.stringify([next.status,next.stage,next.dependency,next.variants.length,next.export?.model,next.preview?.model,next.package])!==JSON.stringify([this.run?.status,this.run?.stage,this.run?.dependency,this.run?.variants?.length,this.run?.export?.model,this.run?.preview?.model,this.run?.package]);
+                const changed=JSON.stringify([next.active,next.status,next.stage,next.error,next.dependency,next.variants.length,next.export?.model,next.preview?.model,next.package])!==JSON.stringify([this.run?.active,this.run?.status,this.run?.stage,this.run?.error,this.run?.dependency,this.run?.variants?.length,this.run?.export?.model,this.run?.preview?.model,this.run?.package]);
                 this.run=next;
                 if(next.pending)this.syncGraph(next);
                 if(changed)this.render();

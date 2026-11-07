@@ -10,5 +10,14 @@ async def probe():
     extension=await module.comfy_entrypoint();nodes=await extension.get_node_list()
     assert {node.define_schema().node_id for node in nodes}=={'HairDeckLoader','HairDeckGenerate','HairDeckSave'}
     import torch
+    from hairdeck_core import paths
+    # Generation reaches this hub lazily in DinoEncoder. Importing node schemas
+    # alone misses its segmentation/logging dependencies. Build on meta with no
+    # pretrained weights: no downloads, model files or GPU allocations.
+    torch.hub.load(paths.dinov3_repo(), 'dinov3_vitl16', source='local', pretrained=False, device='meta')
+    # The generated-card review imports its renderer lazily too. Import the
+    # implementation without creating a GL context or rendering any assets.
+    from hairdeck_core.vrm.render import _pyrender
+    _pyrender()
     print('HairDeck real entrypoints imported:',torch.__version__,flush=True)
 asyncio.run(probe())

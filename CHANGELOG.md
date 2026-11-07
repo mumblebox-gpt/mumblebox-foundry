@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-preview.13 — HairDeck installation and restored previews
+
+- Fix HairDeck generation and review in Pinokio by explicitly installing the bundled DINOv3 and renderer dependencies: termcolor, six and imageio. Apply the same requirements through normal installs, updates and software repair.
+- Extend the installation probe through the real local DINOv3 hub and lazy review renderer. Check these imports before recording installation success, without downloading weights or allocating GPU models.
+- Restore HairDeck and Turnaround 3D previews with the newer native ComfyUI viewer. Infer the model filename from existing artifact URLs so the correct loader and owned file endpoint are used. Saved results can be viewed without regenerating them.
+- Fix HairDeck controls staying busy after a failed or completed task. Refresh navigation and Retry when background cleanup releases the task.
+- Add regression checks for lazy dependency failures, preview URL loading and the final busy-to-idle transition. Verify actual rendered previews separately from generated/exported files.
+
 ## 0.1.0-preview.12 — Splat & Solid
 
 - Add **Splat & Solid**, powered by Idol from Sperid Labs, as the third independent method under Create a Mesh from an Image. Its six-page wizard supports upload/drop, camera and Gallery, real Advanced controls, Rocket Mode, saved checkpoints, resume and History.

@@ -2,7 +2,7 @@
 
 A local ComfyUI interface for turning reference images into textured 3D assets. A guided workflow connects four-view image generation, Pixal3D/TRELLIS.2 geometry, Hi3D refinement, measured cleanup, texturing and selected exports.
 
-**Preview 0.1.0-preview.12 — Windows / NVIDIA.** Install through [Pinokio](docs/PINOKIO.md) for automated software setup, or use the [manual installation](INSTALL.md). Pinokio opens the Foundry interface directly. Original Foundry code is Apache-2.0; models and third-party tools retain their own terms. Read [third-party notices](THIRD-PARTY.md), particularly before commercial use.
+**Preview 0.1.0-preview.13 — Windows / NVIDIA.** Install through [Pinokio](docs/PINOKIO.md) for automated software setup, or use the [manual installation](INSTALL.md). Pinokio opens the Foundry interface directly. Original Foundry code is Apache-2.0; models and third-party tools retain their own terms. Read [third-party notices](THIRD-PARTY.md), particularly before commercial use.
 
 ## Included
 

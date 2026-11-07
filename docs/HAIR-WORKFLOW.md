@@ -2,6 +2,8 @@
 
 Added in Foundry preview.10 on 2026-11-02, following qualification on top of preview.9. The existing image and image-to-3D workflows remain in place.
 
+Preview.13 corrects missing Pinokio dependencies in DINOv3's lazy hub imports and the bundled review renderer. The software installer checks both paths before reporting success. It also restores the native 3D preview's model-format detection and refreshes Retry/navigation after task cleanup. Existing generations can be reopened; this repair does not require regenerating hair.
+
 ## Delivered workflow
 
 The Foundry home card opens a six-page hair wizard: reference image, generation options, generation review, head/materials, motion/exports, and finished result. Hair has its own backend owner, MCP tools, persistent runs and two colored groups beside the existing workflows. The portable graph contains the same five-node section, without test images, run identities or output paths.

@@ -1,4 +1,11 @@
-# Preview 0.1.0-preview.12 validation
+# Preview 0.1.0-preview.13 validation
+
+- Reproduced the reported missing `termcolor` failure in the actual Pinokio host. A real retry also exposed missing `six` and `imageio` in the lazy review renderer. All three now belong to the canonical HairDeck host requirements; the installer probes both lazy execution paths with no weight downloads or GPU model allocation.
+- Reused the original failed reference and default generation settings in Pinokio. HairDeck generated 83 hair cards and nine predicted chains, then exported static GLB, a skinned VRM with nine spring groups, and a 28-file ZIP. The separate Comfy Desktop wizard also completed the selected GLB/VRM/package export using its saved generation.
+- Diagnosed the blank native previews independently: older HairDeck and Turnaround callers did not supply the filename required by the current native loader. Verified the rendered hair in both actual app windows and the rendered saved Turnaround alien in Comfy Desktop. A CDP orbit drag changed the Turnaround preview image. Asset creation, HTTP success and canvas existence were not used as substitutes for visual review.
+- Verified HairDeck's real Next controls through review, materials and exports, and that navigation unlocks after export cleanup. Targeted regression checks cover missing lazy imports, existing preview URL forms and the delayed active-to-idle transition. Saved source images, weights, settings and previous outputs are retained.
+
+## Preview.12 validation
 
 Validated on 2026-11-07 in the existing ComfyUI Desktop instance, on the reference RTX 4080 SUPER / 16 GB VRAM / 64 GB RAM system. The standalone experiment remains preserved. This is an integrated workflow test and existing-install update qualification, not a fresh-machine or universal hardware claim.
 

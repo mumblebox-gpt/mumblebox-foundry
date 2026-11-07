@@ -12,6 +12,11 @@ freetype-py==2.5.1
 pyglet==2.1.19
 lightning-utilities==0.15.3
 portalocker==4.4.2
+# The local DINOv3 hub also imports its segmentation logging helpers.
+termcolor==3.3.0
+# Bundled pyrender's camera/material imports are reached by review rendering.
+six==1.17.0
+imageio==2.38.0
 # Imports inherited from the upstream pack, explicitly owned by this host.
 einops>=0.8
 kornia>=0.8
