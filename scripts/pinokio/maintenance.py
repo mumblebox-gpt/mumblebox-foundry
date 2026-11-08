@@ -13,6 +13,7 @@ import sys
 import uuid
 import zipfile
 from urllib.request import urlopen
+from urllib.error import URLError
 from bootstrap import Layout, atomic_json, capture, download, extract_checked, install, run
 from runtime import InstallationLock
 
@@ -24,14 +25,29 @@ def require_idle(root,read=None):
     """Check both Foundry jobs and the Comfy queue before stopping this installation."""
     runtime=Path(root)/'.pinokio'/'runtime.json'
     if not runtime.exists():return
-    base=json.loads(runtime.read_text(encoding='utf-8'))['comfy_url']
+    record=json.loads(runtime.read_text(encoding='utf-8'))
+    base=record['comfy_url']
     if not re.fullmatch(r'http://127\.0\.0\.1:[0-9]+',base):
         raise ValueError('Invalid local Foundry service address.')
     def request(path):
         with urlopen(base+path,timeout=5) as response:
             return json.loads(response.read(1024*1024))
     read=read or request
-    status=read('/asset-workshop/status');queue=read('/queue')
+    try:
+        status=read('/asset-workshop/status');queue=read('/queue')
+    except URLError as error:
+        # A closed backend can leave its runtime receipt behind. Only a refused
+        # connection AND a confirmed exited runtime establish that it is stopped.
+        if not isinstance(error.reason,ConnectionRefusedError):raise
+        import psutil
+        pid=record.get('pid')
+        if not isinstance(pid,int) or pid<=0:
+            raise ValueError('Cannot verify the saved Foundry runtime process.') from error
+        try:psutil.Process(pid)
+        except psutil.NoSuchProcess:
+            print('Foundry runtime has exited; no backend is listening. Safe to update.',flush=True)
+            return
+        raise ValueError('Foundry backend is unavailable but its runtime is still running. Wait for startup or stop it before updating.') from error
     if status.get('running') or queue.get('queue_running') or queue.get('queue_pending'):
         raise ValueError('A generation is active or queued. Finish or cancel it before updating. Foundry was not stopped.')
     print('Foundry is idle; it can be stopped safely for the update.',flush=True)

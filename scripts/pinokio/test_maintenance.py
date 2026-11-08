@@ -42,6 +42,34 @@ class MaintenanceTests(unittest.TestCase):
                     maintenance.require_idle(root,read=lambda path:status if path.endswith('status') else queue)
             maintenance.require_idle(root,read=lambda path:{})
 
+    def test_refused_backend_with_exited_runtime_is_safe_to_update(self):
+        import psutil
+        from urllib.error import URLError
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/'.pinokio').mkdir()
+            record=root/'.pinokio/runtime.json';record.write_text('{"pid":123,"comfy_url":"http://127.0.0.1:12345"}')
+            with patch.object(maintenance,'urlopen',side_effect=URLError(ConnectionRefusedError())),patch('psutil.Process',side_effect=psutil.NoSuchProcess(123)):
+                maintenance.require_idle(root)
+            self.assertTrue(record.exists())
+
+    def test_refused_backend_with_live_runtime_does_not_assume_idle(self):
+        from urllib.error import URLError
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/'.pinokio').mkdir()
+            (root/'.pinokio/runtime.json').write_text('{"pid":123,"comfy_url":"http://127.0.0.1:12345"}')
+            with patch.object(maintenance,'urlopen',side_effect=URLError(ConnectionRefusedError())),patch('psutil.Process'):
+                with self.assertRaisesRegex(ValueError,'runtime is still running'):
+                    maintenance.require_idle(root)
+
+    def test_backend_timeout_does_not_assume_idle_even_if_runtime_exited(self):
+        import psutil
+        from urllib.error import URLError
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);(root/'.pinokio').mkdir()
+            (root/'.pinokio/runtime.json').write_text('{"pid":123,"comfy_url":"http://127.0.0.1:12345"}')
+            with patch.object(maintenance,'urlopen',side_effect=URLError(TimeoutError())),patch('psutil.Process',side_effect=psutil.NoSuchProcess(123)):
+                with self.assertRaises(URLError):maintenance.require_idle(root)
+
     def test_bundle_rejects_tampering_and_unlisted_or_user_paths(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);file=root/'README.md';file.write_text('release')

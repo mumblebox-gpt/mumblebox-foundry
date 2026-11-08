@@ -1,3 +1,9 @@
+# Preview 0.1.0-preview.16 validation
+
+The actual Pinokio Update control in the stopped preview.14 installation failed its idle check because the saved backend address refused connection. The stale runtime process had exited. This is a reproduced updater failure, not an asset-generation or preview failure. The correction is made only in canonical development source: require both connection refusal and a confirmed exited saved runtime before accepting the stopped state. Live-process, timeout and active/queued-work protections remain.
+
+Three focused regression cases cover exited/live runtime refusal and timeout. The normal installed updater will be retried after the usual Start Foundry action, so the older installed idle check can run before acquiring the repaired release. No installed source or environment is patched directly. Preview.15 community/installer and native HairDeck evidence follows.
+
 # Preview 0.1.0-preview.15 validation
 
 Community About/Thank You changes were visually inspected in the existing standalone Comfy Desktop Foundry. Contributor credit is specific to Hal Rottenberg's installer improvements, with both original source commits linked. The Pinokio description and contribution guide invite workflow suggestions and pull requests.

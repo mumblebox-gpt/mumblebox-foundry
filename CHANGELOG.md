@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-preview.16 — Update after a closed runtime
+
+- Allow normal Update after the backend has closed and left a stale runtime record. Require both a refused connection and a confirmed exited runtime; live or uncertain processes, timeouts and active queues still prevent interruption. Saved state is preserved.
+
 ## 0.1.0-preview.15 — Community credits and installer resilience
 
 - Reinforce Foundry’s community toolbox approach in About, explain guidance for newcomers, and add a running Thank You section after model credits with specific contributor acknowledgments and source links.
