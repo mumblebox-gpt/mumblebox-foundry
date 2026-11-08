@@ -40,7 +40,7 @@ class InstallTests(unittest.TestCase):
                      'scripts/pinokio/runtime.py', 'scripts/pinokio/maintenance.py',
                      'scripts/pinokio/connect_agent.py', 'docs/PINOKIO.md',
                      'scripts/requirements-hair-windows.txt','scripts/install_hairdeck.py',
-                     'scripts/probe_hairdeck.py','docs/HAIR-WORKFLOW.md',
+                     'scripts/probe_hairdeck.py','scripts/probe_hair_color.py','docs/HAIR-WORKFLOW.md',
                      'comfyui_asset_workshop/web/assets/foundry/hair.png'):
             self.assertIn(name,names)
         self.assertNotIn('scripts/pinokio/mcp.py',names)

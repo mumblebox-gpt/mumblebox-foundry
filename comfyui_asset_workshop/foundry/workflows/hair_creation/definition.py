@@ -10,8 +10,8 @@ WEIGHTS = {key: ('sam3.pt' if key == 'sam3' else 'model.safetensors')
 DEFAULTS = dict(name='Stylized hair', image='', seed=0, variations=1, bones=True, steps=50, cfg=2.,
                 color='auto', show_head=True, head_profile='upstream', scale=1., offset=[0., 0., 0.],
                 uv_mode='shared', texture_size='2K', material='volume', glb=True, vrm=True,
-                motion=False, diagnostics=True, source_data=True, zip=True, checkpoints=WEIGHTS)
-GENERATION_KEYS = ('image', 'seed', 'variations', 'bones', 'steps', 'cfg', 'checkpoints')
+                motion=False, motion_chains=False, diagnostics=True, source_data=True, zip=True, colors=True, checkpoints=WEIGHTS)
+GENERATION_KEYS = ('image', 'seed', 'steps', 'cfg', 'colors', 'checkpoints')
 
 
 def numeric(value, label, low, high, integer=False):
@@ -30,7 +30,7 @@ def validate(data):
     config['name'] = name.strip()
     relative_name(config['image'])
     if not config['image'].lower().endswith(('.png', '.jpg', '.jpeg', '.webp')): raise ValueError('Choose a PNG, JPEG or WebP reference.')
-    for key in ('bones', 'show_head', 'glb', 'vrm', 'motion', 'diagnostics', 'source_data', 'zip'):
+    for key in ('bones', 'show_head', 'glb', 'vrm', 'motion', 'motion_chains', 'diagnostics', 'source_data', 'zip', 'colors'):
         if type(config[key]) is not bool: raise ValueError('Choose whether to enable '+key+'.')
     if not config['glb'] and not config['vrm']: raise ValueError('Select static GLB or rigged VRM.')
     if (config['vrm'] or config['motion']) and not config['bones']: raise ValueError('VRM and motion require spring bones.')
@@ -62,7 +62,8 @@ def catalog():
         available = True
     except (ImportError, KeyError, RuntimeError):
         choices = {key: [value] for key, value in WEIGHTS.items()}; heads = ['upstream']; available = False
-    return dict(title=TITLE, defaults=DEFAULTS, checkpoints=choices, heads=heads, installed=available,
+    from .graph import template
+    return dict(title=TITLE, defaults=DEFAULTS, checkpoints=choices, heads=heads, installed=available,graph_template=template(),
                 viewer_module=viewer_module(), reference='One clear head or upper-body image with the full hairstyle visible. Stylized portraits are the intended domain.',
                 limitations=['Stylized volumetric hair cards, not strand Groom.', 'GLB is static. VRM 0.x includes skinning and spring bones.',
                              'Motion is an MP4 preview, not an animation clip.', 'Head fitting is uniform scale and translation; visual review is required.'])

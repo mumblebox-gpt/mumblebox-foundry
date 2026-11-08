@@ -45,6 +45,7 @@ def install(core,python,source=ROOT):
     (target/'foundry-source.json').write_text(json.dumps(spec,indent=2),encoding='utf-8')
     probe=source/'scripts/probe_hairdeck.py'
     run([python,probe,core,target])
+    run([python,source/'scripts/probe_hair_color.py',core,target,source])
     print('HairDeck software ready. No model weights or export tools were downloaded by installation.',flush=True)
 
 if __name__=='__main__':

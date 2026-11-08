@@ -496,6 +496,17 @@
       "name": "flux2-vae.safetensors",
       "license": "Apache-2.0",
       "license_url": "https://huggingface.co/Comfy-Org/Idol/blob/3d050f4bc705ca1202a0ae4d21d2d97987521307/README.md"
+    },
+    "hairdeck_color": {
+      "repo": "hyz317/HairDeck",
+      "file": "ckpt/color_model/model.safetensors",
+      "revision": "7d2e07c5b4b22fbffa2df58d20b242db035ed69c",
+      "sha256": "47126c70c06b32fd87e5d419109fee4ba4e23363eba090e3fee00a6ccd8264cc",
+      "size": 734166304,
+      "category": "hairdeck",
+      "name": "ckpt/color_model/model.safetensors",
+      "license": "Apache-2.0",
+      "license_url": "https://huggingface.co/hyz317/HairDeck/blob/7d2e07c5b4b22fbffa2df58d20b242db035ed69c/README.md"
     }
   },
   "pipeline_resources": [

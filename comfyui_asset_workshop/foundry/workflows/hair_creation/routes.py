@@ -36,7 +36,8 @@ def register(routes,factory,endpoint,notify):
         if operation=='generate':
             if not 0<=selected<record['config']['variations']:raise ValueError('Choose a configured variation.')
             return compiler.generate(record,selected)
-        if operation not in ('preview','motion_preview','export') or not 0<=selected<len(record['variants']):raise ValueError('Choose a saved variation and operation.')
+        if operation not in ('rig','preview','avatar_preview','motion_preview','export') or not 0<=selected<len(record['variants']):raise ValueError('Choose a saved variation and operation.')
+        if operation=='rig':return compiler.rig(record,selected)
         return compiler.export(record,record['variants'][selected]['checkpoint'])
     @routes.post(PREFIX+'/runs/{id}/start')
     @endpoint

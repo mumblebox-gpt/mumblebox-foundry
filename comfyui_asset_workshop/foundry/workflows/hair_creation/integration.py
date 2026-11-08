@@ -24,7 +24,8 @@ def ensure(config, cancelled, progress):
     import os
     native = upstream(); root = models_root(); root.mkdir(parents=True, exist_ok=True)
     script = Path(native.__file__).parent / 'install_models.py'
-    command = [sys.executable, str(script), '--models-dir', str(root)]
+    command = [sys.executable, str(Path(__file__).with_name('prepare.py')), '--pack',str(script.parent),'--models-dir', str(root)]
+    if config.get('colors',True):command.append('--colors')
     if config['vrm'] or config['motion']: command.append('--with-blender')
     # The upstream transport already pins hashes and resumes bounded chunks. Its
     # public sources match the official HairDeck distributions; no token is sent.
@@ -68,6 +69,11 @@ def ensure(config, cancelled, progress):
     files=native.model_files.resolve('hairdeck', config['checkpoints'])
     if config['head_profile'] not in native.heads.choices([root]): raise ValueError('The selected reference-head profile is not installed.')
     selected_models={}
+    if config.get('colors',True):
+        from .prepare import color_resource
+        color=color_resource();path=root/color['name']
+        if path.stat().st_size!=color['size'] or digest(path)!=color['sha256']:raise ValueError('The HairDeck color checkpoint failed verification.')
+        selected_models['color_model']={'filename':color['name'],'bytes':color['size'],'sha256':color['sha256'],'pinned_default':True}
     for role,name in config['checkpoints'].items():
         path=getattr(files,role);stat=path.stat()
         relative=path.relative_to(root).as_posix() if path.is_relative_to(root) else None

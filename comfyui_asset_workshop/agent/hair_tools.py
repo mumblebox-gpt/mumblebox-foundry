@@ -24,8 +24,8 @@ def register(server,client,checked):
         return compact(client.request(path(creation_id)))
     @tool
     def foundry_hair_start(creation_id:str,request_id:str,operation:str='generate',selected:int=0)->dict[str,Any]:
-        """Run generate, preview, motion_preview or export through the visible wizard owner; the same retry identity is idempotent."""
-        if operation not in ('generate','preview','motion_preview','export'):raise ValueError('Choose generate, preview, motion_preview or export.')
+        """Run generate, rig (add chains to saved cards), preview, avatar_preview, motion_preview or export through the visible wizard owner; retries are idempotent."""
+        if operation not in ('generate','rig','preview','avatar_preview','motion_preview','export'):raise ValueError('Choose generate, rig, preview, avatar_preview, motion_preview or export.')
         return compact(client.request(path(creation_id,'/start'),dict(request_id=request_id,operation=operation,selected=selected,client_id='foundry-agent')))
     @tool
     def foundry_hair_cancel(creation_id:str)->dict[str,Any]:

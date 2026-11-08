@@ -2,7 +2,7 @@
   "id": "6c419aea-6f6c-4151-a885-b0973634c9a1",
   "revision": 0,
   "last_node_id": 400100,
-  "last_link_id": 531,
+  "last_link_id": 532,
   "nodes": [
     {
       "id": 3,
@@ -7661,7 +7661,8 @@
           "name": "模型",
           "type": "HAIRDECK_MODEL",
           "links": [
-            265
+            265,
+            532
           ]
         }
       ],
@@ -7690,7 +7691,7 @@
     },
     {
       "id": 70002,
-      "type": "HairDeckGenerate",
+      "type": "FoundryHairGenerate",
       "pos": [
         -4050,
         4050
@@ -7722,60 +7723,6 @@
           "shape": 7,
           "type": "MASK",
           "link": 270
-        },
-        {
-          "localized_name": "角色图片",
-          "name": "image",
-          "type": "COMBO",
-          "widget": {
-            "name": "image"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "随机种子",
-          "name": "seed",
-          "type": "INT",
-          "widget": {
-            "name": "seed"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "采样步数",
-          "name": "steps",
-          "type": "INT",
-          "widget": {
-            "name": "steps"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "引导强度",
-          "name": "cfg",
-          "type": "FLOAT",
-          "widget": {
-            "name": "cfg"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "生成弹簧骨骼",
-          "name": "generate_bones",
-          "type": "BOOLEAN",
-          "widget": {
-            "name": "generate_bones"
-          },
-          "link": null
-        },
-        {
-          "localized_name": "角色图片",
-          "name": "upload",
-          "type": "IMAGEUPLOAD",
-          "widget": {
-            "name": "upload"
-          },
-          "link": null
         }
       ],
       "outputs": [
@@ -7788,27 +7735,25 @@
           ]
         }
       ],
-      "title": "HAIR — Cards and matching spring chains",
+      "title": "HAIR — HairDeck cards, colors and matching spring chains",
       "properties": {
-        "Node name for S&R": "HairDeckGenerate"
+        "Node name for S&R": "FoundryHairGenerate"
       },
       "widgets_values": [
         "",
         0,
-        "fixed",
         50,
-        2,
+        2.0,
         true,
-        "image"
+        true
       ],
       "widgets_values_named": {
         "image": "",
-        "seed": 1,
-        "control_after_generate": "fixed",
+        "seed": 0,
         "steps": 50,
-        "cfg": 2,
+        "cfg": 2.0,
         "generate_bones": true,
-        "upload": "image"
+        "colors": true
       }
     },
     {
@@ -24353,6 +24298,49 @@
       },
       "color": "#432",
       "bgcolor": "#653"
+    },
+    {
+      "id": 70005,
+      "type": "FoundryHairRig",
+      "pos": [
+        -4000,
+        4740
+      ],
+      "size": [
+        410,
+        140
+      ],
+      "flags": {},
+      "order": 319,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "HAIRDECK_MODEL",
+          "link": 532
+        }
+      ],
+      "outputs": [
+        {
+          "name": "STRING",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "HAIR — Add matching chains to saved cards",
+      "properties": {
+        "Node name for S&R": "FoundryHairRig"
+      },
+      "widgets_values": [
+        "",
+        "",
+        0
+      ],
+      "widgets_values_named": {
+        "checkpoint": "",
+        "creation_id": "",
+        "variant": 0
+      }
     }
   ],
   "links": [
@@ -27571,6 +27559,14 @@
       400053,
       1,
       "MESH"
+    ],
+    [
+      532,
+      70001,
+      0,
+      70005,
+      0,
+      "HAIRDECK_MODEL"
     ]
   ],
   "groups": [

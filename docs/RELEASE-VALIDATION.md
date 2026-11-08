@@ -1,3 +1,19 @@
+# Preview 0.1.0-preview.14 validation
+
+Validated in the existing standalone Comfy Desktop wizard on 2026-11-08. HairDeck remains an independently owned six-node branch; opening older graphs adds only the missing HairDeck section and preserves their existing nodes, groups, settings and output references.
+
+- Generated two actual colored variations with 50 steps and CFG 2: 126 and 82 hair cards. Both interactive variation cards, processing sheets, crop, hair/face masks and multi-view results rendered in the wizard. Dragging the viewer changed its camera; Reset view restored it.
+- Selected the second variation and added 12 predicted chains without changing its saved card curves, latent tokens or predicted colors. Head/chain view choices loaded their corresponding geometry.
+- Applied scale/translation, a custom color, transparent cards and a unique 1K material atlas. All seven material/UV maps rendered. The simple swatch, optional hex field and reference-color choice remained synchronized without regenerating hair.
+- Avatar review validated 12 retained chains and 12 spring groups. The actual player decoded and played HairDeck's three-second, 480px head-turn video with a chain overlay. This is a motion demonstration, not an exported animation clip or supplied 360-degree turntable video.
+- The finished model was visually checked at normal and compact widths. The compact final page has one footer and keeps the complete viewer in its content viewport. History showed the saved thumbnail/package and resume restored the selected variation and completed media.
+- The selected 29-file GLB/VRM/MP4 package passed ZIP CRC, source-color retention, accurate README/provenance and resource credits. SHA-256: `e11ed0f6ee7643f55872b20b14bc57faff82e19868289344c9d00f73ec1814ec`. This local test asset is not distributed with the software. Download endpoints and archive contents were checked; native Save As completion is not claimed.
+- Targeted checks passed: 13 HairDeck Python checks, seven JavaScript checks, seven release/installer checks, seven bootstrap checks and three entrypoint-probe checks. The release inventory now explicitly includes the new color probe. The real ColorDiT entrypoint and CIELAB conversion imported in the Comfy host without loading weights or allocating a model.
+
+Official ColorDiT weights use a pinned public revision, exact size and SHA-256. Installation only prepares software; selected first use acquires the missing model files. Official HairDeck and the community ComfyUI integration retain attribution and separate license terms. Model viewers are view-only; supported fitting/material controls and editable source files do not imply a card-sculpting editor. Physical camera capture, arbitrary custom checkpoints and every head/material combination are not quality-qualified.
+
+Published-update and installed Pinokio verification are recorded after applying the release through its normal Update control. Pre-publication direct-copy diagnostics are not used as proof of that process.
+
 # Preview 0.1.0-preview.13 validation
 
 - Reproduced the reported missing `termcolor` failure in the actual Pinokio host. A real retry also exposed missing `six` and `imageio` in the lazy review renderer. All three now belong to the canonical HairDeck host requirements; the installer probes both lazy execution paths with no weight downloads or GPU model allocation.

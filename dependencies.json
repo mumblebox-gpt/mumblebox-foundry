@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0-preview.13",
+  "version": "0.1.0-preview.14",
   "platform": "Windows NVIDIA",
   "reference_hardware": {
     "gpu": "RTX 4080 SUPER",
@@ -38,7 +38,10 @@
     "weights_revision": "129ad77fba42edfb79a59246f43b11d3fc64c6d1",
     "requirements": "scripts/requirements-hair-windows.txt",
     "weights_downloaded_during_install": false,
-    "export_tools": "Pinned Blender 4.2.23 and VRM Add-on 4.10.2; acquired on first use of rigged output"
+    "export_tools": "Pinned Blender 4.2.23 and VRM Add-on 4.10.2; acquired on first use of rigged output",
+    "color_adapter_revision": "cb20f7073419a33c9ab88f22f686fcb9060a99f0",
+    "color_weights_revision": "7d2e07c5b4b22fbffa2df58d20b242db035ed69c",
+    "color_entrypoint_probe": "scripts/probe_hair_color.py"
   },
   "hi3d_workbench": {
     "repository": "https://github.com/T8mars/Comfyui-Hi3d-T8",

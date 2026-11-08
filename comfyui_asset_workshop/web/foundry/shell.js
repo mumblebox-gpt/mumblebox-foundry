@@ -258,7 +258,16 @@ export class FoundryShell {
         const sequence=this.sequence=(this.sequence||0)+1;
         this.tab='Choose a Workflow';this.content.replaceChildren(hint('Opening the HairDeck workflow…'));
         try{
-            const {HairWizard}=await import('./hair/controller.js');const wizard=new HairWizard(this,options);
+            const {HairWizard}=await import('./hair/controller.js');
+            const {ensureHairBranch}=await import('./hair/graph.js');
+            const capabilities=await request('hair/capabilities');
+            const {presentation}=await import('./app-mode.js');const inApp=presentation.current===this.node;
+            if(capabilities.graph_template&&await ensureHairBranch(capabilities.graph_template)){
+                const node=app.graph.getNodeById(this.node.id);
+                if(!node?.shell)throw Error('The updated HairDeck graph did not reopen its Foundry interface.');
+                await node.shell.openHairWizard(options);if(inApp)presentation.show(node);return;
+            }
+            const wizard=new HairWizard(this,{...options,capabilities});
             const element=await wizard.init();
             if(sequence!==this.sequence){wizard.dispose();return;}
             this.content.replaceChildren(element);this.content.scrollTop=0;this.hairWizard=wizard;

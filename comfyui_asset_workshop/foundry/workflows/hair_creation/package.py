@@ -15,7 +15,7 @@ DESCRIPTIONS={
     'Static/':'Static hair-card geometry and material for importing into a 3D editor or game project. GLB contains no spring-bone rig.',
     'Rigged/':'VRM 0.x avatar with fitted hair, skinning and spring-bone groups. Reference-avatar metadata and separate licensing are retained.',
     'Motion/':'A rendered head-turn video demonstrating the hair motion. MP4 is a visual preview, not an animation clip.',
-    'Textures/':'Procedurally generated material maps and UV layout matching the selected hair export; these are not reconstructed photographic textures.',
+    'Textures/':'Material maps and UV layout matching the selected hair export. When enabled, HairDeck ColorDiT predicts per-card root-to-tip base colors; strand normals, roughness and opacity are procedural. These are not baked photographic textures.',
     'Diagnostics/':'Model input, segmentation masks and multi-view renders showing what HairDeck interpreted and generated.',
     'Source/':'Generated card curves, matching chain curves, latent tokens and surface data for further editing and reproducible export.'}
 
@@ -64,8 +64,9 @@ def build(service,record):
               'BiRefNet-LICENSE.txt':pack/'_vendor/hairdeck_birefnet/LICENSE','pyrender-LICENSE.txt':pack/'_vendor/hairdeck_pyrender/LICENSE'}
     for name,path in licenses.items():copy(path,'Licenses/'+name,'Unmodified upstream license or resource notice.','license')
     provenance={'workflow_title':TITLE,'node_pack_revision':REVISION,'reference_sha256':record['source_sha256'],
-        'generation':{k:config[k] for k in ('seed','steps','cfg','bones','checkpoints')},'selected_variation':record['selected'],
-        'appearance':{k:config[k] for k in ('head_profile','scale','offset','color','material','uv_mode','texture_size')},
+        'generation':{k:config[k] for k in ('seed','steps','cfg','bones','colors','checkpoints')},'selected_variation':record['selected'],
+        'appearance':{k:config[k] for k in ('head_profile','scale','offset','color','material','uv_mode','texture_size','motion_chains')},
+        'exported_appearance':source.get('appearance',{}),
         'selection':{k:config[k] for k in ('glb','vrm','motion','diagnostics','source_data','zip')},
         'generation_seed':source['measurements']['seed'],'rig_validation':source['measurements'].get('rig',{}),
         'models':record.get('models',{})}
@@ -84,6 +85,7 @@ def build(service,record):
             limitations=['Hair-card topology is preserved; global watertight repair and quad retopology are not applied.'] if directory in ('Static/','Rigged/') else []))
     registry=json.loads((Path(__file__).resolve().parents[3]/'finishing/package_resources.json').read_text(encoding='utf-8'))
     resources=[registry[key] for key in ('hairdeck','hairdeck_wrapper','sam3','dinov3','birefnet')]
+    if config['colors']:resources.append(registry['hairdeck_color'])
     if config['vrm'] or config['motion']:
         resources.extend([dict(name='Reference avatar',stage='Rigged export',version=None,source='https://huggingface.co/hyz317/HairDeck',license='Apache-2.0 for bundled upstream example; custom heads retain their own terms',license_summary='Original author and VRM metadata remain in the avatar.'),registry['hairdeck_vrm']])
     from ... import VERSION

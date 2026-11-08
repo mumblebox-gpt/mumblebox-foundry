@@ -454,5 +454,16 @@
     "license_url": "https://github.com/facebookresearch/dinov3/blob/ffb4bb89c6558ca3244655c25a3955d01788b732/LICENSE.md",
     "license_summary": "Custom terms govern the DINOv3 material; consult the retained agreement.",
     "license_revision": "ffb4bb89c6558ca3244655c25a3955d01788b732"
+  },
+  "hairdeck_color": {
+    "id": "hairdeck_color",
+    "name": "HairDeck ColorDiT",
+    "stage": "Per-card root-to-tip hair colors",
+    "version": "cb20f7073419a33c9ab88f22f686fcb9060a99f0",
+    "source": "https://github.com/hyz317/HairDeck",
+    "license": "Apache-2.0",
+    "license_url": "https://github.com/hyz317/HairDeck/blob/cb20f7073419a33c9ab88f22f686fcb9060a99f0/LICENSE",
+    "license_summary": "Official HairDeck color model and adapted inference source; retain authors and notices.",
+    "notices": []
   }
 }

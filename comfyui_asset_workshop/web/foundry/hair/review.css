@@ -1,0 +1,14 @@
+.hair-variations{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin:16px 0}
+.hair-variation{min-width:0;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--panel)}
+.hair-variation.selected{border:2px solid var(--accent);padding:11px}
+.hair-variation>header{display:flex;align-items:baseline;justify-content:space-between;gap:12px}.hair-variation h3{margin:0 0 8px}
+.hair-viewer-tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:8px 0}.hair-viewer-tools label{display:flex;align-items:center;gap:5px}.hair-viewer-tools button{padding:6px 10px}
+.hair-viewer-compact{height:300px}.hair-sheet-section{margin-top:24px;border-top:1px solid var(--border);padding-top:16px}
+.hair-sheet-section>h3{margin:0 0 8px}.hair-diagnostics figure{min-width:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--panel)}
+.hair-diagnostics figcaption{padding:8px 12px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;justify-content:space-between;font-size:13px}
+.hair-image-button{display:block;width:100%;padding:0;border:0;border-radius:0;background:transparent}.hair-image-button img{display:block;max-height:310px;min-height:120px}
+.hair-full-image{display:block;max-width:100%;max-height:78vh;object-fit:contain}.hair-save-image{font-size:12px}
+.hair-color-custom{display:flex;gap:10px;align-items:center;margin-bottom:10px}.hair-color-custom[hidden]{display:none}.hair-color-custom input[type=color]{width:52px;height:44px;padding:3px;flex:none;cursor:pointer}.hair-color-custom input[type=text]{flex:1;min-width:0;font-family:monospace}.hair-color-custom input[aria-invalid=true]{border-color:var(--danger)}
+.hair-wizard[data-page="6"] .wizard-footer{position:static;box-shadow:none}
+@container foundry (max-width:750px){.hair-variations,.hair-diagnostics{grid-template-columns:1fr}.hair-viewer-compact{height:280px}}
+@container foundry (max-width:780px){.hair-wizard[data-page="6"] .wizard-rail{display:none}.hair-wizard .hair-viewer{height:clamp(220px,38vh,340px)}}

@@ -4,9 +4,23 @@ Added in Foundry preview.10 on 2026-11-02, following qualification on top of pre
 
 Preview.13 corrects missing Pinokio dependencies in DINOv3's lazy hub imports and the bundled review renderer. The software installer checks both paths before reporting success. It also restores the native 3D preview's model-format detection and refreshes Retry/navigation after task cleanup. Existing generations can be reopened; this repair does not require regenerating hair.
 
+## Full experience correction (working tree, not published)
+
+The 2026-11-08 repair is governed by `docs/research/2026-11-08-hairdeck-full-experience/REPORT.md`. It adds simultaneous 1–4 variation cards, per-variation reference-head and chain views, visible processing/crop/mask sheets, enlargeable material and UV maps, adding matching chains to saved cards, separate avatar review and head-turn motion, and per-variation saved media. These are HairDeck outputs and controls translated into Foundry's wizard, rather than a claim that a produced GLB proves the experience.
+
+The current official ColorDiT source is adapted from HairDeck `cb20f7073419a33c9ab88f22f686fcb9060a99f0` (Apache-2.0). Its public 734,166,304-byte checkpoint is pinned to `hyz317/HairDeck@7d2e07c5b4b22fbffa2df58d20b242db035ed69c`, SHA-256 `47126c70c06b32fd87e5d419109fee4ba4e23363eba090e3fee00a6ccd8264cc`. It predicts 16 root-to-tip colors per card. First-use preparation includes the selected color weights before generation. The installer declares scikit-image 0.26.0 and probes the actual ColorDiT imports/conversion without weights or GPU allocation.
+
+Predicted card colors require unique UV charts, so the output uses a unique atlas when `colors=true` and `color=auto`. A single-color override supports shared or unique UVs. Both static GLB and VRM use the same appearance bundle; source card JSON retains predicted colors. The package distinguishes predicted base colors from procedural strand/material maps and records the effective exported appearance.
+
+The HairDeck graph remains independent. Generation node 70002 now adapts upstream generation and its color model; node 70005 adds chains to immutable saved cards. The API/MCP operations are `generate`, `rig`, `preview`, `avatar_preview`, `motion_preview`, and `export`. Existing saved runs retain their original single-color meaning and assets on migration. Material changes invalidate stale review media while preserving cards; previews for different variations retain their own identity.
+
+Motion is the official three-second head-turn simulation, optionally showing chains. It is not a promised 360-degree rendered orbit or an exported animation clip. The 3D cards can be orbited interactively. Official model viewers are view-only; full card sculpting is done in an editor using the supplied source data, not in a nonexistent native HairDeck sculpting UI.
+
+The corrected native ComfyUI wizard was exercised with two colored variations, adding chains to saved hair, reference-head/chain review, processing sheets, fitting/material/UV changes, avatar validation, playable motion, color swatch/hex controls, final exports and History/resume. The finished model was visually checked at normal and compact widths. The selected result contains 82 cards and 12 validated spring groups; its 29-file package passed CRC and README/provenance checks. This does not make the older implementation evidence below proof of the corrected release; see [current validation](RELEASE-VALIDATION.md).
+
 ## Delivered workflow
 
-The Foundry home card opens a six-page hair wizard: reference image, generation options, generation review, head/materials, motion/exports, and finished result. Hair has its own backend owner, MCP tools, persistent runs and two colored groups beside the existing workflows. The portable graph contains the same five-node section, without test images, run identities or output paths.
+The Foundry home card opens a six-page hair wizard: reference image, generation options, generation review, head/materials, motion/exports, and finished result. Hair has its own backend owner, MCP tools, persistent runs and two colored groups beside the existing workflows. The repaired portable graph contains a six-node section, without test images, run identities or output paths. Opening HairDeck upgrades an older saved graph with only its missing HairDeck nodes/groups or old generation adapter; existing workflow inputs, settings, groups and output references are preserved.
 
 - Upload a clear head or upper-body reference with the entire hairstyle visible. Existing camera capture and Gallery selection are shared with the image workflow.
 - Recommended generation uses seed 0, 50 steps, CFG 2 and spring bones. One to four variations run sequentially. Advanced controls select the six locally available checkpoint roles, steps and CFG.

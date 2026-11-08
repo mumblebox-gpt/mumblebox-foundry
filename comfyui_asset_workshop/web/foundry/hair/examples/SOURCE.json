@@ -1,0 +1,12 @@
+{
+  "source": "https://huggingface.co/hyz317/HairDeck",
+  "revision": "7d2e07c5b4b22fbffa2df58d20b242db035ed69c",
+  "license": "Apache-2.0 per upstream release",
+  "authors": "HairDeck authors",
+  "files": {
+    "ex01.png": "4a64ca95ac241743779103774153fd3d1b8f150f5e318e1478c32b6fe8a44c58",
+    "ex02.png": "f591054e0d3646d9aef2fbc1a3d86d7afcd1fa262cc2deb19ce7d4384f682693",
+    "ex03.png": "2ba8e27ed3ebc0db26bdb7f5a03c120134b6dc61aee2dfe6981bd1c17a79f5f0",
+    "ex04.png": "1482d3cbf1ccc8abdbbe2aba1c88a3f9fd74018d15c7aab9a572756c27c0633e"
+  }
+}

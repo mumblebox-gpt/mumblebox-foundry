@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.0-preview.14 — HairDeck full wizard experience
+
+- Bring HairDeck's review experience into the existing independent workflow: compare up to four interactive variation cards, choose a variation, toggle its reference head and predicted chains, and inspect processing/crop/mask sheets in the wizard.
+- Expose multi-view result sheets and full-size material/UV maps with downloads. Keep fitting and material changes attached to saved hair instead of regenerating it.
+- Add matching spring bones to saved cards, separate rigged-avatar and motion previews, per-variation media retention, and an optional chain overlay in HairDeck's head-turn video.
+- Add the official HairDeck ColorDiT model for per-card root-to-tip colors, with pinned public first-use preparation, managed GPU residency, checkpoint persistence and matching static/VRM material exports. Preserve older saved single-color runs.
+- Add a simple reference-color/custom-color choice with a swatch and optional hex field. Color changes update saved hair materials without regenerating the hairstyle.
+- Upgrade older saved graphs with the isolated HairDeck branch while preserving their other nodes, settings and results. Keep the finished viewer visible in compact layouts and remove duplicate finish controls.
+- Extend dependency declarations, the real color entrypoint probe, agent operations, source attribution and package documentation. Include the probe in the distributed archive and check that release inventory automatically.
+
 ## 0.1.0-preview.13 — HairDeck installation and restored previews
 
 - Fix HairDeck generation and review in Pinokio by explicitly installing the bundled DINOv3 and renderer dependencies: termcolor, six and imageio. Apply the same requirements through normal installs, updates and software repair.

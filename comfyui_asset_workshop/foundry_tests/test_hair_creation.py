@@ -14,6 +14,24 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 
 class HairContractTests(unittest.TestCase):
+    def test_review_manifest_uses_actual_artifacts_with_english_labels(self):
+        from foundry.workflows.hair_creation.review import displays
+        files=[dict(filename=n,subfolder='saved') for n in ('preview_00001_.png','preprocess_00001_.png','uv_layout.png','cards.json')]
+        result=displays(files)
+        self.assertEqual([x['group'] for x in result],['result','input','material'])
+        self.assertEqual(result[1]['label'],'HairDeck processing sheet')
+        self.assertEqual(result[2]['path'],'saved/uv_layout.png')
+
+    def test_card_color_interpolation_preserves_root_tip_and_caps(self):
+        from foundry.workflows.hair_creation.appearance import color_rows
+        import numpy as np
+        colors=np.tile([[1.,0.,0.],[0.,0.,1.]],(8,1))
+        surface=color_rows(colors,32,'surface')
+        np.testing.assert_array_equal(surface[0],[0.,0.,1.])
+        np.testing.assert_array_equal(surface[-1],[1.,0.,0.])
+        np.testing.assert_array_equal(color_rows(colors,2,'root'),[[1.,0.,0.]]*2)
+        np.testing.assert_array_equal(color_rows(colors,2,'tip'),[[0.,0.,1.]]*2)
+
     def test_hair_owner_exists_and_rejects_invalid_options(self):
         from foundry.workflows.hair_creation.definition import validate
         config = validate({'name': 'Copper hair', 'image': 'hair.png'})
@@ -69,6 +87,41 @@ class HairRunTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(record['variants'],[{'checkpoint':'saved'}])
         self.service.update(record['id'],{**config,'seed':3})
         self.assertEqual(record['variants'],[])
+
+    async def test_adding_chains_and_more_variations_does_not_destroy_saved_cards(self):
+        created=self.service.create({'image':'hair.png','bones':False,'vrm':False});record=self.service.get(created['id'])
+        record['variants']=[{'checkpoint':'immutable-saved-cards'}]
+        self.service.update(record['id'],{**record['config'],'bones':True,'variations':4})
+        self.assertEqual(record['variants'][0]['checkpoint'],'immutable-saved-cards')
+        from foundry.workflows.hair_creation.graph import rig
+        prompt=rig(record,0)
+        self.assertEqual(prompt['70005']['inputs']['checkpoint'],'immutable-saved-cards')
+        self.assertNotIn('HairDeckGenerate',str(prompt))
+
+    async def test_view_files_are_owned_but_unlisted_artifacts_are_denied(self):
+        created=self.service.create({'image':'hair.png'});record=self.service.get(created['id'])
+        self.service.output_root.mkdir();path=self.service.output_root/'hair-nohead.glb';path.write_bytes(b'glb')
+        record['variants']=[{'views':{'hair':'hair-nohead.glb'}}]
+        self.assertEqual(self.service.file(record['id'],'hair-nohead.glb'),path)
+        with self.assertRaises(ValueError):self.service.file(record['id'],'not-owned.glb')
+
+    async def test_appearance_change_invalidates_stale_media_but_preserves_cards(self):
+        record=self.service.get(self.service.create({'image':'hair.png'})['id'])
+        record['variants']=[{'checkpoint':'saved','reviews':{'preview':{'model':'old.glb'}}}]
+        record['motion_preview']={'model':'old.mp4'}
+        self.service.update(record['id'],{**record['config'],'color':'#AA2211'})
+        self.assertEqual(record['variants'],[{'checkpoint':'saved'}])
+        self.assertNotIn('motion_preview',record)
+
+    async def test_avatar_and_motion_previews_prepare_blender_before_running(self):
+        captured=[]
+        self.service.prepare=lambda config,*args:captured.append(config.copy()) or {}
+        record=self.service.get(self.service.create({'image':'hair.png','vrm':False,'motion':False})['id'])
+        for operation in ('avatar_preview','motion_preview'):
+            record['operation']=operation
+            await self.service.prepare_resources(record)
+            self.assertTrue(captured[-1]['vrm'])
+        self.assertFalse(record['config']['vrm'])
 
     async def test_cancel_before_models_keeps_existing_results_and_releases_owner(self):
         record=self.service.create({'image':'hair.png'});ident=record['id']

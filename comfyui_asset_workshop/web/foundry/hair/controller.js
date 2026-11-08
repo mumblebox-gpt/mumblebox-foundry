@@ -5,27 +5,29 @@ import {request} from '../services.js';
 import {dialog} from '../dialogs.js';
 import {activity} from '../activity.js';
 import {uploadReference,capturePhoto,inputURL} from '../images/references.js';
-import {mountMesh} from '../wizard/preview.js';
+import {hairFileURL,displayFiles,imageSheet,hairViewer,variationCards,preprocessingWarnings} from './review.js';
 
 const titles=['Starting image','Generation options','Generate and review','Head and materials','Motion and exports','Finished result'];
 const blurbs=['A clear view of the hairstyle','Defaults and optional variations','Compare saved hair and chains','Fit and surface appearance','Static or skinned deliverables','Files, measurements and History'];
 const clone=value=>JSON.parse(JSON.stringify(value));
-const fileURL=(id,path,download=false)=>'/mumblebox-foundry/v1/hair/runs/'+id+'/file?'+new URLSearchParams({path,...(download?{download:'1'}:{})});
+const fileURL=hairFileURL;
 
 export class HairWizard {
-    constructor(shell,{resume=false,runId=null}={}){
-        this.shell=shell;this.host=el('section',{class:'wizard hair-wizard','aria-label':'HairDeck creation wizard'});
+    constructor(shell,{resume=false,runId=null,capabilities=null}={}){
+        this.shell=shell;this.providedCapabilities=capabilities;this.host=el('section',{class:'wizard hair-wizard','aria-label':'HairDeck creation wizard'});
         const saved=resume?shell.node.properties.foundryHair:null;
-        this.page=saved?.page||1;this.runId=runId||saved?.runId;this.draft=saved?.draft;this.selected=saved?.selected;this.resuming=!!saved;this.fromAgent=!!runId;this.disposers=[];
+        this.page=saved?.page||1;this.runId=runId||saved?.runId;this.draft=saved?.draft;this.selected=saved?.selected;this.reviewState=saved?.reviewState||{};this.resuming=!!saved;this.fromAgent=!!runId;this.disposers=[];
     }
     async init(){
-        this.cap=await request('hair/capabilities');this.draft??=clone(this.cap.defaults);
+        this.cap=this.providedCapabilities||await request('hair/capabilities');
+        this.draft=this.draft?{...clone(this.cap.defaults),colors:false,...this.draft}:clone(this.cap.defaults);
         if(this.runId){this.run=await request('hair/runs/'+this.runId);if(!this.resuming)this.draft=clone(this.run.config);this.selected??=this.run.selected||0;
-            if(this.fromAgent||this.run.active)this.page=this.run.package||this.run.operation==='export'?6:this.run.operation==='preview'?4:this.run.operation==='motion_preview'?5:this.run.variants.length||this.run.active?3:1;}
+            if(this.fromAgent||this.run.active)this.page=this.run.package||this.run.operation==='export'?6:this.run.operation==='preview'?4:['motion_preview','avatar_preview'].includes(this.run.operation)?5:this.run.variants.length||this.run.active?3:1;}
         if(!this.shell.root.querySelector('link[data-hair]'))this.shell.root.append(el('link',{rel:'stylesheet',href:new URL('./hair.css',import.meta.url).href,'data-hair':''}));
+        if(!this.shell.root.querySelector('link[data-hair-review]'))this.shell.root.append(el('link',{rel:'stylesheet',href:new URL('./review.css',import.meta.url).href,'data-hair-review':''}));
         this.render();this.poll();return this.host;
     }
-    remember(){this.shell.node.properties.foundryHair={page:this.page,runId:this.runId,selected:this.selected||0,draft:clone(this.draft)};app.graph.setDirtyCanvas(true);}
+    remember(){this.shell.node.properties.foundryHair={page:this.page,runId:this.runId,selected:this.selected||0,reviewState:clone(this.reviewState||{}),draft:clone(this.draft)};app.graph.setDirtyCanvas(true);}
     go(page){this.page=page;this.remember();this.render();this.shell.content.scrollTop=0;}
     async act(action){
         if(this.working)return;this.working=true;this.error='';
@@ -42,6 +44,7 @@ export class HairWizard {
         this.syncGraph({pending:{graph}});
         this.run=await request('hair/runs/'+this.runId+'/start',{operation,selected:this.selected||0,request_id:crypto.randomUUID(),client_id:api.clientId||''});
         if(operation==='generate')this.page=3;else if(operation==='export')this.page=6;
+        if(operation==='generate'||operation==='export')this.shell.content.scrollTop=0;
         this.remember();
     }
     async poll(){
@@ -50,7 +53,7 @@ export class HairWizard {
             if(this.runId){
                 const next=await request('hair/runs/'+this.runId);
                 if(this.disposed)return;
-                const changed=JSON.stringify([next.active,next.status,next.stage,next.error,next.dependency,next.variants.length,next.export?.model,next.preview?.model,next.package])!==JSON.stringify([this.run?.active,this.run?.status,this.run?.stage,this.run?.error,this.run?.dependency,this.run?.variants?.length,this.run?.export?.model,this.run?.preview?.model,this.run?.package]);
+                const changed=JSON.stringify([next.active,next.status,next.stage,next.error,next.dependency,next.variants.map(v=>v.checkpoint),next.export?.model,next.preview?.model,next.avatar_preview?.model,next.motion_preview?.model,next.package])!==JSON.stringify([this.run?.active,this.run?.status,this.run?.stage,this.run?.error,this.run?.dependency,this.run?.variants?.map(v=>v.checkpoint),this.run?.export?.model,this.run?.preview?.model,this.run?.avatar_preview?.model,this.run?.motion_preview?.model,this.run?.package]);
                 this.run=next;
                 if(next.pending)this.syncGraph(next);
                 if(changed)this.render();
@@ -101,15 +104,26 @@ export class HairWizard {
         };
         const modal=dialog(this.shell,'Choose a saved hairstyle reference',el('div',{},list,more));await load();
     }
+    examples(){
+        const list=el('div',{class:'hair-gallery'});
+        const modal=dialog(this.shell,'Try an official HairDeck reference',el('div',{},list,hint('Reference examples provided by the HairDeck authors.')));
+        for(const [index,name] of ['ex01.png','ex02.png','ex03.png','ex04.png'].entries()){
+            const url=new URL('./examples/'+name,import.meta.url).href;
+            list.append(button([el('img',{src:url,alt:'HairDeck reference example '+(index+1)}),el('span',{},'Example '+(index+1))],()=>this.act(async()=>{
+                const response=await fetch(url);if(!response.ok)throw Error('This HairDeck example is unavailable.');
+                await this.add(new File([await response.blob()],'hairdeck-'+name,{type:'image/png'}));modal.close();
+            }),{class:'image-preview'}));
+        }
+    }
     inputPage(){
         const input=el('input',{type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,onchange:e=>this.act(()=>this.add(e.target.files[0]))});
         const drag=e=>{e.preventDefault();e.stopPropagation();if(e.dataTransfer)e.dataTransfer.dropEffect='copy';};
         return el('div',{},this.text('name','Asset name'),hint(this.cap.reference),
             el('div',{class:'creator-drop',ondragenter:drag,ondragover:drag,ondrop:e=>{
                 drag(e);const file=e.dataTransfer?.files?.[0];if(file)this.act(()=>this.add(file));
-            }},input,
+            },tabIndex:0,onpaste:e=>{const file=[...(e.clipboardData?.items||[])].find(x=>x.type.startsWith('image/'))?.getAsFile();if(file){e.preventDefault();this.act(()=>this.add(file));}}},input,
                 this.draft.image?el('img',{class:'hair-reference',src:inputURL(this.draft.image),alt:'Starting hairstyle reference'}):hint('Drop one head or upper-body reference here.'),
-                el('div',{class:'actions'},button('Upload image',()=>input.click()),button('Take a photo with connected camera',()=>capturePhoto(this.shell,file=>this.act(()=>this.add(file))),{disabled:!navigator.mediaDevices}),button('Choose from Gallery',()=>this.act(()=>this.gallery())))),
+                el('div',{class:'actions'},button('Upload image',()=>input.click()),button('Take a photo with connected camera',()=>capturePhoto(this.shell,file=>this.act(()=>this.add(file))),{disabled:!navigator.mediaDevices}),button('Choose from Gallery',()=>this.act(()=>this.gallery())),button('Try a HairDeck example',()=>this.examples()))),
             hint('Keep the whole hairstyle in frame. Avoid heavy occlusion and cropped hair. HairDeck reconstructs stylized hair cards; it does not reconstruct the person or produce strand Groom.'));
     }
     optionsPage(){
@@ -120,46 +134,64 @@ export class HairWizard {
         }
         return el('div',{},hint('HairDeck generates volumetric hair cards and can generate matching spring-bone chains. Use the defaults for the first result.'),
             el('div',{class:'hair-grid'},this.number('seed','Seed',0,Number.MAX_SAFE_INTEGER-16),this.number('variations','Variations',1,4)),
+            this.check('colors','Preserve the reference’s per-card colors','HairDeck’s color model predicts 16 colors along every card, including colored tips and ribbons. Turn off for a single measured hair color.'),
             this.check('bones','Generate spring bones','Required for rigged VRM and the motion preview. Variations run sequentially to limit memory use.'),advanced,
-            hint('Before generation, Foundry prepares all required weights and selected rig-export tools. First use downloads about 6.4 GB of weights plus supporting files. Model licenses are recorded in the package.'));
+            hint('Before generation, Foundry prepares all required weights and selected rig-export tools. Per-card colors add a 734 MB checkpoint on first use. Model licenses are recorded in the package.'));
     }
-    viewer(item){
-        if(!item)return hint('The saved hair preview will appear here.');
-        const host=el('div',{class:'wizard-mesh hair-viewer'});let disposed=false,cleanup;
-        const show=async bones=>{cleanup?.();host.replaceChildren();try{
-            const dispose=await mountMesh(host,fileURL(this.runId,bones&&item.bone_model?item.bone_model:item.model),this.cap.viewer_module);
-            if(disposed)dispose();else cleanup=dispose;
-        }catch(error){if(!disposed)host.replaceChildren(hint(error.message));}};
-        this.disposers.push(()=>{disposed=true;cleanup?.();});setTimeout(()=>{if(!disposed)show(false);},0);
-        return el('div',{},item.bone_model?el('label',{class:'hair-check'},el('input',{type:'checkbox',onchange:e=>show(e.target.checked)}),'Show predicted chains (diagnostic overlay)'):null,host,
-            hint('Click and drag to rotate. Scroll to zoom. The chain overlay is a diagnostic; the rigged VRM contains the actual bones.'));
-    }
+    viewer(item){return hairViewer(this,item);}
     reviewPage(){
-        const options=(this.run?.variants||[]).map((item,index)=>button('Variation '+(index+1),()=>{this.selected=index;this.render();},{'aria-pressed':String((this.selected||0)===index)}));
         const item=this.run?.variants?.[this.selected||0];
-        return el('div',{},el('div',{class:'actions'},...options),this.viewer(item),item?this.measurements(item):null,
-            item?el('details',{},el('summary',{},'What the model interpreted'),el('div',{class:'hair-diagnostics'},...item.files.filter(f=>/^(model_input|preprocess|hair_mask|face_mask)/.test(f.filename)).map(f=>el('figure',{},el('img',{src:fileURL(this.runId,f.subfolder+'/'+f.filename),alt:f.filename}),el('figcaption',{},f.filename.replace(/_\d+_\.png$/,'')))))):null);
+        return el('div',{},hint('Compare every variation, then select the one to fit, style and export. These are HairDeck’s generated hair cards, not a reconstruction of the person.'),
+            variationCards(this),item?this.measurements(item):null,
+            item&&!item.bone_model?button('Add spring bones to this saved variation',()=>this.act(async()=>{
+                this.draft.bones=true;await this.start('rig');
+            }),{disabled:this.run?.active}):null,
+            item?el('section',{class:'hair-sheet-section'},el('h3',{},'What HairDeck interpreted'),hint('Review the crop and segmentation before continuing. If the hairstyle is cropped or the wrong region was detected, replace the reference.'),
+                ...preprocessingWarnings(item).map(text=>el('p',{class:'warning-panel',role:'status'},text)),imageSheet(this,item,'input')):null,
+            item?el('section',{class:'hair-sheet-section'},el('h3',{},'Generated hair · multi-view sheet'),imageSheet(this,item,'result')):null);
+    }
+    colorControl(){
+        const automatic=this.draft.color==='auto';
+        const chosen=/^#[0-9a-f]{6}$/i.test(this.draft.color)?this.draft.color:(this.customColor||'#884422');
+        const picker=el('input',{type:'color',value:chosen,'aria-label':'Choose hair color'});
+        const hex=el('input',{type:'text',value:chosen,maxLength:7,spellcheck:false,'aria-label':'Hair color hex code'});
+        const custom=el('div',{class:'hair-color-custom',hidden:automatic},picker,hex);
+        const set=value=>{this.draft.color=value;this.customColor=value;this.remember();};
+        picker.addEventListener('input',()=>{hex.value=picker.value;hex.removeAttribute('aria-invalid');set(picker.value);});
+        hex.addEventListener('input',()=>{const valid=/^#[0-9a-f]{6}$/i.test(hex.value);hex.setAttribute('aria-invalid',String(!valid));if(valid)picker.value=hex.value;set(hex.value);});
+        return el('div',{class:'hair-color-control'},field('Hair color',el('select',{'aria-label':'Hair color source',onchange:e=>{
+            custom.hidden=e.target.value==='auto';this.draft.color=custom.hidden?'auto':picker.value;this.remember();
+        }},el('option',{value:'auto',selected:automatic},'Use reference colors'),el('option',{value:'custom',selected:!automatic},'Choose a color'))),custom,
+        hint('Reference colors preserve HairDeck’s prediction. A chosen color replaces it; the saved geometry stays the same.'));
     }
     materialsPage(){
         const selected=this.run?.variants?.[this.selected||0];
-        const item=this.run?.preview?.checkpoint===selected?.checkpoint?this.run.preview:selected;
+        const item=this.run?.export?.checkpoint===selected?.checkpoint?this.run.export:
+            selected?.reviews?.preview||(this.run?.preview?.checkpoint===selected?.checkpoint?this.run.preview:selected);
         const fitting=el('details',{},el('summary',{},'Fitting adjustments'),this.number('scale','Uniform hair scale',.25,4,.01),
             ...['X','Y','Z'].map((axis,index)=>field(axis+' offset (metres)',el('input',{type:'number',step:.005,min:-1,max:1,value:this.draft.offset[index],onchange:e=>{this.draft.offset[index]=Number(e.target.value);this.remember();}}))),
             hint('Moves and scales the generated hair and its matching chains together. It does not automatically fit a complete character. Review alignment to the selected head.'));
-        return el('div',{class:'hair-materials'},el('div',{},this.viewer(item)),el('div',{},
+        return el('div',{},el('div',{class:'hair-materials'},el('div',{},this.viewer(item),imageSheet(this,item,'result')),el('div',{},
             this.select('head_profile','Reference head',this.cap.heads.map(x=>[x,x==='upstream'?'HairDeck reference head':x])),
             this.check('show_head','Include reference head in static GLB','The VRM export includes its reference avatar.'),fitting,
-            this.text('color','Hair color','auto samples the reference; enter #RRGGBB for a chosen color.'),
+            this.colorControl(),
             this.select('material','Material preset',[['volume','Volumetric locks'],['ribbon','Transparent hair cards'],['solid','Solid geometry diagnostic'],['checker','UV checker']]),
             this.select('uv_mode','UV layout',[['shared','Shared atlas (recommended)'],['unique','Unique areas for painting']]),this.select('texture_size','Texture resolution',['1K','2K','4K']),
-            button('Preview these changes',()=>this.act(()=>this.start('preview')),{disabled:this.run?.active,class:'primary'}),hint('Applies fitting, color and material choices to the saved hair. No new hair generation is needed.')));
+            this.draft.colors?hint('Predicted per-card colors use unique UV areas so each card keeps its own root-to-tip colors. A single-color override can use a shared atlas.'):null,
+            button('Preview these changes',()=>this.act(()=>this.start('preview')),{disabled:this.run?.active,class:'primary'}),hint('Applies fitting, color and material choices to the saved hair. No new hair generation is needed.'))),
+            el('section',{class:'hair-sheet-section'},el('h3',{},'Material maps and UV layout'),hint('These are the maps used by this saved preview. Click a map to inspect it at full size or download it for painting.'),imageSheet(this,item,'material')));
     }
     exportPage(){
         const selected=this.run?.variants?.[this.selected||0];
-        const motion=this.run?.motion_preview?.checkpoint===selected?.checkpoint?this.run.motion_preview.files?.find(f=>f.filename.endsWith('.mp4')):null;
+        const motionItem=selected?.reviews?.motion_preview||(this.run?.motion_preview?.checkpoint===selected?.checkpoint?this.run.motion_preview:null);
+        const motion=motionItem?.files?.find(f=>f.filename.endsWith('.mp4'));
+        const avatar=selected?.reviews?.avatar_preview||(this.run?.avatar_preview?.checkpoint===selected?.checkpoint?this.run.avatar_preview:motionItem);
         return el('div',{},hint('Choose the files to deliver. The package includes an accurate README, measurements, provenance and resource licenses.'),
-        this.draft.bones?button('Preview hair motion',()=>this.act(()=>this.start('motion_preview')),{disabled:this.run?.active}):null,
-        motion?el('video',{controls:true,preload:'metadata',class:'hair-motion',src:fileURL(this.runId,motion.subfolder+'/'+motion.filename)}):null,
+        selected?el('h3',{},'Variation '+((this.selected||0)+1)+' · Seed '+selected.measurements.seed):null,
+        this.draft.bones?el('div',{class:'actions'},button('Preview rigged avatar',()=>this.act(()=>this.start('avatar_preview')),{disabled:this.run?.active}),button('Preview hair motion',()=>this.act(()=>this.start('motion_preview')),{disabled:this.run?.active})):null,
+        this.draft.bones?this.check('motion_chains','Show predicted chains in the motion video','An optional diagnostic overlay. The clean static GLB remains free of display chains.'):null,
+        motion?el('section',{},el('h3',{},'HairDeck spring-bone motion'),el('video',{controls:true,loop:true,preload:'metadata',class:'hair-motion',src:fileURL(this.runId,motion.subfolder+'/'+motion.filename)}),hint('HairDeck’s head-turn simulation. This is not a 360-degree orbit or an exportable animation clip.')):null,
+        avatar?el('section',{},el('h3',{},'Skinned avatar review'),imageSheet(this,avatar,'result'),this.measurements(avatar),hint(avatar.measurements.rig?.ok?'VRM validation passed. Skinning and spring groups were checked.':'Review the rig validation before exporting.')):null,
         this.check('glb','Static GLB','Portable hair geometry, UVs and material. Contains no spring-bone rig.'),
         this.draft.bones?this.check('vrm','Rigged VRM 0.x','Hair bound to the selected reference avatar, with skinning and spring-bone groups.'):hint('Spring bones are off. Return to Generation options to enable VRM or motion.'),
         this.draft.bones?this.check('motion','Head-turn motion preview (MP4)','A rendered demonstration, not an animation clip. This adds processing time.'):null,
@@ -170,7 +202,7 @@ export class HairWizard {
     finishedPage(){
         const item=this.run?.export;
         const downloads=(item?.files||[]).filter(f=>this.draft.glb&&f.filename.endsWith('.glb')||this.draft.vrm&&f.filename.endsWith('.vrm')||this.draft.motion&&f.filename.endsWith('.mp4'));
-        return el('div',{},this.viewer(item),item?this.measurements(item):null,
+        return el('div',{},this.viewer(item),item?this.measurements(item):null,imageSheet(this,item,'result'),
             this.run?.package?el('div',{class:'actions'},el('a',{class:'primary',href:fileURL(this.runId,this.run.package.path,true)},'Download ZIP'),button('Open History',()=>this.shell.open('History'))):null,
             ...downloads.map(f=>el('p',{},el('a',{href:fileURL(this.runId,f.subfolder+'/'+f.filename,true)},f.filename))),
             item?.files.find(f=>f.filename.endsWith('.mp4'))?el('video',{controls:true,preload:'metadata',class:'hair-motion',src:fileURL(this.runId,item.files.find(f=>f.filename.endsWith('.mp4')).subfolder+'/'+item.files.find(f=>f.filename.endsWith('.mp4')).filename)}):null,
@@ -178,6 +210,7 @@ export class HairWizard {
     }
     render(){
         this.disposers.splice(0).forEach(f=>f());
+        this.host.dataset.page=String(this.page);
         const busy=!!this.run?.active||this.working;
         const rail=el('aside',{class:'wizard-rail'},el('span',{class:'eyebrow'},'HAIRDECK / HAIR'),el('h3',{},'HairDeck\nStylized Hair'),el('ol',{class:'wizard-steps'},...titles.map((title,i)=>el('li',{class:i+1===this.page?'current':''},el('span',{},String(i+1)),el('div',{},el('strong',{},title),el('small',{},blurbs[i]))))),hint('One image. Hair cards. Matching spring bones.'));
         const panel=el('div',{class:'wizard-panel'},el('header',{class:'page-head'},el('span',{class:'eyebrow'},'PAGE '+this.page+' OF 6'),el('h2',{},titles[this.page-1])));
@@ -191,10 +224,17 @@ export class HairWizard {
             this.page===6&&!busy?button('Make a new hair asset',()=>this.shell.openHairWizard(),{class:'primary'}):null,
             !busy&&['failed','interrupted','cancelled'].includes(this.run?.status)?button('Retry remaining work',()=>this.act(()=>this.start(this.run.operation))):null,
             button('Choose a workflow',()=>this.shell.open('Choose a Workflow')));
-        if(this.page===6)panel.append(navigation());
         panel.append(this[['inputPage','optionsPage','reviewPage','materialsPage','exportPage','finishedPage'][this.page-1]]());
         panel.append(hint(this.page===2?'Clicking Next generates hair cards and matching spring chains.':this.page===5?'Clicking Next prepares the selected outputs, package and History entry.':''),navigation());
         this.host.replaceChildren(rail,panel);this.paintProgress();
+        if(this.page===6&&this.run?.export&&!busy)requestAnimationFrame(()=>{
+            if(this.disposed||this.page!==6)return;
+            const viewer=this.host.querySelector('.hair-viewer'),content=this.shell.content;
+            if(!viewer)return;
+            const frame=viewer.getBoundingClientRect(),area=content.getBoundingClientRect();
+            if(frame.height<=area.height&&(frame.top<area.top||frame.bottom>area.bottom))
+                content.scrollTop+=frame.top-area.top-(area.height-frame.height)/2;
+        });
     }
     dispose(){this.disposed=true;clearTimeout(this.timer);this.disposers.splice(0).forEach(f=>f());}
 }

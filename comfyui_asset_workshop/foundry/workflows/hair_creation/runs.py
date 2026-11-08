@@ -34,7 +34,10 @@ class HairRuns:
 
     def get(self,ident):
         if ident in self.records:return self.records[ident]
-        record=json.loads(self.path(ident).read_text(encoding='utf-8'));self.records[ident]=record
+        record=json.loads(self.path(ident).read_text(encoding='utf-8'))
+        # An older saved generation used a single measured color. Do not
+        # relabel it as ColorDiT output or invalidate its saved hair on resume.
+        record['config']=validate({'colors':False,**record['config']});self.records[ident]=record
         if record['status'] in ('running','cleaning'):
             pending=record.get('pending')
             if pending and (pending['id'] in self.native.active_ids() or self.native.history(pending['id'])):
@@ -64,7 +67,13 @@ class HairRuns:
         config=validate(data);sha=self.source(config)
         if any(config[k]!=record['config'][k] for k in GENERATION_KEYS) or sha!=record['source_sha256']:
             record.update(variants=[],selected=0)
-            record.pop('preview',None);record.pop('motion_preview',None)
+            record.pop('preview',None);record.pop('motion_preview',None);record.pop('avatar_preview',None)
+        elif any(config[k]!=record['config'][k] for k in ('color','show_head','head_profile','scale','offset','uv_mode','texture_size','material')):
+            for key in ('preview','avatar_preview','motion_preview'):record.pop(key,None)
+            for variant in record['variants']:variant.pop('reviews',None)
+        elif config['motion_chains']!=record['config']['motion_chains']:
+            record.pop('motion_preview',None)
+            for variant in record['variants']:variant.get('reviews',{}).pop('motion_preview',None)
         record.update(config=config,source_sha256=sha,status='idle',error='',progress=0)
         record.pop('package',None);record.pop('export',None);record.pop('request_id',None)
         self.save(record);return self.public(record)
@@ -78,7 +87,7 @@ class HairRuns:
     def start(self,ident,data):
         record=self.get(ident);request=data.get('request_id');operation=data.get('operation','generate')
         if not isinstance(request,str) or not 1<=len(request)<=100:raise ValueError('Supply a retry-safe request identity.')
-        if operation not in ('generate','preview','motion_preview','export'):raise ValueError('Choose hair generation, material preview, motion preview or export.')
+        if operation not in ('generate','rig','preview','avatar_preview','motion_preview','export'):raise ValueError('Choose hair generation, spring chains, material preview, avatar preview, motion preview or export.')
         if record.get('request_id')==request:
             if record.get('operation')!=operation:raise ValueError('Request identity belongs to another operation.')
             return self.public(record)
@@ -88,6 +97,7 @@ class HairRuns:
         if self.source(record['config'])!=record['source_sha256']:raise ValueError('The reference changed. Upload it again before generating.')
         record.update(status='running',cancel=False,error='',request_id=request,operation=operation,selected=selected,
                       client_id=str(data.get('client_id',''))[:100],progress=0)
+        if operation in ('rig','avatar_preview','motion_preview'):record['config']['bones']=True
         self.save(record);self.tasks[ident]=asyncio.create_task(self.execute(record));return self.public(record)
 
     def cancel(self,ident):
@@ -110,7 +120,9 @@ class HairRuns:
         self.event(record,'Preparing selected HairDeck resources',2)
         loop=asyncio.get_running_loop()
         def progress(value):loop.call_soon_threadsafe(lambda:record.update(dependency=value))
-        record['models']=await asyncio.to_thread(self.prepare,record['config'],lambda:record.get('cancel',False),progress)
+        preparation=copy.deepcopy(record['config'])
+        if record['operation'] in ('avatar_preview','motion_preview'):preparation['vrm']=True
+        record['models']=await asyncio.to_thread(self.prepare,preparation,lambda:record.get('cancel',False),progress)
         record.pop('dependency',None);self.check(record)
 
     async def execute(self,record):
@@ -123,12 +135,24 @@ class HairRuns:
                     self.event(record,f'HairDeck: generating hair variation {index+1} of {record["config"]["variations"]}',
                                10+int(index/record['config']['variations']*80))
                     await self.enqueue(record,graph.generate(record,index),'70003','generate',index)
+                if record['config']['bones']:
+                    for index,item in enumerate(record['variants']):
+                        if not item.get('bone_model'):
+                            self.check(record);self.event(record,f'Adding matching spring chains to variation {index+1}',85)
+                            await self.enqueue(record,graph.rig(record,index),'70005','rig',index)
                 self.event(record,'Hair variations saved for review',95)
+            elif record['operation']=='rig':
+                self.event(record,'HairDeck: adding matching spring chains to the saved hair',10)
+                await self.enqueue(record,graph.rig(record,record['selected']),'70005','rig',record['selected'])
             else:
+                if record['config']['bones'] and not record['variants'][record['selected']].get('bone_model'):
+                    self.event(record,'Adding matching spring chains to the selected saved variation',8)
+                    await self.enqueue(record,graph.rig(record,record['selected']),'70005','rig',record['selected'])
                 self.event(record,'Preparing materials, selected rig and exports',10)
                 checkpoint=record['variants'][record['selected']]['checkpoint']
                 request=copy.deepcopy(record)
                 if record['operation']=='preview':request['config'].update(glb=True,vrm=False,motion=False)
+                if record['operation']=='avatar_preview':request['config'].update(glb=True,vrm=True,motion=False)
                 if record['operation']=='motion_preview':request['config'].update(glb=True,vrm=True,motion=True)
                 await self.enqueue(record,graph.export(request,checkpoint),'70004',record['operation'],record['selected'])
                 if record['operation']=='export':
@@ -160,7 +184,11 @@ class HairRuns:
             if not owned_path(self.output_root,self.output_root/item[key]).is_file():raise ValueError('A saved hair artifact is missing.')
         if pending['phase']=='generate':
             if len(record['variants'])==pending['index']:record['variants'].append(item)
-        else:record[pending['phase']]=item
+        elif pending['phase']=='rig':record['variants'][pending['index']]=item
+        else:
+            record[pending['phase']]=item
+            if pending['phase'] in ('preview','avatar_preview','motion_preview'):
+                record['variants'][pending['index']].setdefault('reviews',{})[pending['phase']]=item
         record.pop('pending',None);self.save(record)
 
     async def recover(self,record):
@@ -179,9 +207,11 @@ class HairRuns:
 
     def file(self,ident,name):
         record=self.get(ident);allowed=set()
-        for item in [*record['variants'],record.get('export',{}),record.get('preview',{}),record.get('motion_preview',{})]:
+        reviews=[v for item in record['variants'] for v in item.get('reviews',{}).values()]
+        for item in [*record['variants'],*reviews,record.get('export',{}),record.get('preview',{}),record.get('avatar_preview',{}),record.get('motion_preview',{})]:
             for key in ('model','bone_model'):
                 if item.get(key):allowed.add(item[key])
+            allowed.update(item.get('views',{}).values())
             for file in item.get('files',[]):allowed.add(file['subfolder']+'/'+file['filename'])
         if record.get('package'):allowed.add(record['package']['path'])
         if name not in allowed:raise ValueError('This file does not belong to the saved hair result.')
