@@ -90,7 +90,7 @@ def build_archive(sources,selection,identity,metadata,output_root,worker,check_i
     register(job,["relocated"],"Relocated import verification copy; published files are retained")
     selected=dependency_closure(selection,sources)
     original_hashes={str(Path(p).resolve()):digest(p) for s in selected.values() for p in s.files.values() if Path(p).is_file()}
-    req={"job":str(job),"export_dir":str(root),"variants":{k:{"directory":VARIANTS[k][0],"formats":list(selection.variants[k]),"sources":{role:str(Path(p).resolve()) for role,p in s.files.items()}} for k,s in selected.items()}}
+    req={"job":str(job),"export_dir":str(root),"grounding":metadata.get("grounding"),"variants":{k:{"directory":VARIANTS[k][0],"formats":list(selection.variants[k]),"sources":{role:str(Path(p).resolve()) for role,p in s.files.items()}} for k,s in selected.items()}}
     (job/"request.json").write_text(json.dumps(req,indent=2),encoding="utf-8")
     check_interrupt();worker(req,"package",check_interrupt)
     report=json.loads((job/"package-report.json").read_text(encoding="utf-8"))
@@ -109,7 +109,10 @@ def build_archive(sources,selection,identity,metadata,output_root,worker,check_i
                 'json','cameras'))
     variants=[VariantRecord(**v) for v in report["variants"]]
     # Accept existing final-stage receipts only when their input file digest matches.
-    metadata=copy.deepcopy(metadata);warnings=[];resource_ids={"blender","comfyui"}
+    metadata=copy.deepcopy(metadata)
+    supplied_warnings=metadata.get("warnings",[])
+    warnings=[str(item)[:2000] for item in supplied_warnings[:100]] if isinstance(supplied_warnings,list) else []
+    resource_ids={"blender","comfyui"}
     for v in variants:
         src=selected[v.id]
         hashes={digest(p) for p in src.files.values() if Path(p).is_file()}

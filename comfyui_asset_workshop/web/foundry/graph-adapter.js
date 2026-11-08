@@ -97,6 +97,11 @@ export function clearWizardState(node){
     localStorage.removeItem(wizardStateKey());
     app.graph.change?.();
 }
+export function savedSingleWizardState(node){
+    let saved=node.properties.foundrySingle;
+    try{saved=JSON.parse(localStorage.getItem(wizardStateKey()+':single'))||saved;}catch{}
+    return saved||null;
+}
 export function savedWizardState(node){
     let saved=node.properties.foundryWizard;
     try{saved=JSON.parse(localStorage.getItem(wizardStateKey()))||saved;}catch{}

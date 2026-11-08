@@ -1,3 +1,4 @@
+import {problemPanel} from './problem-panel.js';
 import {el,button,hint,link} from "./dom.js";
 import {dialog} from "./dialogs.js";
 
@@ -9,7 +10,7 @@ export function modelAccessUrl(message) {
 }
 
 export function modelAccessError(shell,message) {
-    const panel=el("div",{class:"error-panel",role:"alert"},el("p",{},message));
+    const panel=problemPanel(message);
     const url=modelAccessUrl(message);
     if(url)panel.append(el("div",{class:"actions"},link("Open model access page",url),
         button("Open Hugging Face settings",()=>shell.settings({service:"hugging-face"}))));

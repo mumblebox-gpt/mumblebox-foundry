@@ -13,7 +13,7 @@ export function creator(c){
     const category=el('select',{'aria-label':'Image category',onchange:e=>{draft.category=e.target.value;c.remember();c.render();}},
         ...c.cap.categories.map(item=>el('option',{value:item.id,selected:item.id===draft.category},item.name)));
     const subject=el('fieldset',{disabled:busy},el('div',{class:'creator-columns'},
-        field('Creation name',el('input',{value:draft.name,maxLength:100,oninput:e=>{draft.name=e.target.value;c.remember();}})),field('What are you creating?',category)),
+        field('Creation name',el('input',{value:draft.name,maxLength:100,oninput:e=>{draft.name=e.target.value;c.remember();}})),c.singleOrigin?hint('One reference for Single Image or Text. Describe any subject below.'):field('What are you creating?',category)),
         hint(c.cap.categories.find(item=>item.id===draft.category)?.description),
         text('description','Describe your image',4,'The subject, appearance, colors and style you want.'),
         c.paired()?el('div',{class:'creator-columns'},text('front','Front details · optional',2,'Details visible on the front.'),text('back','Back details · optional',2,'Backpack, rear markings or details we cannot see from the front.')):null,
@@ -60,10 +60,10 @@ export function creator(c){
         el('div',{class:'creator-pair','data-paired':String(c.paired())},...frames),
         c.run?.pair_review?hint(c.run.pair_review):null,
         el('div',{class:'creator-finish actions'},button('Save & Create Another',()=>c.act(()=>c.save('another')),{disabled:!ready||busy}),
-            c.paired()?button('Save & Create a 3D Mesh',()=>c.act(()=>c.save('3d')),{disabled:!ready||busy,class:'primary'}):null,
+            (c.paired()||c.singleOrigin)?button(c.singleOrigin?'Use image in Single Image workflow':'Save & Create a 3D Mesh',()=>c.act(()=>c.save('3d')),{disabled:!ready||busy,class:'primary'}):null,
             button('Save & View Gallery',()=>c.act(()=>c.save('gallery')),{disabled:!ready||busy}),
             ready?el('a',{href:'/mumblebox-foundry/v1/images/'+c.id+'/package',download:''},'Download Images'):null));
-    const sections=[['subject','Describe the subject','Category and front/back details',subject],['references','Add references','Optional images and camera capture',el('fieldset',{disabled:busy},referenceControls(c))],
+    const sections=[['subject','Describe the subject',c.singleOrigin?'One image from your description':'Category and front/back details',subject],['references','Add references','Optional images and camera capture',el('fieldset',{disabled:busy},referenceControls(c))],
         ['model','Choose a model','Defaults, styles and LoRAs',modelPanel],['review','Generate & review','Edit, save or continue to 3D',review]];
     const rail=el('nav',{class:'creator-rail','aria-label':'Image creation sections'},...sections.map(([id,label,description],index)=>button([
         el('span',{class:'creator-step'},String(index+1)),el('span',{},el('strong',{},label),el('small',{},description))],()=>c.host.querySelector('#creator-'+id)?.scrollIntoView({block:'start',behavior:'smooth'}),{'data-section':'creator-'+id})));

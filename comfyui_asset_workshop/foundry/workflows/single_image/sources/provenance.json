@@ -1,0 +1,13 @@
+{
+  "template": "https://github.com/Comfy-Org/workflow_templates/blob/ea7faae6999fb31338f43408ff4a575bd3f7d9a0/templates/3d_pixal3d_trellis2_image_to_model.json",
+  "revision": "ea7faae6999fb31338f43408ff4a575bd3f7d9a0",
+  "files": {
+    "official.api.json": "935114d9a7e6be283be4155f1e31321fbf6605216c65b452e5487850a8687e1b",
+    "official.json": "d2ae14b92f8c17762a9432b80b3bafa13dd8e922e372f3023b532ec52e22ed89"
+  },
+  "runtime_adjustments": [
+    "Qualified pinned Pixal3D single-image BF16 checkpoint retained instead of unqualified INT8 acquisition",
+    "1024 shape resolution default; official 1536 option remains available",
+    "Save untextured geometry before original-reference Hi3D and final TRELLIS.2 texturing"
+  ]
+}

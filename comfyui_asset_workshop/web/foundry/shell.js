@@ -1,3 +1,4 @@
+import {fontControl,TEXT_SIZES} from './typography.js';
 import {el,button,icon,hint} from "./dom.js";
 import {activityState,loadedState} from "./activity-state.js";
 import {activity} from "./activity.js";
@@ -15,7 +16,7 @@ import {syncGuidedBranch,syncGuidedOutputs} from './guided/graph.js';
 
 export class FoundryShell {
     constructor(host,node) {
-        this.node=node; this.host=host; this.tab="Choose a Workflow";
+        this.statusListeners=new Set();this.node=node; this.host=host; this.tab="Choose a Workflow";
         this.shadow=host.shadowRoot||host.attachShadow({mode:"open"});
         this.shadow.replaceChildren();
         for (const file of ["theme.css","layout.css","images.css","roadmap.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
@@ -33,7 +34,7 @@ export class FoundryShell {
         this.agentRunHandler=event=>{
             if(this.node.graph!==app.graph||!this.host.isConnected)return;
             const id=event.detail?.id;
-            if(typeof id==="string"&&/^[a-f0-9]{32}$/.test(id))this.openWizard({runId:id});
+            if(typeof id==="string"&&/^[a-f0-9]{32}$/.test(id))this.openWizard({runId:id,method:event.detail?.method||"turnaround"});
         };
         api.addEventListener("mumblebox-foundry-run",this.agentRunHandler);
         this.agentImageHandler=event=>{
@@ -64,11 +65,13 @@ export class FoundryShell {
             ...["Korean","Japanese","Mandarin","Spanish","Portuguese","German"].map(name=>el("option",{disabled:true},name+" — Coming soon")));
         this.themeButton=button([icon("contrast",18),"Theme"],()=>this.setTheme(this.root.dataset.theme==="dark"?"light":"dark"));
         this.themeButton.setAttribute("aria-label","Switch color theme");
+        this.fontControl=fontControl(this);
+        this.updateSlot=el("div",{class:"header-update",role:"status","aria-live":"polite"});
         this.settingsButton=button([icon("gear",18),"Settings"],()=>this.settings());
         const donate=button("Donate",()=>{}, {disabled:true,title:"Donation link coming soon"});
         const identity=el("div",{class:"identity"},el("div",{class:"brand"},el("div",{class:"brand-lockup"},
             el("h1",{},el("img",{class:"brand-logo",src:new URL("../assets/foundry/logo-approved.png",import.meta.url).href,alt:"Mumblebox 3D Asset Foundry",width:2172,height:724})),this.version)),
-            el("div",{class:"header-actions"},languages,this.themeButton,this.settingsButton,donate));
+            el("div",{class:"header-tools"},el("div",{class:"header-actions"},languages,this.themeButton,this.fontControl.element,this.settingsButton,donate),this.updateSlot));
         this.vram=resourceMeter("VRAM");this.ram=resourceMeter("RAM");this.cpu=resourceMeter("CPU",{percent:true});
         this.loadedDot=el("span",{class:"loaded-dot","aria-hidden":"true"});
         this.loadedLabel=el("small",{},"Model state unavailable");
@@ -78,7 +81,7 @@ export class FoundryShell {
             this.activity.element,el("div",{class:"model-residency"},this.unload,this.loadedLabel));
         this.nav=el("nav",{class:"tabs",role:"tablist","aria-label":"Foundry sections"});
         this.tabs=["Choose a Workflow","Images","History","Integrations","About","Roadmap"];
-        this.tabs.forEach((name,i)=>this.nav.append(button(name,()=>this.open(name),{class:i===2?"secondary-start":"",role:"tab","aria-selected":name===this.tab,tabindex:name===this.tab?0:-1})));
+        this.tabs.forEach((name,i)=>this.nav.append(button([icon(["cube","image","history","plug","info","map"][i],16),name],()=>this.open(name),{class:i===2?"secondary-start":"",role:"tab","aria-selected":name===this.tab,tabindex:name===this.tab?0:-1})));
         this.nav.addEventListener("keydown",e=>{
             if(!["ArrowRight","ArrowLeft","Home","End"].includes(e.key))return;
             e.preventDefault();
@@ -97,6 +100,7 @@ export class FoundryShell {
             if(!this.node.graph._nodes.some(n=>n.properties?.guidedOwner===this.node.id))
                 syncGuidedBranch(await request('guided/template'),this.node);
             this.version.textContent="v"+this.data.version;
+            await this.setFontSize(this.data.preferences.font_size||"default",false);
             this.root.dataset.motion=this.data.preferences.busy_motion||"system";
             if(this.data.preferences.theme) await this.setTheme(this.data.preferences.theme,false);
             else await this.setTheme(this.root.dataset.theme,false);
@@ -110,6 +114,12 @@ export class FoundryShell {
         this.themeButton.title=theme==="dark"?"Switch to light theme":"Switch to dark theme";
         this.themeButton.setAttribute("aria-pressed",String(theme==="dark"));
         if(save)try{await request("preferences",{theme},{method:"PATCH"});}catch(e){this.message(e.message,true);}
+    }
+    async setFontSize(value,save=true){
+        if(!TEXT_SIZES.some(x=>x[0]===value))return;
+        const before=this.root.dataset.fontSize||'default';this.root.dataset.fontSize=value;this.fontControl.update(value);
+        if(save)try{this.data.preferences=await request('preferences',{font_size:value},{method:'PATCH'});}
+        catch(error){this.root.dataset.fontSize=before;this.fontControl.update(before);this.message(error.message,true);}
     }
     message(text,error=false) {this.notice.textContent=text;this.notice.dataset.error=String(error);}
     resources(data) {
@@ -127,6 +137,7 @@ export class FoundryShell {
         this.activity.update(activityState(this.unloading?{...data,resource_cleanup:{status:"releasing"}}:data));
         this.unload.disabled=!data||data.running||this.unloading;
         this.unload.title=data?.running?"Wait for the current run to finish":"Release loaded models and reusable model caches";
+        this.updates?.refreshFlag();for(const listener of this.statusListeners)listener();
         if(wasRunning&&!data?.running&&this.data)request("library/sync",{}).catch(e=>this.message(e.message,true));
     }
     async unloadModels() {
@@ -157,8 +168,8 @@ export class FoundryShell {
         } catch(error) {if(sequence===this.sequence)this.content.replaceChildren(el("p",{"data-connection-error":String(error.code==="FOUNDRY_OFFLINE")},error.message),button("Retry",()=>this.open(name)));}
     }
 
-    async openWizard({resume=false,runId=null}={}){
-        this.retryView=()=>this.openWizard({resume,runId});
+    async openWizard({resume=false,runId=null,method="turnaround"}={}){
+        this.retryView=()=>this.openWizard({resume,runId,method});
         this.viewDispose?.();this.viewDispose=null;this.sequence=(this.sequence||0)+1;
         const sequence=this.sequence;
         this.tab="Choose a Workflow";
@@ -166,7 +177,7 @@ export class FoundryShell {
         let wizard;
         try{
             const {Wizard}=await import("./wizard/controller.js");
-            wizard=new Wizard(this,{resume,runId});
+            wizard=new Wizard(this,{resume,runId,method});
             const element=await wizard.init();
             if(sequence!==this.sequence){wizard.dispose();return;}
             this.content.replaceChildren(element);
@@ -178,7 +189,12 @@ export class FoundryShell {
         }catch(error){wizard?.dispose();this.content.replaceChildren(el("p",{role:"alert","data-connection-error":String(error.code==="FOUNDRY_OFFLINE")},error.message));}
     }
 
-    chooseMesh(handoff,origin){
+    async chooseMesh(handoff,origin){
+        if(origin?.method==='single-image'){
+            await this.openWizard({resume:true,method:'single-image'});
+            Object.assign(this.wizard.draft,{name:handoff.name,references:handoff.references.slice(0,1),image_creation:handoff.image_creation});
+            this.wizard.runId=null;this.wizard.run=null;this.wizard.go(1);return;
+        }
         this.pendingMeshHandoff=handoff;this.meshOrigin=origin;
         return this.open('Choose a Workflow');
     }
@@ -196,7 +212,8 @@ export class FoundryShell {
     }
     async openMeshMethod(method){
         const handoff=this.pendingMeshHandoff;
-        if(method==='splat'){
+        if(method==='single'){await this.openWizard({method:'single-image',resume:!!this.meshOrigin});if(handoff){Object.assign(this.wizard.draft,{name:handoff.name,references:handoff.references.slice(0,1),image_creation:handoff.image_creation});this.wizard.go(1);}}
+        else if(method==='splat'){
             if(await this.openSplatWizard({handoff})===false)return;
         }
         else if(method==='guided'){
@@ -280,5 +297,5 @@ export class FoundryShell {
         try{const module=await import("./views/settings.js");return module.render(this,options);}
         catch(error){this.message(error.message,true);}
     }
-    dispose() {api.removeEventListener('mumblebox-foundry-splat',this.agentSplatHandler);clearInterval(this.guidedHeartbeat);api.removeEventListener('guided.bind',this.guidedBindHandler);this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
+    dispose() {this.fontControl.dispose();this.statusListeners.clear();api.removeEventListener('mumblebox-foundry-splat',this.agentSplatHandler);clearInterval(this.guidedHeartbeat);api.removeEventListener('guided.bind',this.guidedBindHandler);this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
 }

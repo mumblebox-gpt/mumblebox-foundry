@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from ...artifacts import digest
 
-MODELS = {"splat":("idol","idol_dino","idol_decoder","idol_image_vae","birefnet"), "guided":("pixal_single","moge2","qwen21_union"),
+MODELS = {"single_geometry":("pixal_single","shape_vae","dino","moge2","birefnet"), "splat":("idol","idol_dino","idol_decoder","idol_image_vae","birefnet"), "guided":("pixal_single","moge2","qwen21_union"),
           "turnaround":("qwen21","qwen21_clip","qwen21_vae","birefnet"),
           "geometry":("pixal_multiview","shape_vae","dino"),
           "refinement":("birefnet",), "texture":("birefnet",)}
@@ -20,7 +20,7 @@ def required_stages(operation, selection):
     first = {"turnaround": 0, "rocket": 0, "mesh": 1, "finish": 3}[operation]
     return stages[first:]
 
-def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambda value:None, turnaround_model="qwen21"):
+def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambda value:None, turnaround_model="qwen21",geometry_model="pixal3d"):
     import folder_paths
     from .... import models
     path=Path(state_root)/"verified-models.json"
@@ -28,6 +28,7 @@ def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambd
     except (FileNotFoundError,ValueError):receipts={}
     from .turnaround import dependency_keys
     required = dependency_keys(turnaround_model) if stage == "turnaround" else MODELS.get(stage,())
+    if stage=='single_geometry' and geometry_model=='trellis2':required=tuple('trellis_single' if k=='pixal_single' else k for k in required)
     for key in required:
         if cancelled():raise InterruptedError("Cancelled before model loading.")
         model=models.MODELS[key]

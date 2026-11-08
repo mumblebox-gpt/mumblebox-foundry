@@ -174,7 +174,7 @@ class Hi3DQuadFinish:
         manifest=dest/"manifest.json";manifest.write_text(json.dumps(report,indent=2))
         from .owned_scratch import cleanup
         scratch=cleanup(job)
-        text=json.dumps({"cleanup":scratch,"quads":report["geometry"]["quads"],"triangles_runtime":report["geometry"]["runtime_triangles"],"watertight":report["geometry"]["watertight"],"export_dir":str(dest)})
+        text=json.dumps({"cleanup":scratch,"quads":report["geometry"]["quads"],"triangles_runtime":report["geometry"]["runtime_triangles"],"watertight":report["geometry"]["watertight"],"warnings":report["geometry"].get("warnings",[]),"export_dir":str(dest)})
         return {"ui":{"text":[text]},"result":(Types.File3D(str(dest/"runtime.glb")),str(manifest),text)}
 
 class Hi3DExportBundle:
@@ -191,6 +191,7 @@ class Hi3DExportBundle:
                     "quad_light":("STRING",{"default":"","lazy":True}),"quad_detail":("STRING",{"default":"","lazy":True}),
                     "asset_name":("STRING",{"default":"Asset"}),
                     "selection_json":("STRING",{"default":"","multiline":True,"tooltip":"Blank includes available outputs. Explicit schema: mumblebox.export-selection/1."}),
+                    "grounding_json":("STRING",{"default":""}),
                     "metadata_json":("STRING",{"default":"","multiline":True,"tooltip":"Optional hash-bound production receipts; old asset statistics are never applied to a different file."})},
                 "hidden":{"prompt":"PROMPT","unique_id":"UNIQUE_ID"}}
     RETURN_TYPES=("STRING","STRING");RETURN_NAMES=("zip_path","report")
@@ -214,7 +215,7 @@ class Hi3DExportBundle:
                 and kw.get(self.INPUTS[v]) is None]
     def export(self,use_saved_variants,saved_balanced,saved_compact,saved_print,run_name,
                detailed=None,balanced=None,compact=None,print_stl=None,quad_light="",quad_detail="",
-               asset_name="Asset",selection_json="",metadata_json="",prompt=None,unique_id=None):
+               asset_name="Asset",selection_json="",metadata_json="",grounding_json="",prompt=None,unique_id=None):
         import folder_paths
         import comfy.model_management as mm
         from comfy_api.latest import Types
@@ -227,6 +228,11 @@ class Hi3DExportBundle:
         selected=self.selection(use_saved_variants,selection_json,prompt,unique_id,**args)
         metadata=json.loads(metadata_json) if metadata_json.strip() else {}
         if not isinstance(metadata,dict):raise ValueError("Package metadata must be a JSON object")
+        if grounding_json.strip():
+            from .grounding import validate_frame
+            frame=json.loads(grounding_json);validate_frame(frame)
+            metadata['grounding']=frame;metadata.setdefault('production',{})['grounding']=frame
+            if frame.get('warning'):metadata.setdefault('warnings',[]).append(frame['warning'])
         metadata.update(asset_name=asset_name,run_name=safe_name(run_name),_job_root=str(work_root()/"package-jobs"))
         sources={};staging=None
         for variant in selected.variants:
@@ -267,6 +273,22 @@ class Hi3DExportBundle:
         result=build_archive(sources,selected,identity,metadata,Path(folder_paths.get_output_directory())/"3d"/"Finishing",
                              run,mm.throw_exception_if_processing_interrupted)
         summary=asdict(result)
+        if metadata.get('grounding'):
+            from .grounding import ground_glb,validate_frame
+            frame=metadata['grounding'];summary['grounding']=frame;summary['grounded_previews']={}
+            if frame['mode']=='original':
+                views={'detailed':'texture','game_balanced':'balanced','game_compact':'compact','quad_light':'quads','print':'print'}
+                for key,artifact in sources.items():summary['grounded_previews'][views[key]]=str(artifact.files.get('glb') or artifact.files.get('runtime_glb') or artifact.files['stl'])
+            else:
+                root=Path(result.archive_path).with_suffix('')
+                preview_root=Path(folder_paths.get_output_directory())/'foundry'/'grounded-previews'/result.export_id
+                paths={'detailed':('Detailed/mesh.glb','texture'),'game_balanced':('Game/Balanced/mesh.glb','balanced'),'game_compact':('Game/Compact/mesh.glb','compact'),'quad_light':('Editable_Quads/Light/runtime.glb','quads'),'print':('Print/mesh.stl','print')}
+                for key,artifact in sources.items():
+                    relative,view=paths[key];path=root/relative
+                    if not path.is_file() and key!='print':
+                        preview_root.mkdir(parents=True,exist_ok=True);path=preview_root/(key+'.glb')
+                        ground_glb(artifact.files.get('glb') or artifact.files['runtime_glb'],path,validate_frame(frame),floor=True)
+                    if path.is_file():summary['grounded_previews'][view]=str(path)
         try:
             from .history_receipt import publish
             publish(result.archive_path, result.export_id, folder_paths.get_user_directory())

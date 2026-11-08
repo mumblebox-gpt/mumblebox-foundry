@@ -43,6 +43,9 @@ class InstallTests(unittest.TestCase):
                      'scripts/probe_hairdeck.py','scripts/probe_hair_color.py','docs/HAIR-WORKFLOW.md',
                      'comfyui_asset_workshop/web/assets/foundry/hair.png'):
             self.assertIn(name,names)
+        for method in ('single','turnaround','guided','splat'):
+            self.assertIn('comfyui_asset_workshop/web/assets/foundry/method-'+method+'.webp',names)
+        self.assertIn('comfyui_asset_workshop/finishing/grounding.py',names)
         self.assertNotIn('scripts/pinokio/mcp.py',names)
         self.assertFalse(any(name.startswith(('.pinokio/', 'bench/')) for name in names))
     def test_install_and_repeat_preserve(self):

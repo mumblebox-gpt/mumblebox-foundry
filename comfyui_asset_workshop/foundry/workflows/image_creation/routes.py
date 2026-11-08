@@ -122,9 +122,10 @@ def register(routes,factory,endpoint,notify=lambda ident:None):
     @routes.post(PREFIX+'/{id}/handoff')
     @endpoint
     async def handoff(request):
-        await body(request);service=factory()
+        options=await body(request);service=factory()
+        if options.get('mode','pair') not in ('single','pair'):raise ValueError('Choose a single-image or paired handoff.')
         if request.match_info['id'] in service.tasks:raise ValueError('Finish image creation before the 3D handoff.')
-        return service.handoff(request.match_info['id'])
+        return service.handoff(request.match_info['id'],single=options.get('mode')=='single')
 
     @routes.post(PREFIX+'/{id}/reuse')
     @endpoint

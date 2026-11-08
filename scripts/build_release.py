@@ -6,9 +6,9 @@ PACK=ROOT/"comfyui_asset_workshop"
 TOP=("README.md","CHANGELOG.md","INSTALL.md","THIRD-PARTY.md","LICENSE","NOTICE","dependencies.json","requirements-worker-windows.txt",
      "pinokio.js","pinokio.json","install.js","start.js","update.js","repair.js","icon.png")
 DIRECTORIES=("agent","finishing","foundry","licenses","material_lab","pipeline_workers","web","workflows")
-EXTENSIONS={".py",".json",".js",".css",".svg",".png",".md",".txt",".html"}
+EXTENSIONS={".py",".json",".js",".css",".svg",".png",".webp",".md",".txt",".html"}
 IGNORED={".venv","__pycache__","node_modules",".git"}
-TEXT_EXTENSIONS=EXTENSIONS-{".png"}
+TEXT_EXTENSIONS=EXTENSIONS-{".png",".webp"}
 
 def validate_text_encoding(files):
     """Reject broken source text before it can enter a public package."""
@@ -24,7 +24,7 @@ def validate_text_encoding(files):
 def inventory():
     files=[ROOT/name for name in TOP]
     files+=list((ROOT/"licenses").glob("*.txt"))
-    files+=[ROOT/"docs"/name for name in ("AGENT-SETUP.md","RELEASE-VALIDATION.md","PINOKIO.md","HAIR-WORKFLOW.md","SPLAT-SOLID.md")]
+    files+=[ROOT/"docs"/name for name in ("AGENT-SETUP.md","RELEASE-VALIDATION.md","PINOKIO.md","HAIR-WORKFLOW.md","SPLAT-SOLID.md","LOCAL-UPDATE-VALIDATION.md","GROUNDING-VALIDATION.md")]
     files+=[ROOT/"scripts"/name for name in ("install_foundry.py","install_hairdeck.py","probe_hairdeck.py","probe_hair_color.py","build_release.py","requirements-hair-windows.txt")]
     files+=[ROOT/"scripts"/"pinokio"/name for name in ("bootstrap.py","runtime.py","maintenance.py","connect_agent.py","hi3d_entry.py")]
     files+=[p for p in PACK.iterdir() if p.is_file() and p.suffix in EXTENSIONS and p.name not in ("README.md","PIPELINE.md")]

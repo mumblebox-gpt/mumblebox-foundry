@@ -231,12 +231,13 @@ class ImageRuns:
         self.library.accept(record,revision_id,expected);record.pop('candidate',None)
         self.library.save(record);return self.public(record)
 
-    def handoff(self,ident):
+    def handoff(self,ident,single=False):
         record=self.get(ident)
-        if not record['config']['paired']:raise ValueError('This standalone image creation has no 3D asset handoff.')
+        if not record['config']['paired'] and not single:raise ValueError('This standalone image creation has no 3D asset handoff.')
         self.library.publish(record)
         references=[]
-        for side,role in (('front','primary'),('back','back')):
+        sides=(('single','primary'),) if not record['config']['paired'] else ((('front','primary'),) if single else (('front','primary'),('back','back')))
+        for side,role in sides:
             revision=self.library.revision(record,record['accepted'][side]);source=self.library.file(record,revision['id'])
             relative=Path('foundry-created')/ident/(side+'-'+revision['sha256'][:16]+'.png')
             target=owned_path(self.input_root,self.input_root/relative);target.parent.mkdir(parents=True,exist_ok=True)

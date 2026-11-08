@@ -63,6 +63,16 @@ class ImageRunTests(unittest.IsolatedAsyncioTestCase):
         creation=self.create(category='general');run=await self.run_job(creation['id'])
         self.assertEqual(list(run['accepted']),['single'])
         with self.assertRaisesRegex(ValueError,'standalone'):self.service.handoff(creation['id'])
+    async def test_single_image_handoff_copies_one_reference_and_binds_lineage(self):
+        creation=self.create(category='general');await self.run_job(creation['id'])
+        handoff=self.service.handoff(creation['id'],single=True)
+        self.assertEqual(len(handoff['references']),1)
+        self.assertEqual(handoff['references'][0]['id'],'single')
+        from foundry.workflows.image_creation.lineage import resolve_handoff
+        from foundry.artifacts import digest
+        refs=[{**r,'sha256':digest(self.input/r['filename'])} for r in handoff['references']]
+        self.assertEqual(resolve_handoff(self.library.state_root,handoff['image_creation'],refs)['images'][0]['side'],'single')
+
     async def test_handoff_copies_pair_and_retains_roles(self):
         creation=self.create();run=await self.run_job(creation['id']);handoff=self.service.handoff(creation['id'])
         self.assertEqual([r['role'] for r in handoff['references']],['primary','back'])

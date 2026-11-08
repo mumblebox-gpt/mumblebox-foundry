@@ -4,7 +4,7 @@ export const roadmap = [
     {
         id: "interface", title: "GUI & usability", summary: "Clearer feedback and controls throughout the interface.",
         items: [
-            {title: "Keep improving the guided experience", description: "Review the interface and workflow wizards together: plain-language help, useful defaults, Advanced options and clear feedback, without unnecessary padding or repeated instructions."},
+            {title: "More translations", description: "Add carefully reviewed interface translations while keeping model names, controls and help consistent."},
         ],
     },
     {

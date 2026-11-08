@@ -51,6 +51,33 @@ def stats(v,f):
             "watertight":bool(mesh.is_watertight),"winding_consistent":bool(mesh.is_winding_consistent),
             "components":len(trimesh.graph.connected_components(mesh.face_adjacency,nodes=np.arange(len(mesh.faces))))}
 
+def topology_preserving_quads(part,budget):
+    """QEM retains topology; planar subdivision creates quads without hole caps.
+
+    This is an explicitly reported fallback, not a QuadriFlow result. It is
+    permitted only for an already closed component and retains the same budget.
+    """
+    if not part.is_watertight or not part.is_winding_consistent:
+        raise ValueError('Topology-preserving quads require a closed, consistently wound source component')
+    reduced=simplify_mesh(part,max(8,budget//3))
+    if not reduced.is_watertight or not reduced.is_winding_consistent:
+        raise ValueError('Topology-preserving reduction could not retain the closed component')
+    v,f=triangles_to_quads(reduced.vertices,reduced.faces)
+    if len(f)>budget*1.25:raise ValueError('The closed quad fallback needs a higher quad budget for this component')
+    return v,f
+
+
+def small_holes_only(vertices,faces,extents):
+    if not len(vertices) or not len(faces):return False
+    check=stats(vertices,faces)
+    if check['nonmanifold_edges'] or check['boundary_edges']>max(100,len(faces)*.02):return False
+    es=np.asarray([[p[i],p[(i+1)%len(p)]] for p in faces for i in range(len(p))])
+    es,ct=np.unique(np.sort(es,axis=1),axis=0,return_counts=True);boundary=es[ct==1]
+    for ring in trimesh.graph.connected_components(boundary,nodes=np.unique(boundary)):
+        if len(ring)>16 or np.linalg.norm(np.ptp(np.asarray(vertices)[ring],axis=0))>np.linalg.norm(extents)*.03:return False
+    return True
+
+
 def geometry(req):
     start=time.monotonic(); job=Path(req["job"])
     a=np.load(job/"master.npz")
@@ -62,14 +89,14 @@ def geometry(req):
     remaining=req["target_quads"]-tiny_budget
     from quad_contract import allocate_budget
     budgets=allocate_budget([p.area for p in major],remaining,minimum=24)
-    vertices=[];polys=[]; details=[]
+    vertices=[];polys=[]; details=[];closed_fallback=False
     for index,(part,budget) in enumerate(zip(major,budgets)):
         guide=simplify_mesh(part,min(len(part.faces),req["guide_triangles"]))
         guide.export(job/"guide.obj",include_normals=False)
         np.savez(job/"projection-source.npz",vertices=part.vertices,faces=part.faces)
         subreq=dict(req,component=index,component_target=budget,initial_scale=(len(guide.faces)/(budget*2))**.5)
         (job/"request.json").write_text(json.dumps(subreq,indent=2))
-        method=req["method"]; reason=None
+        method="topology_preserving" if closed_fallback else req["method"]; reason=None
         if method=="qremeshify":
             try:
                 blender(subreq,"remesh",600)
@@ -109,7 +136,16 @@ def geometry(req):
                 bounded_process([sys.executable,"-u","-c",program,str(job/"quadriflow-guide.npz"),str(job/"quadriflow-result.npz"),str(budget)],timeout=1200)
                 shutil.copy2(job/"quadriflow-result.npz",qcache)
             qr=np.load(job/"quadriflow-result.npz");v=qr["vertices"].tolist();f=qr["faces"].tolist()
+            f,_=normalize_quad_diagonals(f)
             details.append({"method":"QuadriFlow 0.2.0","seed":42,"target":budget,"actual":len(f),"preserve_sharp":True,"preserve_boundary":True,"raw_checkpoint_reused":cache_hit,"seconds":time.monotonic()-begin})
+        if method=='quadriflow' and part.is_watertight and not small_holes_only(v,f,part.extents):
+            details.append({'method':'QuadriFlow rejected','component':index,'rejection':stats(v,f),
+                'reason':'Boundary defects exceed the unchanged small-hole guard'})
+            method='topology_preserving';closed_fallback=True
+        if method=='topology_preserving':
+            v,f=topology_preserving_quads(part,budget)
+            details.append({'method':'Topology-preserving quad subdivision','component':index,'target':budget,'actual':len(f),
+                'reason':'QuadriFlow damaged a closed component; QEM preserves topology before exact planar quad subdivision'})
         v=np.array(v,dtype=np.float64)
         distances=[]; nearest=[]
         for first in range(0,len(v),1024):
@@ -118,7 +154,10 @@ def geometry(req):
         nearest=np.concatenate(nearest); distances=np.concatenate(distances)
         limit=np.linalg.norm(part.extents)*.02
         if (distances>limit).any(): raise ValueError("Retopology moved beyond the 2% component projection guard")
-        v=nearest
+        # Keep planar, closed fallback polygons intact. Their distance to the
+        # master was just checked by the same 2% guard; projection can collapse
+        # vertices near a narrow feature and damage this guaranteed topology.
+        if method!='topology_preserving':v=nearest
         # Normalize before measuring defects; a fixed diagonal is not a surface edge.
         f,rotations=normalize_quad_diagonals(f)
         if rotations:details.append({"method":"polygon-start rotation before repair gate","rotated_quads":rotations})
@@ -148,6 +187,7 @@ def geometry(req):
         offset=len(vertices);vertices.extend(v);polys.extend([[i+offset for i in p] for p in f])
     write_obj(job/"quad-raw.obj",vertices,polys)
     report=stats(vertices,polys)
+    report['warnings']=['Topology-preserving quad subdivision was used where QuadriFlow returned openings. This is an editable starting mesh; review its edge flow before rigging.'] if closed_fallback else []
     report.update({"target_quads":req["target_quads"],"component_policy":"remesh major components independently; exact quad subdivision for components under 200 triangles",
         "preserved_small_components":len(small),"source_components":len(parts),"methods":details,
         "source_vertices":len(source.vertices),"source_triangles":len(source.faces),"seconds":time.monotonic()-start})

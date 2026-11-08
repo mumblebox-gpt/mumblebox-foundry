@@ -1,3 +1,4 @@
+import {problemPanel} from '../problem-panel.js';
 import {api} from '/scripts/api.js';
 import {app} from '/scripts/app.js';
 import {el,button,hint} from '../dom.js';
@@ -140,7 +141,7 @@ export class GuidedWizard{
         this.busyText=el('span',{class:'muted'});
         const active=this.active();const error=this.error||this.job?.error||this.job?.finishing?.error;
         this.host.replaceChildren(rail,el('div',{class:'wizard-panel'},el('div',{class:'page-head'},el('span',{class:'eyebrow'},'3D-GUIDED / PAGE '+this.page+' OF 6'),el('h2',{},titles[this.page-1])),
-            error?el('p',{class:'error-panel',role:'alert'},error):null,
+            error?problemPanel(error):null,
             active?el('section',{class:'wizard-busy',role:'status','aria-live':'polite'},el('strong',{},this.job?.preparing?'Preparing required resources':stageNames[this.job?.finishing?.stage||this.job?.current_stage]||'Starting selected stage'),this.busyText,
                 hint(Object.keys(this.job?.completed||{}).length+' of 10 generation stages saved. Completed files remain available.')):null,
             pages[this.page-1](this)));

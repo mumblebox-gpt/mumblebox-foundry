@@ -1,3 +1,4 @@
+import {problemPanel} from '../problem-panel.js';
 import {api} from '/scripts/api.js';
 import {app} from '/scripts/app.js';
 import {el,button,hint,field,link} from '../dom.js';
@@ -102,7 +103,7 @@ export class SplatWizard{
         this.renderEpoch=(this.renderEpoch||0)+1;this.disposers.splice(0).forEach(d=>d());this.host.replaceChildren();
         const rail=el('aside',{class:'wizard-rail'},el('span',{class:'eyebrow'},'IDOL / SPLAT & SOLID'),el('h3',{},'Splat & Solid'),el('ol',{class:'wizard-steps'},...titles.map((title,i)=>el('li',{class:i+1===this.page?'current':''},el('span',{},String(i+1)),el('div',{},el('strong',{},title),el('small',{},blurbs[i]))))),hint('Visual detail from Idol. Separate companion geometry.'));
         const panel=el('div',{class:'wizard-panel'},el('header',{class:'page-head'},el('span',{class:'eyebrow'},'PAGE '+this.page+' OF 6'),el('h2',{},this.page===6&&this.active()?'Creating your asset':titles[this.page-1])));
-        if(this.error||this.run?.error)panel.append(el('p',{class:'error-panel',role:'alert'},this.error||this.run.error));
+        if(this.error||this.run?.error)panel.append(problemPanel(this.error||this.run.error));
         if(this.run?.active){const a=activity();a.update({busy:true,label:this.run.stage,detail:this.run.dependency?.name||'Completed stages remain saved.'});this.progress=el('progress',{max:100,value:this.run.progress||0,'aria-label':'Overall Splat & Solid progress'});this.progressText=el('strong',{},'');panel.append(a.element,this.progress,this.progressText);}
         panel.append(page(this));this.host.append(rail,panel);this.updateProgress();
     }

@@ -1,3 +1,4 @@
+import {cacheControls} from '../cache-controls.js';
 import {el,button,hint,field} from "../dom.js";
 import {request} from "../services.js";
 import {dialog} from "../dialogs.js";
@@ -53,8 +54,8 @@ export function render(shell,{service}={}) {
         el("option",{value,selected:value===(shell.data.preferences.busy_motion||"system")},label)));
     const appearance=el("section",{class:"settings-section"},el("h3",{},"Appearance and language"),
         el("div",{class:"actions"},button("Light theme",()=>shell.setTheme("light")),button("Dark theme",()=>shell.setTheme("dark"))),
-        field("Busy animations",motion,"Applies to processing and downloads in the header and stage panels. Choose Spin to override reduced motion, or Pause for a still indicator."),
-        hint("English is active. Korean, Japanese, Mandarin, Spanish, Portuguese and German are planned; translations are not installed yet."));
+        field("Busy animations",motion,"Applies to progress indicators. Pause keeps them still; System follows your motion preference."),
+        hint("Language: English. More translations are planned."));
     const profile=el("select",{"aria-label":"Memory profile",onchange:async e=>{
         try{shell.data.preferences=await request("preferences",{profile:e.target.value},{method:"PATCH"});}
         catch(error){shell.message(error.message,true);}
@@ -62,16 +63,17 @@ export function render(shell,{service}={}) {
        el("option",{value:"low",disabled:true},"Low memory · Coming soon"),
        el("option",{value:"high",disabled:true},"High memory · Coming soon"));
     const profiles=el("section",{class:"settings-section"},el("h3",{},"Memory profile"),
-        field("Hardware profile",profile,"Default supplies the tested starting values for the image-to-3D workflow. Choices you make in its wizard take priority."),
-        hint("Additional memory profiles are not configured yet. The tested reference machine has 16 GB GPU VRAM and 64 GB system RAM; this is not an 8 GB compatibility claim."));
+        field("Hardware profile",profile,"Wizard choices override the default profile."),
+        hint("Reference hardware: 16 GB VRAM and 64 GB RAM. Lower-memory profiles are still being evaluated."));
 
     const hf=connection(shell,"hugging-face","Hugging Face"),civitai=connection(shell,"civitai","Civitai");
     const resources=resourceLists(shell);
     const updates=shell.updates.settings();
-    const content=el("div",{},appearance,profiles,updates.element,hf.element,civitai.element,
+    const cache=cacheControls(shell);
+    const content=el("div",{},cache.element,appearance,profiles,updates.element,hf.element,civitai.element,
         resources.element);
     const modal=dialog(shell,"Settings",content);
-    modal.surface.addEventListener("foundry-close",()=>{hf.clear();civitai.clear();resources.dispose();updates.dispose();});
+    modal.surface.addEventListener("foundry-close",()=>{hf.clear();civitai.clear();resources.dispose();updates.dispose();cache.dispose();});
     const target=service==="civitai"?civitai.element:service==="hugging-face"?hf.element:null;
     if(target)requestAnimationFrame(()=>{
         if(!modal.surface.isConnected)return;

@@ -21,6 +21,7 @@ export function exportChoices(capabilities,selection,onChange=()=>{}) {
                 if(e.target.checked)selected[variant.id]={formats:[variant.formats[0]]};else delete selected[variant.id];changed();
             }});
             return el("section",{class:"export-option"},el("label",{class:"export-title"},toggle,title(variant.id)),hint(variant.description),
+                variant.id==="quad_light"?hint("QuadriFlow uses the CPU. High CPU use and spikes are normal. Retopology can take several minutes."):null,
                 el("div",{class:"format-options"},...variant.formats.map(format=>el("label",{class:"format-check"},
                     el("input",{type:"checkbox",checked:selected[variant.id]?.formats.includes(format)||false,disabled:!enabled,
                         "aria-label":title(variant.id)+" "+format.toUpperCase(),onchange:e=>{
@@ -30,7 +31,7 @@ export function exportChoices(capabilities,selection,onChange=()=>{}) {
         });
         const focused=root.getRootNode().activeElement?.getAttribute?.("aria-label");
         root.replaceChildren(el("h3",{},"Output versions & formats"),
-            hint("Only selected versions are generated. The ZIP includes a README describing the actual files, measurements and model notices."),
+            hint("Only selected versions are generated. The ZIP includes measurements, a README and model credits."),
             el("div",{class:"export-summary",role:"status"},`${versions} version${versions===1?"":"s"} · ${formats} format selection${formats===1?"":"s"}`),
             el("div",{class:"actions"},button("Select all",()=>{selection.variants=Object.fromEntries(capabilities.map(v=>[v.id,{formats:[...v.formats]}]));changed();}),
                 button("Clear",()=>{selection.variants={};changed();})),el("div",{class:"export-grid"},...cards));

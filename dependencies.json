@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0-preview.16",
+  "version": "0.1.0-preview.17",
   "platform": "Windows NVIDIA",
   "reference_hardware": {
     "gpu": "RTX 4080 SUPER",
@@ -20,7 +20,8 @@
       "opencv-python==5.0.0.93",
       "safetensors==0.8.0",
       "huggingface-hub==1.30.0"
-    ]
+    ],
+    "geometry_requirements": "comfyui_asset_workshop/requirements.txt"
   },
   "trellis_wrapper": {
     "repository": "https://github.com/visualbruno/ComfyUI-Trellis2",

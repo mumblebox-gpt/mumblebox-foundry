@@ -1,3 +1,11 @@
+# Mumblebox 3D Asset Foundry — ComfyUI node pack
+
+This folder contains the Foundry interface, independent workflow branches and shared runtime services. For current features and installation, read the [product README](../README.md), [installation guide](../INSTALL.md) and [validation notes](../docs/RELEASE-VALIDATION.md).
+
+Open **Mumblebox 3D Asset Foundry.json** for the current GUI. Single Image or Text is the direct one-image route; Turnaround, 3D-Guided, Splat & Solid and HairDeck retain separate owners. The older Asset Workshop graph and the technical notes below describe the original node interface.
+
+---
+
 # Asset Workshop for ComfyUI
 
 A staged workflow inside the existing ComfyUI canvas:

@@ -8,7 +8,8 @@ from .package import provenance
 def save_handoff(library,record,references):
     receipt=uuid.uuid4().hex
     images=[]
-    for reference,side in zip(references,('front','back')):
+    for reference,fallback in zip(references,('front','back')):
+        side=reference.get('id') if reference.get('id') in ('single','front','back') else fallback
         revision=library.revision(record,record['accepted'][side])
         images.append({'side':side,'revision':revision['id'],'sha256':revision['sha256'],
                        'filename':reference['filename'],'provenance':provenance(revision)})

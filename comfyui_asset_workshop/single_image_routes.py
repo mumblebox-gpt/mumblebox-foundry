@@ -44,9 +44,13 @@ class NativeQueue:
             async with client.post(f"http://127.0.0.1:{args.port}/prompt", json={
                 "prompt": graph, "prompt_id": prompt_id, "client_id": client_id}) as response:
                 result = await response.json()
-                if response.status >= 400:
-                    error = result.get("error", {})
-                    raise ValueError(f"Comfy rejected the stage: {error}. Node errors: {result.get('node_errors', {})}")
+                from .foundry.queue_validation import rejection
+                error=rejection(result,response.status)
+                if error:
+                    # Comfy can accept only valid outputs with HTTP 200. Cancel
+                    # this exact prompt so a partial stage is never successful.
+                    if response.status<400:self.cancel(result.get('prompt_id',prompt_id))
+                    raise ValueError(error)
                 return result["prompt_id"]
 
     async def wait(self, prompt_id, timeout, cancelled):

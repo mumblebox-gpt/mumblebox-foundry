@@ -46,6 +46,10 @@ def template():
     return json.loads(Path(__file__).with_name("template.json").read_text(encoding="utf-8"))
 
 def compile_stage(stage, run):
+    if run.get('method')=='single-image':
+        from ..single_image.graph import compile_stage as single_stage,remap
+        from ..single_image.definition import OFFSET
+        return remap(single_stage(stage,run),OFFSET)
     if stage not in STAGE_OUTPUTS:
         raise ValueError("Unknown workflow stage.")
     graph = template()

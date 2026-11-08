@@ -16,6 +16,7 @@ def stage_plan(operation, selection):
 def snapshot(run):
     if not isinstance(run.get('selection'), dict): return None
     plan = stage_plan(run.get('operation', 'rocket'), run['selection'])
+    if run.get('method')=='single-image':plan=[s for s in plan if s!='turnaround']
     done = [stage for stage in plan if stage in run.get('stages', {})]
     if run.get('status') == 'complete' and run.get('cleanup',{}).get('status') != 'failed': done = list(plan)
     return {'stages': plan, 'completed': done, 'total': len(plan),

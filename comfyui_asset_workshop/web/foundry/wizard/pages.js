@@ -117,8 +117,8 @@ export function optionsPage(w){
     return el("div",{},hint("Pixal3D / TRELLIS.2 will construct the initial mesh from your four views. Hi3D then refines it using the matching front image, followed by measured geometry cleanup."),
         el("div",{class:"wizard-columns"},
             select(w,"shape_resolution","Initial mesh detail",[[1024,"1024 · Default"],[1536,"1536 · Experimental"],[2048,"2048 · Experimental"]],"Higher detail requires more memory and time."),
-            select(w,"refine_resolution","Refinement detail",[[512,"512 · Faster"],[1024,"1024 · Intermediate"],[1536,"1536 · Default"]],"1536 is the setting used by the successful alien workflow.")),
-        advanced,el("div",{class:"note-panel"},hint("The Default memory profile supplies these starting values. An option you change here takes priority. Refinement can take several minutes.")),
+            select(w,"refine_resolution","Refinement detail",[[512,"512 · Faster"],[1024,"1024 · Intermediate"],[1536,"1536 · Default"]],"Choose more detail when the subject needs it; higher settings use more memory and time.")),
+        advanced,el("div",{class:"note-panel"},hint("Recommended defaults are loaded. Your changes take priority.")),
         w.nav({next:()=>w.start("mesh"),note:"Clicking Next generates the initial mesh, refines it once with Hi3D, and cleans the geometry."}));
 }
 function mesh(w,key){
@@ -132,7 +132,8 @@ function mesh(w,key){
             if(!container.isConnected)dispose();else w.previewDispose=dispose;
         }catch(error){container.replaceChildren(hint(error.message));}
     });
-    return el("div",{},container,hint("Drag to rotate. Scroll to zoom."));
+    return el("div",{},el('div',{class:'preview-tools'},hint('Drag to rotate · Scroll to zoom'),
+        button('Fit view',()=>{w.previewDispose?.viewer?.fitToViewer();w.previewDispose?.viewer?.forceRender();},{title:'Fit the complete mesh in the viewer'})),container);
 }
 function exports(w){
     return el("div",{},exportChoices(w.cap.exports,w.draft.selection,()=>w.remember()),
@@ -147,7 +148,7 @@ export function finishingPage(w){
     const picker=el("select",{"aria-label":"Compare geometry",onchange:e=>{w.geometryPreview=e.target.value;w.render();}},
         ...[["clean","Cleaned refined mesh"],["refined","After Hi3D"],["decoded","Before Hi3D"]].filter(([k])=>w.run?.previews?.[k])
             .map(([value,text])=>el("option",{value,selected:value===(w.geometryPreview||"clean")},text)));
-    const fields=el("fieldset",{disabled:!!w.run?.active},select(w,"texture_size","Texture size",[[1024,"1024"],[2048,"2048"],[4096,"4096 · Default"]],
+    const fields=el("fieldset",{disabled:!!w.run?.active},w.single?select(w,'export_grounding','Floor placement',[['level','Level and place on floor · Recommended'],['place','Place on floor only'],['original','Keep original orientation']],'Levels a near-upright resting pose without bending the mesh. Applied after baking to previews and exports; saved generation checkpoints stay unchanged.'):null,select(w,"texture_size","Texture size",[[1024,"1024"],[2048,"2048"],[4096,"4096 · Default"]],
         "TRELLIS.2 applies color and material maps to the final cleaned geometry. Print-only exports skip this stage."),
         el("details",{},el("summary",{},"Advanced texture settings"),el("div",{class:"wizard-columns"},
             number(w,"texture_steps","Texture steps","Default: 20."),number(w,"texture_seed","Texture seed","Default: 42."),
@@ -166,22 +167,23 @@ export function finishingPage(w){
 }
 export function resultPage(w){
     const complete=!w.run?.active&&w.run?.status==="complete"&&w.run?.package;
-    if(!complete)return el("div",{},hint("Textures, selected mesh versions and exports are being prepared from the saved clean master."),
-        !w.run?.active?button("Retry remaining stages",()=>w.act(()=>w.start(w.run?.operation==="rocket"?"rocket":"finish")),{class:"primary"}):null,
+    if(!complete)return el("div",{},hint(w.run?.status==="failed"?"Completed stages are saved. Choose how to continue above.":"Preparing your selected mesh versions and exports."),
+        w.run?.previews?.texture||w.run?.previews?.clean?mesh(w,w.run.previews.texture?"texture":"clean"):null,
+        !w.run?.active&&!w.error?button("Retry remaining stages",()=>w.act(()=>w.start(w.run?.operation==="rocket"?"rocket":"finish")),{class:"primary"}):null,
         el("details",{},el("summary",{},"Stage log"),el("ol",{},...(w.run?.events||[]).map(e=>el("li",{},e.text)))),
-        w.nav({back:4}));
+        w.nav({back:w.single?3:4}));
     const p=w.run.package;
     const selectedVariants=w.run.selection.variants;
     const options=[["texture","Detailed master","detailed"],["balanced","Balanced game mesh","game_balanced"],
         ["compact","Compact game mesh","game_compact"],["quads","Editable quad runtime preview","quad_light"],
-        ["print","Print mesh (STL)","print"],["clean","Clean geometry",null]]
+        ["print","Print mesh (STL)","print"],["clean","Original clean geometry (before floor placement)",null]]
         .filter(([key,label,variant])=>w.run.previews[key]&&(!variant||selectedVariants[variant]));
     const selected=options.some(([k])=>k===w.finalPreview)?w.finalPreview:options[0]?.[0];
     const picker=el("select",{"aria-label":"Finished mesh version",onchange:e=>{w.finalPreview=e.target.value;w.render();}},
         ...options.map(([value,text])=>el("option",{value,selected:value===selected},text)));
     return el("div",{},resultActions(w,"top"),el("div",{class:"complete-panel"},el("h3",{},w.run.name+" is ready"),
         hint(p.selected_variants.map(title).join(" · ")+" · "+p.file_count+" files · "+(p.bytes/1024**2).toFixed(1)+" MB")),
-        picker,mesh(w,selected),measurements(w),el("div",{class:"actions"},
+        picker,w.run.package.grounding?hint('Floor placement: '+(w.run.package.grounding.applied==='level'?'leveled '+w.run.package.grounding.correction_degrees.toFixed(1)+'°':w.run.package.grounding.applied==='place'?'placed on floor':'original orientation')+'. Saved generation checkpoints are unchanged.'):null,mesh(w,selected),measurements(w),el("div",{class:"actions"},
             el("a",{href:p.download,download:"",class:"download-link primary"},"Download ZIP"),
             button("Open Output Folder",()=>w.act(()=>request("wizard/runs/"+w.runId+"/open-folder",{})))),
         ...(p.warnings||[]).map(text=>el("p",{class:"note-panel"},text)),
@@ -191,8 +193,8 @@ export function resultPage(w){
 
 function resultActions(w,position){
     return el("nav",{class:"actions result-actions","aria-label":"Finished asset actions "+position},
-        button("Make a new asset",()=>w.shell.openWizard(),{class:"primary"}),
-        button("Back to export choices",()=>w.go(4)),
+        button("Make a new asset",()=>w.shell.openWizard({method:w.method}),{class:"primary"}),
+        button("Back to export choices",()=>w.go(w.single?3:4)),
         button("Choose another workflow",()=>w.shell.open("Choose a Workflow")));
 }
 

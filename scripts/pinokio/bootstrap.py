@@ -198,7 +198,7 @@ def install(root,source=None,repair=False):
     step('Blender',blender_spec,setup_blender)
     install_extension(layout,blender,source)
     # Probe software imports without loading weights or allocating GPU models.
-    run([layout.host_python,'-c','import torch,torchvision,trimesh,keyring; print("Host imports OK",torch.__version__)'])
+    run([layout.host_python,'-c','import torch,torchvision,trimesh,keyring,scipy,networkx; from trimesh.poses import compute_stable_poses; print("Host imports and stable support-pose entry point OK",torch.__version__)'])
     run([layout.host_python,'-c','import sys; sys.path.insert(0,sys.argv[1]); from comfy.ldm.moge.model import MoGeModel; from PIL import Image; import numpy,psutil; print("Guided camera/render adapter imports OK")',layout.comfy])
     run([layout.worker_python,'-c','import torch,cumesh,flex_gemm,nvdiffrast,nvdiffrec_render,o_voxel,pymeshlab,meshlib; print("Finishing imports OK",torch.__version__)'])
     run([layout.host_python,'-c','import sys; sys.path.insert(0,sys.argv[1]); import comfy_extras.nodes_triposplat,comfy_extras.nodes_gaussian_splat,comfy_extras.nodes_mesh_postprocess,comfy_extras.nodes_mesh_io; print("Native Idol splat, mesh extraction and cleanup imports OK")',layout.comfy])

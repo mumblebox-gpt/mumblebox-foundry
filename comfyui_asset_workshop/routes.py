@@ -175,6 +175,7 @@ def reconcile(asset):
 async def status(request):
     from .civitai_routes import DOWNLOADS
     from .pipeline_workers.activity import snapshot as worker_snapshot, host_residency
+    from .foundry.cache import busy as maintenance_busy
     workers=worker_snapshot()
     residencies=host_residency(list(memory.current_loaded_models))+workers
     workflow_activity=[]
@@ -192,6 +193,7 @@ async def status(request):
         **meter_sample(),
         "model_residency":residencies,
         "workflow_activity":workflow_activity,
+        "maintenance_active":maintenance_busy(),
         "loaded_models": len(memory.current_loaded_models),
         "helper_loaded": description_helper.PROCESS is not None and description_helper.PROCESS.poll() is None,
         "running": queue().get_tasks_remaining() > 0 or any(__import__(__package__+".foundry.workflows."+name+".runs",fromlist=["busy"]).busy() for name in ('image_to_3d','image_creation','hair_creation','guided_mesh','splat_solid')), "root": configuration()["root"],

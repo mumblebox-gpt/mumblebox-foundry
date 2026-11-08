@@ -1,8 +1,8 @@
 {
   "id": "6c419aea-6f6c-4151-a885-b0973634c9a1",
   "revision": 0,
-  "last_node_id": 400100,
-  "last_link_id": 532,
+  "last_node_id": 503011,
+  "last_link_id": 641,
   "nodes": [
     {
       "id": 3,
@@ -3933,7 +3933,7 @@
         "Node name for S&R": "WeldVertices"
       },
       "widgets_values": [
-        1e-05,
+        0.00001,
         0
       ]
     },
@@ -7743,7 +7743,7 @@
         "",
         0,
         50,
-        2.0,
+        2,
         true,
         true
       ],
@@ -7751,7 +7751,7 @@
         "image": "",
         "seed": 0,
         "steps": 50,
-        "cfg": 2.0,
+        "cfg": 2,
         "generate_bones": true,
         "colors": true
       }
@@ -9992,19 +9992,19 @@
         939810832464276,
         "fixed",
         25,
-        1.0,
+        1,
         "euler",
         "simple",
-        1.0
+        1
       ],
       "widgets_values_named": {
         "seed": 939810832464276,
         "control_after_generate": "fixed",
         "steps": 25,
-        "cfg": 1.0,
+        "cfg": 1,
         "sampler_name": "euler",
         "scheduler": "simple",
-        "denoise": 1.0
+        "denoise": 1
       }
     },
     {
@@ -10122,10 +10122,10 @@
         "guidedStage": "concept"
       },
       "widgets_values": [
-        1.0
+        1
       ],
       "widgets_values_named": {
-        "extra_gb": 1.0
+        "extra_gb": 1
       }
     },
     {
@@ -11335,11 +11335,11 @@
         "guidedStage": "refine"
       },
       "widgets_values": [
-        1e-05,
+        0.00001,
         0
       ],
       "widgets_values_named": {
-        "epsilon_rel": 1e-05,
+        "epsilon_rel": 0.00001,
         "epsilon_abs": 0
       }
     },
@@ -12151,7 +12151,7 @@
         20,
         1024,
         4096,
-        3.0,
+        3,
         "FoundryViewBridge//texture",
         "euler",
         0.2,
@@ -12164,7 +12164,7 @@
         "steps": 20,
         "resolution": 1024,
         "texture_size": 4096,
-        "guidance": 3.0,
+        "guidance": 3,
         "filename_prefix": "FoundryViewBridge//texture",
         "sampler": "euler",
         "guidance_rescale": 0.2,
@@ -14050,10 +14050,10 @@
         "guidedStage": "proxy"
       },
       "widgets_values": [
-        1.0
+        1
       ],
       "widgets_values_named": {
-        "extra_gb": 1.0
+        "extra_gb": 1
       }
     },
     {
@@ -14106,10 +14106,10 @@
         "guidedStage": "proxy"
       },
       "widgets_values": [
-        1.0
+        1
       ],
       "widgets_values_named": {
-        "extra_gb": 1.0
+        "extra_gb": 1
       }
     },
     {
@@ -14511,10 +14511,10 @@
       "widgets_values": [
         512,
         "solid",
-        20.0,
+        20,
         false,
-        1.0,
-        0.0,
+        1,
+        0,
         false,
         2,
         0.001,
@@ -14523,10 +14523,10 @@
       "widgets_values_named": {
         "resolution": 512,
         "sign_mode": "solid",
-        "sign_mode.fill": 20.0,
+        "sign_mode.fill": 20,
         "sign_mode.qef": false,
-        "band": 1.0,
-        "project_back": 0.0,
+        "band": 1,
+        "project_back": 0,
         "fix_poles": false,
         "smooth_iters": 2,
         "drop_small_components": 0.001,
@@ -16507,10 +16507,10 @@
         "guidedStage": "enhance_sheet"
       },
       "widgets_values": [
-        1.0
+        1
       ],
       "widgets_values_named": {
-        "extra_gb": 1.0
+        "extra_gb": 1
       }
     },
     {
@@ -16908,19 +16908,19 @@
         42,
         "fixed",
         40,
-        1.0,
+        1,
         "euler",
         "simple",
-        1.0
+        1
       ],
       "widgets_values_named": {
         "seed": 42,
         "control_after_generate": "fixed",
         "steps": 40,
-        "cfg": 1.0,
+        "cfg": 1,
         "sampler_name": "euler",
         "scheduler": "simple",
-        "denoise": 1.0
+        "denoise": 1
       }
     },
     {
@@ -17352,14 +17352,14 @@
         "guidedStage": "enhance_sheet"
       },
       "widgets_values": [
-        1.0,
-        0.0,
-        1.0
+        1,
+        0,
+        1
       ],
       "widgets_values_named": {
-        "strength": 1.0,
-        "start_percent": 0.0,
-        "end_percent": 1.0
+        "strength": 1,
+        "start_percent": 0,
+        "end_percent": 1
       }
     },
     {
@@ -17852,11 +17852,11 @@
       },
       "widgets_values": [
         "preserve",
-        1.0
+        1
       ],
       "widgets_values_named": {
         "mode": "preserve",
-        "padding": 1.0
+        "padding": 1
       }
     },
     {
@@ -18060,11 +18060,11 @@
       },
       "widgets_values": [
         "preserve",
-        1.0
+        1
       ],
       "widgets_values_named": {
         "mode": "preserve",
-        "padding": 1.0
+        "padding": 1
       }
     },
     {
@@ -18268,11 +18268,11 @@
       },
       "widgets_values": [
         "preserve",
-        1.0
+        1
       ],
       "widgets_values_named": {
         "mode": "preserve",
-        "padding": 1.0
+        "padding": 1
       }
     },
     {
@@ -18476,11 +18476,11 @@
       },
       "widgets_values": [
         "preserve",
-        1.0
+        1
       ],
       "widgets_values_named": {
         "mode": "preserve",
-        "padding": 1.0
+        "padding": 1
       }
     },
     {
@@ -19001,10 +19001,10 @@
         "guidedStage": "reconstruct"
       },
       "widgets_values": [
-        1.0
+        1
       ],
       "widgets_values_named": {
-        "extra_gb": 1.0
+        "extra_gb": 1
       }
     },
     {
@@ -19057,10 +19057,10 @@
         "guidedStage": "reconstruct"
       },
       "widgets_values": [
-        1.0
+        1
       ],
       "widgets_values_named": {
-        "extra_gb": 1.0
+        "extra_gb": 1
       }
     },
     {
@@ -24341,6 +24341,6131 @@
         "creation_id": "",
         "variant": 0
       }
+    },
+    {
+      "id": 500003,
+      "type": "KSampler",
+      "pos": [
+        25196.7515625,
+        170
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 304,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 533
+        },
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 534
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 535
+        },
+        {
+          "localized_name": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 536
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "scheduler",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            557
+          ]
+        }
+      ],
+      "title": "Single Image · KSampler",
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        56,
+        "fixed",
+        12,
+        7.5,
+        "euler",
+        "normal",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 56,
+        "steps": 12,
+        "cfg": 7.5,
+        "sampler_name": "euler",
+        "scheduler": "normal",
+        "denoise": 1
+      }
+    },
+    {
+      "id": 500015,
+      "type": "CLIPVisionLoader",
+      "pos": [
+        25666.7515625,
+        170
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 87,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "clip_name",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CLIP_VISION",
+          "name": "CLIP_VISION",
+          "type": "CLIP_VISION",
+          "links": [
+            568
+          ]
+        }
+      ],
+      "title": "Single Image · CLIPVisionLoader",
+      "properties": {
+        "Node name for S&R": "CLIPVisionLoader",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        "dino_v3_L_naf_fp32.safetensors"
+      ],
+      "widgets_values_named": {
+        "clip_name": "dino_v3_L_naf_fp32.safetensors"
+      }
+    },
+    {
+      "id": 500018,
+      "type": "KSampler",
+      "pos": [
+        26136.7515625,
+        170
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 325,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 537
+        },
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 538
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 539
+        },
+        {
+          "localized_name": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 540
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "scheduler",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            554
+          ]
+        }
+      ],
+      "title": "Single Image · KSampler",
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        7.5,
+        "euler",
+        "normal",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 42,
+        "steps": 20,
+        "cfg": 7.5,
+        "sampler_name": "euler",
+        "scheduler": "normal",
+        "denoise": 1
+      }
+    },
+    {
+      "id": 500023,
+      "type": "KSampler",
+      "pos": [
+        26606.7515625,
+        170
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 341,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 541
+        },
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 542
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 543
+        },
+        {
+          "localized_name": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 544
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "scheduler",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            550
+          ]
+        }
+      ],
+      "title": "Single Image · KSampler",
+      "properties": {
+        "Node name for S&R": "KSampler",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        12,
+        7.5,
+        "euler",
+        "simple",
+        1
+      ],
+      "widgets_values_named": {
+        "seed": 42,
+        "steps": 12,
+        "cfg": 7.5,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "denoise": 1
+      }
+    },
+    {
+      "id": 500055,
+      "type": "LoadMoGeModel",
+      "pos": [
+        25196.7515625,
+        630
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 88,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model_name",
+          "name": "model_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "model_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MOGE_MODEL",
+          "name": "MOGE_MODEL",
+          "type": "MOGE_MODEL",
+          "links": [
+            545
+          ]
+        }
+      ],
+      "title": "Single Image · LoadMoGeModel",
+      "properties": {
+        "Node name for S&R": "LoadMoGeModel",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        "moge_2_vitl_normal_fp16.safetensors"
+      ],
+      "widgets_values_named": {
+        "model_name": "moge_2_vitl_normal_fp16.safetensors"
+      }
+    },
+    {
+      "id": 500056,
+      "type": "MoGeInference",
+      "pos": [
+        25666.7515625,
+        630
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 273,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "moge_model",
+          "name": "moge_model",
+          "type": "MOGE_MODEL",
+          "link": 545
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 546
+        },
+        {
+          "localized_name": "resolution_level",
+          "name": "resolution_level",
+          "type": "INT",
+          "widget": {
+            "name": "resolution_level"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fov_x_degrees",
+          "name": "fov_x_degrees",
+          "type": "FLOAT",
+          "widget": {
+            "name": "fov_x_degrees"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "batch_size",
+          "name": "batch_size",
+          "type": "INT",
+          "widget": {
+            "name": "batch_size"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "force_projection",
+          "name": "force_projection",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "force_projection"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "apply_mask",
+          "name": "apply_mask",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "apply_mask"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "refine_steps",
+          "name": "refine_steps",
+          "type": "INT",
+          "widget": {
+            "name": "refine_steps"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "moge_geometry",
+          "name": "moge_geometry",
+          "type": "MOGE_GEOMETRY",
+          "links": [
+            564
+          ]
+        }
+      ],
+      "title": "Single Image · MoGeInference",
+      "properties": {
+        "Node name for S&R": "MoGeInference",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        9,
+        0,
+        1,
+        true,
+        true,
+        3
+      ],
+      "widgets_values_named": {
+        "resolution_level": 9,
+        "fov_x_degrees": 0,
+        "batch_size": 1,
+        "force_projection": true,
+        "apply_mask": true,
+        "refine_steps": 3
+      }
+    },
+    {
+      "id": 500087,
+      "type": "EmptyTrellis2LatentStructure",
+      "pos": [
+        26136.7515625,
+        630
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 89,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "batch_size",
+          "name": "batch_size",
+          "type": "INT",
+          "widget": {
+            "name": "batch_size"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            536
+          ]
+        }
+      ],
+      "title": "Single Image · EmptyTrellis2LatentStructure",
+      "properties": {
+        "Node name for S&R": "EmptyTrellis2LatentStructure",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        1
+      ],
+      "widgets_values_named": {
+        "batch_size": 1
+      }
+    },
+    {
+      "id": 500091,
+      "type": "Trellis2ShapeStage",
+      "pos": [
+        26606.7515625,
+        630
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 319,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 547
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 548
+        },
+        {
+          "localized_name": "voxel",
+          "name": "voxel",
+          "type": "VOXEL",
+          "link": 549
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            538,
+            552
+          ]
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            539,
+            553
+          ]
+        },
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            540
+          ]
+        }
+      ],
+      "title": "Single Image · Trellis2ShapeStage",
+      "properties": {
+        "Node name for S&R": "Trellis2ShapeStage",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      }
+    },
+    {
+      "id": 500092,
+      "type": "VaeDecodeShapeTrellis",
+      "pos": [
+        25196.7515625,
+        1090
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 348,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 550
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 551
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            576,
+            638
+          ]
+        },
+        {
+          "localized_name": "shape_subdivides",
+          "name": "shape_subdivides",
+          "type": "SHAPE_SUBDIVIDES",
+          "links": []
+        }
+      ],
+      "title": "Single Image · VaeDecodeShapeTrellis",
+      "properties": {
+        "Node name for S&R": "VaeDecodeShapeTrellis",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      }
+    },
+    {
+      "id": 500094,
+      "type": "Trellis2UpsampleStage",
+      "pos": [
+        25666.7515625,
+        1090
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 332,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 552
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 553
+        },
+        {
+          "localized_name": "shape_latent",
+          "name": "shape_latent",
+          "type": "LATENT",
+          "link": 554
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 555
+        },
+        {
+          "localized_name": "target_resolution",
+          "name": "target_resolution",
+          "type": "INT",
+          "widget": {
+            "name": "target_resolution"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            542
+          ]
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            543
+          ]
+        },
+        {
+          "localized_name": "LATENT",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            544
+          ]
+        }
+      ],
+      "title": "Single Image · Trellis2UpsampleStage",
+      "properties": {
+        "Node name for S&R": "Trellis2UpsampleStage",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        1024
+      ],
+      "widgets_values_named": {
+        "target_resolution": 1024
+      }
+    },
+    {
+      "id": 500108,
+      "type": "ModelSamplingSD3",
+      "pos": [
+        26136.7515625,
+        1090
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 221,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 556
+        },
+        {
+          "localized_name": "shift",
+          "name": "shift",
+          "type": "FLOAT",
+          "widget": {
+            "name": "shift"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            533
+          ]
+        }
+      ],
+      "title": "Single Image · ModelSamplingSD3",
+      "properties": {
+        "Node name for S&R": "ModelSamplingSD3",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        5
+      ],
+      "widgets_values_named": {
+        "shift": 5
+      }
+    },
+    {
+      "id": 500117,
+      "type": "VAELoader",
+      "pos": [
+        26606.7515625,
+        1090
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 90,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "vae_name",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            551,
+            555,
+            558
+          ]
+        }
+      ],
+      "title": "Single Image · VAELoader",
+      "properties": {
+        "Node name for S&R": "VAELoader",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        "trellis_2_shape_vae_bf16.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "trellis_2_shape_vae_bf16.safetensors"
+      }
+    },
+    {
+      "id": 500119,
+      "type": "VaeDecodeStructureTrellis2",
+      "pos": [
+        25196.7515625,
+        1550
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 312,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "samples",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 557
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 558
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "voxel",
+          "name": "voxel",
+          "type": "VOXEL",
+          "links": [
+            549
+          ]
+        }
+      ],
+      "title": "Single Image · VaeDecodeStructureTrellis2",
+      "properties": {
+        "Node name for S&R": "VaeDecodeStructureTrellis2",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        "32"
+      ],
+      "widgets_values_named": {
+        "resolution": "32"
+      }
+    },
+    {
+      "id": 500122,
+      "type": "LoadImage",
+      "pos": [
+        25666.7515625,
+        1550
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 91,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "COMBO",
+          "widget": {
+            "name": "image"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "choose file to upload",
+          "name": "upload",
+          "type": "IMAGEUPLOAD",
+          "widget": {
+            "name": "upload"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            562,
+            573,
+            575,
+            599,
+            601
+          ]
+        },
+        {
+          "localized_name": "MASK",
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            565
+          ]
+        }
+      ],
+      "title": "Single Image · LoadImage",
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        "",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": ""
+      }
+    },
+    {
+      "id": 500125,
+      "type": "RescaleCFG",
+      "pos": [
+        26136.7515625,
+        1550
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 198,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 559
+        },
+        {
+          "localized_name": "multiplier",
+          "name": "multiplier",
+          "type": "FLOAT",
+          "widget": {
+            "name": "multiplier"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            556
+          ]
+        }
+      ],
+      "title": "Single Image · RescaleCFG",
+      "properties": {
+        "Node name for S&R": "RescaleCFG",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        0.7
+      ],
+      "widgets_values_named": {
+        "multiplier": 0.7
+      }
+    },
+    {
+      "id": 500126,
+      "type": "RescaleCFG",
+      "pos": [
+        26606.7515625,
+        1550
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 199,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 560
+        },
+        {
+          "localized_name": "multiplier",
+          "name": "multiplier",
+          "type": "FLOAT",
+          "widget": {
+            "name": "multiplier"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            537,
+            541
+          ]
+        }
+      ],
+      "title": "Single Image · RescaleCFG",
+      "properties": {
+        "Node name for S&R": "RescaleCFG",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        0.5
+      ],
+      "widgets_values_named": {
+        "multiplier": 0.5
+      }
+    },
+    {
+      "id": 500192,
+      "type": "RemoveBackground",
+      "pos": [
+        25196.7515625,
+        2010
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 157,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "bg_removal_model",
+          "name": "bg_removal_model",
+          "type": "BACKGROUND_REMOVAL",
+          "link": 561
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 562
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            566
+          ]
+        }
+      ],
+      "title": "Single Image · RemoveBackground",
+      "properties": {
+        "Node name for S&R": "RemoveBackground",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      }
+    },
+    {
+      "id": 500193,
+      "type": "LoadBackgroundRemovalModel",
+      "pos": [
+        25666.7515625,
+        2010
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 92,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "bg_removal_name",
+          "name": "bg_removal_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "bg_removal_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "bg_model",
+          "name": "bg_model",
+          "type": "BACKGROUND_REMOVAL",
+          "links": [
+            561,
+            598
+          ]
+        }
+      ],
+      "title": "Single Image · LoadBackgroundRemovalModel",
+      "properties": {
+        "Node name for S&R": "LoadBackgroundRemovalModel",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        "birefnet.safetensors"
+      ],
+      "widgets_values_named": {
+        "bg_removal_name": "birefnet.safetensors"
+      }
+    },
+    {
+      "id": 500199,
+      "type": "CFGOverride",
+      "pos": [
+        26136.7515625,
+        2010
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 159,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 563
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "start_percent",
+          "name": "start_percent",
+          "type": "FLOAT",
+          "widget": {
+            "name": "start_percent"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "end_percent",
+          "name": "end_percent",
+          "type": "FLOAT",
+          "widget": {
+            "name": "end_percent"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            559
+          ]
+        }
+      ],
+      "title": "Single Image · CFGOverride",
+      "properties": {
+        "Node name for S&R": "CFGOverride",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        1,
+        0.667,
+        1
+      ],
+      "widgets_values_named": {
+        "cfg": 1,
+        "start_percent": 0.667,
+        "end_percent": 1
+      }
+    },
+    {
+      "id": 500242,
+      "type": "MoGeGeometryToFOV",
+      "pos": [
+        26606.7515625,
+        2010
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 285,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "moge_geometry",
+          "name": "moge_geometry",
+          "type": "MOGE_GEOMETRY",
+          "link": 564
+        },
+        {
+          "localized_name": "axis",
+          "name": "axis",
+          "type": "COMBO",
+          "widget": {
+            "name": "axis"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "unit",
+          "name": "unit",
+          "type": "COMBO",
+          "widget": {
+            "name": "unit"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "fov",
+          "name": "fov",
+          "type": "FLOAT",
+          "links": [
+            570
+          ]
+        },
+        {
+          "localized_name": "focal_pixels",
+          "name": "focal_pixels",
+          "type": "FLOAT",
+          "links": []
+        }
+      ],
+      "title": "Single Image · MoGeGeometryToFOV",
+      "properties": {
+        "Node name for S&R": "MoGeGeometryToFOV",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        "horizontal",
+        "degrees"
+      ],
+      "widgets_values_named": {
+        "axis": "horizontal",
+        "unit": "degrees"
+      }
+    },
+    {
+      "id": 500248,
+      "type": "ComfySwitchNode",
+      "pos": [
+        25196.7515625,
+        2470
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 196,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "on_false",
+          "name": "on_false",
+          "shape": 7,
+          "type": "MASK",
+          "link": 565
+        },
+        {
+          "localized_name": "on_true",
+          "name": "on_true",
+          "shape": 7,
+          "type": "MASK",
+          "link": 566
+        },
+        {
+          "localized_name": "switch",
+          "name": "switch",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "switch"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "output",
+          "name": "output",
+          "type": "MASK",
+          "links": [
+            572
+          ]
+        }
+      ],
+      "title": "Single Image · Switch: Remove background",
+      "properties": {
+        "Node name for S&R": "ComfySwitchNode",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        true
+      ],
+      "widgets_values_named": {
+        "switch": true
+      }
+    },
+    {
+      "id": 500279,
+      "type": "CFGOverride",
+      "pos": [
+        25666.7515625,
+        2470
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 160,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 567
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "start_percent",
+          "name": "start_percent",
+          "type": "FLOAT",
+          "widget": {
+            "name": "start_percent"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "end_percent",
+          "name": "end_percent",
+          "type": "FLOAT",
+          "widget": {
+            "name": "end_percent"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            560
+          ]
+        }
+      ],
+      "title": "Single Image · CFGOverride",
+      "properties": {
+        "Node name for S&R": "CFGOverride",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        1,
+        0.769,
+        1
+      ],
+      "widgets_values_named": {
+        "cfg": 1,
+        "start_percent": 0.769,
+        "end_percent": 1
+      }
+    },
+    {
+      "id": 500298,
+      "type": "Pixal3DConditioning",
+      "pos": [
+        26136.7515625,
+        2470
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 295,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "clip_vision_model",
+          "name": "clip_vision_model",
+          "type": "CLIP_VISION",
+          "link": 568
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 569
+        },
+        {
+          "localized_name": "fov",
+          "name": "camera_angle_x",
+          "type": "FLOAT",
+          "widget": {
+            "name": "camera_angle_x"
+          },
+          "link": 570
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            534,
+            547
+          ]
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            535,
+            548
+          ]
+        }
+      ],
+      "title": "Single Image · Pixal3DConditioning",
+      "properties": {
+        "Node name for S&R": "Pixal3DConditioning",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        49.13
+      ],
+      "widgets_values_named": {}
+    },
+    {
+      "id": 500302,
+      "type": "PreviewImage",
+      "pos": [
+        26606.7515625,
+        2470
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 258,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 571
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            546,
+            569
+          ]
+        }
+      ],
+      "title": "Single Image · PreviewImage",
+      "properties": {
+        "Node name for S&R": "PreviewImage",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      }
+    },
+    {
+      "id": 500303,
+      "type": "MaskPreview",
+      "pos": [
+        25196.7515625,
+        2930
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 219,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "link": 572
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            574
+          ]
+        }
+      ],
+      "title": "Single Image · MaskPreview",
+      "properties": {
+        "Node name for S&R": "MaskPreview",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      }
+    },
+    {
+      "id": 500312,
+      "type": "ImageCropToMask",
+      "pos": [
+        25666.7515625,
+        2930
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 238,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 573
+        },
+        {
+          "localized_name": "masks",
+          "name": "masks",
+          "type": "MASK",
+          "link": 574
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "pad_factor",
+          "name": "pad_factor",
+          "type": "FLOAT",
+          "widget": {
+            "name": "pad_factor"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "grow_mask",
+          "name": "grow_mask",
+          "type": "INT",
+          "widget": {
+            "name": "grow_mask"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "background",
+          "name": "background",
+          "type": "COLOR",
+          "widget": {
+            "name": "background"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            571
+          ]
+        }
+      ],
+      "title": "Single Image · ImageCropToMask",
+      "properties": {
+        "Node name for S&R": "ImageCropToMask",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        1024,
+        1024,
+        1.1,
+        0,
+        "#000000"
+      ],
+      "widgets_values_named": {
+        "width": 1024,
+        "height": 1024,
+        "pad_factor": 1.1,
+        "grow_mask": 0,
+        "background": "#000000"
+      }
+    },
+    {
+      "id": 500319,
+      "type": "UNETLoader",
+      "pos": [
+        26136.7515625,
+        2930
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 93,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "unet_name",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "weight_dtype",
+          "name": "weight_dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "weight_dtype"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MODEL",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            563,
+            567
+          ]
+        }
+      ],
+      "title": "Single Image · UNETLoader",
+      "properties": {
+        "Node name for S&R": "UNETLoader",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        "pixal3d_bf16.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "pixal3d_bf16.safetensors",
+        "weight_dtype": "default"
+      }
+    },
+    {
+      "id": 500340,
+      "type": "SaveImage",
+      "pos": [
+        25196.7515625,
+        4020
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 156,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 575
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "title": "Single Image · SaveImage",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "turnaround"
+      },
+      "widgets_values": [
+        "foundry-single/template/reference"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-single/template/reference"
+      }
+    },
+    {
+      "id": 500381,
+      "type": "MeshToFile3D",
+      "pos": [
+        26606.7515625,
+        2930
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 354,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 576
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB",
+          "links": [
+            577
+          ]
+        }
+      ],
+      "title": "Single Image · MeshToFile3D",
+      "properties": {
+        "Node name for S&R": "MeshToFile3D",
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      }
+    },
+    {
+      "id": 500382,
+      "type": "Save3DAdvanced",
+      "pos": [
+        25196.7515625,
+        3390
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 361,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_FBX,FILE_3D_OBJ,FILE_3D_STL,FILE_3D_USDZ,FILE_3D",
+          "link": 577
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "shape": 7,
+          "type": "LOAD3D_MODEL_INFO",
+          "link": null
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "shape": 7,
+          "type": "LOAD3D_CAMERA",
+          "link": null
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "viewport_state",
+          "name": "viewport_state",
+          "type": "LOAD_3D",
+          "widget": {
+            "name": "viewport_state"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D",
+          "links": []
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "type": "LOAD3D_MODEL_INFO",
+          "links": []
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "type": "LOAD3D_CAMERA",
+          "links": []
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "title": "Single Image · Initial single-image geometry before Hi3D",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "geometry"
+      },
+      "widgets_values": [
+        "foundry-single/template/geometry",
+        {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 3.799999999999999,
+              "y": 3.5,
+              "z": 10.4
+            },
+            "target": {
+              "x": 0,
+              "y": 2.5,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.04433073118285891,
+              "y": 0.174086157830089,
+              "z": 0.007845237828654018,
+              "w": 0.9837007919932577
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        768,
+        768
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-single/template/geometry",
+        "viewport_state": {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 3.799999999999999,
+              "y": 3.5,
+              "z": 10.4
+            },
+            "target": {
+              "x": 0,
+              "y": 2.5,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.04433073118285891,
+              "y": 0.174086157830089,
+              "z": 0.007845237828654018,
+              "w": 0.9837007919932577
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "width": 768,
+        "height": 768
+      }
+    },
+    {
+      "id": 502001,
+      "type": "Hi3DBackend",
+      "pos": [
+        25196.7515625,
+        4650
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 94,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "url",
+          "name": "url",
+          "type": "STRING",
+          "widget": {
+            "name": "url"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "HI3D_BACKEND",
+          "name": "HI3D_BACKEND",
+          "type": "HI3D_BACKEND",
+          "links": [
+            578
+          ]
+        }
+      ],
+      "title": "Single Image · Hi3D — existing local backend",
+      "properties": {
+        "Node name for S&R": "Hi3DBackend",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "widgets_values_named": {
+        "url": ""
+      }
+    },
+    {
+      "id": 502002,
+      "type": "DecimateMesh",
+      "pos": [
+        25666.7515625,
+        4650
+      ],
+      "size": [
+        430,
+        82
+      ],
+      "flags": {},
+      "order": 355,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 638
+        },
+        {
+          "localized_name": "target_face_count",
+          "name": "target_face_count",
+          "type": "INT",
+          "widget": {
+            "name": "target_face_count"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "placement_mode",
+          "name": "placement_mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "placement_mode"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            580,
+            584
+          ]
+        }
+      ],
+      "title": "Single Image · Hi3D intake copy — at most 4.5M triangles",
+      "properties": {
+        "Node name for S&R": "DecimateMesh",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        4500000,
+        "midpoint"
+      ],
+      "widgets_values_named": {
+        "target_face_count": 4500000,
+        "placement_mode": "midpoint"
+      }
+    },
+    {
+      "id": 502003,
+      "type": "Hi3DRefine",
+      "pos": [
+        26136.7515625,
+        4650
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 362,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "backend",
+          "name": "backend",
+          "type": "HI3D_BACKEND",
+          "link": 578
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 579
+        },
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 580
+        },
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cpu_offload",
+          "name": "cpu_offload",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "cpu_offload"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "attention",
+          "name": "attention",
+          "type": "COMBO",
+          "widget": {
+            "name": "attention"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "refined_mesh",
+          "name": "refined_mesh",
+          "type": "MESH",
+          "links": [
+            581,
+            583
+          ]
+        },
+        {
+          "localized_name": "report_json",
+          "name": "report_json",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "localized_name": "job_id",
+          "name": "job_id",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · REFINE ONCE — 1536 / 25 steps / seed 42",
+      "properties": {
+        "Node name for S&R": "Hi3DRefine",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        1536,
+        25,
+        42,
+        "fixed",
+        true,
+        "sdpa"
+      ],
+      "widgets_values_named": {
+        "resolution": 1536,
+        "steps": 25,
+        "seed": 42,
+        "cpu_offload": true,
+        "attention": "sdpa"
+      }
+    },
+    {
+      "id": 502004,
+      "type": "MeshToFile3D",
+      "pos": [
+        26606.7515625,
+        4650
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 368,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 581
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB",
+          "links": [
+            582
+          ]
+        }
+      ],
+      "title": "Single Image · Unmodified Hi3D master",
+      "properties": {
+        "Node name for S&R": "MeshToFile3D",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502005,
+      "type": "Save3DAdvanced",
+      "pos": [
+        25196.7515625,
+        8040
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 373,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_FBX,FILE_3D_OBJ,FILE_3D_STL,FILE_3D_USDZ,FILE_3D",
+          "link": 582
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "shape": 7,
+          "type": "LOAD3D_MODEL_INFO",
+          "link": null
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "shape": 7,
+          "type": "LOAD3D_CAMERA",
+          "link": null
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "viewport_state",
+          "name": "viewport_state",
+          "type": "LOAD_3D",
+          "widget": {
+            "name": "viewport_state"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D",
+          "links": []
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "type": "LOAD3D_MODEL_INFO",
+          "links": []
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "type": "LOAD3D_CAMERA",
+          "links": []
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "title": "Single Image · 2 - AFTER Hi3D - 1,999,999 triangles",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "refinement"
+      },
+      "widgets_values": [
+        "foundry-template/2005",
+        {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 3.799999999999999,
+              "y": 3.5,
+              "z": 10.4
+            },
+            "target": {
+              "x": 0,
+              "y": 2.5,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.04433073118285891,
+              "y": 0.174086157830089,
+              "z": 0.007845237828654018,
+              "w": 0.9837007919932577
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        768,
+        768
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-template/2005",
+        "viewport_state": {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 3.799999999999999,
+              "y": 3.5,
+              "z": 10.4
+            },
+            "target": {
+              "x": 0,
+              "y": 2.5,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.04433073118285891,
+              "y": 0.174086157830089,
+              "z": 0.007845237828654018,
+              "w": 0.9837007919932577
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "width": 768,
+        "height": 768
+      }
+    },
+    {
+      "id": 502006,
+      "type": "Hi3DAlignToSource",
+      "pos": [
+        25196.7515625,
+        5110
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 369,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 583
+        },
+        {
+          "localized_name": "source_mesh",
+          "name": "source_mesh",
+          "type": "MESH",
+          "link": 584
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh_in_source_frame",
+          "name": "mesh_in_source_frame",
+          "type": "MESH",
+          "links": [
+            585
+          ]
+        },
+        {
+          "localized_name": "alignment_report",
+          "name": "alignment_report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · Restore source scale/position — no rotation",
+      "properties": {
+        "Node name for S&R": "Hi3DAlignToSource",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502007,
+      "type": "Hi3DNormalizeMesh",
+      "pos": [
+        25666.7515625,
+        5110
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 374,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 585
+        },
+        {
+          "localized_name": "span",
+          "name": "span",
+          "type": "FLOAT",
+          "widget": {
+            "name": "span"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "normalized_mesh",
+          "name": "normalized_mesh",
+          "type": "MESH",
+          "links": [
+            586
+          ]
+        },
+        {
+          "localized_name": "original_frame",
+          "name": "original_frame",
+          "type": "HI3D_MESH_FRAME",
+          "links": [
+            593
+          ]
+        }
+      ],
+      "title": "Single Image · Normalize repair working copy",
+      "properties": {
+        "Node name for S&R": "Hi3DNormalizeMesh",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        0.96
+      ],
+      "widgets_values_named": {
+        "span": 0.96
+      }
+    },
+    {
+      "id": 502008,
+      "type": "WeldVertices",
+      "pos": [
+        26136.7515625,
+        5110
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 376,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 586
+        },
+        {
+          "localized_name": "epsilon_rel",
+          "name": "epsilon_rel",
+          "type": "FLOAT",
+          "widget": {
+            "name": "epsilon_rel"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "epsilon_abs",
+          "name": "epsilon_abs",
+          "type": "FLOAT",
+          "widget": {
+            "name": "epsilon_abs"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            587
+          ]
+        }
+      ],
+      "title": "Single Image · Repair 1 — weld nearby vertices",
+      "properties": {
+        "Node name for S&R": "WeldVertices",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        0.00001,
+        0
+      ],
+      "widgets_values_named": {
+        "epsilon_rel": 0.00001,
+        "epsilon_abs": 0
+      }
+    },
+    {
+      "id": 502009,
+      "type": "FillHoles",
+      "pos": [
+        26606.7515625,
+        5110
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 378,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 587
+        },
+        {
+          "localized_name": "max_perimeter",
+          "name": "max_perimeter",
+          "type": "FLOAT",
+          "widget": {
+            "name": "max_perimeter"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "weld_epsilon_rel",
+          "name": "weld_epsilon_rel",
+          "type": "FLOAT",
+          "widget": {
+            "name": "weld_epsilon_rel"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "max_vertices",
+          "name": "max_vertices",
+          "type": "INT",
+          "widget": {
+            "name": "max_vertices"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fill_chains",
+          "name": "fill_chains",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "fill_chains"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            588,
+            639,
+            590
+          ]
+        }
+      ],
+      "title": "Single Image · Repair 2 — fill small holes",
+      "properties": {
+        "Node name for S&R": "FillHoles",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        0.03,
+        0,
+        16,
+        false
+      ],
+      "widgets_values_named": {
+        "max_perimeter": 0.03,
+        "weld_epsilon_rel": 0,
+        "max_vertices": 16,
+        "fill_chains": false
+      }
+    },
+    {
+      "id": 502010,
+      "type": "Hi3DNeedsSolidRepair",
+      "pos": [
+        25196.7515625,
+        5570
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 381,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 588
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "needs_solid_repair",
+          "name": "needs_solid_repair",
+          "type": "BOOLEAN",
+          "links": [
+            589
+          ]
+        },
+        {
+          "localized_name": "connectivity_report",
+          "name": "connectivity_report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · Does connectivity require solid remesh?",
+      "properties": {
+        "Node name for S&R": "Hi3DNeedsSolidRepair",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502011,
+      "type": "RemeshMesh",
+      "pos": [
+        25666.7515625,
+        5570
+      ],
+      "size": [
+        430,
+        274
+      ],
+      "flags": {},
+      "order": 382,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 639
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sign_mode",
+          "name": "sign_mode",
+          "type": "COMFY_DYNAMICCOMBO_V3",
+          "widget": {
+            "name": "sign_mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fill",
+          "name": "sign_mode.fill",
+          "type": "FLOAT",
+          "widget": {
+            "name": "sign_mode.fill"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "qef",
+          "name": "sign_mode.qef",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "sign_mode.qef"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "band",
+          "name": "band",
+          "type": "FLOAT",
+          "widget": {
+            "name": "band"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "project_back",
+          "name": "project_back",
+          "type": "FLOAT",
+          "widget": {
+            "name": "project_back"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "fix_poles",
+          "name": "fix_poles",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "fix_poles"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "smooth_iters",
+          "name": "smooth_iters",
+          "type": "INT",
+          "widget": {
+            "name": "smooth_iters"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "drop_small_components",
+          "name": "drop_small_components",
+          "type": "FLOAT",
+          "widget": {
+            "name": "drop_small_components"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "precluster_max_verts",
+          "name": "precluster_max_verts",
+          "type": "INT",
+          "widget": {
+            "name": "precluster_max_verts"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            591
+          ]
+        }
+      ],
+      "title": "Single Image · Repair 3 — solid remesh only when needed",
+      "properties": {
+        "Node name for S&R": "RemeshMesh",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        512,
+        "solid",
+        20,
+        false,
+        1,
+        0,
+        false,
+        0,
+        0,
+        20000000
+      ],
+      "widgets_values_named": {
+        "resolution": 512,
+        "sign_mode": "solid",
+        "sign_mode.fill": 20,
+        "sign_mode.qef": false,
+        "band": 1,
+        "project_back": 0,
+        "fix_poles": false,
+        "smooth_iters": 0,
+        "drop_small_components": 0,
+        "precluster_max_verts": 20000000
+      }
+    },
+    {
+      "id": 502012,
+      "type": "ComfySwitchNode",
+      "pos": [
+        26136.7515625,
+        5570
+      ],
+      "size": [
+        534.616796875,
+        400
+      ],
+      "flags": {},
+      "order": 384,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "on_false",
+          "name": "on_false",
+          "shape": 7,
+          "type": "MESH",
+          "link": 590
+        },
+        {
+          "localized_name": "on_true",
+          "name": "on_true",
+          "shape": 7,
+          "type": "MESH",
+          "link": 591
+        },
+        {
+          "localized_name": "switch",
+          "name": "switch",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "switch"
+          },
+          "link": 589
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "output",
+          "name": "output",
+          "type": "MESH",
+          "links": [
+            592
+          ]
+        }
+      ],
+      "title": "Single Image · Automatic repair choice — retain detail when already closed",
+      "properties": {
+        "Node name for S&R": "ComfySwitchNode",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        false
+      ],
+      "widgets_values_named": {}
+    },
+    {
+      "id": 502013,
+      "type": "Hi3DRestoreMeshFrame",
+      "pos": [
+        26606.7515625,
+        5570
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 386,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 592
+        },
+        {
+          "localized_name": "original_frame",
+          "name": "original_frame",
+          "type": "HI3D_MESH_FRAME",
+          "link": 593
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MESH",
+          "name": "MESH",
+          "type": "MESH",
+          "links": [
+            594
+          ]
+        }
+      ],
+      "title": "Single Image · Restore pre-cleanup coordinate frame",
+      "properties": {
+        "Node name for S&R": "Hi3DRestoreMeshFrame",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502014,
+      "type": "Hi3DRemoveZeroEdges",
+      "pos": [
+        25196.7515625,
+        6030
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 388,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 594
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "clean_mesh",
+          "name": "clean_mesh",
+          "type": "MESH",
+          "links": [
+            595
+          ]
+        },
+        {
+          "localized_name": "cleanup_report",
+          "name": "cleanup_report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · Remove exact connected zero edges",
+      "properties": {
+        "Node name for S&R": "Hi3DRemoveZeroEdges",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502015,
+      "type": "Hi3DMeshAudit",
+      "pos": [
+        25666.7515625,
+        6030
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 390,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 595
+        },
+        {
+          "localized_name": "run_name",
+          "name": "run_name",
+          "type": "STRING",
+          "widget": {
+            "name": "run_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            596,
+            603,
+            608,
+            611,
+            618,
+            621,
+            628,
+            629,
+            640
+          ]
+        },
+        {
+          "localized_name": "geometry_report",
+          "name": "geometry_report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · Audit final geometry before UVs",
+      "properties": {
+        "Node name for S&R": "Hi3DMeshAudit",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        "foundry-template/2015"
+      ],
+      "widgets_values_named": {
+        "run_name": "foundry-template/2015"
+      }
+    },
+    {
+      "id": 502016,
+      "type": "MeshToFile3D",
+      "pos": [
+        26136.7515625,
+        6030
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 394,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 596
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB",
+          "links": [
+            597
+          ]
+        }
+      ],
+      "title": "Single Image · Clean geometry file",
+      "properties": {
+        "Node name for S&R": "MeshToFile3D",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502017,
+      "type": "Save3DAdvanced",
+      "pos": [
+        25666.7515625,
+        8040
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 404,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_FBX,FILE_3D_OBJ,FILE_3D_STL,FILE_3D_USDZ,FILE_3D",
+          "link": 597
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "shape": 7,
+          "type": "LOAD3D_MODEL_INFO",
+          "link": null
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "shape": 7,
+          "type": "LOAD3D_CAMERA",
+          "link": null
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "viewport_state",
+          "name": "viewport_state",
+          "type": "LOAD_3D",
+          "widget": {
+            "name": "viewport_state"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D",
+          "links": []
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "type": "LOAD3D_MODEL_INFO",
+          "links": []
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "type": "LOAD3D_CAMERA",
+          "links": []
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "title": "Single Image · 03 — CLEAN MASTER — before textures",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "refinement"
+      },
+      "widgets_values": [
+        "foundry-template/2017",
+        {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 10,
+              "y": 10,
+              "z": 10.000000000000002
+            },
+            "target": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.2798481423331213,
+              "y": 0.3647051996310008,
+              "z": 0.11591689595929511,
+              "w": 0.8804762392171493
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        768,
+        768
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-template/2017",
+        "viewport_state": {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 10,
+              "y": 10,
+              "z": 10.000000000000002
+            },
+            "target": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.2798481423331213,
+              "y": 0.3647051996310008,
+              "z": 0.11591689595929511,
+              "w": 0.8804762392171493
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "width": 768,
+        "height": 768
+      }
+    },
+    {
+      "id": 502020,
+      "type": "RemoveBackground",
+      "pos": [
+        26606.7515625,
+        6030
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 158,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "bg_removal_model",
+          "name": "bg_removal_model",
+          "type": "BACKGROUND_REMOVAL",
+          "link": 598
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 599
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "links": [
+            600
+          ]
+        }
+      ],
+      "title": "Single Image · Matching cropped front — foreground mask",
+      "properties": {
+        "Node name for S&R": "RemoveBackground",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502021,
+      "type": "InvertMask",
+      "pos": [
+        25196.7515625,
+        6490
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 197,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mask",
+          "name": "mask",
+          "type": "MASK",
+          "link": 600
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "MASK",
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            602
+          ]
+        }
+      ],
+      "title": "Single Image · Convert foreground selection to alpha mask",
+      "properties": {
+        "Node name for S&R": "InvertMask",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502022,
+      "type": "JoinImageWithAlpha",
+      "pos": [
+        25666.7515625,
+        6490
+      ],
+      "size": [
+        468.991796875,
+        400
+      ],
+      "flags": {},
+      "order": 220,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 601
+        },
+        {
+          "localized_name": "alpha",
+          "name": "alpha",
+          "type": "MASK",
+          "link": 602
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "IMAGE",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            579,
+            604
+          ]
+        }
+      ],
+      "title": "Single Image · Matching FRONT RGBA for refinement and texture",
+      "properties": {
+        "Node name for S&R": "JoinImageWithAlpha",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502023,
+      "type": "Hi3DTrellis2TextureMesh",
+      "pos": [
+        26136.7515625,
+        6490
+      ],
+      "size": [
+        440.9302734375,
+        400
+      ],
+      "flags": {},
+      "order": 395,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 603
+        },
+        {
+          "localized_name": "image",
+          "name": "image",
+          "type": "IMAGE",
+          "link": 604
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "COMBO",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "texture_size",
+          "name": "texture_size",
+          "type": "INT",
+          "widget": {
+            "name": "texture_size"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "guidance",
+          "name": "guidance",
+          "type": "FLOAT",
+          "widget": {
+            "name": "guidance"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "sampler",
+          "name": "sampler",
+          "shape": 7,
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "guidance_rescale",
+          "name": "guidance_rescale",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "guidance_rescale"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "reference_lock",
+          "name": "reference_lock",
+          "shape": 7,
+          "type": "FLOAT",
+          "widget": {
+            "name": "reference_lock"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "reference_substeps",
+          "name": "reference_substeps",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "reference_substeps"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "textured_glb",
+          "name": "textured_glb",
+          "type": "FILE_3D",
+          "links": [
+            605,
+            609,
+            619,
+            630
+          ]
+        },
+        {
+          "localized_name": "base_color",
+          "name": "base_color",
+          "type": "IMAGE",
+          "links": [
+            606
+          ]
+        },
+        {
+          "localized_name": "metallic_roughness",
+          "name": "metallic_roughness",
+          "type": "IMAGE",
+          "links": [
+            607
+          ]
+        },
+        {
+          "localized_name": "report",
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · TRELLIS.2 — texture FINAL cleaned geometry",
+      "properties": {
+        "Node name for S&R": "Hi3DTrellis2TextureMesh",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        20,
+        1024,
+        4096,
+        3,
+        "foundry-template/2023",
+        "euler",
+        0.2,
+        0,
+        2
+      ],
+      "widgets_values_named": {
+        "seed": 42,
+        "steps": 20,
+        "resolution": 1024,
+        "texture_size": 4096,
+        "guidance": 3,
+        "filename_prefix": "foundry-template/2023",
+        "sampler": "euler",
+        "guidance_rescale": 0.2,
+        "reference_lock": 0,
+        "reference_substeps": 2
+      }
+    },
+    {
+      "id": 502024,
+      "type": "Save3DAdvanced",
+      "pos": [
+        25196.7515625,
+        8670
+      ],
+      "size": [
+        445.1685546875,
+        400
+      ],
+      "flags": {},
+      "order": 405,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_FBX,FILE_3D_OBJ,FILE_3D_STL,FILE_3D_USDZ,FILE_3D",
+          "link": 605
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "shape": 7,
+          "type": "LOAD3D_MODEL_INFO",
+          "link": null
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "shape": 7,
+          "type": "LOAD3D_CAMERA",
+          "link": null
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "viewport_state",
+          "name": "viewport_state",
+          "type": "LOAD_3D",
+          "widget": {
+            "name": "viewport_state"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D",
+          "links": []
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "type": "LOAD3D_MODEL_INFO",
+          "links": []
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "type": "LOAD3D_CAMERA",
+          "links": []
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "title": "Single Image · 3 - CLEANED + TEXTURED - 735,580 triangles",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "texture"
+      },
+      "widgets_values": [
+        "foundry-template/2024",
+        {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 3.802604916236812,
+              "y": 3.4955371254930214,
+              "z": 10.399476029169834
+            },
+            "target": {
+              "x": -5.413535695872501e-11,
+              "y": 2.5000000003445915,
+              "z": -8.525073405212532e-11
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.044131562161011655,
+              "y": 0.1742044038371286,
+              "z": 0.007815388879961508,
+              "w": 0.9836890517849806
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        768,
+        768
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-template/2024",
+        "viewport_state": {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 3.802604916236812,
+              "y": 3.4955371254930214,
+              "z": 10.399476029169834
+            },
+            "target": {
+              "x": -5.413535695872501e-11,
+              "y": 2.5000000003445915,
+              "z": -8.525073405212532e-11
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.044131562161011655,
+              "y": 0.1742044038371286,
+              "z": 0.007815388879961508,
+              "w": 0.9836890517849806
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "width": 768,
+        "height": 768
+      }
+    },
+    {
+      "id": 502025,
+      "type": "SaveImage",
+      "pos": [
+        25666.7515625,
+        8670
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 409,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 606
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "title": "Single Image · Final base-color atlas",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "texture"
+      },
+      "widgets_values": [
+        "foundry-template/2025"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-template/2025"
+      }
+    },
+    {
+      "id": 502026,
+      "type": "SaveImage",
+      "pos": [
+        26136.7515625,
+        8670
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 410,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 607
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "title": "Single Image · Final metallic / roughness atlas",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "texture"
+      },
+      "widgets_values": [
+        "foundry-template/2026"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-template/2026"
+      }
+    },
+    {
+      "id": 502030,
+      "type": "Hi3DOptimizeAndRebake",
+      "pos": [
+        26606.7515625,
+        6490
+      ],
+      "size": [
+        432.0708984375,
+        400
+      ],
+      "flags": {},
+      "order": 406,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 608
+        },
+        {
+          "localized_name": "textured_glb",
+          "name": "textured_glb",
+          "shape": 7,
+          "type": "FILE_3D",
+          "link": 609
+        },
+        {
+          "localized_name": "texture_source_path",
+          "name": "texture_source_path",
+          "type": "STRING",
+          "widget": {
+            "name": "texture_source_path"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "method",
+          "name": "method",
+          "type": "COMBO",
+          "widget": {
+            "name": "method"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target_triangles",
+          "name": "target_triangles",
+          "type": "INT",
+          "widget": {
+            "name": "target_triangles"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "texture_size",
+          "name": "texture_size",
+          "type": "INT",
+          "widget": {
+            "name": "texture_size"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "planar_quadric",
+          "name": "planar_quadric",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "planar_quadric"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "run_name",
+          "name": "run_name",
+          "type": "STRING",
+          "widget": {
+            "name": "run_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "optimized_textured_mesh",
+          "name": "optimized_textured_mesh",
+          "type": "MESH",
+          "links": [
+            610,
+            612
+          ]
+        },
+        {
+          "localized_name": "base_color",
+          "name": "base_color",
+          "type": "IMAGE",
+          "links": [
+            613
+          ]
+        },
+        {
+          "localized_name": "report",
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · GAME 250K — reduce and rebake color/PBR",
+      "properties": {
+        "Node name for S&R": "Hi3DOptimizeAndRebake",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        "",
+        "quadric",
+        250000,
+        4096,
+        false,
+        "foundry-template/2030"
+      ],
+      "widgets_values_named": {
+        "texture_source_path": "",
+        "method": "quadric",
+        "target_triangles": 250000,
+        "texture_size": 4096,
+        "planar_quadric": false,
+        "run_name": "foundry-template/2030"
+      }
+    },
+    {
+      "id": 502031,
+      "type": "BakeNormalMapFromMesh",
+      "pos": [
+        25196.7515625,
+        6950
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 415,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "low_poly",
+          "name": "low_poly",
+          "type": "MESH",
+          "link": 610
+        },
+        {
+          "localized_name": "high_poly",
+          "name": "high_poly",
+          "type": "MESH",
+          "link": 611
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cage_distance",
+          "name": "cage_distance",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cage_distance"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "ignore_backfaces",
+          "name": "ignore_backfaces",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "ignore_backfaces"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "normal_map",
+          "name": "normal_map",
+          "type": "IMAGE",
+          "links": [
+            614,
+            617
+          ]
+        }
+      ],
+      "title": "Single Image · Bake high-detail master shading",
+      "properties": {
+        "Node name for S&R": "BakeNormalMapFromMesh",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        4096,
+        0.01,
+        true
+      ],
+      "widgets_values_named": {
+        "resolution": 4096,
+        "cage_distance": 0.01,
+        "ignore_backfaces": true
+      }
+    },
+    {
+      "id": 502032,
+      "type": "ApplyTextureToMesh",
+      "pos": [
+        25666.7515625,
+        6950
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 423,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 612
+        },
+        {
+          "localized_name": "base_color",
+          "name": "base_color",
+          "type": "IMAGE",
+          "link": 613
+        },
+        {
+          "localized_name": "metallic",
+          "name": "metallic",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "roughness",
+          "name": "roughness",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "occlusion",
+          "name": "occlusion",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "normal_map",
+          "name": "normal_map",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 614
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            615
+          ]
+        }
+      ],
+      "title": "Single Image · Attach baked normal detail",
+      "properties": {
+        "Node name for S&R": "ApplyTextureToMesh",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502033,
+      "type": "MeshToFile3D",
+      "pos": [
+        26136.7515625,
+        6950
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 429,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 615
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB",
+          "links": [
+            616
+          ]
+        }
+      ],
+      "title": "Single Image · Game export container",
+      "properties": {
+        "Node name for S&R": "MeshToFile3D",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502034,
+      "type": "Save3DAdvanced",
+      "pos": [
+        25196.7515625,
+        9300
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 433,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_FBX,FILE_3D_OBJ,FILE_3D_STL,FILE_3D_USDZ,FILE_3D",
+          "link": 616
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "shape": 7,
+          "type": "LOAD3D_MODEL_INFO",
+          "link": null
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "shape": 7,
+          "type": "LOAD3D_CAMERA",
+          "link": null
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "viewport_state",
+          "name": "viewport_state",
+          "type": "LOAD_3D",
+          "widget": {
+            "name": "viewport_state"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D",
+          "links": [
+            635
+          ]
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "type": "LOAD3D_MODEL_INFO",
+          "links": []
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "type": "LOAD3D_CAMERA",
+          "links": []
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "title": "Single Image · GAME — 250K textured + baked normals",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "balanced"
+      },
+      "widgets_values": [
+        "foundry-template/2034",
+        {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 10,
+              "y": 10,
+              "z": 10.000000000000002
+            },
+            "target": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.2798481423331213,
+              "y": 0.3647051996310008,
+              "z": 0.11591689595929511,
+              "w": 0.8804762392171493
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        768,
+        768
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-template/2034",
+        "viewport_state": {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 10,
+              "y": 10,
+              "z": 10.000000000000002
+            },
+            "target": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.2798481423331213,
+              "y": 0.3647051996310008,
+              "z": 0.11591689595929511,
+              "w": 0.8804762392171493
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "width": 768,
+        "height": 768
+      }
+    },
+    {
+      "id": 502035,
+      "type": "SaveImage",
+      "pos": [
+        25666.7515625,
+        9300
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 424,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 617
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "title": "Single Image · Normal map sidecar",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "balanced"
+      },
+      "widgets_values": [
+        "foundry-template/2035"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-template/2035"
+      }
+    },
+    {
+      "id": 502040,
+      "type": "Hi3DOptimizeAndRebake",
+      "pos": [
+        26606.7515625,
+        6950
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 407,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 618
+        },
+        {
+          "localized_name": "textured_glb",
+          "name": "textured_glb",
+          "shape": 7,
+          "type": "FILE_3D",
+          "link": 619
+        },
+        {
+          "localized_name": "texture_source_path",
+          "name": "texture_source_path",
+          "type": "STRING",
+          "widget": {
+            "name": "texture_source_path"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "method",
+          "name": "method",
+          "type": "COMBO",
+          "widget": {
+            "name": "method"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target_triangles",
+          "name": "target_triangles",
+          "type": "INT",
+          "widget": {
+            "name": "target_triangles"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "texture_size",
+          "name": "texture_size",
+          "type": "INT",
+          "widget": {
+            "name": "texture_size"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "planar_quadric",
+          "name": "planar_quadric",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "planar_quadric"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "run_name",
+          "name": "run_name",
+          "type": "STRING",
+          "widget": {
+            "name": "run_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "optimized_textured_mesh",
+          "name": "optimized_textured_mesh",
+          "type": "MESH",
+          "links": [
+            620,
+            622
+          ]
+        },
+        {
+          "localized_name": "base_color",
+          "name": "base_color",
+          "type": "IMAGE",
+          "links": [
+            623
+          ]
+        },
+        {
+          "localized_name": "report",
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · GAME 100K — reduce and rebake color/PBR",
+      "properties": {
+        "Node name for S&R": "Hi3DOptimizeAndRebake",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        "",
+        "quadric",
+        100000,
+        4096,
+        false,
+        "foundry-template/2040"
+      ],
+      "widgets_values_named": {
+        "texture_source_path": "",
+        "method": "quadric",
+        "target_triangles": 100000,
+        "texture_size": 4096,
+        "planar_quadric": false,
+        "run_name": "foundry-template/2040"
+      }
+    },
+    {
+      "id": 502041,
+      "type": "BakeNormalMapFromMesh",
+      "pos": [
+        25196.7515625,
+        7410
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 416,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "low_poly",
+          "name": "low_poly",
+          "type": "MESH",
+          "link": 620
+        },
+        {
+          "localized_name": "high_poly",
+          "name": "high_poly",
+          "type": "MESH",
+          "link": 621
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cage_distance",
+          "name": "cage_distance",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cage_distance"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "ignore_backfaces",
+          "name": "ignore_backfaces",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "ignore_backfaces"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "normal_map",
+          "name": "normal_map",
+          "type": "IMAGE",
+          "links": [
+            624,
+            627
+          ]
+        }
+      ],
+      "title": "Single Image · Bake high-detail master shading",
+      "properties": {
+        "Node name for S&R": "BakeNormalMapFromMesh",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        4096,
+        0.01,
+        true
+      ],
+      "widgets_values_named": {
+        "resolution": 4096,
+        "cage_distance": 0.01,
+        "ignore_backfaces": true
+      }
+    },
+    {
+      "id": 502042,
+      "type": "ApplyTextureToMesh",
+      "pos": [
+        25666.7515625,
+        7410
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 425,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 622
+        },
+        {
+          "localized_name": "base_color",
+          "name": "base_color",
+          "type": "IMAGE",
+          "link": 623
+        },
+        {
+          "localized_name": "metallic",
+          "name": "metallic",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "roughness",
+          "name": "roughness",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "occlusion",
+          "name": "occlusion",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "normal_map",
+          "name": "normal_map",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 624
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "links": [
+            625
+          ]
+        }
+      ],
+      "title": "Single Image · Attach baked normal detail",
+      "properties": {
+        "Node name for S&R": "ApplyTextureToMesh",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502043,
+      "type": "MeshToFile3D",
+      "pos": [
+        26136.7515625,
+        7410
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 430,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 625
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB",
+          "links": [
+            626
+          ]
+        }
+      ],
+      "title": "Single Image · Game export container",
+      "properties": {
+        "Node name for S&R": "MeshToFile3D",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      }
+    },
+    {
+      "id": 502044,
+      "type": "Save3DAdvanced",
+      "pos": [
+        25196.7515625,
+        9930
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 434,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D_GLB,FILE_3D_GLTF,FILE_3D_FBX,FILE_3D_OBJ,FILE_3D_STL,FILE_3D_USDZ,FILE_3D",
+          "link": 626
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "shape": 7,
+          "type": "LOAD3D_MODEL_INFO",
+          "link": null
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "shape": 7,
+          "type": "LOAD3D_CAMERA",
+          "link": null
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "viewport_state",
+          "name": "viewport_state",
+          "type": "LOAD_3D",
+          "widget": {
+            "name": "viewport_state"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "model_3d",
+          "name": "model_3d",
+          "type": "FILE_3D",
+          "links": [
+            636
+          ]
+        },
+        {
+          "localized_name": "model_3d_info",
+          "name": "model_3d_info",
+          "type": "LOAD3D_MODEL_INFO",
+          "links": []
+        },
+        {
+          "localized_name": "camera_info",
+          "name": "camera_info",
+          "type": "LOAD3D_CAMERA",
+          "links": []
+        },
+        {
+          "localized_name": "width",
+          "name": "width",
+          "type": "INT",
+          "links": []
+        },
+        {
+          "localized_name": "height",
+          "name": "height",
+          "type": "INT",
+          "links": []
+        }
+      ],
+      "title": "Single Image · GAME — 100K textured + baked normals",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "compact"
+      },
+      "widgets_values": [
+        "foundry-template/2044",
+        {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 10,
+              "y": 10,
+              "z": 10.000000000000002
+            },
+            "target": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.2798481423331213,
+              "y": 0.3647051996310008,
+              "z": 0.11591689595929511,
+              "w": 0.8804762392171493
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        768,
+        768
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-template/2044",
+        "viewport_state": {
+          "image": "",
+          "mask": "",
+          "normal": "",
+          "camera_info": {
+            "position": {
+              "x": 10,
+              "y": 10,
+              "z": 10.000000000000002
+            },
+            "target": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "zoom": 1,
+            "cameraType": "perspective",
+            "quaternion": {
+              "x": -0.2798481423331213,
+              "y": 0.3647051996310008,
+              "z": 0.11591689595929511,
+              "w": 0.8804762392171493
+            },
+            "fov": 35,
+            "aspect": 1,
+            "near": 0.01,
+            "far": 10000,
+            "frustum": {
+              "left": -5,
+              "right": 5,
+              "top": 5,
+              "bottom": -5
+            }
+          },
+          "recording": "",
+          "model_3d_info": [
+            {
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "quaternion": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "scale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          ]
+        },
+        "width": 768,
+        "height": 768
+      }
+    },
+    {
+      "id": 502045,
+      "type": "SaveImage",
+      "pos": [
+        25666.7515625,
+        9930
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 426,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "link": 627
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "title": "Single Image · Normal map sidecar",
+      "properties": {
+        "singleOwner": "3012",
+        "singleStage": "compact"
+      },
+      "widgets_values": [
+        "foundry-template/2045"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "foundry-template/2045"
+      }
+    },
+    {
+      "id": 502050,
+      "type": "Hi3DPrintCandidate",
+      "pos": [
+        25196.7515625,
+        10560
+      ],
+      "size": [
+        470.5708984375,
+        400
+      ],
+      "flags": {},
+      "order": 396,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 628
+        },
+        {
+          "localized_name": "height_mm",
+          "name": "height_mm",
+          "type": "FLOAT",
+          "widget": {
+            "name": "height_mm"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "print_stl",
+          "name": "print_stl",
+          "type": "FILE_3D",
+          "links": [
+            637
+          ]
+        },
+        {
+          "localized_name": "print_report",
+          "name": "print_report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · PRINT CANDIDATE — 100mm, Z up, geometry STL",
+      "properties": {
+        "Node name for S&R": "Hi3DPrintCandidate",
+        "singleOwner": "3012",
+        "singleStage": "print"
+      },
+      "widgets_values": [
+        100,
+        "foundry-template/2050"
+      ],
+      "widgets_values_named": {
+        "height_mm": 100,
+        "filename_prefix": "foundry-template/2050"
+      }
+    },
+    {
+      "id": 503000,
+      "type": "Hi3DFinishingSource",
+      "pos": [
+        26606.7515625,
+        7410
+      ],
+      "size": [
+        452.5240234375,
+        400
+      ],
+      "flags": {},
+      "order": 408,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "shape": 7,
+          "type": "MESH",
+          "link": 629
+        },
+        {
+          "localized_name": "textured_source",
+          "name": "textured_source",
+          "shape": 7,
+          "type": "FILE_3D",
+          "link": 630
+        },
+        {
+          "localized_name": "use_saved_checkpoint",
+          "name": "use_saved_checkpoint",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "use_saved_checkpoint"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "saved_clean_mesh",
+          "name": "saved_clean_mesh",
+          "type": "STRING",
+          "widget": {
+            "name": "saved_clean_mesh"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "saved_texture_mesh",
+          "name": "saved_texture_mesh",
+          "type": "STRING",
+          "widget": {
+            "name": "saved_texture_mesh"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "clean_geometry",
+          "name": "clean_geometry",
+          "type": "MESH",
+          "links": [
+            631
+          ]
+        },
+        {
+          "localized_name": "approved_appearance",
+          "name": "approved_appearance",
+          "type": "FILE_3D",
+          "links": [
+            632,
+            634
+          ]
+        }
+      ],
+      "title": "Single Image · 11 — Finishing source: saved alien / live pipeline",
+      "properties": {
+        "Node name for S&R": "Hi3DFinishingSource",
+        "singleOwner": "3012",
+        "singleStage": "finishing"
+      },
+      "widgets_values": [
+        false,
+        "",
+        ""
+      ],
+      "widgets_values_named": {
+        "use_saved_checkpoint": false,
+        "saved_clean_mesh": "",
+        "saved_texture_mesh": ""
+      }
+    },
+    {
+      "id": 503001,
+      "type": "Hi3DQuadFinish",
+      "pos": [
+        25196.7515625,
+        11190
+      ],
+      "size": [
+        558.569921875,
+        400
+      ],
+      "flags": {},
+      "order": 417,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 631
+        },
+        {
+          "localized_name": "textured_source",
+          "name": "textured_source",
+          "type": "FILE_3D",
+          "link": 632
+        },
+        {
+          "localized_name": "enabled",
+          "name": "enabled",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "enabled"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "target_quads",
+          "name": "target_quads",
+          "type": "INT",
+          "widget": {
+            "name": "target_quads"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "texture_size",
+          "name": "texture_size",
+          "type": "INT",
+          "widget": {
+            "name": "texture_size"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "method",
+          "name": "method",
+          "type": "COMBO",
+          "widget": {
+            "name": "method"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "guide_triangles",
+          "name": "guide_triangles",
+          "type": "INT",
+          "widget": {
+            "name": "guide_triangles"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cage_distance",
+          "name": "cage_distance",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cage_distance"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "run_name",
+          "name": "run_name",
+          "type": "STRING",
+          "widget": {
+            "name": "run_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "reuse_geometry",
+          "name": "reuse_geometry",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "reuse_geometry"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "after",
+          "name": "after",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "after"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "baked_runtime_glb",
+          "name": "baked_runtime_glb",
+          "type": "FILE_3D",
+          "links": []
+        },
+        {
+          "localized_name": "export_manifest",
+          "name": "export_manifest",
+          "type": "STRING",
+          "links": [
+            633
+          ]
+        },
+        {
+          "localized_name": "report",
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · OPTIONAL QUADS — qualified 25K preset / UV + bake + export",
+      "properties": {
+        "Node name for S&R": "Hi3DQuadFinish",
+        "singleOwner": "3012",
+        "singleStage": "quads"
+      },
+      "widgets_values": [
+        true,
+        25000,
+        4096,
+        "quadriflow",
+        100000,
+        0.01,
+        "foundry-template/3001",
+        true,
+        ""
+      ],
+      "widgets_values_named": {
+        "enabled": true,
+        "target_quads": 25000,
+        "texture_size": 4096,
+        "method": "quadriflow",
+        "guide_triangles": 100000,
+        "cage_distance": 0.01,
+        "run_name": "foundry-template/3001",
+        "reuse_geometry": true,
+        "after": ""
+      }
+    },
+    {
+      "id": 503010,
+      "type": "Hi3DExportBundle",
+      "pos": [
+        25196.7515625,
+        11820
+      ],
+      "size": [
+        582.3384765625,
+        400
+      ],
+      "flags": {},
+      "order": 437,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "detailed",
+          "name": "detailed",
+          "shape": 7,
+          "type": "FILE_3D",
+          "link": 634
+        },
+        {
+          "localized_name": "balanced",
+          "name": "balanced",
+          "shape": 7,
+          "type": "FILE_3D",
+          "link": 635
+        },
+        {
+          "localized_name": "compact",
+          "name": "compact",
+          "shape": 7,
+          "type": "FILE_3D",
+          "link": 636
+        },
+        {
+          "localized_name": "print_stl",
+          "name": "print_stl",
+          "shape": 7,
+          "type": "FILE_3D",
+          "link": 637
+        },
+        {
+          "localized_name": "use_saved_variants",
+          "name": "use_saved_variants",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "use_saved_variants"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "saved_balanced",
+          "name": "saved_balanced",
+          "type": "STRING",
+          "widget": {
+            "name": "saved_balanced"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "saved_compact",
+          "name": "saved_compact",
+          "type": "STRING",
+          "widget": {
+            "name": "saved_compact"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "saved_print",
+          "name": "saved_print",
+          "type": "STRING",
+          "widget": {
+            "name": "saved_print"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "run_name",
+          "name": "run_name",
+          "type": "STRING",
+          "widget": {
+            "name": "run_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "quad_light",
+          "name": "quad_light",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "quad_light"
+          },
+          "link": 633
+        },
+        {
+          "localized_name": "quad_detail",
+          "name": "quad_detail",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "quad_detail"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "asset_name",
+          "name": "asset_name",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "asset_name"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "selection_json",
+          "name": "selection_json",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "selection_json"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "grounding_json",
+          "name": "grounding_json",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "grounding_json"
+          },
+          "link": 641
+        },
+        {
+          "localized_name": "metadata_json",
+          "name": "metadata_json",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "metadata_json"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "zip_path",
+          "name": "zip_path",
+          "type": "STRING",
+          "links": []
+        },
+        {
+          "localized_name": "report",
+          "name": "report",
+          "type": "STRING",
+          "links": []
+        }
+      ],
+      "title": "Single Image · 12 — ASSET PACKAGE: selected exports + directory README + ZIP",
+      "properties": {
+        "Node name for S&R": "Hi3DExportBundle",
+        "singleOwner": "3012",
+        "singleStage": "package"
+      },
+      "widgets_values": [
+        false,
+        "",
+        "",
+        "",
+        "foundry-template/3010",
+        "",
+        "",
+        "Gray Alien",
+        "",
+        "",
+        ""
+      ],
+      "widgets_values_named": {
+        "use_saved_variants": false,
+        "saved_balanced": "",
+        "saved_compact": "",
+        "saved_print": "",
+        "run_name": "foundry-template/3010",
+        "quad_detail": "",
+        "asset_name": "Gray Alien",
+        "selection_json": "",
+        "metadata_json": ""
+      }
+    },
+    {
+      "id": 503011,
+      "type": "Hi3DGroundingFrame",
+      "pos": [
+        25819.090039062503,
+        11820
+      ],
+      "size": [
+        430,
+        400
+      ],
+      "flags": {},
+      "order": 102,
+      "mode": 2,
+      "inputs": [
+        {
+          "localized_name": "mesh",
+          "name": "mesh",
+          "type": "MESH",
+          "link": 640
+        },
+        {
+          "localized_name": "mode",
+          "name": "mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "grounding_plan",
+          "name": "grounding_plan",
+          "type": "STRING",
+          "links": [
+            641
+          ]
+        }
+      ],
+      "title": "Single Image · Level support plane for final exports",
+      "properties": {
+        "Node name for S&R": "Hi3DGroundingFrame",
+        "singleOwner": "3012",
+        "singleStage": "package"
+      },
+      "widgets_values": [
+        "level"
+      ],
+      "widgets_values_named": {
+        "mode": "level"
+      }
     }
   ],
   "links": [
@@ -27567,6 +33692,878 @@
       70005,
       0,
       "HAIRDECK_MODEL"
+    ],
+    [
+      533,
+      500108,
+      0,
+      500003,
+      0,
+      "MODEL"
+    ],
+    [
+      534,
+      500298,
+      0,
+      500003,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      535,
+      500298,
+      1,
+      500003,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      536,
+      500087,
+      0,
+      500003,
+      3,
+      "LATENT"
+    ],
+    [
+      537,
+      500126,
+      0,
+      500018,
+      0,
+      "MODEL"
+    ],
+    [
+      538,
+      500091,
+      0,
+      500018,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      539,
+      500091,
+      1,
+      500018,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      540,
+      500091,
+      2,
+      500018,
+      3,
+      "LATENT"
+    ],
+    [
+      541,
+      500126,
+      0,
+      500023,
+      0,
+      "MODEL"
+    ],
+    [
+      542,
+      500094,
+      0,
+      500023,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      543,
+      500094,
+      1,
+      500023,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      544,
+      500094,
+      2,
+      500023,
+      3,
+      "LATENT"
+    ],
+    [
+      545,
+      500055,
+      0,
+      500056,
+      0,
+      "MOGE_MODEL"
+    ],
+    [
+      546,
+      500302,
+      0,
+      500056,
+      1,
+      "IMAGE"
+    ],
+    [
+      547,
+      500298,
+      0,
+      500091,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      548,
+      500298,
+      1,
+      500091,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      549,
+      500119,
+      0,
+      500091,
+      2,
+      "VOXEL"
+    ],
+    [
+      550,
+      500023,
+      0,
+      500092,
+      0,
+      "LATENT"
+    ],
+    [
+      551,
+      500117,
+      0,
+      500092,
+      1,
+      "VAE"
+    ],
+    [
+      552,
+      500091,
+      0,
+      500094,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      553,
+      500091,
+      1,
+      500094,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      554,
+      500018,
+      0,
+      500094,
+      2,
+      "LATENT"
+    ],
+    [
+      555,
+      500117,
+      0,
+      500094,
+      3,
+      "VAE"
+    ],
+    [
+      556,
+      500125,
+      0,
+      500108,
+      0,
+      "MODEL"
+    ],
+    [
+      557,
+      500003,
+      0,
+      500119,
+      0,
+      "LATENT"
+    ],
+    [
+      558,
+      500117,
+      0,
+      500119,
+      1,
+      "VAE"
+    ],
+    [
+      559,
+      500199,
+      0,
+      500125,
+      0,
+      "MODEL"
+    ],
+    [
+      560,
+      500279,
+      0,
+      500126,
+      0,
+      "MODEL"
+    ],
+    [
+      561,
+      500193,
+      0,
+      500192,
+      0,
+      "BACKGROUND_REMOVAL"
+    ],
+    [
+      562,
+      500122,
+      0,
+      500192,
+      1,
+      "IMAGE"
+    ],
+    [
+      563,
+      500319,
+      0,
+      500199,
+      0,
+      "MODEL"
+    ],
+    [
+      564,
+      500056,
+      0,
+      500242,
+      0,
+      "MOGE_GEOMETRY"
+    ],
+    [
+      565,
+      500122,
+      1,
+      500248,
+      0,
+      "MASK"
+    ],
+    [
+      566,
+      500192,
+      0,
+      500248,
+      1,
+      "MASK"
+    ],
+    [
+      567,
+      500319,
+      0,
+      500279,
+      0,
+      "MODEL"
+    ],
+    [
+      568,
+      500015,
+      0,
+      500298,
+      0,
+      "CLIP_VISION"
+    ],
+    [
+      569,
+      500302,
+      0,
+      500298,
+      1,
+      "IMAGE"
+    ],
+    [
+      570,
+      500242,
+      0,
+      500298,
+      2,
+      "FLOAT"
+    ],
+    [
+      571,
+      500312,
+      0,
+      500302,
+      0,
+      "IMAGE"
+    ],
+    [
+      572,
+      500248,
+      0,
+      500303,
+      0,
+      "MASK"
+    ],
+    [
+      573,
+      500122,
+      0,
+      500312,
+      0,
+      "IMAGE"
+    ],
+    [
+      574,
+      500303,
+      0,
+      500312,
+      1,
+      "MASK"
+    ],
+    [
+      575,
+      500122,
+      0,
+      500340,
+      0,
+      "IMAGE"
+    ],
+    [
+      576,
+      500092,
+      0,
+      500381,
+      0,
+      "MESH"
+    ],
+    [
+      577,
+      500381,
+      0,
+      500382,
+      0,
+      "FILE_3D_GLB"
+    ],
+    [
+      578,
+      502001,
+      0,
+      502003,
+      0,
+      "HI3D_BACKEND"
+    ],
+    [
+      579,
+      502022,
+      0,
+      502003,
+      1,
+      "IMAGE"
+    ],
+    [
+      580,
+      502002,
+      0,
+      502003,
+      2,
+      "MESH"
+    ],
+    [
+      581,
+      502003,
+      0,
+      502004,
+      0,
+      "MESH"
+    ],
+    [
+      582,
+      502004,
+      0,
+      502005,
+      0,
+      "FILE_3D_GLB"
+    ],
+    [
+      583,
+      502003,
+      0,
+      502006,
+      0,
+      "MESH"
+    ],
+    [
+      584,
+      502002,
+      0,
+      502006,
+      1,
+      "MESH"
+    ],
+    [
+      585,
+      502006,
+      0,
+      502007,
+      0,
+      "MESH"
+    ],
+    [
+      586,
+      502007,
+      0,
+      502008,
+      0,
+      "MESH"
+    ],
+    [
+      587,
+      502008,
+      0,
+      502009,
+      0,
+      "MESH"
+    ],
+    [
+      588,
+      502009,
+      0,
+      502010,
+      0,
+      "MESH"
+    ],
+    [
+      589,
+      502010,
+      0,
+      502012,
+      2,
+      "BOOLEAN"
+    ],
+    [
+      590,
+      502009,
+      0,
+      502012,
+      0,
+      "MESH"
+    ],
+    [
+      591,
+      502011,
+      0,
+      502012,
+      1,
+      "MESH"
+    ],
+    [
+      592,
+      502012,
+      0,
+      502013,
+      0,
+      "MESH"
+    ],
+    [
+      593,
+      502007,
+      1,
+      502013,
+      1,
+      "HI3D_MESH_FRAME"
+    ],
+    [
+      594,
+      502013,
+      0,
+      502014,
+      0,
+      "MESH"
+    ],
+    [
+      595,
+      502014,
+      0,
+      502015,
+      0,
+      "MESH"
+    ],
+    [
+      596,
+      502015,
+      0,
+      502016,
+      0,
+      "MESH"
+    ],
+    [
+      597,
+      502016,
+      0,
+      502017,
+      0,
+      "FILE_3D_GLB"
+    ],
+    [
+      598,
+      500193,
+      0,
+      502020,
+      0,
+      "BACKGROUND_REMOVAL"
+    ],
+    [
+      599,
+      500122,
+      0,
+      502020,
+      1,
+      "IMAGE"
+    ],
+    [
+      600,
+      502020,
+      0,
+      502021,
+      0,
+      "MASK"
+    ],
+    [
+      601,
+      500122,
+      0,
+      502022,
+      0,
+      "IMAGE"
+    ],
+    [
+      602,
+      502021,
+      0,
+      502022,
+      1,
+      "MASK"
+    ],
+    [
+      603,
+      502015,
+      0,
+      502023,
+      0,
+      "MESH"
+    ],
+    [
+      604,
+      502022,
+      0,
+      502023,
+      1,
+      "IMAGE"
+    ],
+    [
+      605,
+      502023,
+      0,
+      502024,
+      0,
+      "FILE_3D"
+    ],
+    [
+      606,
+      502023,
+      1,
+      502025,
+      0,
+      "IMAGE"
+    ],
+    [
+      607,
+      502023,
+      2,
+      502026,
+      0,
+      "IMAGE"
+    ],
+    [
+      608,
+      502015,
+      0,
+      502030,
+      0,
+      "MESH"
+    ],
+    [
+      609,
+      502023,
+      0,
+      502030,
+      1,
+      "FILE_3D"
+    ],
+    [
+      610,
+      502030,
+      0,
+      502031,
+      0,
+      "MESH"
+    ],
+    [
+      611,
+      502015,
+      0,
+      502031,
+      1,
+      "MESH"
+    ],
+    [
+      612,
+      502030,
+      0,
+      502032,
+      0,
+      "MESH"
+    ],
+    [
+      613,
+      502030,
+      1,
+      502032,
+      1,
+      "IMAGE"
+    ],
+    [
+      614,
+      502031,
+      0,
+      502032,
+      5,
+      "IMAGE"
+    ],
+    [
+      615,
+      502032,
+      0,
+      502033,
+      0,
+      "MESH"
+    ],
+    [
+      616,
+      502033,
+      0,
+      502034,
+      0,
+      "FILE_3D_GLB"
+    ],
+    [
+      617,
+      502031,
+      0,
+      502035,
+      0,
+      "IMAGE"
+    ],
+    [
+      618,
+      502015,
+      0,
+      502040,
+      0,
+      "MESH"
+    ],
+    [
+      619,
+      502023,
+      0,
+      502040,
+      1,
+      "FILE_3D"
+    ],
+    [
+      620,
+      502040,
+      0,
+      502041,
+      0,
+      "MESH"
+    ],
+    [
+      621,
+      502015,
+      0,
+      502041,
+      1,
+      "MESH"
+    ],
+    [
+      622,
+      502040,
+      0,
+      502042,
+      0,
+      "MESH"
+    ],
+    [
+      623,
+      502040,
+      1,
+      502042,
+      1,
+      "IMAGE"
+    ],
+    [
+      624,
+      502041,
+      0,
+      502042,
+      5,
+      "IMAGE"
+    ],
+    [
+      625,
+      502042,
+      0,
+      502043,
+      0,
+      "MESH"
+    ],
+    [
+      626,
+      502043,
+      0,
+      502044,
+      0,
+      "FILE_3D_GLB"
+    ],
+    [
+      627,
+      502041,
+      0,
+      502045,
+      0,
+      "IMAGE"
+    ],
+    [
+      628,
+      502015,
+      0,
+      502050,
+      0,
+      "MESH"
+    ],
+    [
+      629,
+      502015,
+      0,
+      503000,
+      0,
+      "MESH"
+    ],
+    [
+      630,
+      502023,
+      0,
+      503000,
+      1,
+      "FILE_3D"
+    ],
+    [
+      631,
+      503000,
+      0,
+      503001,
+      0,
+      "MESH"
+    ],
+    [
+      632,
+      503000,
+      1,
+      503001,
+      1,
+      "FILE_3D"
+    ],
+    [
+      633,
+      503001,
+      1,
+      503010,
+      9,
+      "STRING"
+    ],
+    [
+      634,
+      503000,
+      1,
+      503010,
+      0,
+      "FILE_3D"
+    ],
+    [
+      635,
+      502034,
+      0,
+      503010,
+      1,
+      "FILE_3D"
+    ],
+    [
+      636,
+      502044,
+      0,
+      503010,
+      2,
+      "FILE_3D"
+    ],
+    [
+      637,
+      502050,
+      0,
+      503010,
+      3,
+      "FILE_3D"
+    ],
+    [
+      638,
+      500092,
+      0,
+      502002,
+      0,
+      "MESH"
+    ],
+    [
+      639,
+      502009,
+      0,
+      502011,
+      0,
+      "MESH"
+    ],
+    [
+      640,
+      502015,
+      0,
+      503011,
+      0,
+      "MESH"
+    ],
+    [
+      641,
+      503011,
+      0,
+      503010,
+      13,
+      "STRING"
     ]
   ],
   "groups": [
@@ -28001,6 +34998,126 @@
       ],
       "color": "#496d65",
       "flags": {}
+    },
+    {
+      "id": 384,
+      "title": "Single Image or Text / geometry",
+      "bounding": [
+        25171.7515625,
+        100,
+        1910,
+        3760
+      ],
+      "color": "#486b75",
+      "flags": {}
+    },
+    {
+      "id": 385,
+      "title": "Single Image or Text / turnaround",
+      "bounding": [
+        25171.7515625,
+        3950,
+        1910,
+        540
+      ],
+      "color": "#486b75",
+      "flags": {}
+    },
+    {
+      "id": 386,
+      "title": "Single Image or Text / finishing",
+      "bounding": [
+        25171.7515625,
+        4580,
+        1910,
+        3300
+      ],
+      "color": "#486b75",
+      "flags": {}
+    },
+    {
+      "id": 387,
+      "title": "Single Image or Text / refinement",
+      "bounding": [
+        25171.7515625,
+        7970,
+        1910,
+        540
+      ],
+      "color": "#486b75",
+      "flags": {}
+    },
+    {
+      "id": 388,
+      "title": "Single Image or Text / texture",
+      "bounding": [
+        25171.7515625,
+        8600,
+        1910,
+        540
+      ],
+      "color": "#486b75",
+      "flags": {}
+    },
+    {
+      "id": 389,
+      "title": "Single Image or Text / balanced",
+      "bounding": [
+        25171.7515625,
+        9230,
+        1910,
+        540
+      ],
+      "color": "#486b75",
+      "flags": {}
+    },
+    {
+      "id": 390,
+      "title": "Single Image or Text / compact",
+      "bounding": [
+        25171.7515625,
+        9860,
+        1910,
+        540
+      ],
+      "color": "#486b75",
+      "flags": {}
+    },
+    {
+      "id": 391,
+      "title": "Single Image or Text / print",
+      "bounding": [
+        25171.7515625,
+        10490,
+        1910,
+        540
+      ],
+      "color": "#486b75",
+      "flags": {}
+    },
+    {
+      "id": 392,
+      "title": "Single Image or Text / quads",
+      "bounding": [
+        25171.7515625,
+        11120,
+        1910,
+        540
+      ],
+      "color": "#486b75",
+      "flags": {}
+    },
+    {
+      "id": 393,
+      "title": "Single Image or Text / package",
+      "bounding": [
+        25171.7515625,
+        11750,
+        1910,
+        540
+      ],
+      "color": "#486b75",
+      "flags": {}
     }
   ],
   "config": {},
@@ -28044,7 +35161,11 @@
     "splat_method": {
       "method": "splat-solid/v1",
       "owner": "3012"
-    }
+    },
+    "single_origin": [
+      25196.7515625,
+      100
+    ]
   },
   "version": 0.4
 }

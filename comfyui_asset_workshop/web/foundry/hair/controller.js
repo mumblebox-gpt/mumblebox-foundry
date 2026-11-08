@@ -1,3 +1,4 @@
+import {problemPanel} from '../problem-panel.js';
 import {api} from '/scripts/api.js';
 import {app} from '/scripts/app.js';
 import {el,button,hint,field} from '../dom.js';
@@ -215,7 +216,7 @@ export class HairWizard {
         const rail=el('aside',{class:'wizard-rail'},el('span',{class:'eyebrow'},'HAIRDECK / HAIR'),el('h3',{},'HairDeck\nStylized Hair'),el('ol',{class:'wizard-steps'},...titles.map((title,i)=>el('li',{class:i+1===this.page?'current':''},el('span',{},String(i+1)),el('div',{},el('strong',{},title),el('small',{},blurbs[i]))))),hint('One image. Hair cards. Matching spring bones.'));
         const panel=el('div',{class:'wizard-panel'},el('header',{class:'page-head'},el('span',{class:'eyebrow'},'PAGE '+this.page+' OF 6'),el('h2',{},titles[this.page-1])));
         if(this.run?.active){const a=activity();a.update({busy:true,label:'HairDeck · '+this.run.stage,detail:this.run.dependency?.message||this.run.dependency?.name||'Completed hair variations remain saved.'});this.progress=el('progress',{max:100,value:this.run.progress||0,'aria-label':'Overall HairDeck workflow progress'});this.progressText=el('strong',{},'');panel.append(el('div',{class:'hair-progress'},a.element,this.progress,this.progressText));}
-        const error=this.error||this.run?.error;if(error)panel.append(el('p',{class:'error-panel',role:'alert'},error));
+        const error=this.error||this.run?.error;if(error)panel.append(problemPanel(error));
         const navigation=()=>el('footer',{class:'wizard-footer actions'},this.page>1?button('Back',()=>this.go(this.page-1),{disabled:busy}):null,
             this.page<6?button('Next',()=>this.act(async()=>{
                 if(this.page===2)await this.start('generate');else if(this.page===5)await this.start('export');else this.go(this.page+1);

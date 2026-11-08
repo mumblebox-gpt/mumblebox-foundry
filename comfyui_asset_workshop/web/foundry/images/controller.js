@@ -8,11 +8,14 @@ import {showImageStage} from './graph.js';
 export class ImageCreator{
     constructor(shell){
         this.shell=shell;this.node=shell.node;this.host=el('section',{class:'image-creator','aria-label':'Image creator'});
-        this.storageKey='foundry-image-creator:'+app.extensionManager.workflow.activeWorkflow.path+':'+this.node.id;
-        let saved=this.node.properties.foundryImageCreator||{};
+        this.singleOrigin=shell.imageOrigin?.method==='single-image'&&!shell.openImageId;
+        this.stateProperty=this.singleOrigin?'foundryImageCreatorSingle':'foundryImageCreator';
+        this.storageKey='foundry-image-creator:'+app.extensionManager.workflow.activeWorkflow.path+':'+this.node.id+(this.singleOrigin?':single':'');
+        let saved=this.node.properties[this.stateProperty]||{};
         try{const local=JSON.parse(localStorage.getItem(this.storageKey)||'null');if(local?.updated>(saved.updated||0))saved=local;}catch{}
         // Restored Comfy node properties may be reactive proxies, not cloneable objects.
-        this.draft=JSON.parse(JSON.stringify(saved.draft||{name:'Untitled image',category:'characters',model:'klein4',description:'',front:'',back:'',references:[],loras:[],settings:{seed:-1}}));
+        this.draft=JSON.parse(JSON.stringify(saved.draft||{name:'Untitled image',category:this.singleOrigin?'general':'characters',model:'klein4',description:'',front:'',back:'',references:[],loras:[],settings:{seed:-1}}));
+        if(this.singleOrigin)this.draft.category='general';
         this.openedSaved=!!shell.openImageId;this.id=shell.openImageId||saved.id;delete shell.openImageId;
         this.progress=e=>{if(this.run?.active&&(!e.detail?.prompt_id||e.detail.prompt_id===this.run.pending?.prompt_id)&&this.progressText)
             this.progressText.textContent='Sampling '+e.detail.value+' of '+e.detail.max;};
@@ -29,7 +32,7 @@ export class ImageCreator{
     referenceLimit(){return this.model()[this.paired()?'pair_references':'single_references'];}
     remember(){
         const state={id:this.id,draft:structuredClone(this.draft),updated:Date.now()};
-        this.node.properties.foundryImageCreator=state;
+        this.node.properties[this.stateProperty]=state;
         try{localStorage.setItem(this.storageKey,JSON.stringify(state));}catch{}
     }
     detach(){this.detached=true;this.observer?.disconnect();this.remember();}
@@ -48,6 +51,7 @@ export class ImageCreator{
         finally{this.working=false;this.remember();this.render();}
     }
     async configure(){
+        if(this.singleOrigin)this.draft.category='general';
         this.run=await request(this.id?'images/'+this.id:'images',this.draft,this.id?{method:'PATCH'}:{});
         this.id=this.run.id;this.draft=structuredClone(this.run.config);this.remember();
     }
@@ -68,7 +72,7 @@ export class ImageCreator{
         if(destination==='another'){this.id=null;this.run=null;this.draft={...this.draft,name:'Untitled image',description:'',front:'',back:'',references:[]};this.remember();this.render();this.shell.content.scrollTop=0;}
         else if(destination==='gallery')await this.shell.openImages('Gallery');
         else if(destination==='3d'){
-            const handoff=await request('images/'+this.id+'/handoff',{});
+            const handoff=await request('images/'+this.id+'/handoff',this.singleOrigin?{mode:'single'}:{});
             const origin=this.shell.imageOrigin;delete this.shell.imageOrigin;
             await this.shell.chooseMesh(handoff,origin);
         }

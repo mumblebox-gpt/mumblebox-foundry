@@ -1,3 +1,17 @@
+# Preview 0.1.0-preview.17 validation
+
+The canonical-source update was exercised in the existing standalone Comfy Desktop development installation on Windows / RTX 4080 SUPER 16 GB / 64 GB RAM. Single Image or Text completed geometry, Hi3D refinement, cleanup, 4K texturing, compact baking, optional quad export and package creation with real visible previews. Image creation/direct handoff, Gallery selection, reload/Resume, method artwork, Font scaling, cache review and the other saved wizards were checked proportionally. [Local update evidence](LOCAL-UPDATE-VALIDATION.md) describes the exact checks and limits.
+
+The subsequent grounding repair reused the saved outputs and reran packaging only. Detailed, compact and quad runtime GLBs touch the floor at Y=0; the actual editable quad BLEND reopened in Blender at Z=0. The measured frame is rigid, with unchanged topology and embedded image bytes. [Grounding evidence](GROUNDING-VALIDATION.md) records measurements, tests, coordinate conversion and the remaining uneven-foot limit.
+
+The public graph adds an independent 71-node Single Image section. Existing method nodes and saved assets are retained. The release inventory now includes WebP method artwork and checks its inclusion. Geometry requirements and the real stable-pose import are declared/probed for normal future installations.
+
+**The installed Pinokio copy was not updated or directly modified.** Pinokio unit checks used temporary fixtures; these do not constitute a new installed-Pinokio workflow test. The existing update path can offer the newly published preview. A fresh-machine installation, every asset category, physical webcam capture and all export/settings combinations were not retested. The validation is for the exercised local path, not a universal quality guarantee.
+
+Verification passed: 41 targeted Foundry tests, 4 grounding tests, 2 closed-quad tests, 7 installer/release-inventory tests and 29 Pinokio tests using temporary fixtures. The previous full-app pass also parsed all 51 Foundry JavaScript modules.
+
+Earlier release records follow unchanged.
+
 # Preview 0.1.0-preview.16 validation
 
 The actual Pinokio Update control in the stopped preview.14 installation failed its idle check because the saved backend address refused connection. The stale runtime process had exited. This is a reproduced updater failure, not an asset-generation or preview failure. The correction is made only in canonical development source: require both connection refusal and a confirmed exited saved runtime before accepting the stopped state. Live-process, timeout and active/queued-work protections remain.

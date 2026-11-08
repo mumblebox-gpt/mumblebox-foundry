@@ -14,6 +14,8 @@ export async function render(shell){
         if(name==="Create Images"){
             let creator=shell.imageCreator;
             if(creator?.disposed)creator=null;
+            const singleOrigin=shell.imageOrigin?.method==='single-image'&&!shell.openImageId;
+            if(creator&&creator.singleOrigin!==singleOrigin){if(creator.run?.active){body.replaceChildren(hint('Wait for the current image creation to finish.'));return;}creator.dispose();creator=null;}
             if(creator&&shell.openImageId&&shell.openImageId!==creator.id){
                 if(creator.run?.active){body.replaceChildren(hint('An image is generating. Return to Create Images when it finishes.'));return;}
                 creator.dispose();creator=null;

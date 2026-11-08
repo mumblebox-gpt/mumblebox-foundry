@@ -135,7 +135,7 @@
   },
   "dinov3": {
     "id": "dinov3",
-    "stage": "Image features for multiview geometry",
+    "stage": "Image features for geometry",
     "name": "DINOv3",
     "version": "f37641be376725d324c56626007cc477f1249a69",
     "source": "https://huggingface.co/Comfy-Org/Pixal3D",
@@ -465,5 +465,18 @@
     "license_url": "https://github.com/hyz317/HairDeck/blob/cb20f7073419a33c9ab88f22f686fcb9060a99f0/LICENSE",
     "license_summary": "Official HairDeck color model and adapted inference source; retain authors and notices.",
     "notices": []
+  },
+  "pixal3d_single": {
+    "id": "pixal3d_single",
+    "stage": "Single-image geometry",
+    "name": "Pixal3D",
+    "version": "Single-image BF16 weights; pinned checkpoint in production metadata",
+    "source": "https://ldyang694.github.io/projects/pixal3d/",
+    "notices": [
+      "Pixal3D-MIT.txt"
+    ],
+    "license": "MIT",
+    "license_url": "https://github.com/TencentARC/Pixal3D/blob/main/LICENSE",
+    "license_summary": "Retain the copyright and permission notice for licensed material; separately supplied dependencies retain their own terms."
   }
 }

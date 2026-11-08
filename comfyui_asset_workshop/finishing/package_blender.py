@@ -1,7 +1,7 @@
 """Packaging-only Blender conversion and relocated re-import; no remeshing or baking."""
 import bpy,json,sys,shutil,hashlib
 from pathlib import Path
-from mathutils import Vector
+from mathutils import Vector,Matrix
 sys.path.insert(0,str(Path(__file__).parent))
 from package_catalog import FileRecord,VariantRecord,VARIANTS
 from dataclasses import asdict
@@ -78,6 +78,19 @@ def fbx(obj,path):
       bake_anim=False,path_mode="RELATIVE",embed_textures=False)
 def measured(s):
     return {k:v for k,v in s.items() if k!="bounds"}
+def grounded_glb(source,target):
+    frame=req.get('grounding')
+    if not frame or frame.get('mode')=='original':return source,None
+    from grounding import ground_glb,validate_frame
+    T=validate_frame(frame);minimum=ground_glb(source,target,T,floor=True);T[1,3]-=minimum
+    return str(target),T
+
+def apply_frame(obj,matrix):
+    from grounding import blender_frame
+    obj.matrix_world=Matrix(blender_frame(matrix).tolist())@obj.matrix_world
+    select(obj);bpy.ops.object.transform_apply(location=True,rotation=True,scale=True)
+    obj.data.update();bpy.context.view_layer.update()
+
 def package():
     root=Path(req["export_dir"]);files=[];variants=[];expected={}
     for key,item in req["variants"].items():
@@ -88,7 +101,17 @@ def package():
             rel=directory+name;owned.append(FileRecord(rel,"asset",key,description,fmt,role,tuple(deps)));return rel
         if key=="print":
             dst=out/"mesh.stl";shutil.copy2(sources["stl"],dst)
-            bpy.ops.wm.stl_import(filepath=str(dst));obj=one_mesh();s=summary(obj)
+            bpy.ops.wm.stl_import(filepath=str(dst));obj=one_mesh()
+            if req.get('grounding') and req['grounding']['mode']!='original':
+                import numpy as np
+                from grounding import validate_frame
+                old_height=summary(obj)['dimensions'][2];T=validate_frame(req['grounding']);T[:3,3]=0;apply_frame(obj,T)
+                height=summary(obj)['dimensions'][2]
+                if height<=0:raise ValueError('The print mesh has no height')
+                obj.scale=(old_height/height,)*3;select(obj);bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
+                lo,hi=summary(obj)['bounds'];obj.location=(-(lo[0]+hi[0])/2,-(lo[1]+hi[1])/2,-lo[2]);bpy.ops.object.transform_apply(location=True,rotation=False,scale=False)
+                bpy.ops.wm.stl_export(filepath=str(dst),export_selected_objects=True)
+            s=summary(obj)
             record("mesh.stl","stl","Print-oriented triangle geometry; STL does not store a unit declaration.")
             v.measurements={"geometry":measured(s),"coordinates":{"units":"Unitless STL coordinates","up_axis":"Not encoded in STL"}}
             ex["mesh.stl"]={"summary":s,"textured":False}
@@ -100,7 +123,9 @@ def package():
             if not any(len(p.vertices)==4 for p in quad.data.polygons):raise ValueError("Quad source has no quads")
             for o in list(bpy.data.objects):
                 if o!=quad:bpy.data.objects.remove(o,do_unlink=True)
-            before=set(bpy.data.objects);bpy.ops.import_scene.gltf(filepath=sources["runtime_glb"])
+            runtime_source,frame=grounded_glb(sources['runtime_glb'],job/(key+'-grounded.glb'))
+            if frame is not None:apply_frame(quad,frame)
+            before=set(bpy.data.objects);bpy.ops.import_scene.gltf(filepath=runtime_source)
             imported=[o for o in bpy.data.objects if o not in before and o.type=="MESH"]
             if len(imported)!=1:raise ValueError("Expected one runtime mesh")
             runtime=imported[0];runtime.name="Runtime_Triangles"
@@ -125,7 +150,7 @@ def package():
                 fbx(runtime,out/"runtime.fbx");record("runtime.fbx","fbx","Triangulated runtime derivative with UVs and normals.",deps=deps)
                 ex["runtime.fbx"]={"summary":r,"textured":bool(tex)}
             if "runtime_glb" in fmts:
-                shutil.copy2(sources["runtime_glb"],out/"runtime.glb");record("runtime.glb","glb","Preserved triangulated runtime mesh with embedded materials.")
+                shutil.copy2(runtime_source,out/"runtime.glb");record("runtime.glb","glb","Preserved triangulated runtime mesh with embedded materials.")
                 ex["runtime.glb"]={"summary":r,"textured":bool(tex)}
             if "blend" in fmts:
                 runtime.hide_set(True);runtime.hide_render=True;select(quad)
@@ -141,10 +166,10 @@ def package():
               "Changing topology, UVs, normals or the fixed triangulation can require rebaking.",
               "FBX and OBJ may require reconstruction of the target application's material graph from the supplied maps."]
         else:
-            obj=glb(sources["glb"]);s=summary(obj)
+            source,frame=grounded_glb(sources['glb'],job/(key+'-grounded.glb'));obj=glb(source);s=summary(obj)
             tex,specs=textures(obj,out/"Textures",directory,key);owned+=tex
             if "glb" in fmts:
-                shutil.copy2(sources["glb"],out/"mesh.glb");record("mesh.glb","glb","Preserved triangle mesh with embedded PBR materials.")
+                shutil.copy2(source,out/"mesh.glb");record("mesh.glb","glb","Preserved triangle mesh with embedded PBR materials.")
                 ex["mesh.glb"]={"summary":s,"textured":bool(tex)}
             if "fbx" in fmts:
                 fbx(obj,out/"mesh.fbx");record("mesh.fbx","fbx","Triangle mesh with UVs and normals; companion material maps included.",deps=[f.path for f in tex])
@@ -152,6 +177,8 @@ def package():
             v.measurements={"geometry":measured(s),"textures":specs,"coordinates":{"units":"Metres; generated scale is not calibrated","up_axis":"Y in interchange files; dimensions reported in Blender Z-up coordinates"}}
             v.limitations=["Rigging, deformation and Unreal import have not been qualified.",
                 "FBX may require reconstruction of the target application's material graph from the supplied maps."]
+        if req.get('grounding'):
+            frame=req['grounding'];v.measurements['grounding']={'mode':frame['applied'],'correction_degrees':frame['correction_degrees'],'geometry_deformed':False}
         for f in owned:
             p=root/f.path;f.bytes=p.stat().st_size;f.sha256=hashlib.sha256(p.read_bytes()).hexdigest()
         v.file_paths=[f.path for f in owned];files+=owned;variants.append(v);expected[key]=ex

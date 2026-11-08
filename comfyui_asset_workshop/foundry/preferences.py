@@ -16,12 +16,15 @@ class Preferences:
                 data = {}
             return {"theme": data.get("theme") if data.get("theme") in ("light", "dark") else None,
                     "language": "en", "profile": "default",
+                    "font_size": data.get("font_size","default") if data.get("font_size","default") in ("default","larger","large","extra-large","175","200") else "default",
                     "busy_motion": data.get("busy_motion", "system") if data.get("busy_motion", "system") in ("system", "full", "paused") else "system",
                     "auto_check_updates": data.get("auto_check_updates", True) is not False}
 
     def update(self, patch):
-        if not isinstance(patch, dict) or set(patch) - {"theme", "language", "profile", "auto_check_updates", "busy_motion"}:
+        if not isinstance(patch, dict) or set(patch) - {"theme", "language", "profile", "auto_check_updates", "busy_motion", "font_size"}:
             raise ValueError("Only supported interface preferences can be saved here.")
+        if patch.get("font_size","default") not in ("default","larger","large","extra-large","175","200"):
+            raise ValueError("Choose Default or one of the supported text percentages.")
         if "auto_check_updates" in patch and not isinstance(patch["auto_check_updates"], bool):
             raise ValueError("Automatic update checks must be on or off.")
         if "theme" in patch and patch["theme"] not in ("light", "dark"):

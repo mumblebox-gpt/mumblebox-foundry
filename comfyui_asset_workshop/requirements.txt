@@ -1,3 +1,7 @@
 trimesh==5.1.1
 keyring==25.7.0
 packaging>=24.2
+
+# Stable support-pose computation for optional grounded exports (Comfy host).
+scipy==1.18.1
+networkx==3.6.1

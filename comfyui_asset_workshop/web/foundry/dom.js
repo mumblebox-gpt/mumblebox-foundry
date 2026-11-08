@@ -17,6 +17,14 @@ export const field = (label, control, description) => el("label", {class:"field"
 export const bytes = value => Number.isFinite(value) ? (value / 1024 ** 3).toFixed(1) + " GB" : "Unavailable";
 
 const paths = {
+    glasses:'M3 12l2-6h2M21 12l-2-6h-2M10 13h4M10 14a4 4 0 1 1-8 0 4 4 0 0 1 8 0m12 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
+    chevron:'m6 9 6 6 6-6',
+    check:'m5 12 4 4 10-10',
+    refresh:'M20 7V3l-3 3a8 8 0 1 0 3 6M20 3h-5',
+    trash:'M3 6h18M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7',
+    plug:'M8 3v5m8-5v5M6 8h12v4a6 6 0 0 1-6 6v4M6 8v4a6 6 0 0 0 6 6',
+    info:'M12 11v6m0-10h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0',
+    map:'M4 3v18m0-16h15l-3 5 3 5H4',
     cube:"M12 3 3 8v9l9 5 9-5V8l-9-5ZM3 8l9 5 9-5M12 13v9",
     arrow:"M4 12h16m-6-6 6 6-6 6",
     gear:"M10 2h4l.5 3 1.5.8 2.8-1.1 2 3.4-2.3 2 .1 1.9 2.4 2-2 3.5-2.9-1-1.6.9-.5 3.1h-4l-.5-3.1-1.6-.9-2.9 1-2-3.5 2.4-2 .1-1.9-2.3-2 2-3.4 2.8 1.1L9.5 5 10 2ZM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z",
@@ -29,6 +37,7 @@ const paths = {
 export function icon(name, size=24) {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     for (const [k,v] of Object.entries({viewBox:"0 0 24 24",width:size,height:size,fill:"none",stroke:"currentColor","stroke-width":1.5,"stroke-linecap":"round","stroke-linejoin":"round","aria-hidden":"true"})) svg.setAttribute(k,v);
+    svg.classList.add("ui-icon");
     const path = document.createElementNS(svg.namespaceURI, "path");
     path.setAttribute("d", paths[name] || paths.cube); svg.append(path);
     if(name==="contrast") {

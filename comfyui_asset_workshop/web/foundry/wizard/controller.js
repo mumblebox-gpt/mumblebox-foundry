@@ -3,12 +3,15 @@ import {el,button,hint} from "../dom.js";
 import {request} from "../services.js";
 import {dialog} from "../dialogs.js";
 import {modelAccessError} from "../connection-help.js";
-import {referenceFilename,syncWizardGraph,syncWizardOutputs,wizardStateKey,clearWizardState,savedWizardState,rememberPreviousSession} from "../graph-adapter.js";
+import {referenceFilename,syncWizardGraph,syncWizardOutputs,wizardStateKey,clearWizardState,savedWizardState,savedSingleWizardState,rememberPreviousSession} from "../graph-adapter.js";
 import {initialState,copyRunConfiguration} from "./session.js";
 import {exportChoices,validateExports} from "./export-choices.js";
 import {FIRST_USE_MESSAGE} from "../activity-state.js";
 import {overallProgress} from "../overall-progress.js";
 import {inputPage,reviewPage,optionsPage,finishingPage,resultPage} from "./pages.js";
+import {singleInputPage,singleOptionsPage} from '../single/pages.js';
+import {syncSingleGraph,syncSingleOutputs} from '../single/graph.js';
+const singleTitles=['Your starting image','Mesh and refinement','Refined mesh and exports','Your asset package'];
 const clone=value=>JSON.parse(JSON.stringify(value));
 const titles=["Your starting images","Review the four views","Mesh and refinement","Refined mesh and exports","Your asset package"];
 const stepLabels=["Starting images","Four views","Mesh settings","Refine & export","Asset package"];
@@ -18,12 +21,13 @@ const stageNames={turnaround:"Qwen Image 2.1 · Creating four views",geometry:"P
  balanced:"Baking the balanced game mesh",compact:"Baking the compact game mesh",quads:"QuadriFlow · Retopology, UVs and detail baking",
  print:"Preparing and measuring the print mesh",package:"Writing exports, README and ZIP",cleanup:"Releasing models and temporary work"};
 export class Wizard {
-    constructor(shell,{resume=false,runId=null}={}) {
+    constructor(shell,{resume=false,runId=null,method="turnaround"}={}) {
         this.shell=shell;this.node=shell.node;this.page=1;this.disposed=false;this.previewDispose=null;
-        const saved=savedWizardState(this.node);
-        if(!resume)rememberPreviousSession(this.node);
+        this.method=method;this.single=method==="single-image";
+        const saved=this.single?clone(savedSingleWizardState(this.node)):savedWizardState(this.node);
+        if(!resume&&!this.single)rememberPreviousSession(this.node);
         const state=initialState(saved,resume);
-        this.draft=state.draft;this.sessionId=state.sessionId||crypto.randomUUID();
+        this.draft=state.draft;if(this.single)this.draft.method=method;this.sessionId=state.sessionId||crypto.randomUUID();
         this.draft.turnaround_model??="qwen21";
         this.runId=state.runId;this.page=state.page;
         this.agentRunId=runId;
@@ -39,6 +43,7 @@ export class Wizard {
     }
     async init(){
         this.cap=await request("wizard/capabilities");
+        if(this.single)this.cap={...this.cap,defaults:this.cap.single_defaults};
         this.draft.selection??=structuredClone(this.cap.selection);
         this.draft.profile=this.shell.data?.preferences?.profile||"default";
         if(this.runId){
@@ -47,9 +52,10 @@ export class Wizard {
                 if(this.agentRunId){
                     const r=this.run;
                     this.draft=copyRunConfiguration(this.draft,r);
-                    this.page=r.operation==="rocket"||r.package?5:r.completed.includes("refinement")?4:r.completed.includes("turnaround")?2:1;
-                    const branch=await request("wizard/runs/"+this.runId+"/turnaround-graph");
-                    syncWizardGraph(r,this.node,branch);this.remember();
+                    this.page=this.single?(r.operation==='rocket'||r.package?4:r.completed.includes('refinement')?3:2):r.operation==="rocket"||r.package?5:r.completed.includes("refinement")?4:r.completed.includes("turnaround")?2:1;
+                    if(this.single)syncSingleGraph(await request('wizard/single-template'),this.node,r);
+                    else {const branch=await request("wizard/runs/"+this.runId+"/turnaround-graph");syncWizardGraph(r,this.node,branch);}
+                    this.remember();
                 }
                 this.applyRun();
             }
@@ -61,11 +67,12 @@ export class Wizard {
     }
     remember(){
         const state={page:this.page,draft:clone(this.draft),runId:this.runId,sessionId:this.sessionId};
-        this.node.properties.foundryWizard=state;
-        localStorage.setItem(wizardStateKey(),JSON.stringify(state));
+        this.node.properties[this.single?'foundrySingle':'foundryWizard']=state;
+        localStorage.setItem(wizardStateKey()+(this.single?':single':''),JSON.stringify(state));
+        this.node.graph?.change?.();
     }
     applyRun(){
-        syncWizardOutputs(this.run.outputs,this.node);
+        if(this.single)syncSingleOutputs(this.run.outputs,this.node);else syncWizardOutputs(this.run.outputs,this.node);
         if(!this.run.geometry_audit&&this.run.outputs?.["2015"]?.text?.[0]){
             try{this.run.geometry_audit=JSON.parse(this.run.outputs["2015"].text[0]);}catch{}
         }
@@ -106,13 +113,13 @@ export class Wizard {
         const data=clone(this.draft);
         this.run=await request(this.runId?"wizard/runs/"+this.runId:"wizard/runs",data,this.runId?{method:"PATCH"}:{});
         this.runId=this.run.id;this.remember();
-        const branch=await request("wizard/runs/"+this.runId+"/turnaround-graph");
-        syncWizardGraph(this.run,this.node,branch);
+        if(this.single)syncSingleGraph(await request('wizard/single-template'),this.node,this.run);
+        else {const branch=await request("wizard/runs/"+this.runId+"/turnaround-graph");syncWizardGraph(this.run,this.node,branch);}
     }
     async start(operation){
         await this.save();
         this.run=await request("wizard/runs/"+this.runId+"/start",{operation,client_id:api.clientId||"",request_id:crypto.randomUUID()});
-        this.page=operation==="turnaround"?2:operation==="mesh"?4:5;
+        this.page=this.single?(operation==="mesh"?3:4):operation==="turnaround"?2:operation==="mesh"?4:5;
         this.remember();this.render();
     }
     go(page){this.page=page;this.remember();this.render();this.shell.content.scrollTop=0;}
@@ -131,7 +138,7 @@ export class Wizard {
     confirmReset(){
         dialog(this.shell,"Start over?",hint("Return to workflow selection? Your saved images, meshes and packages will remain on disk."),
             [{label:"Keep working",run:close=>close()},{label:"Start over",primary:true,run:close=>{
-                close();clearWizardState(this.node);this.shell.open("Choose a Workflow");
+                close();if(this.single)delete this.node.properties.foundrySingle;else clearWizardState(this.node);this.shell.open("Choose a Workflow");
             }}]);
     }
     cancel(){
@@ -170,7 +177,7 @@ export class Wizard {
             el("img",{src:new URL("../../assets/foundry-chaos-star.svg",import.meta.url).href,alt:"",class:"working-star"}),
             el("div",{class:"stage-progress"},this.overallText,this.overallMeter,this.overallCount,
                 el("strong",{},this.run.dependency?"Preparing required models":this.run.stage==="turnaround"?(this.run.turnaround?.name||"Image model")+" · Creating four views":stageNames[this.run.progress?.current||this.run.stage]||"Preparing the next stage"),this.sampleProgress,this.elapsed,
-                hint(this.run.dependency?FIRST_USE_MESSAGE:this.run.stage==="refinement"?"Refinement can take several minutes. The saved initial mesh is retained.":"Your completed stages are saved as the workflow progresses."),stages));
+                hint(this.run.dependency?FIRST_USE_MESSAGE:this.run.stage==="quads"?"QuadriFlow uses the CPU. High CPU use and spikes are normal. Retopology can take several minutes.":this.run.stage==="refinement"?"Refinement can take several minutes. The saved initial mesh is retained.":"Your completed stages are saved as the workflow progresses."),stages));
     }
     updateOverall(sample=0){
         const p=this.run?.progress;if(!p||!this.overallMeter)return;
@@ -185,19 +192,22 @@ export class Wizard {
         if(this.disposed)return;
         this.previewDispose?.();this.previewDispose=null;
         const rail=el("aside",{class:"wizard-rail","aria-label":"Workflow progress"},
-            el("span",{class:"eyebrow"},"IMAGE TO 3D"),el("h3",{},"From reference\nto asset"),
-            el("ol",{class:"wizard-steps"},...stepLabels.map((title,i)=>el("li",{
+            el("span",{class:"eyebrow"},"IMAGE TO 3D"),el("h3",{},this.single?"Single Image\nor Text":"From reference\nto asset"),
+            el("ol",{class:"wizard-steps"},...(this.single?["Starting image","Mesh settings","Refine & export","Asset package"]:stepLabels).map((title,i)=>el("li",{
                 class:i+1===this.page?"current":i+1<this.page?"visited":"",
                 ...(i+1===this.page?{"aria-current":"step"}:{})},
                 el("span",{class:"step-number","aria-hidden":"true"},String(i+1).padStart(2,"0")),
-                el("div",{},el("strong",{},title),el("small",{},stepDescriptions[i]))))),
+                el("div",{},el("strong",{},title),el("small",{},(this.single?["Upload, create or choose","Detail and refinement controls","Preview and output choices","Files and production record"]:stepDescriptions)[i]))))),
             el("div",{class:"wizard-rail-note"},el("strong",{},"Defaults are loaded"),
                 hint("Start with the loaded defaults. Open Advanced whenever you want more control.")));
-        const header=el("div",{class:"page-head"},el("div",{},el("span",{class:"eyebrow"},"PAGE "+this.page+" OF 5"),
-            el("h2",{tabindex:-1},titles[this.page-1])));
-        const pages=[inputPage,reviewPage,optionsPage,finishingPage,resultPage];
-        const panel=el("div",{class:"wizard-panel"},header,
-            this.error?modelAccessError(this.shell,this.error):null,this.busy(),pages[this.page-1](this));
+        const header=el("div",{class:"page-head"},el("div",{},el("span",{class:"eyebrow"},"PAGE "+this.page+" OF "+(this.single?4:5)),
+            el("h2",{tabindex:-1},(this.single?singleTitles:titles)[this.page-1])));
+        const pages=this.single?[singleInputPage,singleOptionsPage,finishingPage,resultPage]:[inputPage,reviewPage,optionsPage,finishingPage,resultPage];
+        const problem=this.error?modelAccessError(this.shell,this.error):null;
+        if(problem&&!this.run?.active&&this.runId)problem.append(el('div',{class:'actions'},
+            button('Retry remaining stages',()=>this.act(()=>this.start(this.run.operation||'mesh')),{class:'primary'}),
+            button('Review output choices',()=>this.go(this.single?3:4))));
+        const panel=el("div",{class:"wizard-panel"},header,problem,this.busy(),pages[this.page-1](this));
         this.host.replaceChildren(rail,panel);
         // Native DOM append does not accept null. Filtered via the shared helper.
         this.host.querySelector("h2")?.scrollIntoView({block:"nearest"});

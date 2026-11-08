@@ -86,6 +86,12 @@ class WizardRuns:
         refs=copy.deepcopy(data.get("references",[]))
         category=data.get("category","characters")
         turnaround_model=data.get("turnaround_model","qwen21")
+        method=data.get('method','turnaround')
+        if method not in ('turnaround','single-image'):raise ValueError('Choose an available mesh method.')
+        single=method=='single-image'
+        if single:
+            from ..single_image.definition import validate_references
+            validate_references(refs)
         bound=bind_references(category,refs,turnaround_model)
         for item in refs:
             path=owned_path(self.input_root,self.input_root/item["filename"])
@@ -100,9 +106,13 @@ class WizardRuns:
             raise ValueError("Use an asset name without path separators or reserved Windows names.")
         profile=data.get("profile","default")
         overrides=copy.deepcopy(data.get("overrides",{}))
-        return dict(name=name,slug=re.sub("[^a-zA-Z0-9_-]+","-",name).strip("-")[:60] or "asset",
+        settings_resolver=resolve_settings
+        if single:
+            from ..single_image.definition import resolve_settings as settings_resolver
+            bound={'prompt':'','recipe':'official-single-image','guidance':'One original reference; three-quarter view recommended.'}
+        return dict(method=method,name=name,slug=re.sub("[^a-zA-Z0-9_-]+","-",name).strip("-")[:60] or "asset",
                     category=category,references=refs,profile=profile,overrides=overrides,
-                    settings=resolve_settings(profile,overrides),
+                    settings=settings_resolver(profile,overrides),
                     selection=self.selection(data.get("selection",DEFAULT_SELECTION)),
                     reference_prompt=bound["prompt"],turnaround_model=turnaround_model,
                     turnaround_recipe=bound["recipe"],turnaround_guidance=bound["guidance"],
@@ -120,12 +130,14 @@ class WizardRuns:
         run=self.get(ident)
         if ident in self.tasks:raise ValueError("Wait for this stage or cancel it before changing its inputs.")
         revised=self.validate(data)
+        if revised.get("method")!=run.get("method","turnaround"):raise ValueError("Start a new asset to change its workflow method.")
         if ident in self.tasks:raise ValueError("This stage started while the inputs were being checked. Wait or cancel before changing them.")
         run.update(revised)
         # Invalidate the current view of stale descendants, never their files.
         keys={"turnaround":["sheet","front","left","back","right"],"geometry":["decoded"],
               "refinement":["refined","clean"],"texture":["texture"],"balanced":["balanced"],
               "compact":["compact"],"quads":["quads","quad_manifest"],"print":["print"],"package":[]}
+        if run.get("method")=="single-image":keys["geometry"].append("front")
         for stage,receipt in list(run["stages"].items()):
             if stage=="package" or receipt["fingerprint"]!=self.fingerprint(run,stage):
                 for key in keys[stage]:
@@ -139,9 +151,9 @@ class WizardRuns:
         # No model state, credentials or unbounded history crosses this boundary.
         fields=("id","name","category","references","profile","overrides","settings","selection","status",
                 "stage","error","previews","package","cleanup","version","pending","events","reference_prompt","measurements","geometry_audit","dependency",
-                "turnaround_model","turnaround_recipe","turnaround_guidance","operation","request_id","image_creation")
+                "method","quad_report","turnaround_model","turnaround_recipe","turnaround_guidance","operation","request_id","image_creation")
         result=copy.deepcopy({k:run[k] for k in fields if k in run})
-        if run.get("checkpoints",{}).get("print"):
+        if run.get("checkpoints",{}).get("print") and not run.get("package",{}).get("grounded_previews",{}).get("print"):
             path=Path(run["checkpoints"]["print"])
             relative=path.relative_to(self.output_root)
             result.setdefault("previews",{})["print"]=view_url({"filename":path.name,"subfolder":relative.parent.as_posix(),"type":"output"})
@@ -152,7 +164,7 @@ class WizardRuns:
             from .readiness import download_progress
             result["dependency"]={**run["dependency"],**download_progress(run["id"])}
         result["outputs"]=copy.deepcopy(run.get("outputs",{}))
-        if run.get("references") and run.get("settings"):
+        if run.get("method")!="single-image" and run.get("references") and run.get("settings"):
             result["turnaround"]=model_spec(run.get("turnaround_model","qwen21"))
         if "geometry_audit" not in result:
             saved=run.get("outputs",{}).get("2015",{}).get("text",[])
@@ -162,6 +174,9 @@ class WizardRuns:
         return result
 
     def fingerprint(self, run, stage):
+        if run.get('method')=='single-image':
+            from ..single_image.policy import fingerprint
+            return fingerprint(run,stage,self.input_root)
         settings={k:run["settings"][k] for k in STAGE_KEYS[stage]}
         if stage=="turnaround":
             # Detect a file replaced outside the wizard as well as changed notes/order.
@@ -195,10 +210,11 @@ class WizardRuns:
                 return self.public(run)
         if self.tasks or self.native.active_ids() or self.legacy_busy():
             raise ValueError("Another Comfy or Foundry job is active. Wait for it to finish.")
-        if operation in ("mesh","finish") and not self.fresh(run,"turnaround"):
+        if run.get("method")!="single-image" and operation in ("mesh","finish") and not self.fresh(run,"turnaround"):
             raise ValueError("Generate and review the current four views first.")
         if operation=="finish" and not self.fresh(run,"refinement"):
             raise ValueError("Generate the refined mesh with the current settings first.")
+        if run.get('method')=='single-image' and operation=='turnaround':raise ValueError('Single Image does not use turnaround generation.')
         run.update(status="running",stage="preparing",error="",cancel=False,operation=operation,client_id=client_id,request_id=request_id)
         self.save(run)
         self.tasks[ident]=asyncio.create_task(self.execute(run,operation))
@@ -236,7 +252,7 @@ class WizardRuns:
             await self.prepare_dependencies(run, operation)
             # stage() reuses validated checkpoints, so Rocket can enter from any page.
             # The backend owns continuation; it never depends on a browser staying open.
-            if operation in ("turnaround","rocket"):
+            if run.get("method")!="single-image" and operation in ("turnaround","rocket"):
                 await self.stage(run,"turnaround")
             if operation in ("mesh","rocket"):
                 await self.stage(run,"geometry")
@@ -280,12 +296,14 @@ class WizardRuns:
         loop = asyncio.get_running_loop()
         def progress(value):
             loop.call_soon_threadsafe(lambda: run.update(dependency=value))
+        if run.get('method')=='single-image':
+            from ..single_image.definition import required_stages
         for stage in required_stages(operation, run["selection"]):
-            if await asyncio.to_thread(self.fresh, run, stage):
+            if await asyncio.to_thread(self.fresh, run, "geometry" if stage=="single_geometry" else stage):
                 continue
             self.require_not_cancelled(run)
             await asyncio.to_thread(ensure, stage, self.root, lambda: run.get("cancel", False),
-                                    run["id"], progress, run.get("turnaround_model", "qwen21"))
+                                    run["id"], progress, run.get("turnaround_model", "qwen21"),run.get("settings",{}).get("geometry_model","pixal3d"))
         run.pop("dependency", None)
         self.require_not_cancelled(run)
 
@@ -304,8 +322,8 @@ class WizardRuns:
         def progress(value):
             run["dependency"]=value
         run["dependency"]={"phase":"checking required models"}
-        await asyncio.to_thread(ensure,stage,self.root,lambda:run.get("cancel",False),run["id"],
-                                lambda value:loop.call_soon_threadsafe(progress,value),run.get("turnaround_model","qwen21"))
+        await asyncio.to_thread(ensure,"single_geometry" if stage=="geometry" and run.get("method")=="single-image" else stage,self.root,lambda:run.get("cancel",False),run["id"],
+                                lambda value:loop.call_soon_threadsafe(progress,value),run.get("turnaround_model","qwen21"),run.get("settings",{}).get("geometry_model","pixal3d"))
         run.pop("dependency",None)
         self.require_not_cancelled(run)
         graph=compile_stage(stage,run)
@@ -334,6 +352,8 @@ class WizardRuns:
             errors=[str(m[1].get("exception_message","")) for m in status.get("messages",[]) if m[0]=="execution_error"]
             raise ValueError("Comfy could not finish "+pending["stage"]+": "+("; ".join(errors) or status.get("status_str","interrupted")))
         outputs=history.get("outputs",{})
+        if run.get('method')=='single-image':
+            outputs={str(int(k)-500000):v for k,v in outputs.items()}
         stage=pending["stage"]
         # Keep an immutable production record independently of the editable draft.
         record=self.root/run["id"]/"stages"/(pending["prompt_id"]+".json")
@@ -359,7 +379,9 @@ class WizardRuns:
             for path in paths[1:]:
                 with Image.open(path).convert("RGB") as image:
                     if image.getbbox() is None:raise ValueError("A turnaround crop is empty. Regenerate or revise the reference.")
-        elif stage=="geometry":saved("382","decoded")
+        elif stage=="geometry":
+            saved("382","decoded")
+            if run.get('method')=='single-image':saved('340','front','images')
         elif stage=="refinement":
             saved("2005","refined")
             saved("2017","clean")
@@ -376,6 +398,7 @@ class WizardRuns:
             paths.append(path)
         elif stage=="quads":
             report=json.loads(outputs["3001"]["text"][0])
+            run["quad_report"]=report
             manifest=owned_path(self.output_root,Path(report["export_dir"])/"manifest.json")
             run["checkpoints"]["quad_manifest"]=str(manifest)
             paths.append(manifest)
@@ -384,6 +407,9 @@ class WizardRuns:
         elif stage=="package":
             report=json.loads(outputs["3010"]["text"][1])
             path=owned_path(self.output_root,report["archive_path"])
+            for key,filename in report.get('grounded_previews',{}).items():
+                artifact=owned_path(self.output_root,filename);relative=artifact.relative_to(self.output_root)
+                run['previews'][key]=view_url({'filename':artifact.name,'subfolder':relative.parent.as_posix(),'type':'output'})
             run["package"]={**report,"download":"/mumblebox-foundry/v1/wizard/runs/"+run["id"]+"/package"}
             paths.append(path)
             import zipfile
@@ -397,6 +423,9 @@ class WizardRuns:
         self.event(run,"Completed "+stage+"; saved output verified.")
 
     def metadata(self, run):
+        if run.get('method')=='single-image':
+            from ..single_image.policy import metadata
+            return metadata(run)
         spec=model_spec(run.get("turnaround_model","qwen21"))
         resources=spec["resources"]+["pixal3d","trellis2","hi3d","pymeshlab","dinov3","birefnet","pixelartistry"]
         receipts=[]
@@ -426,4 +455,4 @@ class WizardRuns:
             lineage["texture_models"] = [{field:item[field] for field in ("name","repo","file","revision","sha256")}
                                         for item in model_lock["worker_models"]["trellis_texture"]]
         if run.get('image_creation'):lineage['image_creation']=run['image_creation']
-        return {"workflow_version":VERSION,"receipts":receipts,"production":lineage}
+        return {"workflow_version":VERSION,"receipts":receipts,"production":lineage,"warnings":run.get("quad_report",{}).get("warnings",[])}

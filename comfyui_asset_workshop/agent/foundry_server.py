@@ -22,7 +22,7 @@ def create_server(client):
         "Use the existing ComfyUI Foundry workflow. Read capabilities first. Upload only authorized references, "
         "label the first primary and describe each additional reference's purpose. Select the model, category, "
         "settings and export formats explicitly or use returned defaults. Model licenses vary. "
-        "Create/update a run; start turnaround, mesh, finish, or rocket for remaining stages. "
+        "For the simplest path create a run with method=single-image and exactly one reference; start mesh, finish or rocket. Single Image uses the official Comfy Pixal3D single-image recipe, original-reference Hi3D, cleanup and final TRELLIS.2 texturing. For the separate Turnaround method start turnaround, mesh, finish or rocket. "
         "Reuse request_id for retries of the same start; use a new ID for an intentional new operation. "
         "Poll status at sensible intervals; completed checkpoints survive cancellation. "
         "The backend continues if this client disconnects. show_run updates the existing Foundry UI without OS focus. "
@@ -46,7 +46,7 @@ def create_server(client):
     @server.tool(structured_output=True)
     @checked
     def foundry_create_run(configuration:dict[str,Any])->dict[str,Any]:
-        """Save name, references, category, turnaround_model, profile, overrides and selection. Does not generate."""
+        """Save method (single-image or turnaround), name, references, category, profile, overrides and export selection. Single-image accepts exactly one reference; no turnaround model is used. Does not generate."""
         return client.create_run(configuration)
 
     @server.tool(structured_output=True)

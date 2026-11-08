@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.0-preview.17 — Single Image or Text, grounding and interface update
+
+- Add per-object floor placement for Single Image exports: choose automatic near-upright leveling, translation-only placement or original orientation. Apply a measured rigid pose after baking to the actual GLB/BLEND/FBX/OBJ/STL outputs and final previews, without deforming geometry or rerunning AI stages. Preserve source checkpoints and record the pose and limitations.
+- Add **Single Image or Text** as the first/default mesh method, with its own wizard and isolated graph section. Use the official ComfyUI single-image Pixal3D recipe, then original-reference Hi3D refinement, cleanup, final TRELLIS.2 texturing, baking and selected exports. Keep Turnaround, 3D-Guided, HairDeck and Splat & Solid independent.
+- Start with upload/drop, webcam, Gallery or **Create Image**. The embedded creator returns one accepted reference with its source record and preserves the normal paired-image session. Gallery uses bounded pages and a Load more control.
+- Add matching artwork for all four mesh methods, compact spacing and help, consistent icons/navigation, useful preview space and expandable technical errors.
+- Add **Font** with a glasses icon and persistent Default, 112%, 125%, 150%, 175% and 200% choices, with layout reflow and light/dark support.
+- Add a green/red release-status flag with update details, disabled update actions while processing, and neutral checking/failure states. This checks published releases; it does not install unpublished source.
+- Add **Settings → Purge Cache** with exact-file/size review, selected categories, a separate confirmation and active-job guards. Preserve saved assets, references, models, settings and durable editable results.
+- Keep QuadriFlow optional and explain its CPU use and duration. If it opens an already closed component beyond the unchanged small-hole limits, use a reported topology-preserving quad subdivision fallback. Retain strict closure, winding, budget and surface-distance checks; bake textures onto the chosen output.
+- Reject partially validated Comfy jobs instead of accepting a valid subset as stage success. Retain completed checkpoints for retries.
+- Preserve Single Image drafts and Resume across reloads, and retain reported worker warnings in package documentation with single-image-specific model credits.
+- Reorganize the README around installation, workflow choice, outputs and researcher/community credits.
+
 ## 0.1.0-preview.16 — Update after a closed runtime
 
 - Allow normal Update after the backend has closed and left a stale runtime record. Require both a refused connection and a confirmed exited runtime; live or uncertain processes, timeouts and active queues still prevent interruption. Saved state is preserved.

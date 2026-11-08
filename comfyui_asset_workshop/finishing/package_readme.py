@@ -20,7 +20,7 @@ LABELS={"vertices":"Vertices","triangles":"Triangles","quads":"Quads","ngons":"N
 def measurement_lines(m):
     out=[]
     groups=[("Geometry",m.get("geometry") or {k:v for k,v in m.items() if k in LABELS})]
-    groups += [(title,m.get(key,{})) for title,key in (("Authoring geometry","authoring"),("Runtime geometry","runtime"),("Dimensions and coordinates","coordinates"),("Recorded topology","topology"))]
+    groups += [(title,m.get(key,{})) for title,key in (("Authoring geometry","authoring"),("Runtime geometry","runtime"),("Dimensions and coordinates","coordinates"),("Recorded topology","topology"),("Grounding","grounding"))]
     for title,data in groups:
         if data:
             out+=["**"+title+"**","","| Measurement | Value |","|---|---:|"]
