@@ -2,6 +2,12 @@
 
 This Windows/NVIDIA beta installs an isolated copy of ComfyUI, Foundry, the Hi3D service, the texture/finishing worker, Blender and the companion MCP. It opens the Foundry interface inside Pinokio. Existing ComfyUI installations are not replaced.
 
+## Community workflows and contributions
+
+Foundry is a growing toolbox of local image and 3D workflows, shaped by practical use, learning and community contributions. The aim is to bring together the best practical local approaches and make them easier to use through guided wizards and automatic software setup. Credit stays with the researchers, model authors and workflow contributors whose work makes it possible.
+
+Have a workflow that produces great results locally? Share it through [GitHub Issues](https://github.com/mumblebox-gpt/mumblebox-foundry/issues). [Pull requests](https://github.com/mumblebox-gpt/mumblebox-foundry/pulls) for workflow integrations, improvements and fixes are welcome. Include the workflow, example results, required models and hardware, and relevant license information so we can evaluate and credit it properly.
+
 ## Install and open
 
 1. Install Pinokio from https://pinokio.co/ and complete its software prerequisites.

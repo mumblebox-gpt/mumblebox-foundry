@@ -1,7 +1,7 @@
 module.exports = {
   version:"8.0.0",
   title:"Mumblebox 3D Asset Foundry",
-  description:"Create images and textured 3D assets with guided workflows, optional quad retopology, game and print exports, and an agent MCP. Windows/NVIDIA beta.",
+  description:"A growing toolbox for making images and 3D assets locally, with guided workflows and automatic software setup. Help bring the best practical local workflows together: workflow suggestions, improvements and pull requests are welcome. Windows/NVIDIA preview.",
   icon:"icon.png",
   menu:async(kernel,info)=>{
     for(const [script,label] of [["install.js","Installing software"],["repair.js","Repairing software"],["update.js","Updating Foundry"]]){

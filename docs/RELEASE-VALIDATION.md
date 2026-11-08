@@ -1,3 +1,15 @@
+# Preview 0.1.0-preview.15 validation
+
+Community About/Thank You changes were visually inspected in the existing standalone Comfy Desktop Foundry. Contributor credit is specific to Hal Rottenberg's installer improvements, with both original source commits linked. The Pinokio description and contribution guide invite workflow suggestions and pull requests.
+
+Installer verification: Python 3.13.12 reproduced the inherited `SETUPTOOLS_USE_DISTUTILS=stdlib` import failure; `local` succeeds. A fresh, SHA-256-verified iopath 0.1.10 source archive was downloaded through the actual repaired transport and built into a wheel with uv in an isolated cache/build environment. No user environment was changed. The bundled-distutils override remains scoped to HairDeck's dependency-build subprocess, retaining current requirements, Torch constraints and both real-entrypoint probes.
+
+Bounded Blender primary/mirror requests each returned HTTP206, ZIP signatures and a 404,453,484-byte total; the mirror redirected to Purdue. The primary worked here, so the fork's earlier HTTP403 was not reproduced. Blender's pinned version/hash and mandatory full-download checksum check remain unchanged; this is not a fresh full Blender transfer or fresh-machine installation claim.
+
+Focused regression checks passed: 26 Pinokio/bootstrap/update tests, one HairDeck installer test, three HairDeck probe tests and seven portable release/installer tests; both changed JavaScript files parsed, and the source whitespace check passed. Native GUI acceptance: a new auburn-haired reference produced two saved variations. The first checkpoint and data hashes remained unchanged when adding the second. The saved second variation gained spring chains without regenerating its hairstyle, then displayed 146 cards and 11 validated spring groups. Actual review/head/chain controls, enlarged sheets, pointer-driven orbit, scale/Z fitting, swatch/hex color override, ribbon/volume material previews, unique UV maps, reference-color restoration, avatar review and three-second 480px motion playback passed. The final 29-file package passed CRC, all 28 non-self catalog checksums and README inventory checks. History displayed its thumbnail/formats; the actual Resume control restored the same completed run and final preview. The original graph remains selected and saved.
+
+Brian explicitly waived the native ZIP Save As/download-completion check on 2026-11-08 to proceed with release work. The package integrity checks above remain valid; successful native Save As is not claimed. Pinokio update/retest and publication follow the native acceptance pass.
+
 # Preview 0.1.0-preview.14 validation
 
 Validated in the existing standalone Comfy Desktop wizard on 2026-11-08. HairDeck remains an independently owned six-node branch; opening older graphs adds only the missing HairDeck section and preserves their existing nodes, groups, settings and output references.

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-preview.15 — Community credits and installer resilience
+
+- Reinforce Foundry’s community toolbox approach in About, explain guidance for newcomers, and add a running Thank You section after model credits with specific contributor acknowledgments and source links.
+- Refresh the Pinokio description and guide to welcome quality local workflow suggestions, improvements and pull requests, with clear contributor credit.
+- Adopt Blender's mirror service and an identifiable Foundry download client, retaining the pinned Blender version and SHA-256 verification. Verified cached archives still avoid network downloads.
+- Prevent HairDeck dependency builds from inheriting the removed stdlib distutils implementation from a Pinokio shell. Use setuptools' bundled implementation only in that build subprocess, preserving the parent environment, Torch constraints, current requirements path and both import probes.
+- Thanks to [halr9000](https://github.com/halr9000/mumblebox-foundry) for the original installer fixes. Adapted from commits [7c731364](https://github.com/halr9000/mumblebox-foundry/commit/7c731364e92fbec4bec7bb65bed086c59c2210b7) and [3be2d239](https://github.com/halr9000/mumblebox-foundry/commit/3be2d2393e323d4edad404704671e13a9d85566e).
+
 ## 0.1.0-preview.14 — HairDeck full wizard experience
 
 - Bring HairDeck's review experience into the existing independent workflow: compare up to four interactive variation cards, choose a variation, toggle its reference head and predicted chains, and inspect processing/crop/mask sheets in the wizard.
