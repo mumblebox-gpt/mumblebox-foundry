@@ -98,7 +98,8 @@ def download(url,path,sha256):
     if path.exists() and digest(path)==sha256:return
     temporary=path.with_suffix(path.suffix+'.partial')
     print(f'Downloading software: {path.name}',flush=True)
-    with urllib.request.urlopen(url,timeout=60) as response,temporary.open('wb') as output:
+    request=urllib.request.Request(url,headers={'User-Agent':'Mumblebox-Foundry (+https://github.com/mumblebox-gpt/mumblebox-foundry)'})
+    with urllib.request.urlopen(request,timeout=60) as response,temporary.open('wb') as output:
         size=int(response.headers.get('Content-Length',0));received=0;report=0
         while block:=response.read(8*1024*1024):
             output.write(block);received+=len(block)
