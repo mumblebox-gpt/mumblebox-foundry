@@ -4,6 +4,11 @@ from pathlib import Path
 
 class ResourceInventory:
     EXTENSIONS={'.safetensors','.gguf','.ckpt','.pt','.pth','.bin','.onnx','.npz','.pkl','.sft'}
+    SORT_ORDERS = {
+        "name_asc": ("name", False), "name_desc": ("name", True),
+        "size_asc": ("bytes", False), "size_desc": ("bytes", True),
+        "date_asc": ("added_at", False), "date_desc": ("added_at", True),
+    }
     def __init__(self,root,busy,locations=None,models=None,invalidate=lambda:None):
         self.root=Path(root).resolve();self.busy=busy;self.locations=locations or (lambda:[])
         self.models=models or {};self.invalidate=invalidate;self.tokens={};self.lock=threading.RLock()
@@ -35,25 +40,44 @@ class ResourceInventory:
                         reason='' if any(real.is_relative_to(x['path']) for x in roots) else 'Target is outside registered model locations.'
                         if in_use:reason='Unload models and finish active jobs or downloads before deleting.'
                         stat=p.stat();relative=p.relative_to(root).as_posix();matched_key=next((k for k,m in self.models.items() if m.get('name')==name),None);matched=self.models.get(matched_key,{})
+                        symlink = p.is_symlink()
+                        arrival = p.lstat() if symlink else stat
+                        added_at = getattr(arrival, 'st_birthtime', arrival.st_ctime if os.name == 'nt' else None)
                         workflows=list(location.get('workflows',[]))
                         for stage,keys in MODELS.items():
                             if matched_key in keys:workflows.extend(labels.get(stage,[]))
+                        if matched_key == 'ccore_vision_projector':
+                            workflows.append('CCORE Image + Text')
+                        if matched_key in ('ccore_prop','ccore_prop_q8'):
+                            workflows.extend(('CCORE Text','CCORE Image + Text'))
                         if 'idol' in name.lower():workflows.append('Splat & Solid')
                         if 'hairdeck' in str(real).lower():workflows.append('HairDeck')
                         if name.startswith('birefnet'):workflows.extend(['Turnaround','3D-Guided','HairDeck','Splat & Solid'])
                         items.append(dict(id=hashlib.sha256(key.encode()).hexdigest()[:24],name=name,relative_path=relative,location=location['label'],
                             kind='lora' if 'lora' in str(p.parent).lower() else 'image_model' if any(x in str(p.parent).lower() for x in ('diffusion_models','checkpoints')) else 'component',workflows=sorted(set(workflows)),bytes=stat.st_size,
-                            deletable=not reason,reason=reason,shared_links=stat.st_nlink,symlink=p.is_symlink(),download_known=bool(matched),path=str(p.absolute())))
+                            added_at=added_at,deletable=not reason,reason=reason,shared_links=stat.st_nlink,
+                            symlink=symlink,download_known=bool(matched),path=str(p.absolute())))
                     except OSError:continue
                     if len(items)>=100000:truncated=True;break
                 if truncated:break
             if truncated:break
         return {'items':items,'truncated':truncated}
-    def list(self,cursor=0,limit=100):
+    def list(self, cursor=0, limit=100, *, sort=None):
         cursor=int(cursor);limit=int(limit)
         if cursor<0 or cursor>100000 or not 1<=limit<=200:raise ValueError('Invalid model list page.')
+        if sort is not None and sort not in self.SORT_ORDERS:
+            raise ValueError('Choose a supported model sort order.')
         with self.lock:
             data=self._scan();rows=data['items']
+            if sort is not None:
+                field, descending = self.SORT_ORDERS[sort]
+                rows.sort(key=lambda row: (row['name'].casefold(), row['location'].casefold(),
+                                           row['relative_path'].casefold(), row['id']))
+                if field == 'name':
+                    rows.sort(key=lambda row: row['name'].casefold(), reverse=descending)
+                else:
+                    direction = -1 if descending else 1
+                    rows.sort(key=lambda row: (row[field] is None, direction * (row[field] or 0)))
             return {'items':[{k:v for k,v in i.items() if k!='path'} for i in rows[cursor:cursor+limit]],
                 'next_cursor':cursor+limit if cursor+limit<len(rows) else None,'total':len(rows),'truncated':data['truncated']}
     def _target(self,ident):

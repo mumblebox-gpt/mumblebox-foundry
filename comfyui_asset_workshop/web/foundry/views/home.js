@@ -70,18 +70,19 @@ export function home(shell) {
                 shell.node.properties.foundryHair?.runId?button('Resume',()=>shell.openHairWizard({resume:true}),{title:'Resume hair asset'}):null)),
         el('h3',{},'Create Rigged Hair with HairDeck'),
         hint('Powered by HairDeck from hyz317 and its researchers, with FengLairh’s ComfyUI integration. Create and fit stylized hair cards, adjust materials, and export GLB or spring-bone VRM with motion preview.')));
-    const ccoreCard=el('article',{class:'planned-workflow','data-workflow':'ccore'},
-        el('img',{src:new URL('../../assets/foundry/ccore-prop.svg',import.meta.url).href,
-            alt:'Stylized cargo crate with orange latches',loading:'lazy'}),el('div',{},
-            el('div',{class:'workflow-card-heading'},el('span',{class:'badge'},'CCORE · Text to Prop'),
+    const ccoreCard=image=>el('article',{class:'planned-workflow','data-workflow':image?'ccore-image':'ccore'},
+        el('img',{src:new URL(image?'../../assets/foundry/ccore-image.webp':'../../assets/foundry/ccore-prop.svg',import.meta.url).href,
+            alt:image?'Finished field radio with an orange handle beside its reference sketch':'Stylized cargo crate with orange latches',
+            loading:'lazy',decoding:'async'}),el('div',{},
+            el('div',{class:'workflow-card-heading'},el('span',{class:'badge'},image?'CCORE · Image + Text':'CCORE · Text to Prop'),
                 el('div',{class:'workflow-card-controls'},
-                    button('Open Prop Wizard',()=>shell.openCcoreWizard(),{class:'primary'}),
+                    button(image?'Open Image + Text Wizard':'Open Prop Wizard',()=>shell.openCcoreWizard({image}),{class:'primary'}),
                     button('View Graph',async()=>{
                         const {showPropGraph}=await import('../ccore/graph.js');
-                        showPropGraph(shell.node);
+                        showPropGraph(shell.node,image);
                     },{title:'View CCORE workflow'}),
-                    shell.node.properties.foundryCcore?.id?button('Resume',()=>shell.openCcoreWizard({resume:true}),{title:'Resume CCORE prop'}):null)),
-            el('h3',{},'Create a Prop from Text'),
-            hint('Describe a stylized game prop, such as a crate, lantern or control panel. Powered by CCORE GLB-3D-Coder on Qwen3.5. Review the generated prop in 3D and export GLB or ZIP.')));
-    return el("div",{},card,el("div",{class:"future-workflows"},imageCard,hairCard,ccoreCard,...planned.map(([id,name,description])=>el("article",{class:"planned-workflow"},artwork(id,name),el("div",{},el("span",{class:"badge"},"Coming soon"),el("h3",{},name),hint(description))))));
+                    shell.node.properties[image?'foundryCcoreImage':'foundryCcore']?.id?button('Resume',()=>shell.openCcoreWizard({image,resume:true}),{title:image?'Resume Image + Text prop':'Resume CCORE prop'}):null)),
+            el('h3',{},image?'Create a Prop from Image + Text':'Create a Prop from Text'),
+            hint(image?'Give CCORE GLB-3D-Coder one reference and describe what to keep or change. Review the stylized prop in 3D and export GLB or ZIP.':'Describe a stylized game prop, such as a crate, lantern or control panel. Powered by CCORE GLB-3D-Coder on Qwen3.5. Review the generated prop in 3D and export GLB or ZIP.')));
+    return el("div",{},card,el("div",{class:"future-workflows"},ccoreCard(false),ccoreCard(true),hairCard,imageCard,...planned.map(([id,name,description])=>el("article",{class:"planned-workflow"},artwork(id,name),el("div",{},el("span",{class:"badge"},"Coming soon"),el("h3",{},name),hint(description))))));
 }

@@ -41,7 +41,8 @@ def compile_stage(record,side,seed,references,attempt,edit=None):
             output=node_id
     if output is None:raise ValueError('The selected image recipe has no image output.')
     # A separate ID range keeps queue progress/output events off the 3D nodes.
-    mapping={ident:str(60000+index) for index,ident in enumerate(nodes)}
+    offset=660000 if record.get('graph_scope')=='ccore-reference' else 60000
+    mapping={ident:str(offset+index) for index,ident in enumerate(nodes)}
     for node in nodes.values():
         for key,value in node['inputs'].items():
             if isinstance(value,list) and len(value)==2 and str(value[0]) in mapping:

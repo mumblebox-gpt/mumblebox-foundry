@@ -2,7 +2,7 @@ import {modelAccessError} from "../connection-help.js";
 import {el,button,hint,field,link} from '../dom.js';
 import {request} from '../services.js';
 import {referenceControls} from './references.js';
-import {workingStar} from '../activity.js';
+import {elapsedTime,workingStar} from '../activity.js';
 
 export function creator(c){
     const draft=c.draft,model=c.model(),busy=!!c.run?.active;
@@ -13,7 +13,7 @@ export function creator(c){
     const category=el('select',{'aria-label':'Image category',onchange:e=>{draft.category=e.target.value;c.remember();c.render();}},
         ...c.cap.categories.map(item=>el('option',{value:item.id,selected:item.id===draft.category},item.name)));
     const subject=el('fieldset',{disabled:busy},el('div',{class:'creator-columns'},
-        field('Creation name',el('input',{value:draft.name,maxLength:100,oninput:e=>{draft.name=e.target.value;c.remember();}})),c.singleOrigin?hint('One reference for Single Image or Text. Describe any subject below.'):field('What are you creating?',category)),
+        field('Creation name',el('input',{value:draft.name,maxLength:100,oninput:e=>{draft.name=e.target.value;c.remember();}})),c.singleOrigin?hint(c.ccoreOrigin?'Create one reference for your CCORE prop. Describe the image you want below.':'One reference for Single Image or Text. Describe any subject below.'):field('What are you creating?',category)),
         hint(c.cap.categories.find(item=>item.id===draft.category)?.description),
         text('description','Describe your image',4,'The subject, appearance, colors and style you want.'),
         c.paired()?el('div',{class:'creator-columns'},text('front','Front details · optional',2,'Details visible on the front.'),text('back','Back details · optional',2,'Backpack, rear markings or details we cannot see from the front.')):null,
@@ -56,11 +56,12 @@ export function creator(c){
         ready&&!busy?button('Generate a new variation',()=>c.act(()=>c.generate('regenerate'))):null,
         busy?button('Cancel generation',()=>c.act(async()=>{c.run=await request('images/'+c.id+'/cancel',{});})):null,c.progressText),
         c.error?modelAccessError(c.shell,c.error):null,
-        busy?el('div',{class:'creator-busy'},workingStar(),el('progress',{'aria-label':'Image generation in progress'})):null,
+        busy?el('div',{class:'creator-busy'},workingStar(),elapsedTime(c.run.started_at*1000),el('progress',{'aria-label':'Image generation in progress'})):null,
         el('div',{class:'creator-pair','data-paired':String(c.paired())},...frames),
         c.run?.pair_review?hint(c.run.pair_review):null,
         el('div',{class:'creator-finish actions'},button('Save & Create Another',()=>c.act(()=>c.save('another')),{disabled:!ready||busy}),
-            (c.paired()||c.singleOrigin)?button(c.singleOrigin?'Use image in Single Image workflow':'Save & Create a 3D Mesh',()=>c.act(()=>c.save('3d')),{disabled:!ready||busy,class:'primary'}):null,
+            (c.paired()||c.singleOrigin)?button(c.ccoreOrigin?'Use image in CCORE':c.singleOrigin?'Use image in Single Image workflow':'Save & Create a 3D Mesh',()=>c.act(()=>c.save('3d')),{disabled:!ready||busy,class:'primary'}):null,
+            c.ccoreOrigin?button('Back to CCORE wizard',()=>c.shell.openCcoreWizard({image:true}),{disabled:busy}):null,
             button('Save & View Gallery',()=>c.act(()=>c.save('gallery')),{disabled:!ready||busy}),
             ready?el('a',{href:'/mumblebox-foundry/v1/images/'+c.id+'/package',download:''},'Download Images'):null));
     const sections=[['subject','Describe the subject',c.singleOrigin?'One image from your description':'Category and front/back details',subject],['references','Add references','Optional images and camera capture',el('fieldset',{disabled:busy},referenceControls(c))],

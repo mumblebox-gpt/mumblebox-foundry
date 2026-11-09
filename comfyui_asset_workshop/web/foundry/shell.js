@@ -68,7 +68,7 @@ export class FoundryShell {
         this.fontControl=fontControl(this);
         this.updateSlot=el("div",{class:"header-update",role:"status","aria-live":"polite"});
         this.settingsButton=button([icon("gear",18),"Settings"],()=>this.settings());
-        const donate=button("Donate",()=>{}, {disabled:true,title:"Donation link coming soon"});
+        const donate=button("Coffee",()=>{}, {disabled:true,title:"Coffee link coming soon"});
         const identity=el("div",{class:"identity"},el("div",{class:"brand"},el("div",{class:"brand-lockup"},
             el("h1",{},el("img",{class:"brand-logo",src:new URL("../assets/foundry/logo-approved.png",import.meta.url).href,alt:"Mumblebox 3D Asset Foundry",width:2172,height:724})),this.version)),
             el("div",{class:"header-tools"},el("div",{class:"header-actions"},languages,this.themeButton,this.fontControl.element,this.settingsButton,donate),this.updateSlot));
@@ -151,6 +151,7 @@ export class FoundryShell {
         await this.open("Images");
     }
     async open(name) {
+        if(name!=='Images'&&this.imageOrigin?.method==='ccore-image')delete this.imageOrigin;
         this.retryView=()=>this.open(name);
         this.viewDispose?.();this.viewDispose=null;
         this.tab=name;this.sequence=(this.sequence||0)+1;const sequence=this.sequence;
@@ -271,6 +272,7 @@ export class FoundryShell {
     }
 
     async openCcoreWizard(options={}) {
+        if(this.imageOrigin?.method==='ccore-image')delete this.imageOrigin;
         this.viewDispose?.();
         this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;
@@ -284,7 +286,7 @@ export class FoundryShell {
             if(sequence!==this.sequence){wizard.dispose();return;}
             this.content.replaceChildren(element);
             this.content.scrollTop=0;
-            this.content.setAttribute('aria-label','CCORE prop wizard');
+            this.content.setAttribute('aria-label',options.image?'CCORE Image + Text wizard':'CCORE text-only prop wizard');
             this.viewDispose=()=>wizard.dispose();
             [...this.nav.children].forEach((node,index)=>node.setAttribute('aria-selected',String(index===0)));
         } catch(error) {

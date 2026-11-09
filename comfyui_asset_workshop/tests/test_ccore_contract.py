@@ -49,6 +49,25 @@ class CcoreContractTests(unittest.TestCase):
         prompt = "  Create one green case.\nPut the handle on top.  "
         self.assertEqual(contract.options({"prompt": prompt})["prompt"], prompt)
 
+    def test_model_precision_defaults_and_validates(self):
+        contract = load_contract()
+        self.assertEqual(contract.options({"prompt": "A crate"}).get("model_variant"), "q4_k_m")
+        self.assertEqual(contract.options({"prompt": "A crate", "model_variant": "q8_0"})["model_variant"], "q8_0")
+        for invalid in ("fp16", "", None, ["q4_k_m"]):
+            with self.subTest(invalid=invalid), self.assertRaisesRegex(ValueError, "model precision"):
+                contract.options({"prompt": "A crate", "model_variant": invalid})
+
+    def test_one_local_reference_is_required_only_for_image_mode(self):
+        contract = load_contract()
+        brief = {"prompt": "A crate"}
+        self.assertNotIn("image", contract.options(brief))
+        image = "foundry-references/cargo crate.png"
+        self.assertEqual(contract.options({**brief, "mode": "image_text", "image": image})["image"], image)
+        for name in ("", "/outside.jpg", "foundry-references/../outside.jpg",
+                     "foundry-references/nested/picture.jpg", "foundry-references/bad.png:stream"):
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, "reference"):
+                contract.options({**brief, "mode": "image_text", "image": name})
+
     def test_measures_self_contained_scene(self):
         self.assertEqual(self.validate(self.triangle())["triangles"], 1)
 

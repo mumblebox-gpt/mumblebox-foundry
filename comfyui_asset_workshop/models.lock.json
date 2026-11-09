@@ -12,6 +12,28 @@
       "license": "apache-2.0",
       "license_url": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder/blob/8f32a199f8b22fe3157b9c5c8b42b052a0750dd3/LICENSE"
     },
+    "ccore_prop_q8": {
+      "repo": "ccore/Qwen3.5-4B-GLB-3D-Coder",
+      "file": "Qwen3.5-4B-GLB-3D-Coder-Q8_0.gguf",
+      "revision": "8f32a199f8b22fe3157b9c5c8b42b052a0750dd3",
+      "sha256": "68a66e251d96afdf120d7e8886964317b3f628abef5aad85e564b25b44da2a20",
+      "size": 4482402848,
+      "category": "mumblebox_ccore",
+      "name": "Qwen3.5-4B-GLB-3D-Coder-Q8_0.gguf",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder/blob/8f32a199f8b22fe3157b9c5c8b42b052a0750dd3/LICENSE"
+    },
+    "ccore_vision_projector": {
+      "repo": "ccore/Qwen3.5-4B-GLB-3D-Coder",
+      "file": "mmproj-Qwen3.5-4B-BF16.gguf",
+      "revision": "8f32a199f8b22fe3157b9c5c8b42b052a0750dd3",
+      "sha256": "ae08d9d7eceb8f2d0672d61b5e6aa78b611f2942b55ed71d21414980cc454b91",
+      "size": 675568768,
+      "category": "mumblebox_ccore",
+      "name": "mmproj-Qwen3.5-4B-BF16.gguf",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder/blob/8f32a199f8b22fe3157b9c5c8b42b052a0750dd3/LICENSE"
+    },
     "qwen21": {
       "repo": "Comfy-Org/Qwen-Image-2.1",
       "file": "diffusion_models/qwen_image_2.1_int8_convrot.safetensors",

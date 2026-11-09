@@ -4,7 +4,15 @@ export const roadmap = [
     {
         id: "interface", title: "GUI & usability", summary: "Clearer feedback and controls throughout the interface.",
         items: [
+            {title: "Did you know? tips during busy stages", status: "Planned", description: "Rotate short, useful tips while Foundry works. Cover reference images, workflow choices, exports and how agents can use the Foundry MCP."},
             {title: "More translations", description: "Add carefully reviewed interface translations while keeping model names, controls and help consistent."},
+        ],
+    },
+    {
+        id: "models", title: "Model Management", summary: "Make installed models easier to find and manage in Settings.",
+        items: [
+            {title: "Sort installed models by name, date added and size", status: "Available", description: "Settings remembers your sort order. Date added is the file creation date on this system."},
+            {title: "Open Models Folder", status: "Available", description: "Open ComfyUI’s primary models folder in Windows Explorer."},
         ],
     },
     {
@@ -12,6 +20,9 @@ export const roadmap = [
         items: [
             {title: "Better vehicle, prop and creature turnarounds", status: "Evaluate", description: "Revisit the original turnaround recipe and published guidance for each category. Evaluate a single three-quarter starting image where a head-on front/back pair hides important shape. Preserve the successful character approach."},
             {title: "Category-specific view sets", status: "Evaluate", description: "Determine how many views each category needs and which angles help. Investigate a fifth, top-down vehicle view, including extraction, view order, camera information and Pixal3D/TRELLIS input support before adopting it."},
+            {title: "Better CCORE memory management", status: "Planned", description: "Evaluate tighter GPU memory estimates and memory profile defaults for longer generation and image guidance."},
+            {title: "CCORE prop animation controls", status: "Evaluate", description: "Qualify CCORE’s author-supported animation on representative props and expose reliable controls and previews."},
+            {title: "ANIMA support for image creation", status: "Planned", description: "Add ANIMA as a model choice in Create Images, with guidance for its supported settings and hardware requirements."},
             {title: "Enhance Prompt in image creation", description: "Add an optional language-model prompt enhancement button that preserves the user's idea, reference roles and front/back details. Let the user review the result before generating."},
             {title: "Refinement comparisons", status: "Evaluate", description: "Keep one refinement pass recommended. Compare optional rear-then-front passes, and separately investigate aligning and fusing front/rear refinements. Preserve each result so the user can choose before texturing; extra passes may not improve quality."},
         ],
@@ -45,6 +56,8 @@ export const roadmap = [
             {title: "Independent workflows, shared services", description: "Give each workflow a dedicated graph section and cohesive code ownership. Reuse shared model, resource, gallery and export services without creating one tangled graph."},
             {title: "Memory profiles that affect the workflow", description: "Keep the working default profile, including the tested Splat & Solid path. Qualify additional hardware profiles across each workflow later, with explicit user choices taking precedence and clear memory recommendations."},
             {title: "MCP and export documentation parity", description: "Expose new workflow choices to agents and keep package README contents, file descriptions, model provenance and license links aligned with the outputs actually selected."},
+            {title: "Rework and update the Foundry MCP", status: "Planned", description: "Review the existing agent tools, bring workflow coverage and job controls up to date, and verify asset handoffs for Blender and other creation tools."},
+            {title: "Foundry skill for Claude and Codex", status: "Planned", description: "Include a skill that explains when to use Foundry’s existing MCP to generate an asset for Blender and when to work directly in Blender. Later, test one request from workflow selection through import into the intended Blender scene."},
             {title: "Portable updates and first-use preparation", description: "Trace dependencies for every runtime when adding features. Check access and prepare all selected workflow resources before generation, download models only on first use, and keep ComfyUI and Pinokio releases consistent."},
         ],
     },

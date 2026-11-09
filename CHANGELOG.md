@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-preview.19 — CCORE Image + Text and GPU memory checks
+
+- Add a separate **CCORE Image + Text** wizard. Drop in one reference or make one in Foundry, then describe what to keep or change. Preview the prop in 3D and save GLB or ZIP with model and projector credits.
+- Enable dedicated GPU memory checks in both CCORE wizards. Choose Standard (Q4_K_M) or Higher precision (Q8_0). If the selected budget will not fit, Foundry offers measured retry choices and keeps your inputs. Image + Text also accounts for the author’s BF16 vision projector.
+- Show elapsed time during processing, including downloads and multiple stages of the same run. The timer continues when you reopen an active run.
+- Remember Installed models sorting by name, date added or size. Open the primary ComfyUI models directory from Settings.
+- Add matching Image + Text artwork, align workflow cards in each row, move Create Images after the CCORE cards, and update the About and Roadmap tabs. Rename the disabled Donate control to Coffee.
+
 ## 0.1.0-preview.18 — Create a Prop from Text
 
 - Add the CCORE text-to-prop workflow, with dedicated crate artwork, a guided wizard, a rotatable 3D preview, and GLB or ZIP downloads.

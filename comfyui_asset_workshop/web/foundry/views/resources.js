@@ -1,19 +1,42 @@
 import {el,button,hint} from '../dom.js';
 import {request} from '../services.js';
 const size=n=>n>=1024**3?(n/1024**3).toFixed(2)+' GB':(n/1024**2).toFixed(1)+' MB';
+const dateFormat = new Intl.DateTimeFormat(undefined, {dateStyle: 'medium'});
+const sortKey = 'mumblebox-foundry/model-sort';
+const sortOrders = {
+    name_asc: 'Name A–Z', name_desc: 'Name Z–A',
+    size_desc: 'Size · largest first', size_asc: 'Size · smallest first',
+    date_desc: 'Date added · newest first', date_asc: 'Date added · oldest first',
+};
 export function resourceLists(shell){
     let disposed=false,cursor=0;
     const lists=el('ul',{class:'resource-rows'}),feedback=el('p',{role:'status',class:'muted'});
     const refresh=button('Refresh list',()=>load(true)),more=button('Show more models',()=>load(false),{hidden:true});
-    const root=el('section',{},el('div',{class:'section-heading'},el('h3',{},'Installed models'),refresh),
+    const sort = el('select', {onchange: () => {
+        localStorage.setItem(sortKey, sort.value);
+        load(true);
+    }}, Object.entries(sortOrders).map(([value, label]) => el('option', {value}, label)));
+    const savedSort = localStorage.getItem(sortKey);
+    sort.value = Object.hasOwn(sortOrders, savedSort) ? savedSort : 'name_asc';
+    const open = button('Open Models Folder', async () => {
+        try {await request('resources/open-folder', {});}
+        catch (error) {feedback.textContent = error.message;}
+    });
+    const root=el('section',{},el('div',{class:'section-heading'},
+        el('h3',{},'Installed models'),
+        el('div',{class:'resource-list-tools'},el('label',{},'Sort models',sort),refresh,open)),
         hint('Models across ComfyUI and registered workflow runtimes. Deleting weights preserves images, meshes and saved results. Required published models are prepared again before workflow processing.'),feedback,lists,more);
     async function load(reset=false){
-        refresh.disabled=true;more.disabled=true;if(reset){cursor=0;lists.replaceChildren();}
+        refresh.disabled=true;more.disabled=true;sort.disabled=true;if(reset){cursor=0;lists.replaceChildren();}
         try{
-            const data=await request('resources?cursor='+cursor+'&limit=100');if(disposed)return;
+            const query = new URLSearchParams({cursor, limit: 100, sort: sort.value});
+            const data=await request('resources?' + query);if(disposed)return;
             feedback.textContent=data.total+' model files found'+(data.truncated?' · inventory limit reached.':'.');
             for(const item of data.items){
-                const details=el('div',{},el('strong',{},item.name),el('small',{class:'muted'},size(item.bytes)+' · '+item.location),
+                const added = Number.isFinite(item.added_at)
+                    ? 'Added ' + dateFormat.format(item.added_at * 1000) : 'Date added unavailable';
+                const details=el('div',{},el('strong',{},item.name),
+                    el('small',{class:'muted'},size(item.bytes)+' · '+item.location+' · '+added),
                     hint(item.workflows.length?'Used by: '+item.workflows.join(', '):'Available to installed workflows; origin is not recorded.'),item.reason?hint(item.reason):null);
                 const row=el('li',{},details);
                 const remove=button('Delete',async()=>{
@@ -34,7 +57,7 @@ export function resourceLists(shell){
             }
             cursor=data.next_cursor;more.hidden=cursor===null;
         }catch(e){if(!disposed)feedback.textContent=e.message;}
-        finally{refresh.disabled=false;more.disabled=false;}
+        finally{refresh.disabled=false;more.disabled=false;sort.disabled=false;}
     }
     load(true);return {element:root,dispose:()=>{disposed=true;}};
 }

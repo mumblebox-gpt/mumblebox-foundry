@@ -51,9 +51,9 @@ def remove_exact(paths):
             failures.append(str(path))
     return removed, failures
 
-def open_folder(path):
+def open_folder(path, label="output folder"):
     path = Path(path)
-    if not path.is_dir(): raise ValueError("The output folder is no longer available.")
+    if not path.is_dir(): raise ValueError(f"The {label} is no longer available.")
     if os.name != "nt":
-        raise ValueError("Opening the server's output folder is currently available on Windows.")
+        raise ValueError(f"Opening the server’s {label} is currently available on Windows.")
     os.startfile(str(path))

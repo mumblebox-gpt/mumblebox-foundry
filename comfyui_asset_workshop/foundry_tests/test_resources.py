@@ -53,4 +53,47 @@ class ResourcesTests(unittest.TestCase):
             item=next(i for i in inventory.list()['items'] if i['name']=='model.onnx')
             inventory.remove(inventory.preview(item['id'])['token']);self.assertFalse((b/'model.onnx').exists());self.assertTrue((a/'vae.safetensors').exists())
 
+    def test_sorting_is_global_before_pagination(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            nested = root / "models"
+            nested.mkdir()
+            (root / "Zulu.gguf").write_bytes(b"large")
+            (root / "alpha.gguf").write_bytes(b"a")
+            (nested / "Beta.gguf").write_bytes(b"abc")
+            inventory = self.inventory(root)
+            self.assertEqual(inventory.list(limit=1, sort="name_asc")["items"][0]["name"], "alpha.gguf")
+            self.assertEqual(inventory.list(limit=1, sort="name_desc")["items"][0]["name"], "Zulu.gguf")
+            self.assertEqual(inventory.list(limit=1, sort="size_asc")["items"][0]["name"], "alpha.gguf")
+            first = inventory.list(limit=1, sort="size_desc")
+            self.assertEqual(first["items"][0]["name"], "Zulu.gguf")
+            self.assertEqual(inventory.list(cursor=first["next_cursor"], limit=1, sort="size_desc")["items"][0]["name"], "Beta.gguf")
+            with self.assertRaises(ValueError):
+                inventory.list(sort="bad")
+
+    def test_date_added_sort_keeps_unknown_dates_last_in_either_direction(self):
+        from unittest.mock import patch
+
+        with tempfile.TemporaryDirectory() as temp:
+            inventory = self.inventory(temp)
+            rows = [dict(name=name, id=name, location="Models", relative_path=name, added_at=added)
+                    for name, added in (("unknown.gguf", None), ("new.gguf", 200), ("old.gguf", 100))]
+            with patch.object(inventory, "_scan", side_effect=lambda: {"items": list(rows), "truncated": False}):
+                self.assertEqual([i["name"] for i in inventory.list(sort="date_asc")["items"]],
+                                 ["old.gguf", "new.gguf", "unknown.gguf"])
+                self.assertEqual([i["name"] for i in inventory.list(sort="date_desc")["items"]],
+                                 ["new.gguf", "old.gguf", "unknown.gguf"])
+
+    def test_windows_date_added_is_creation_time(self):
+        import os
+        if os.name != "nt":
+            self.skipTest("Windows creation time")
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "weights.gguf"
+            path.write_bytes(b"model")
+            os.utime(path, (978307200, 978307200))
+            date_added = self.inventory(temp).list()["items"][0].get("added_at")
+            self.assertEqual(date_added, os.path.getctime(path))
+            self.assertNotEqual(date_added, path.stat().st_mtime)
+
 if __name__=='__main__':unittest.main()

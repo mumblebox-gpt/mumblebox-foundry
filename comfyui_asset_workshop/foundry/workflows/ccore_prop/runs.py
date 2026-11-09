@@ -3,11 +3,12 @@ import asyncio
 import json
 from pathlib import Path
 import re
+import time
 import uuid
 
 from ...artifacts import owned_path
 from ....store import atomic_json
-from .contract import options
+from .contract import STANDARD_MODEL, options
 from .generation import STATE
 from .nodes import PROMPT_NODE, graph
 
@@ -40,6 +41,7 @@ class PropRuns:
             if not path.is_file():
                 raise ValueError("This CCORE prop run is no longer available.")
             run = json.loads(path.read_text(encoding="utf-8"))
+            run["config"].setdefault("model_variant", STANDARD_MODEL)
             if run["status"] == "running":
                 run.update(status="interrupted", error="Generation was interrupted. Start a new attempt.")
                 self.save(run)
@@ -57,7 +59,10 @@ class PropRuns:
         if download.get("owner") == ident and download.get("status") == "running":
             transfer = {key: download.get(key) for key in ("name", "bytes", "total", "phase")}
         return {key: run[key] for key in ("id", "config", "status", "error", "result")} | {
-            "active": active, "phase": progress or run["phase"], "download": transfer
+            "active": active, "phase": progress or run["phase"], "download": transfer,
+            "started_at": run.get("started_at"),
+            "smaller_budget": run.get("smaller_budget"),
+            "fallbacks": run.get("fallbacks", []),
         }
 
     def start(self, data):
@@ -72,7 +77,7 @@ class PropRuns:
         if self.tasks or self.enhancement or self.native.active_ids() or self.other_busy():
             raise ValueError("Wait for the current Foundry workflow to finish before generating a prop.")
         run = dict(id=ident, config=config, status="running", phase="Preparing CCORE",
-                   error="", result=None, prompt_id=str(uuid.uuid4()), cancelled=False)
+                   error="", result=None, prompt_id=str(uuid.uuid4()), cancelled=False, started_at=time.time())
         self.save(run)
         self.records[ident] = run
         self.tasks[ident] = asyncio.create_task(self.execute(run, str(data.get("client_id", ""))[:100]))
@@ -151,7 +156,13 @@ class PropRuns:
                           if event == "execution_error" and data.get("exception_message")]
                 raise ValueError(errors[-1] if errors else "The CCORE stage was interrupted.")
             item = history["outputs"][PROMPT_NODE]["ccore"][0]
+            if item.get("error"):
+                run.update(status="failed", phase="GPU memory check", error=item["error"],
+                           smaller_budget=item["smaller_budget"], fallbacks=item["fallbacks"])
+                return
             model = owned_path(self.output, self.output / item["subfolder"] / item["filename"])
+            if item.get("prepared_reference_sha256"):
+                run["prepared_reference_sha256"] = item["prepared_reference_sha256"]
             run.update(phase="Saving prop and package")
             self.save(run)
             archive, history_id = await asyncio.to_thread(

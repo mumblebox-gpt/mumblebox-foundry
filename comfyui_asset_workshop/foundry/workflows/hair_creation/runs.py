@@ -96,7 +96,7 @@ class HairRuns:
         if type(selected) is not int or selected<0 or (operation!='generate' and selected>=len(record['variants'])):raise ValueError('Select a generated variation.')
         if self.source(record['config'])!=record['source_sha256']:raise ValueError('The reference changed. Upload it again before generating.')
         record.update(status='running',cancel=False,error='',request_id=request,operation=operation,selected=selected,
-                      client_id=str(data.get('client_id',''))[:100],progress=0)
+                      client_id=str(data.get('client_id',''))[:100],progress=0,started_at=time.time())
         if operation in ('rig','avatar_preview','motion_preview'):record['config']['bones']=True
         self.save(record);self.tasks[ident]=asyncio.create_task(self.execute(record));return self.public(record)
 

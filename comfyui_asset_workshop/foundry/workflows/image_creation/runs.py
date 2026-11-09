@@ -44,7 +44,13 @@ class ImageRuns:
 
     def create(self,data):
         config=validate(data);self.check_references(config)
-        record=self.library.create(config);self.records[record['id']]=record
+        scope=data.get('graph_scope','')
+        if scope not in ('','ccore-reference'):raise ValueError('Choose a supported image workspace.')
+        record=self.library.create(config)
+        if scope:
+            record['graph_scope']=scope
+            self.library.save(record)
+        self.records[record['id']]=record
         return self.public(record)
 
     def check_references(self,config):
@@ -87,7 +93,7 @@ class ImageRuns:
         edit=record.get('edit') if operation=='edit' else None
         if operation=='edit' and not edit:raise ValueError('Prepare a selection before generating an edit.')
         if edit and record['accepted'].get(edit['side'])!=edit['source_id']:raise ValueError('The source image changed. Reopen the editor.')
-        record.update(status='running',error='',cancel=False,operation=operation,request_id=request,client_id=text(data.get('client_id',''),'Client',200))
+        record.update(status='running',error='',cancel=False,operation=operation,request_id=request,started_at=time.time(),client_id=text(data.get('client_id',''),'Client',200))
         if operation=='regenerate':
             record['stages']={}
             record['generation_seed']=secrets.randbelow(2**32)

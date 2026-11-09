@@ -6,6 +6,12 @@ import struct
 MAX_GLB = 32 * 1024**2
 MAX_HTML = 2 * 1024**2
 TOKEN_LIMITS = (16384, 32768, 65536)
+STANDARD_MODEL = "q4_k_m"
+TEXT_MODE = "text"
+IMAGE_MODE = "image_text"
+PROJECTOR_KEY = "ccore_vision_projector"
+IMAGE_MAX_TOKENS = 1024
+MODEL_KEYS = {STANDARD_MODEL: "ccore_prop", "q8_0": "ccore_prop_q8"}
 SYSTEM = ("Create game assets for the Godot editor, which uses GLB files. Create whatever the user "
           "requests as a good-quality low-poly asset using only Three.js in one complete standalone HTML "
           "file. The HTML must show the asset and include an Export GLB button that downloads a working "
@@ -15,11 +21,16 @@ EXAMPLE = ("A small olive-green sci-fi cargo crate with two orange latches and d
            "One static low-poly game prop, with solid-color materials.")
 
 
+def default_model_variant():
+    return STANDARD_MODEL
+
+
 def options(data):
     name = data.get("name", "New prop")
     prompt = data.get("prompt", "")
     seed = data.get("seed", 42)
     budget = data.get("max_tokens", 65536)
+    model_variant = data.get("model_variant", default_model_variant())
     if not isinstance(name, str) or not 1 <= len(name.strip()) <= 80 or any(ord(c) < 32 for c in name):
         raise ValueError("Give the prop a name of 1–80 characters.")
     if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 5000:
@@ -28,7 +39,19 @@ def options(data):
         raise ValueError("Use a whole-number seed from 0 to 2,147,483,647.")
     if type(budget) is not int or budget not in TOKEN_LIMITS:
         raise ValueError("Choose an available generation budget.")
-    return dict(name=name.strip(), prompt=prompt, seed=seed, max_tokens=budget)
+    if not isinstance(model_variant, str) or model_variant not in MODEL_KEYS:
+        raise ValueError("Choose an available CCORE model precision.")
+    config = dict(name=name.strip(), prompt=prompt, seed=seed, max_tokens=budget, model_variant=model_variant)
+    mode, image = data.get("mode", TEXT_MODE), data.get("image")
+    if mode == IMAGE_MODE:
+        upload = r'foundry-references/[^/\\:<>"|?*\x00-\x1f]{1,200}\.(png|jpe?g|webp)'
+        created = r'foundry-created/[a-f0-9]{32}/single-[a-f0-9]{16}\.png'
+        if not isinstance(image, str) or not re.fullmatch(f"(?:{upload}|{created})", image, re.IGNORECASE):
+            raise ValueError("Upload one PNG, JPEG or WebP reference before generating.")
+        config.update(mode=mode, image=image)
+    elif mode != TEXT_MODE or image:
+        raise ValueError("Choose the Image + Text workflow to use a reference.")
+    return config
 
 
 def scene_html(text, finish_reason=None):

@@ -66,7 +66,15 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
         @routes.get(PREFIX + "/resources")
         @endpoint
         async def resource_list(request):
-            return await asyncio.to_thread(resources.list,request.query.get("cursor",0),request.query.get("limit",100))
+            return await asyncio.to_thread(resources.list, request.query.get("cursor", 0),
+                                           request.query.get("limit", 100), sort=request.query.get("sort"))
+
+        @routes.post(PREFIX + "/resources/open-folder")
+        @endpoint
+        async def open_models_folder(request):
+            import folder_paths
+            await asyncio.to_thread(open_folder, folder_paths.models_dir, "models folder")
+            return {"opened": True}
 
         @routes.post(PREFIX + "/resources/delete-preview")
         @endpoint

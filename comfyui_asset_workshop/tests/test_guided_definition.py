@@ -154,7 +154,7 @@ class GuidedDefinitionTests(unittest.TestCase):
         tree=ast.parse((ROOT/'foundry/workflows/guided_mesh/runs.py').read_text(encoding='utf-8'))
         owner=next(n for n in tree.body if isinstance(n,ast.ClassDef) and n.name=='GuidedRuns')
         start=next(n for n in owner.body if isinstance(n,ast.FunctionDef) and n.name=='start')
-        namespace={'asyncio':asyncio,'busy':lambda:False}
+        namespace={'asyncio':asyncio,'busy':lambda:False,'time':types.SimpleNamespace(time=lambda:1234.5)}
         exec(compile(ast.Module(body=[start],type_ignores=[]),'<guided start>','exec'),namespace)
         job={'cancelled':True};seen=[]
         async def prepare(ident,operation):seen.append(job['cancelled'])
@@ -166,5 +166,6 @@ class GuidedDefinitionTests(unittest.TestCase):
             await svc.tasks['a'*32]
         asyncio.run(run())
         self.assertEqual(seen,[False])
+        self.assertEqual(job['started_at'],1234.5)
 
 if __name__=='__main__':unittest.main()

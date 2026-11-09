@@ -79,7 +79,7 @@ class SplatRuns:
             return self.public(r)
         if self.tasks or self.native.active_ids() or self.other_busy():raise ValueError('Another workflow is running. Finish it before starting this asset.')
         if self.source(r['config'])!=r['source_sha256']:raise ValueError('The reference image changed. Save the updated reference first.')
-        r.update(status='running',cancel=False,error='',operation=op,request_id=key,client_id=str(data.get('client_id',''))[:100],progress=0)
+        r.update(status='running',cancel=False,error='',operation=op,request_id=key,client_id=str(data.get('client_id',''))[:100],progress=0,started_at=time.time())
         self.save(r);self.tasks[ident]=asyncio.create_task(self.execute(r));return self.public(r)
     def cancel(self,ident):
         r=self.get(ident);r['cancel']=True

@@ -151,7 +151,7 @@ class WizardRuns:
         # No model state, credentials or unbounded history crosses this boundary.
         fields=("id","name","category","references","profile","overrides","settings","selection","status",
                 "stage","error","previews","package","cleanup","version","pending","events","reference_prompt","measurements","geometry_audit","dependency",
-                "method","quad_report","turnaround_model","turnaround_recipe","turnaround_guidance","operation","request_id","image_creation")
+                "method","quad_report","turnaround_model","turnaround_recipe","turnaround_guidance","operation","request_id","image_creation","started_at")
         result=copy.deepcopy({k:run[k] for k in fields if k in run})
         if run.get("checkpoints",{}).get("print") and not run.get("package",{}).get("grounded_previews",{}).get("print"):
             path=Path(run["checkpoints"]["print"])
@@ -215,7 +215,7 @@ class WizardRuns:
         if operation=="finish" and not self.fresh(run,"refinement"):
             raise ValueError("Generate the refined mesh with the current settings first.")
         if run.get('method')=='single-image' and operation=='turnaround':raise ValueError('Single Image does not use turnaround generation.')
-        run.update(status="running",stage="preparing",error="",cancel=False,operation=operation,client_id=client_id,request_id=request_id)
+        run.update(status="running",stage="preparing",error="",cancel=False,operation=operation,client_id=client_id,request_id=request_id,started_at=time.time())
         self.save(run)
         self.tasks[ident]=asyncio.create_task(self.execute(run,operation))
         return self.public(run)

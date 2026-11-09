@@ -2,7 +2,7 @@
 import json
 from aiohttp import web
 
-from .contract import EXAMPLE, TOKEN_LIMITS
+from .contract import EXAMPLE, MODEL_KEYS, TOKEN_LIMITS, default_model_variant
 from .enhancement import enhancement_input
 
 PREFIX = "/mumblebox-foundry/v1/ccore"
@@ -14,7 +14,8 @@ def register(routes, factory, endpoint):
     async def capabilities(request):
         from ..image_to_3d.readiness import viewer_module
 
-        return {"viewer_module": viewer_module(), "example": EXAMPLE, "token_limits": TOKEN_LIMITS}
+        return {"viewer_module": viewer_module(), "example": EXAMPLE, "token_limits": TOKEN_LIMITS,
+                "model_variants": list(MODEL_KEYS), "default_model_variant": default_model_variant()}
 
     @routes.post(PREFIX + "/enhance")
     @endpoint

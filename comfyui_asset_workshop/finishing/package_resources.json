@@ -12,6 +12,17 @@
     ],
     "license_summary": "Official Q4_K_M weights by CCORE, based on Qwen3.5-4B."
   },
+  "ccore_vision_projector": {
+    "id": "ccore_vision_projector",
+    "name": "Qwen3.5-4B BF16 vision projector",
+    "stage": "Reference image encoding",
+    "version": "8f32a199f8b22fe3157b9c5c8b42b052a0750dd3",
+    "source": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder/blob/8f32a199f8b22fe3157b9c5c8b42b052a0750dd3/mmproj-Qwen3.5-4B-BF16.gguf",
+    "license": "Apache-2.0",
+    "license_url": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder/blob/8f32a199f8b22fe3157b9c5c8b42b052a0750dd3/LICENSE",
+    "notices": ["CCORE-LICENSE.txt"],
+    "license_summary": "Unmodified Qwen vision encoder and projector from the LM Studio community, distributed with CCORE."
+  },
   "ccore_three": {
     "id": "ccore_three",
     "name": "Three.js",

@@ -1,4 +1,5 @@
 import {problemPanel} from '../problem-panel.js';
+import {elapsedTime} from '../activity.js';
 import {api} from '/scripts/api.js';
 import {app} from '/scripts/app.js';
 import {el,button,hint} from '../dom.js';
@@ -143,6 +144,7 @@ export class GuidedWizard{
         this.host.replaceChildren(rail,el('div',{class:'wizard-panel'},el('div',{class:'page-head'},el('span',{class:'eyebrow'},'3D-GUIDED / PAGE '+this.page+' OF 6'),el('h2',{},titles[this.page-1])),
             error?problemPanel(error):null,
             active?el('section',{class:'wizard-busy',role:'status','aria-live':'polite'},el('strong',{},this.job?.preparing?'Preparing required resources':stageNames[this.job?.finishing?.stage||this.job?.current_stage]||'Starting selected stage'),this.busyText,
+                elapsedTime((this.job?.started_at||this.job?.finishing?.started_at)*1000),
                 hint(Object.keys(this.job?.completed||{}).length+' of 10 generation stages saved. Completed files remain available.')):null,
             pages[this.page-1](this)));
         this.remember();

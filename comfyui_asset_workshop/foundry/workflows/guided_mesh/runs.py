@@ -68,6 +68,7 @@ class GuidedRuns:
             operation='start' if job['status']=='ready' else 'continue' if job['status']=='awaiting_review' else 'resume'
         if operation not in ('start','continue','resume'):raise ValueError('Choose Start, Continue or Retry.')
         if operation=='resume':self.engine.store.update(ident,cancelled=False)
+        self.engine.store.update(ident,started_at=time.time())
         self.tasks[ident]=asyncio.create_task(self.prepare_start(ident,operation))
         return self.public(self.get(ident))
 
@@ -90,7 +91,7 @@ class GuidedRuns:
                 # No await between relinquishing this operation and acquiring
                 # the established finisher's owned lane.
                 self.tasks.pop(ident,None)
-                self.finish(ident,{'selection':job['rocket_selection'],'overrides':job.get('rocket_overrides',{})})
+                self.finish(ident,{'selection':job['rocket_selection'],'overrides':job.get('rocket_overrides',{})},continued=True)
         except (Exception,asyncio.CancelledError) as error:
             self.engine.store.update(ident,preparing=False,dependency=None,status='cancelled' if self.get(ident)['cancelled'] else 'failed',error=str(error))
         finally:self.tasks.pop(ident,None)
@@ -104,7 +105,7 @@ class GuidedRuns:
             await asyncio.sleep(.1)
         raise ValueError('The active 3D-Guided wizard did not bind the finishing graph. No stage was submitted.')
 
-    def finish(self,ident,data):
+    def finish(self,ident,data,*,continued=False):
         job=self.get(ident)
         if job['status']!='complete' or 'textured' not in job['artifacts']:raise ValueError('Complete and review the textured master before choosing exports.')
         if busy() or self.other_busy():raise ValueError('Wait for the current Foundry job to finish.')
@@ -119,7 +120,7 @@ class GuidedRuns:
             run.update(selection=self.finisher.selection(data['selection']),overrides=overrides)
             self.finisher.save(run)
         else:run=self.finisher.adopt(job,job['name'],data['selection'],overrides,job['spec']['client_id'])
-        self.engine.store.update(ident,export_run_id=run['id'])
+        self.engine.store.update(ident,export_run_id=run['id'],started_at=job.get('started_at') if continued else time.time())
         self.finisher.start(run['id'],'finish',job['spec']['client_id'],data.get('request_id') or uuid.uuid4().hex)
         return self.public(self.get(ident))
 

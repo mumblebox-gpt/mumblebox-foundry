@@ -9,9 +9,9 @@ import sys
 import time
 from urllib import request
 
-from .contract import MAX_HTML, SYSTEM, inspect_glb, scene_html
+from . import gpu, vision
+from .contract import MAX_HTML, MODEL_KEYS, PROJECTOR_KEY, STANDARD_MODEL, SYSTEM, inspect_glb, scene_html
 
-MODEL_KEY = "ccore_prop"
 STATE = {}
 CREATE_FLAGS = getattr(subprocess, "CREATE_NO_WINDOW", 0)
 RENDERER = Path(__file__).with_name("renderer.py")
@@ -58,27 +58,42 @@ def log_tail(path):
         return stream.read().decode("utf-8", errors="replace").strip()
 
 
-def prepare(check):
+def prepare(model_variant, check, *, with_image=False):
     from .... import description_helper, models
 
     if not models.DOWNLOAD_LOCK.acquire(blocking=False):
         raise ValueError("Another model is downloading. Wait for it to finish and try again.")
     try:
-        model = models.MODELS[MODEL_KEY]
+        model_key = MODEL_KEYS[model_variant]
+        keys = [model_key, PROJECTOR_KEY] if with_image else [model_key]
         models.DOWNLOAD.clear()
-        models.DOWNLOAD.update(status="running", owner=STATE["job"], cancel=False,
-                               bytes=0, total=model["size"], name=model["name"])
+        models.DOWNLOAD.update(status="running", owner=STATE["job"], cancel=False, bytes=0, total=0)
         executable = description_helper.runtime(check, use_configured=False)
-        check()
-        local = models.installed(MODEL_KEY)
-        if local is None:
-            models.DOWNLOAD.update(file_count=1, file_index=1, batch_total=model["size"],
-                                   completed_bytes=0, bytes=0, total=model["size"])
+        missing = [models.MODELS[key] for key in keys if models.installed(key) is None]
+        total = sum(model["size"] for model in missing)
+        completed = 0
+        models.DOWNLOAD.update(file_count=len(missing), batch_total=total, completed_bytes=completed)
+        for index, model in enumerate(missing, 1):
+            check()
+            models.DOWNLOAD.update(file_index=index, name=model["name"], bytes=0, total=model["size"])
             models.download_one(model, anonymous=True, check=check)
-            local = models.installed(MODEL_KEY)
-        models.verify([MODEL_KEY])
-        models.DOWNLOAD.update(status="complete", completed_bytes=model["size"])
-        return executable, local
+            completed += model["size"]
+            models.DOWNLOAD.update(completed_bytes=completed)
+        check()
+        models.verify(keys)
+        local = models.installed(model_key)
+        projector = models.installed(PROJECTOR_KEY) if with_image else None
+        standard = None
+        standard_key = MODEL_KEYS[STANDARD_MODEL]
+        if model_key != standard_key and models.installed(standard_key) is not None:
+            try:
+                models.verify([standard_key])
+                standard = models.installed(standard_key)
+            except (OSError, ValueError):
+                # An unavailable or invalid fallback must never be advertised.
+                pass
+        models.DOWNLOAD.update(status="complete", completed_bytes=completed)
+        return executable, local, standard, projector
     except BaseException:
         models.DOWNLOAD.update(status="paused" if models.DOWNLOAD.get("cancel") else "failed")
         raise
@@ -86,7 +101,11 @@ def prepare(check):
         models.DOWNLOAD_LOCK.release()
 
 
-def infer(executable, checkpoint, settings, work, check):
+def infer(executable, checkpoint, settings, work, check, device, gpu_id, standard_checkpoint,
+          *, projector=None, image=None):
+    STATE["phase"] = "Checking GPU memory"
+    gpu.preflight(executable, checkpoint, settings["max_tokens"], device, gpu_id, check,
+                  model_variant=settings["model_variant"], standard_checkpoint=standard_checkpoint, vision=image is not None)
     log = work / "llama.log"
     with socket.socket() as listener:
         listener.bind(("127.0.0.1", 0))
@@ -96,11 +115,12 @@ def infer(executable, checkpoint, settings, work, check):
     headers = {"Authorization": "Bearer " + key, "Content-Type": "application/json"}
     opener = request.build_opener(request.ProxyHandler({}))
     command = [
-        str(executable), "--model", str(checkpoint), "--host", "127.0.0.1",
-        "--port", str(port), "--api-key", key, "--jinja", "--parallel", "1",
-        "--ctx-size", str(settings["max_tokens"] + 4096), "--fit", "on",
-        "--fit-target", "1024", "--reasoning", "on", "--no-webui",
+        str(executable), *gpu.cuda_args(checkpoint, settings["max_tokens"], device, vision=image is not None),
+        "--host", "127.0.0.1", "--port", str(port), "--api-key", key,
+        "--jinja", "--fit", "off", "--log-verbosity", "4", "--reasoning", "on", "--no-webui",
     ]
+    if projector is not None:
+        command.extend(vision.arguments(projector, device))
     from ....pipeline_workers import activity
 
     STATE["phase"] = "Loading CCORE"
@@ -118,11 +138,13 @@ def infer(executable, checkpoint, settings, work, check):
         else:
             raise ValueError("CCORE took too long to load. Free memory and try again.")
 
+        gpu.verify_placement(log.read_text(encoding="utf-8", errors="replace"), device, vision=image is not None)
         activity.update("ccore", "CCORE", "loaded")
         STATE["phase"] = "Designing your prop"
         body = {
             "messages": [{"role": "system", "content": SYSTEM},
-                         {"role": "user", "content": settings["prompt"]}],
+                         {"role": "user", "content": vision.content(settings["prompt"], image)
+                          if image is not None else settings["prompt"]}],
             "seed": settings["seed"], "temperature": .8, "top_p": .95,
             "top_k": 40, "min_p": 0.0, "repeat_penalty": 1.0, "max_tokens": settings["max_tokens"], "stream": True,
             "chat_template_kwargs": {"enable_thinking": True},
@@ -176,17 +198,21 @@ def render_isolated(source, output, check):
     return inspect_glb(output)
 
 
-def generate(settings, work, check):
+def generate(settings, work, check, *, image=None):
+    device, gpu_id = gpu.comfy_device()
     STATE["phase"] = "Preparing the local renderer"
     try:
         run_renderer(["--probe"], work / "renderer-probe.log", 25, check)
     except ValueError as error:
         raise ValueError("The CCORE browser renderer is unavailable. Run Foundry’s software installer. " + str(error)) from error
     STATE["phase"] = "Preparing the CCORE model"
-    executable, checkpoint = prepare(check)
+    executable, checkpoint, standard, projector = prepare(settings["model_variant"], check, with_image=image is not None)
     if not checkpoint:
         raise ValueError("The verified CCORE checkpoint is missing.")
-    html = infer(executable, checkpoint, settings, work, check)
+    if image is not None and not projector:
+        raise ValueError("The verified CCORE vision projector is missing.")
+    html = infer(executable, checkpoint, settings, work, check, device, gpu_id, standard,
+                 projector=projector, image=image)
     STATE["phase"] = "Exporting and checking the GLB"
     source = work / "scene.html"
     source.write_text(html, encoding="utf-8")

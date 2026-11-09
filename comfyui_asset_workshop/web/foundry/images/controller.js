@@ -5,12 +5,20 @@ import {request} from '../services.js';
 import {creator} from './creator.js';
 import {showImageStage} from './graph.js';
 
+export function creatorOrigin(shell){
+    const method=shell.imageOrigin?.method;
+    return !shell.openImageId&&(method==='single-image'||method==='ccore-image')?method:'';
+}
+
 export class ImageCreator{
     constructor(shell){
         this.shell=shell;this.node=shell.node;this.host=el('section',{class:'image-creator','aria-label':'Image creator'});
-        this.singleOrigin=shell.imageOrigin?.method==='single-image'&&!shell.openImageId;
-        this.stateProperty=this.singleOrigin?'foundryImageCreatorSingle':'foundryImageCreator';
-        this.storageKey='foundry-image-creator:'+app.extensionManager.workflow.activeWorkflow.path+':'+this.node.id+(this.singleOrigin?':single':'');
+        this.origin=creatorOrigin(shell);
+        this.singleOrigin=Boolean(this.origin);
+        this.ccoreOrigin=this.origin==='ccore-image';
+        this.stateProperty=this.ccoreOrigin?'foundryImageCreatorCcore':this.singleOrigin?'foundryImageCreatorSingle':'foundryImageCreator';
+        this.storageKey='foundry-image-creator:'+app.extensionManager.workflow.activeWorkflow.path+':'+this.node.id+
+            (this.ccoreOrigin?':ccore':this.singleOrigin?':single':'');
         let saved=this.node.properties[this.stateProperty]||{};
         try{const local=JSON.parse(localStorage.getItem(this.storageKey)||'null');if(local?.updated>(saved.updated||0))saved=local;}catch{}
         // Restored Comfy node properties may be reactive proxies, not cloneable objects.
@@ -52,7 +60,8 @@ export class ImageCreator{
     }
     async configure(){
         if(this.singleOrigin)this.draft.category='general';
-        this.run=await request(this.id?'images/'+this.id:'images',this.draft,this.id?{method:'PATCH'}:{});
+        const payload=this.ccoreOrigin&&!this.id?{...this.draft,graph_scope:'ccore-reference'}:this.draft;
+        this.run=await request(this.id?'images/'+this.id:'images',payload,this.id?{method:'PATCH'}:{});
         this.id=this.run.id;this.draft=structuredClone(this.run.config);this.remember();
     }
     async generate(operation='generate'){await this.configure();this.run=await request('images/'+this.id+'/start',{request_id:crypto.randomUUID(),client_id:api.clientId||'',operation});this.render();}
@@ -74,7 +83,8 @@ export class ImageCreator{
         else if(destination==='3d'){
             const handoff=await request('images/'+this.id+'/handoff',this.singleOrigin?{mode:'single'}:{});
             const origin=this.shell.imageOrigin;delete this.shell.imageOrigin;
-            await this.shell.chooseMesh(handoff,origin);
+            if(this.ccoreOrigin)await this.shell.openCcoreWizard({image:true,handoff});
+            else await this.shell.chooseMesh(handoff,origin);
         }
     }
     async edit(side){const {editImage}=await import('./editor.js');return editImage(this,side);}

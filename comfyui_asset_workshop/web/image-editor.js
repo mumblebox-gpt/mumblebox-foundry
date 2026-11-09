@@ -1,4 +1,5 @@
 import {imageMagnet} from './image-selection.js';
+import {elapsedTime} from './foundry/activity.js';
 // Selection tools and review stay in this dialog while the visible graph executes.
 export async function openImageEditor({element:el, sourceURL, title, model, generate, accept, stop, progress, download,
                                       mode="image", initialMaskURL=null, prepareMask=null, keepLabel=null,
@@ -38,6 +39,7 @@ export async function openImageEditor({element:el, sourceURL, title, model, gene
     let dots, stripes, screenPixel = 1;
     const status = el("p", {role:"status",class:"editor-status"}, foreground?"The highlighted area is kept. Erase background or paint missing parts of the object.":"Draw over the area you want to change.");
     const progressBar = el("progress",{"aria-label":"Image edit progress",hidden:true});
+    const clock = el("div",{});
     const prompt = el("textarea", {"aria-label":"Describe the selected-area change",
         placeholder:"For example: Change this handle to cobalt blue. Keep its shape."});
     const width = el("input", {type:"range",min:1,max:512,step:1,value:40,"aria-label":"Brush size in image pixels"});
@@ -143,7 +145,7 @@ export async function openImageEditor({element:el, sourceURL, title, model, gene
                 el("div",{class:"editor-sliders"},brushControl.element,softnessControl.element),
                 el("p",{class:"hint"},foreground?"Edge softness fades the cutout inward. Start at 0 to preserve thin parts and the automatic mask's soft edges.":"Edge softness blends inward from your selection. Pixels outside it stay unchanged."),
                 el("p",{class:"hint"},foreground?"This changes transparency only. It does not redraw the object or load an image generator.":settingsSummary??`Using ${model} and your current steps, CFG, seed and LoRAs. Try again uses a new seed.`),
-                status,progressBar,el("div",{class:"row"},generateButton,stopButton),
+                status,progressBar,clock,el("div",{class:"row"},generateButton,stopButton),
                 el("div",{class:"row"},keep,retry),
                 el("p",{class:"hint"},foreground?"Your original image stays unchanged. Keeping the cutout saves its transparency.":"Your original stays in use until you choose Keep this edit."),
                 el("div",{class:"row"},download(),resultDownload))));
@@ -267,6 +269,8 @@ export async function openImageEditor({element:el, sourceURL, title, model, gene
         labelButton(tools.magnetic,tool==='magnetic'&&polygon.length?'Finish magnetic lasso':'Magnetic lasso',tool==='magnetic'&&polygon.length?'finish':'magnetic');
         generateButton.disabled=busy || !!polygon.length || !operations.length || (!foreground && !prompt.value.trim());
         retry.disabled=busy || !candidate;keep.disabled=busy || !candidate;cancel.disabled=busy;
+        if (busy && !clock.firstChild) clock.append(elapsedTime(Date.now()));
+        if (!busy && clock.firstChild) clock.replaceChildren();
         stopButton.hidden=!busy || (foreground&&!prepareMask);progressBar.hidden=!busy;prompt.disabled=width.disabled=feather.disabled=replaceDetail.disabled=busy;
         brushControl.reset.disabled=softnessControl.reset.disabled=busy;
         canvas.style.cursor=display==="selection" && !busy?"none":"default";

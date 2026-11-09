@@ -8,6 +8,7 @@ import {initialState,copyRunConfiguration} from "./session.js";
 import {exportChoices,validateExports} from "./export-choices.js";
 import {FIRST_USE_MESSAGE} from "../activity-state.js";
 import {overallProgress} from "../overall-progress.js";
+import {elapsedTime} from "../activity.js";
 import {inputPage,reviewPage,optionsPage,finishingPage,resultPage} from "./pages.js";
 import {singleInputPage,singleOptionsPage} from '../single/pages.js';
 import {syncSingleGraph,syncSingleOutputs} from '../single/graph.js';
@@ -90,10 +91,6 @@ export class Wizard {
                 this.run=current;
                 this.updateOverall();
                 if(changed){this.applyRun();this.render();}
-                if(this.elapsed&&current.pending?.started){
-                    const seconds=Math.max(0,Math.floor(Date.now()/1000-current.pending.started));
-                    this.elapsed.textContent="Elapsed: "+Math.floor(seconds/60)+"m "+(seconds%60)+"s";
-                }
                 if(current.dependency&&this.sampleProgress){
                     const d=current.dependency;
                     this.sampleProgress.textContent=[d.name,d.phase,d.total?Math.round((d.bytes||0)/d.total*100)+"%":""].filter(Boolean).join(" · ");
@@ -164,7 +161,7 @@ export class Wizard {
     busy(){
         if(!this.run?.active)return null;
         this.sampleProgress=el("span",{class:"muted"});
-        this.elapsed=el("span",{class:"muted"});
+        const elapsed=elapsedTime((this.run.started_at||this.run.pending?.started)*1000);
         this.overallText=el("strong",{class:"overall-label"});
         this.overallMeter=el("progress",{max:1,"aria-label":"Overall completion"});
         this.overallCount=el("small",{class:"muted"});
@@ -176,7 +173,7 @@ export class Wizard {
         return el("div",{class:"wizard-busy",role:"status","aria-live":"polite"},
             el("img",{src:new URL("../../assets/foundry-chaos-star.svg",import.meta.url).href,alt:"",class:"working-star"}),
             el("div",{class:"stage-progress"},this.overallText,this.overallMeter,this.overallCount,
-                el("strong",{},this.run.dependency?"Preparing required models":this.run.stage==="turnaround"?(this.run.turnaround?.name||"Image model")+" · Creating four views":stageNames[this.run.progress?.current||this.run.stage]||"Preparing the next stage"),this.sampleProgress,this.elapsed,
+                el("strong",{},this.run.dependency?"Preparing required models":this.run.stage==="turnaround"?(this.run.turnaround?.name||"Image model")+" · Creating four views":stageNames[this.run.progress?.current||this.run.stage]||"Preparing the next stage"),this.sampleProgress,elapsed,
                 hint(this.run.dependency?FIRST_USE_MESSAGE:this.run.stage==="quads"?"QuadriFlow uses the CPU. High CPU use and spikes are normal. Retopology can take several minutes.":this.run.stage==="refinement"?"Refinement can take several minutes. The saved initial mesh is retained.":"Your completed stages are saved as the workflow progresses."),stages));
     }
     updateOverall(sample=0){
