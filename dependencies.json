@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0-preview.17",
+  "version": "0.1.0-preview.18",
   "platform": "Windows NVIDIA",
   "reference_hardware": {
     "gpu": "RTX 4080 SUPER",
@@ -22,6 +22,13 @@
       "huggingface-hub==1.30.0"
     ],
     "geometry_requirements": "comfyui_asset_workshop/requirements.txt"
+  },
+  "ccore": {
+    "model_key": "ccore_prop",
+    "requirements": "comfyui_asset_workshop/requirements.txt",
+    "browser": "Playwright Chromium headless shell",
+    "renderer_probe": "comfyui_asset_workshop/foundry/workflows/ccore_prop/renderer.py --probe",
+    "three_module_manifest": "comfyui_asset_workshop/foundry/workflows/ccore_prop/three/source.json"
   },
   "trellis_wrapper": {
     "repository": "https://github.com/visualbruno/ComfyUI-Trellis2",

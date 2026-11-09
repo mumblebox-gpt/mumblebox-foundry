@@ -1,0 +1,16 @@
+{
+  "version": "0.165.0",
+  "tarball": "https://registry.npmjs.org/three/-/three-0.165.0.tgz",
+  "integrity": "sha512-cc96IlVYGydeceu0e5xq70H8/yoVT/tXBxV/W8A/U6uOq7DXc4/s1Mkmnu6SqoYGhSRWWYFOhVwvq6V0VtbplA==",
+  "files": {
+    "build/three.module.min.js": "1af5bef9a9fd79fcb73fcfd3e4dd2ac0cea8720205bc7607d67369ce194a87fa",
+    "examples/jsm/controls/OrbitControls.js": "f260591ef315aa04888152e7f121865214e33fb54727145cf4e4445058db1297",
+    "examples/jsm/exporters/GLTFExporter.js": "ad62bd3b9a8c760127698710b9cc0ea18cc851da71305ea9105a22b6f4b6de81",
+    "examples/jsm/utils/BufferGeometryUtils.js": "c25b7930e570e9ec56173cd3b866ec8d2e10016630db3937efb439daf1cedbf6",
+    "examples/jsm/environments/RoomEnvironment.js": "e1b92c4dd2d89752293546790bfda9828a630a79700c66f5b736fad7a88cb7e4",
+    "examples/jsm/geometries/RoundedBoxGeometry.js": "d20aeaf7077c459a8d952d215738d7b44fba028440bb862d84b622a34f0c80bb",
+    "examples/jsm/geometries/ConvexGeometry.js": "9bcf80281a538592fbac81507628adf2c8450dd52f15530492725d76085ebf92",
+    "examples/jsm/math/ConvexHull.js": "782e7e422c8d308cd686bacfd23356bda884f01727f9fc4a7a75bcff441bd1ad",
+    "examples/jsm/utils/TextureUtils.js": "d7e0af144ec0c85b4ec09921c31df86515ef1a4767cf42489160c17909d18e59"
+  }
+}

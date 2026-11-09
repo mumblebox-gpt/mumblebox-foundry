@@ -270,6 +270,29 @@ export class FoundryShell {
         } catch(error){wizard?.dispose();this.content.replaceChildren(el('p',{role:'alert'},error.message));return false;}
     }
 
+    async openCcoreWizard(options={}) {
+        this.viewDispose?.();
+        this.viewDispose=null;
+        const sequence=this.sequence=(this.sequence||0)+1;
+        this.tab='Choose a Workflow';
+        this.content.replaceChildren(hint('Opening the CCORE prop workflow…'));
+        let wizard;
+        try {
+            const {CcoreWizard}=await import('./ccore/controller.js');
+            wizard=new CcoreWizard(this,options);
+            const element=await wizard.init();
+            if(sequence!==this.sequence){wizard.dispose();return;}
+            this.content.replaceChildren(element);
+            this.content.scrollTop=0;
+            this.content.setAttribute('aria-label','CCORE prop wizard');
+            this.viewDispose=()=>wizard.dispose();
+            [...this.nav.children].forEach((node,index)=>node.setAttribute('aria-selected',String(index===0)));
+        } catch(error) {
+            wizard?.dispose();
+            if(sequence===this.sequence)this.content.replaceChildren(el('p',{role:'alert'},error.message));
+        }
+    }
+
     async openHairWizard(options={}) {
         this.viewDispose?.();this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;

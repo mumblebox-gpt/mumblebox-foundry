@@ -1,3 +1,11 @@
+# Preview 0.1.0-preview.18 validation
+
+The installed standalone ComfyUI Desktop workflow loaded all 12 example descriptions and cleared the editor with Custom. Two real local Qwen enhancements exercised creative elaboration and preservation of strict requirements. Restore recovered the original draft and Stop preserved the current draft. The CCORE generator received the edited description verbatim.
+
+The edited supply-crate brief generated a 3,224-triangle GLB and a saved History entry. The actual GLB rendered in the native Foundry viewer. Two other attempts returned invalid generated JavaScript, which Foundry rejected at export. Retrying with a simpler description produced the crate.
+
+The software archive includes the pinned CCORE runtime resources, workflow artwork, and Chromium installer probe. Installer and updater checks use temporary fixtures. The GUI evidence is from the existing standalone Desktop installation.
+
 # Preview 0.1.0-preview.17 validation
 
 The canonical-source update was exercised in the existing standalone Comfy Desktop development installation on Windows / RTX 4080 SUPER 16 GB / 64 GB RAM. Single Image or Text completed geometry, Hi3D refinement, cleanup, 4K texturing, compact baking, optional quad export and package creation with real visible previews. Image creation/direct handoff, Gallery selection, reload/Resume, method artwork, Font scaling, cache review and the other saved wizards were checked proportionally. [Local update evidence](LOCAL-UPDATE-VALIDATION.md) describes the exact checks and limits.

@@ -127,12 +127,13 @@ def cached_file(path, size, sha):
     return True
 
 
-def weights(precision):
+def weights(precision, *, use_vision=True):
     root = models.MODEL_ROOT / "LLM" / "Mumblebox"
     folder_paths.add_model_folder_path("mumblebox_description", str(root))
     paths = []
     missing = []
-    for key in (precision, "vision"):
+    keys = (precision, "vision") if use_vision else (precision,)
+    for key in keys:
         check_cancelled()
         name, size, sha = WEIGHTS[key]
         target = root / name
@@ -151,9 +152,10 @@ def weights(precision):
     return paths
 
 
-def runtime():
+def runtime(check=None, *, use_configured=True):
+    check = check or check_cancelled
     # Users on other systems may supply an existing compatible runtime.
-    configured = os.environ.get("MUMBLEBOX_LLAMA_SERVER")
+    configured = os.environ.get("MUMBLEBOX_LLAMA_SERVER") if use_configured else None
     if configured:
         path = Path(configured).expanduser().resolve()
         if not path.is_file():
@@ -198,7 +200,7 @@ def runtime():
                 models.DOWNLOAD.update(bytes=offset, phase="download")
                 with part.open("ab" if resumed else "wb") as output:
                     while block := response.read(4 * 1024**2):
-                        check_cancelled()
+                        check()
                         if offset + len(block) > size:
                             raise ValueError("Runtime download exceeded its pinned size.")
                         output.write(block)
@@ -442,7 +444,8 @@ def side_prompt(parts, view):
     return text
 
 
-def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None, temperature=.7, retry_action=None):
+def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None, temperature=.7,
+             retry_action=None, *, use_vision=True, writing_phase=None):
     global PROCESS
     if not models.DOWNLOAD_LOCK.acquire(blocking=False):
         raise ValueError("Another model download is running. Wait for it, then retry.")
@@ -452,7 +455,7 @@ def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None
         models.DOWNLOAD.update(status="running", bytes=0, total=0, cancel=False, error=None,
                                request={"kind": "description", "asset_id": asset["id"], "action": retry_action})
         executable = runtime()
-        model, projector = weights(asset["settings"].get("helper_precision", "q8"))
+        model, *projectors = weights(asset["settings"].get("helper_precision", "q8"), use_vision=use_vision)
         models.DOWNLOAD.update(status="complete")
     except Exception as error:
         models.DOWNLOAD.update(status="paused" if STATE.get("cancel") else "failed", error=str(error))
@@ -476,11 +479,13 @@ def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None
         listener.bind(("127.0.0.1", 0))
         port = listener.getsockname()[1]
     key = secrets.token_urlsafe(32)
-    command = [str(executable), "--model", str(model), "--mmproj", str(projector),
+    command = [str(executable), "--model", str(model),
                "--host", "127.0.0.1", "--port", str(port), "--api-key", key,
                "--ctx-size", "16384", "--parallel", "1", "--fit", "on",
                "--fit-target", str(int(max(1, asset["settings"].get("extra_vram_headroom_gb", 0)) * 1024)),
                "--jinja", "--reasoning", "off", "--chat-template-kwargs", '{"enable_thinking":false}']
+    if projectors:
+        command.extend(["--mmproj", str(projectors[0])])
     runtime_folder = executable.parent
     log_path = runtime_folder / "mumblebox-last-run.log"
     headers = {"Authorization": "Bearer " + key, "Content-Type": "application/json"}
@@ -506,9 +511,10 @@ def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None
                     time.sleep(.5)
             else:
                 raise ValueError("Description assistant took too long to load. Try Q4 precision in Settings.")
-            STATE["phase"] = "Preparing instructions for each angle" if response_format else "Writing your suggested description"
+            STATE["phase"] = writing_phase or ("Preparing instructions for each angle" if response_format
+                                                 else "Writing your suggested description")
             body = {"messages": [{"role": "system", "content": system}, {"role": "user", "content": content}],
-                    "temperature": .2 if response_format else temperature, "top_p": .8, "top_k": 20,
+                    "temperature": temperature, "top_p": .8, "top_k": 20,
                     "max_tokens": max_tokens, "stream": False,
                     "chat_template_kwargs": {"enable_thinking": False}}
             if response_format:

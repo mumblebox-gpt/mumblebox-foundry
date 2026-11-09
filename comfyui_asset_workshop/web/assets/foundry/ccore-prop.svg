@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 430" role="img" aria-label="Isometric olive cargo crate">
+<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#232c28"/><stop offset="1" stop-color="#111a16"/></linearGradient></defs>
+<rect width="360" height="430" fill="url(#bg)"/>
+<path d="M-20 323 168 414M46 293l203 96m-140-127 213 99m-151-128 215 100M-9 364l259-137M68 399l258-137m-171 173 253-135" fill="none" stroke="#577065" opacity=".35"/>
+<ellipse cx="180" cy="323" rx="143" ry="41" fill="#0a110d" opacity=".8"/>
+<path d="m44 168 120-61 153 63-123 65z" fill="#a2a66e" stroke="#252b22" stroke-width="4"/>
+<path d="m44 168 150 67v104L44 275z" fill="#69764c" stroke="#252b22" stroke-width="4"/>
+<path d="m194 235 123-65v100l-123 69z" fill="#48573a" stroke="#252b22" stroke-width="4"/>
+<path d="m44 168 150 67 123-65m-273 31 150 67 123-65" stroke="#c9cca0" fill="none" opacity=".55" stroke-width="3"/>
+<path d="m74 228 95 42v34l-95-41z" fill="#252f24" stroke="#879467" stroke-width="3"/>
+<path d="m86 244 45 20m-45-11 62 27" stroke="#b6c18d" stroke-width="3" opacity=".6"/>
+<path d="m66 183 18 8v43l-18-8zm91 41 18 8v43l-18-8z" fill="#ec9a46" stroke="#302720" stroke-width="4"/>
+<path d="m135 161 31-16 51 22-31 16z" fill="#283027" stroke="#bdc491" stroke-width="4"/>
+<path d="m157 163 12-6 27 12-12 7z" fill="#111a16"/>
+<path d="m44 168 27-14 23 10-26 13v29l-24-10zm150 67 25-13v26l-25 14-23-10v-27zm123-65-22-9-25 13 23 10v25l24-12zm-123 169 25-14v-25l-25 14-23-11v26z" fill="#333c35" stroke="#252b22" stroke-width="3"/>
+</svg>

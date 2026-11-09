@@ -5,3 +5,6 @@ packaging>=24.2
 # Stable support-pose computation for optional grounded exports (Comfy host).
 scipy==1.18.1
 networkx==3.6.1
+
+# Isolated CCORE scene renderer (Chromium headless shell is installed separately).
+playwright==1.64.1

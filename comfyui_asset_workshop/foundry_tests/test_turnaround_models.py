@@ -60,7 +60,7 @@ class TurnaroundModels(unittest.TestCase):
         import json
         from foundry.workflows.image_to_3d.turnaround import MODEL_IDS, model_spec
         root=Path(__file__).resolve().parents[2]
-        registry=json.loads((root/"experiments/qwen_pixal_connected/finishing/package_resources.json").read_text(encoding="utf-8"))
+        registry=json.loads((root/"comfyui_asset_workshop/finishing/package_resources.json").read_text(encoding="utf-8"))
         for model in MODEL_IDS:
             spec=model_spec(model)
             for key in spec["resources"]:

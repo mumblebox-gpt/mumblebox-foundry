@@ -1,6 +1,17 @@
 {
   "schema": 1,
   "models": {
+    "ccore_prop": {
+      "repo": "ccore/Qwen3.5-4B-GLB-3D-Coder",
+      "file": "Qwen3.5-4B-GLB-3D-Coder-Q4_K_M.gguf",
+      "revision": "8f32a199f8b22fe3157b9c5c8b42b052a0750dd3",
+      "sha256": "3907128f3d98bbe33a38b554766aa79be5d989793836824293f713f57f34bc22",
+      "size": 2708804128,
+      "category": "mumblebox_ccore",
+      "name": "Qwen3.5-4B-GLB-3D-Coder-Q4_K_M.gguf",
+      "license": "apache-2.0",
+      "license_url": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder/blob/8f32a199f8b22fe3157b9c5c8b42b052a0750dd3/LICENSE"
+    },
     "qwen21": {
       "repo": "Comfy-Org/Qwen-Image-2.1",
       "file": "diffusion_models/qwen_image_2.1_int8_convrot.safetensors",

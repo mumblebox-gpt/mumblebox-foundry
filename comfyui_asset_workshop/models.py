@@ -74,7 +74,7 @@ def verify(keys):
         atomic_json(receipts_path, receipts)
 
 
-def download_one(model, *, destination_root=None):
+def download_one(model, *, destination_root=None, anonymous=False, check=None):
     source = {"model": model["name"], "repo_url": "https://huggingface.co/" + quote(model["repo"], safe="/"),
               "license_url": model.get("license_url")}
     DOWNLOAD.update(source=source, recovery=None)
@@ -112,7 +112,7 @@ def download_one(model, *, destination_root=None):
         raise ValueError(f"Not enough free disk space for {model['name']}.")
     url = f"https://huggingface.co/{model['repo']}/resolve/{model['revision']}/{model['file']}"
     headers = {"User-Agent": "ComfyUI-Asset-Workshop/0.1"}
-    token = hf_auth.token()
+    token = None if anonymous else hf_auth.token()
     if token:
         headers["Authorization"] = f"Bearer {token}"
     offset = part.stat().st_size if part.exists() else 0
@@ -142,6 +142,8 @@ def download_one(model, *, destination_root=None):
             with part.open("ab" if resumed else "wb") as output:
                 DOWNLOAD.update(bytes=offset, phase="download")
                 while block := response.read(4 * 1024 * 1024):
+                    if check is not None:
+                        check()
                     if DOWNLOAD.get("cancel"):
                         raise InterruptedError("Download paused; the partial file is retained for resume.")
                     output.write(block)

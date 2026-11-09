@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.0-preview.18 — Create a Prop from Text
+
+- Add the CCORE text-to-prop workflow, with dedicated crate artwork, a guided wizard, a rotatable 3D preview, and GLB or ZIP downloads.
+- Start with one of 12 editable examples or write your own description. Optional Enhance description uses Foundry's local Qwen assistant to develop a brief before generating.
+- Save completed props to Foundry History and resume their previews.
+- Install and probe the isolated Chromium exporter on Windows. Foundry downloads the model weights on first use.
+
 ## 0.1.0-preview.17 — Single Image or Text, grounding and interface update
 
 - Add per-object floor placement for Single Image exports: choose automatic near-upright leveling, translation-only placement or original orientation. Apply a measured rigid pose after baking to the actual GLB/BLEND/FBX/OBJ/STL outputs and final previews, without deforming geometry or rerunning AI stages. Preserve source checkpoints and record the pose and limitations.

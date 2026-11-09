@@ -1,5 +1,5 @@
 """Portable install contract: no downloads, preserved state, repeatability, rollback."""
-import argparse, importlib.util, json, tempfile, unittest
+import argparse, hashlib, importlib.util, json, tempfile, unittest
 from unittest.mock import patch
 from pathlib import Path
 spec=importlib.util.spec_from_file_location("installer",Path(__file__).with_name("install_foundry.py"))
@@ -28,7 +28,10 @@ class InstallTests(unittest.TestCase):
         self.exe=self.root/"python.exe";self.exe.write_text("fixture")
         self.user=self.core/"user";self.user.mkdir()
         (self.user/"asset-workshop.json").write_text(json.dumps({"theme":"keep","pipeline_runtime":{"stable_materials":"preserve"}}))
-        self.args=argparse.Namespace(comfy=str(self.core),user_directory=None,worker_python=str(self.exe),trellis_repo=str(self.repo),trellis_models=str(self.models),blender=str(self.exe),hi3d_url="http://127.0.0.1:8378",skip_hair_software=True)
+        renderer = patch.object(installer, "install_ccore")
+        self.renderer = renderer.start()
+        self.addCleanup(renderer.stop)
+        self.args=argparse.Namespace(host_python=str(self.exe),comfy=str(self.core),user_directory=None,worker_python=str(self.exe),trellis_repo=str(self.repo),trellis_models=str(self.models),blender=str(self.exe),hi3d_url="http://127.0.0.1:8378",skip_hair_software=True)
     def tearDown(self):self.temp.cleanup()
     def test_release_inventory_contains_material_editor(self):
         spec=importlib.util.spec_from_file_location('builder',Path(__file__).with_name('build_release.py'))
@@ -46,6 +49,16 @@ class InstallTests(unittest.TestCase):
         for method in ('single','turnaround','guided','splat'):
             self.assertIn('comfyui_asset_workshop/web/assets/foundry/method-'+method+'.webp',names)
         self.assertIn('comfyui_asset_workshop/finishing/grounding.py',names)
+        self.assertIn('comfyui_asset_workshop/foundry/workflows/ccore_prop/renderer.py',names)
+        self.assertIn('comfyui_asset_workshop/web/assets/foundry/ccore-prop.svg',names)
+        self.assertIn('comfyui_asset_workshop/web/foundry/ccore/examples.js',names)
+        self.assertIn('comfyui_asset_workshop/foundry/workflows/ccore_prop/enhancement.py',names)
+        vendor = 'comfyui_asset_workshop/foundry/workflows/ccore_prop/three'
+        manifest = json.loads((builder.ROOT/vendor/'source.json').read_text(encoding='utf-8'))
+        for path, digest in manifest['files'].items():
+            relative = vendor + '/' + path
+            self.assertIn(relative,names)
+            self.assertEqual(hashlib.sha256((builder.ROOT/relative).read_bytes()).hexdigest(),digest)
         self.assertNotIn('scripts/pinokio/mcp.py',names)
         self.assertFalse(any(name.startswith(('.pinokio/', 'bench/')) for name in names))
     def test_install_and_repeat_preserve(self):
@@ -73,6 +86,7 @@ class InstallTests(unittest.TestCase):
         with patch('install_hairdeck.install') as hair:
             installer.install(self.args)
         hair.assert_called_once_with(self.core.resolve(),self.exe.resolve(),installer.ROOT)
+        self.renderer.assert_called_once_with(self.exe.resolve(), installer.ROOT/'comfyui_asset_workshop')
     def test_remote_service_rejected_before_writes(self):
         self.args.hi3d_url="http://example.com"
         with self.assertRaises(ValueError):installer.install(self.args)

@@ -1,4 +1,56 @@
 {
+  "ccore_prop": {
+    "id": "ccore_prop",
+    "name": "CCORE GLB-3D-Coder (Qwen3.5-4B)",
+    "stage": "Procedural prop generation",
+    "version": "8f32a199f8b22fe3157b9c5c8b42b052a0750dd3",
+    "source": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder",
+    "license": "Apache-2.0",
+    "license_url": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder/blob/8f32a199f8b22fe3157b9c5c8b42b052a0750dd3/LICENSE",
+    "notices": [
+      "CCORE-LICENSE.txt"
+    ],
+    "license_summary": "Official Q4_K_M weights by CCORE, based on Qwen3.5-4B."
+  },
+  "ccore_three": {
+    "id": "ccore_three",
+    "name": "Three.js",
+    "stage": "Local procedural scene and GLB export",
+    "version": "0.165.0",
+    "source": "https://github.com/mrdoob/three.js/tree/r165",
+    "license": "MIT",
+    "license_url": "https://github.com/mrdoob/three.js/blob/r165/LICENSE",
+    "notices": [
+      "THREE-CCORE-LICENSE.txt"
+    ],
+    "license_summary": "Pinned library and exporter used offline."
+  },
+  "ccore_llama": {
+    "id": "ccore_llama",
+    "name": "llama.cpp",
+    "stage": "Local checkpoint inference",
+    "version": "b11160",
+    "source": "https://github.com/ggml-org/llama.cpp/releases/tag/b11160",
+    "license": "MIT",
+    "license_url": "https://github.com/ggml-org/llama.cpp/blob/b11160/LICENSE",
+    "notices": [
+      "LLAMA-CCORE-LICENSE.txt"
+    ],
+    "license_summary": "Uses the shared Foundry-managed inference runtime."
+  },
+  "ccore_playwright": {
+    "id": "ccore_playwright",
+    "name": "Playwright",
+    "stage": "Offline scene execution",
+    "version": "1.64.1",
+    "source": "https://github.com/microsoft/playwright-python/tree/v1.64.1",
+    "license": "Apache-2.0",
+    "license_url": "https://github.com/microsoft/playwright-python/blob/v1.64.1/LICENSE",
+    "notices": [
+      "PLAYWRIGHT-CCORE-LICENSE.txt"
+    ],
+    "license_summary": "The managed Chromium renderer runs only the selected scene and its pinned Three.js dependencies."
+  },
   "comfyui": {
     "id": "comfyui",
     "stage": "Workflow execution, native mesh conversion and detail baking",

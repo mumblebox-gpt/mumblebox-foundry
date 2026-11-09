@@ -110,3 +110,6 @@ For an update rollback, stop ComfyUI and restore the changed files/config listed
 - **Texture worker import failure:** check the isolated Python version, PyTorch build and matching cp313 wheels. Do not replace the host's PyTorch.
 - **Model hash mismatch:** Foundry preserves the existing file and reports it. Resolve that specific file; do not delete the whole model directory.
 - **Out of memory:** retry with lower detail/export choices. Only Default is configured; other memory profiles are not active yet.
+
+
+For the CCORE prop workflow, the Foundry installer installs the pinned Playwright package into the ComfyUI host environment and prepares its Chromium headless shell. If installing the custom node manually, run the extension’s host requirements and then run `python -m playwright install chromium --only-shell` with the same host interpreter. CCORE model weights are downloaded on first use.
