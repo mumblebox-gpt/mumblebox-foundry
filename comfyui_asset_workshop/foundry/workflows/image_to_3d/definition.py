@@ -1,5 +1,6 @@
 """Pure settings and public capabilities for the first guided workflow."""
 from copy import deepcopy
+from ...quad_policy import DEFAULT_METHOD, METHODS, validate_options
 
 WORKFLOW_ID = "image-to-3d/v1"
 VERSION = "2026-11-01.1"
@@ -7,13 +8,14 @@ DEFAULTS = {
     "turnaround_seed": 939810832464276, "shape_resolution": 1024,
     "refine_resolution": 1536, "refine_steps": 25, "refine_seed": 42,
     "cpu_offload": True, "attention": "sdpa", "texture_seed": 42,
-    "texture_steps": 20, "texture_size": 4096, "texture_guidance": 3.0,
+    "texture_mode": "standard", "texture_steps": 20, "texture_size": 4096, "texture_guidance": 3.0,
     "balanced_triangles": 250000, "compact_triangles": 100000,
-    "quad_count": 25000, "print_height_mm": 100.0,
+    "quad_count": 25000, "quad_method": DEFAULT_METHOD, "quad_options": {}, "print_height_mm": 100.0,
 }
 CHOICES = {"shape_resolution": (1024, 1536, 2048),
            "refine_resolution": (512, 1024, 1536),
-           "texture_size": (1024, 2048, 4096), "attention": ("sdpa",)}
+           "texture_size": (1024, 2048, 4096), "attention": ("sdpa",),
+           "texture_mode": ("standard", "smd"), "quad_method": tuple(METHODS)}
 RANGES = {"turnaround_seed": (0, 2**53-1), "refine_seed": (0, 2**53-1),
           "texture_seed": (0, 2**53-1), "refine_steps": (1, 100),
           "texture_steps": (1, 100), "texture_guidance": (0, 20),
@@ -29,6 +31,13 @@ CATEGORIES = [
     {"id": "environment", "name": "Environment piece", "description": "One building, rock formation or coherent set piece. Supply an isolated piece, not an entire scene or level.", "qualified": True},
 ]
 
+def texture_sampling_settings(settings, selected):
+    """Keep historical Standard cache signatures and record effective SMD controls."""
+    if settings.get("texture_mode") == "smd":
+        return {**selected, "texture_mode": "smd", "texture_steps": 4, "texture_guidance": 1.0}
+    return selected
+
+
 def resolve_settings(profile, overrides):
     if profile != "default":
         raise ValueError("Only the Default memory profile is configured.")
@@ -36,6 +45,9 @@ def resolve_settings(profile, overrides):
         raise ValueError("An unsupported workflow setting was supplied.")
     result = deepcopy(DEFAULTS)
     for name, value in overrides.items():
+        if name == "quad_options":
+            result[name] = validate_options(value)
+            continue
         default = DEFAULTS[name]
         if isinstance(default, bool):
             valid = isinstance(value, bool)

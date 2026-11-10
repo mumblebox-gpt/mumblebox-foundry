@@ -157,7 +157,7 @@ def build_archive(sources,selection,identity,metadata,output_root,worker,check_i
     else:warnings.append("Mumblebox terms have not been supplied.")
     files.append(FileRecord(MANIFEST,"metadata",None,"Structured inventory, relationships, measured specifications, production resources and file checksums.","json","manifest"))
     meta={"asset_name":asset,"export_id":ident,"created_utc":datetime.now(timezone.utc).isoformat(timespec="seconds"),"workflow_version":metadata.get("workflow_version"),"warnings":warnings,
-          "production":{key:metadata["production"][key] for key in ("category","turnaround","method","selected_view_ids","reference_view_id","camera_manifest","source_download") if key in metadata.get("production",{})}}
+          "production":{key:metadata["production"][key] for key in ("category","turnaround","method","selected_view_ids","reference_view_id","camera_manifest","source_download","quad_retopology") if key in metadata.get("production",{})}}
     catalog=build_catalog(files,variants,resources,identity,meta)
     # Native verification is run against a relocated copy before the final ZIP is published.
     relocated=job/"relocated";shutil.copytree(root,relocated)

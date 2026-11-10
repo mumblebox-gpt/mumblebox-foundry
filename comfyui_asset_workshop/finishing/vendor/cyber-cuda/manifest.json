@@ -1,0 +1,20 @@
+{
+  "version": "0.10.0",
+  "revision": "f6eddeac7f31f32dde9561a14f4076f60093dee9",
+  "source_sha256": "484c76583e5b40944c61a6e9b38f67466127bfe9435ac03a6e278be2e12c5825",
+  "cuda_toolkit": "12.9.1",
+  "architectures": [
+    "75-real",
+    "80-real",
+    "86-real",
+    "89-real",
+    "90-real",
+    "100-real",
+    "120-real",
+    "75-virtual"
+  ],
+  "files": {
+    "cyberremesh.exe": "96d9ab3a512786bcd8a26897061c4ece2d97edbdf4b2011469eb1aaae9659047",
+    "cudart64_12.dll": "760c38928bbe5759f7b31ed6692599eb7ec83cedd5702e84c2b72028a89837e1"
+  }
+}

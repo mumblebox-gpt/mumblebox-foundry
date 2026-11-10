@@ -38,6 +38,8 @@ class InstallTests(unittest.TestCase):
         builder=importlib.util.module_from_spec(spec);spec.loader.exec_module(builder)
         names={p.relative_to(builder.ROOT).as_posix() for p in builder.inventory()}
         self.assertIn('comfyui_asset_workshop/material_lab/material_editor.html',names)
+        self.assertIn('comfyui_asset_workshop/agent/workspace.py',names)
+        self.assertIn('comfyui_asset_workshop/skills/mumblebox-assets/SKILL.md',names)
         for name in ('pinokio.js', 'pinokio.json', 'install.js', 'start.js', 'update.js',
                      'repair.js', 'icon.png', 'scripts/pinokio/bootstrap.py',
                      'scripts/pinokio/runtime.py', 'scripts/pinokio/maintenance.py',

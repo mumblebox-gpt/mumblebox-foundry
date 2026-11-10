@@ -497,6 +497,28 @@
       "license": "Apache-2.0",
       "license_url": "https://huggingface.co/Comfy-Org/Idol/blob/3d050f4bc705ca1202a0ae4d21d2d97987521307/README.md"
     },
+    "idol_turbo_slow": {
+      "repo": "speridlabs/idol-turbo",
+      "file": "loras/idol_turbo_slow_comfy.safetensors",
+      "revision": "45cdd41f1f4d6d70496daa7d619f57ad79307a37",
+      "sha256": "4b27bbbf87d002762d8d0c840fdbf8b48d740c9fac2ba34d4e607196861f843f",
+      "size": 58744176,
+      "category": "loras",
+      "name": "idol_turbo_slow_comfy.safetensors",
+      "license": "Apache-2.0",
+      "license_url": "https://huggingface.co/speridlabs/idol-turbo/blob/45cdd41f1f4d6d70496daa7d619f57ad79307a37/README.md"
+    },
+    "idol_turbo_fast": {
+      "repo": "speridlabs/idol-turbo",
+      "file": "loras/idol_turbo_fast_comfy.safetensors",
+      "revision": "45cdd41f1f4d6d70496daa7d619f57ad79307a37",
+      "sha256": "1111341fbe27c2e80534fcac236a12c4484b334c407d993d601e9a86f9b36e8a",
+      "size": 58744176,
+      "category": "loras",
+      "name": "idol_turbo_fast_comfy.safetensors",
+      "license": "Apache-2.0",
+      "license_url": "https://huggingface.co/speridlabs/idol-turbo/blob/45cdd41f1f4d6d70496daa7d619f57ad79307a37/README.md"
+    },
     "idol_dino": {
       "repo": "Comfy-Org/Idol",
       "file": "clip_vision/dino_v3_vit_h_bf16.safetensors",
@@ -710,6 +732,41 @@
     }
   ],
   "worker_models": {
+    "trellis_smd_texture": [
+      {
+        "name": "zjwfufu/SMD-TRELLIS.2/texture/lora/adapter_config.json",
+        "category": "worker",
+        "repo": "zjwfufu/SMD-TRELLIS.2",
+        "revision": "b56718082a05d18df01dc34c2b6e88189c5d5c74",
+        "file": "texture/lora/adapter_config.json",
+        "size": 266,
+        "sha256": "10e216f4853dfa9e972c1cffd0824ee1ce6bfe169a3ff996000530e1a993427f",
+        "license": "MIT",
+        "license_url": "https://huggingface.co/zjwfufu/SMD-TRELLIS.2/tree/b56718082a05d18df01dc34c2b6e88189c5d5c74"
+      },
+      {
+        "name": "zjwfufu/SMD-TRELLIS.2/texture/lora/lora.safetensors",
+        "category": "worker",
+        "repo": "zjwfufu/SMD-TRELLIS.2",
+        "revision": "b56718082a05d18df01dc34c2b6e88189c5d5c74",
+        "file": "texture/lora/lora.safetensors",
+        "size": 299703024,
+        "sha256": "3eade256f2866a5b8c736a6d012b84479f929b0b90c540861bb4849fabd2ff9a",
+        "license": "MIT",
+        "license_url": "https://huggingface.co/zjwfufu/SMD-TRELLIS.2/tree/b56718082a05d18df01dc34c2b6e88189c5d5c74"
+      },
+      {
+        "name": "zjwfufu/SMD-TRELLIS.2/texture/sampling.json",
+        "category": "worker",
+        "repo": "zjwfufu/SMD-TRELLIS.2",
+        "revision": "b56718082a05d18df01dc34c2b6e88189c5d5c74",
+        "file": "texture/sampling.json",
+        "size": 558,
+        "sha256": "1d97d98b173ad2e1a9a7707cac7503638ad11ec53b1b45d341af8b64755fbe4d",
+        "license": "MIT",
+        "license_url": "https://huggingface.co/zjwfufu/SMD-TRELLIS.2/tree/b56718082a05d18df01dc34c2b6e88189c5d5c74"
+      }
+    ],
     "trellis_texture": [
       {
         "name": "microsoft/TRELLIS.2-4B/ckpts/shape_enc_next_dc_f16c32_fp16.json",

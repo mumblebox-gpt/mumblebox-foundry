@@ -139,7 +139,10 @@ def infer(executable, checkpoint, settings, work, check, device, gpu_id, standar
             raise ValueError("CCORE took too long to load. Free memory and try again.")
 
         gpu.verify_placement(log.read_text(encoding="utf-8", errors="replace"), device, vision=image is not None)
-        activity.update("ccore", "CCORE", "loaded")
+        names = ["CCORE · " + activity.checkpoint_name(checkpoint)]
+        if projector is not None:
+            names.append("CCORE vision · " + activity.checkpoint_name(projector))
+        activity.update_models("ccore", [{"name": name, "state": "loaded", "device": "GPU"} for name in names])
         STATE["phase"] = "Designing your prop"
         body = {
             "messages": [{"role": "system", "content": SYSTEM},

@@ -136,7 +136,10 @@ function mesh(w,key){
         button('Fit view',()=>{w.previewDispose?.viewer?.fitToViewer();w.previewDispose?.viewer?.forceRender();},{title:'Fit the complete mesh in the viewer'})),container);
 }
 function exports(w){
-    return el("div",{},exportChoices(w.cap.exports,w.draft.selection,()=>w.remember()),
+    const quad=w.quadChoice();
+    const change=quad.change;
+    quad.change=value=>{change(value);w.remember();};
+    return el("div",{},exportChoices(w.cap.exports,w.draft.selection,()=>w.remember(),quad),
         el("details",{},el("summary",{},"Advanced output settings"),el("div",{class:"wizard-columns"},
             number(w,"balanced_triangles","Balanced triangle budget","A starting budget, not a guarantee of suitability for every game."),
             number(w,"compact_triangles","Compact triangle budget","The normal map carries some of the master's surface detail."),
@@ -148,11 +151,17 @@ export function finishingPage(w){
     const picker=el("select",{"aria-label":"Compare geometry",onchange:e=>{w.geometryPreview=e.target.value;w.render();}},
         ...[["clean","Cleaned refined mesh"],["refined","After Hi3D"],["decoded","Before Hi3D"]].filter(([k])=>w.run?.previews?.[k])
             .map(([value,text])=>el("option",{value,selected:value===(w.geometryPreview||"clean")},text)));
-    const fields=el("fieldset",{disabled:!!w.run?.active},w.single?select(w,'export_grounding','Floor placement',[['level','Level and place on floor · Recommended'],['place','Place on floor only'],['original','Keep original orientation']],'Levels a near-upright resting pose without bending the mesh. Applied after baking to previews and exports; saved generation checkpoints stay unchanged.'):null,select(w,"texture_size","Texture size",[[1024,"1024"],[2048,"2048"],[4096,"4096 · Default"]],
+    const mode=w.draft.overrides.texture_mode??w.cap.defaults.texture_mode??"standard";
+    const textureMode=field("Texturing mode",el("select",{"aria-label":"Texturing mode",onchange:e=>{set(w,"texture_mode",e.target.value);w.render();}},
+        el("option",{value:"standard",selected:mode==="standard"},"Standard (default)"),
+        el("option",{value:"smd",selected:mode==="smd"},"Fast (experimental) · SMD-TRELLIS.2")),
+        "Fast uses a four-step texture model. Compare material detail on your asset. Print-only exports skip texturing.");
+    const fields=el("fieldset",{disabled:!!w.run?.active},textureMode,w.single?select(w,'export_grounding','Floor placement',[['level','Level and place on floor · Recommended'],['place','Place on floor only'],['original','Keep original orientation']],'Levels a near-upright resting pose without bending the mesh. Applied after baking to previews and exports; saved generation checkpoints stay unchanged.'):null,select(w,"texture_size","Texture size",[[1024,"1024"],[2048,"2048"],[4096,"4096 · Default"]],
         "TRELLIS.2 applies color and material maps to the final cleaned geometry. Print-only exports skip this stage."),
         el("details",{},el("summary",{},"Advanced texture settings"),el("div",{class:"wizard-columns"},
-            number(w,"texture_steps","Texture steps","Default: 20."),number(w,"texture_seed","Texture seed","Default: 42."),
-            number(w,"texture_guidance","Texture guidance","Default: 3.0."))),exports(w));
+            mode==="standard"?number(w,"texture_steps","Texture steps","Default: 20."):null,
+            number(w,"texture_seed","Texture seed","Default: 42."),
+            mode==="standard"?number(w,"texture_guidance","Texture guidance","Default: 3.0."):null)),exports(w));
     const preview=el("section",{class:"review-preview"},el("h3",{},"Inspect your mesh"),
         ready?el("div",{},picker,mesh(w,w.geometryPreview||"clean")):mesh(w,"decoded"),
         !w.run?.active&&["failed","cancelled","interrupted"].includes(w.run?.status)?button("Retry mesh and refinement",()=>w.act(()=>w.start("mesh"))):null,
@@ -162,7 +171,7 @@ export function finishingPage(w){
             hint("These checks do not establish self-intersection, wall-thickness or fabrication suitability.")):null);
     return el("div",{},el("div",{class:"review-workspace"},preview,
         ready&&!w.run?.active?el("section",{class:"review-options"},fields):hint("The initial mesh is saved before Hi3D begins. The refined, cleaned version will be shown here before texturing.")),
-        w.nav({next:async()=>{if(!ready)throw Error("Finish refinement first.");validateExports(w.draft.selection);await w.start("finish");},
+        w.nav({next:async()=>{if(!ready)throw Error("Finish refinement first.");validateExports(w.draft.selection,w.quadChoice());await w.start("finish");},
             note:"Clicking Next creates the selected textures, mesh versions, exports and ZIP package."}));
 }
 export function resultPage(w){
@@ -174,6 +183,9 @@ export function resultPage(w){
         w.nav({back:w.single?3:4}));
     const p=w.run.package;
     const selectedVariants=w.run.selection.variants;
+    const methods=w.run.quad_report?.effective_methods||[];
+    const solverLabel=id=>w.cap.quad_methods?.find(method=>method.id===id)?.label||
+        (id==="topology_preserving"?"Foundry topology-preserving subdivision":id);
     const options=[["texture","Detailed master","detailed"],["balanced","Balanced game mesh","game_balanced"],
         ["compact","Compact game mesh","game_compact"],["quads","Editable quad runtime preview","quad_light"],
         ["print","Print mesh (STL)","print"],["clean","Original clean geometry (before floor placement)",null]]
@@ -183,6 +195,7 @@ export function resultPage(w){
         ...options.map(([value,text])=>el("option",{value,selected:value===selected},text)));
     return el("div",{},resultActions(w,"top"),el("div",{class:"complete-panel"},el("h3",{},w.run.name+" is ready"),
         hint(p.selected_variants.map(title).join(" · ")+" · "+p.file_count+" files · "+(p.bytes/1024**2).toFixed(1)+" MB")),
+        selectedVariants.quad_light&&methods.length?hint("Quad methods used · "+methods.map(solverLabel).join(" + ")):null,
         picker,w.run.package.grounding?hint('Floor placement: '+(w.run.package.grounding.applied==='level'?'leveled '+w.run.package.grounding.correction_degrees.toFixed(1)+'°':w.run.package.grounding.applied==='place'?'placed on floor':'original orientation')+'. Saved generation checkpoints are unchanged.'):null,mesh(w,selected),measurements(w),el("div",{class:"actions"},
             el("a",{href:p.download,download:"",class:"download-link primary"},"Download ZIP"),
             button("Open Output Folder",()=>w.act(()=>request("wizard/runs/"+w.runId+"/open-folder",{})))),

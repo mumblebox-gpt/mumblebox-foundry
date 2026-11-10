@@ -2,7 +2,8 @@
 import json
 from aiohttp import web
 
-from .contract import EXAMPLE, MODEL_KEYS, TOKEN_LIMITS, default_model_variant
+from .contract import EXAMPLE, IMAGE_MODE, MODEL_KEYS, TEXT_MODE, TOKEN_LIMITS, default_model_variant
+from .nodes import graph as compile_graph
 from .enhancement import enhancement_input
 
 PREFIX = "/mumblebox-foundry/v1/ccore"
@@ -15,7 +16,8 @@ def register(routes, factory, endpoint):
         from ..image_to_3d.readiness import viewer_module
 
         return {"viewer_module": viewer_module(), "example": EXAMPLE, "token_limits": TOKEN_LIMITS,
-                "model_variants": list(MODEL_KEYS), "default_model_variant": default_model_variant()}
+                "model_variants": list(MODEL_KEYS), "default_model_variant": default_model_variant(),
+                "modes": [TEXT_MODE, IMAGE_MODE], "default_seed": 42, "default_max_tokens": TOKEN_LIMITS[-1]}
 
     @routes.post(PREFIX + "/enhance")
     @endpoint
@@ -31,7 +33,11 @@ def register(routes, factory, endpoint):
     @routes.post(PREFIX + "/runs")
     @endpoint
     async def start(request):
-        return factory().start(await read_object(request))
+        data = await read_object(request)
+        result = factory().start(data)
+        if data.get("client_id") == "foundry-agent":
+            notify(result)
+        return result
 
     @routes.get(PREFIX + "/runs/{id}")
     @endpoint
@@ -43,6 +49,26 @@ def register(routes, factory, endpoint):
     @endpoint
     async def cancel(request):
         return factory().cancel(request.match_info["id"])
+
+    def notify(run):
+        from server import PromptServer
+        PromptServer.instance.send_sync("mumblebox-foundry-ccore", {
+            "id": run["id"], "with_image": run["config"].get("mode") == IMAGE_MODE,
+        })
+
+    @routes.post(PREFIX + "/runs/{id}/show")
+    @endpoint
+    async def show(request):
+        service = factory()
+        run = service.get(request.match_info["id"])
+        notify(run)
+        return {"id": run["id"], "display_requested": True}
+
+    @routes.get(PREFIX + "/runs/{id}/graph")
+    @endpoint
+    async def graph(request):
+        run = factory().get(request.match_info["id"])
+        return compile_graph(run["config"], run["id"])
 
     @routes.get(PREFIX + "/runs/{id}/file")
     @endpoint

@@ -6,7 +6,7 @@ You don’t need to know ComfyUI or build a node graph. [Install with Pinokio](d
 
 Foundry brings together work from talented researchers and the open-source community. Our contribution is a practical toolbox: connected workflows, clear choices, previews and saved results.
 
-> **Windows / NVIDIA preview.** Preview **0.1.0-preview.19** adds CCORE Image + Text and dedicated GPU memory checks for both CCORE workflows. See the [changelog](CHANGELOG.md) and [published downloads](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) for release availability.
+> **Windows / NVIDIA preview.** Preview **0.1.0-preview.20** expands the local Foundry MCP, bundles its companion skill and adds three editable quad solvers. See the [changelog](CHANGELOG.md) and [published downloads](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) for release availability.
 
 **Create a Prop from Text · CCORE** turns a description into a stylized prop with a rotatable preview and GLB download. Start from **Choose a Workflow → Open Prop Wizard**, choose one of 12 editable examples, or write your own brief. **Enhance description** optionally uses Foundry’s local Qwen assistant to develop the design. **Create a Prop from Image + Text · CCORE** adds one reference image, with the option to create it in the wizard. Describe what to keep and what to change. Both wizards run locally on an NVIDIA GPU, check available memory before generating, and offer smaller settings when available. Foundry downloads the selected model and, for Image + Text, the vision projector on first use. The ZIP adds Foundry’s file catalog and upstream credits.
 
@@ -30,7 +30,7 @@ Each method has its own wizard and independent graph section. Existing workflows
 3. Start with **Single Image or Text**. Upload or drop one image, take a webcam photo, choose from Gallery, or select **Create Image** to make a reference from a description.
 4. Use the recommended defaults, review the mesh, and choose your exports. **Rocket Mode** runs the remaining selected stages without optional review stops.
 
-Already use ComfyUI? Follow [manual installation](INSTALL.md) and open `Mumblebox 3D Asset Foundry.json`. The [agent setup guide](docs/AGENT-SETUP.md) covers the local MCP tools.
+Already use ComfyUI? Follow [manual installation](INSTALL.md) and open `Mumblebox 3D Asset Foundry.json`. The [agent setup guide](docs/AGENT-SETUP.md) covers the local MCP tools and bundled companion skill for Blender workflows.
 
 The installer prepares software. Missing model weights for your selected workflow are downloaded before processing on first use; opening Foundry alone does not download every model. Keep enough disk space for weights, working files and outputs.
 
@@ -39,7 +39,7 @@ The installer prepares software. Missing model weights for your selected workflo
 - **Interactive previews:** inspect the initial, refined and finished meshes. Rotate and zoom, switch output versions, and return through History without regenerating.
 - **Useful outputs:** detailed and reduced triangle meshes, textures, baking and selected GLB, FBX, OBJ, BLEND or STL formats where supported. The wizard shows the choices available for each method.
 - **Floor placement:** Single Image can level a near-upright support pose, place the object on the floor without rotating it, or keep its original orientation. The measured rigid correction is applied after baking to the actual files and final preview. Source checkpoints stay unchanged; automatic placement does not reshape uneven feet or infer the intended pose of every object.
-- **Optional editable quads:** Single Image and Turnaround can add quad-preserving authoring files. QuadriFlow runs on the **CPU**: high CPU use is normal and it can take several minutes. Turning quads off still produces textured triangle assets. GLB previews triangulate quads; they do not preserve editable quad faces.
+- **Optional editable quads:** Single Image and Turnaround can add quad-preserving authoring files. Choose QuadriFlow or Instant Meshes on the **CPU**, or CyberRemesher on **NVIDIA CUDA**. QuadriFlow can take several minutes. Turning quads off still produces textured triangle assets. GLB previews triangulate quads; they do not preserve editable quad faces.
 - **Honest geometry checks:** cleanup and export reports describe the actual mesh. An editable quad result is a starting point, not a promise of animation-ready edge flow. When QuadriFlow opens an already closed component, a reported topology-preserving fallback can retain closure. Printing and collision still need checks for their intended use.
 - **Saved packages:** selected files, measurements, a readable README, checksums and model/tool credits. Source images, prompts and private working files are kept out of the ordinary asset package.
 

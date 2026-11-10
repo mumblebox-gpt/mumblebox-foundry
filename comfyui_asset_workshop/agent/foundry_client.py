@@ -12,13 +12,18 @@ class FoundryAPI(LocalAPI):
 
     def capabilities(self):return self.request("/wizard/capabilities")
 
-    def import_reference(self,path,role="primary",description=""):
+    def import_reference(self,path,role="primary",description="",target=""):
+        if target not in ("", "ccore"):
+            raise ValueError("Choose the default upload or target ccore.")
         if role not in ("primary","back","face","component","style","detail"):
             raise ValueError("Use primary, back, face, component, style or detail.")
         if len(description)>800:raise ValueError("Keep the reference description under 800 characters.")
         source=self.allowed_input(path)
         if source.stat().st_size>20*1024**2:raise ValueError("References must be smaller than 20 MB.")
-        data,kind=self.multipart({"type":"input","subfolder":"foundry-agent","overwrite":"false"},"image",source)
+        if source.suffix.lower() not in (".png", ".jpg", ".jpeg", ".webp"):
+            raise ValueError("Choose a PNG, JPEG or WebP image.")
+        subfolder = "foundry-references" if target == "ccore" else "foundry-agent"
+        data,kind=self.multipart({"type":"input","subfolder":subfolder,"overwrite":"false"},"image",source)
         result=self.upload_api.request("/upload/image",data,content_type=kind)
         return {"id":uuid.uuid4().hex,"filename":"/".join(filter(None,[result.get("subfolder"),result["name"]])),
                 "role":role,"description":description}

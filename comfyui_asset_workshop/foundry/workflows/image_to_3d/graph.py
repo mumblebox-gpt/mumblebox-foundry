@@ -1,5 +1,6 @@
 """Compile selected stage ancestors without mutating the reviewable source graph."""
 from copy import deepcopy
+from ...quad_policy import node_options
 
 def ancestor_prompt(prompt, endpoints):
     result, visiting = {}, set()
@@ -37,7 +38,7 @@ STAGE_KEYS = {
  "refinement":["refine_resolution","refine_steps","refine_seed","cpu_offload","attention"],
  "texture":["texture_seed","texture_steps","texture_size","texture_guidance"],
  "balanced":["balanced_triangles","texture_size"], "compact":["compact_triangles","texture_size"],
- "quads":["quad_count","texture_size"], "print":["print_height_mm"], "package":[]}
+ "quads":["quad_count","texture_size","quad_method"], "print":["print_height_mm"], "package":[]}
 DEPENDENCIES = {"turnaround":[], "geometry":["turnaround"], "refinement":["geometry"],
                 "texture":["refinement"], "balanced":["texture"], "compact":["texture"],
                 "quads":["texture"], "print":["refinement"]}
@@ -68,12 +69,13 @@ def compile_stage(stage, run):
     inputs(2003, resolution=settings["refine_resolution"], steps=settings["refine_steps"],
            seed=settings["refine_seed"], cpu_offload=settings["cpu_offload"], attention=settings["attention"])
     inputs(2023, seed=settings["texture_seed"], steps=settings["texture_steps"],
-           texture_size=settings["texture_size"], guidance=settings["texture_guidance"])
+           texture_size=settings["texture_size"], guidance=settings["texture_guidance"],
+           texture_mode=settings.get("texture_mode", "standard"))
     for node, budget in [(2030,"balanced_triangles"),(2040,"compact_triangles")]:
         inputs(node,target_triangles=settings[budget],texture_size=settings["texture_size"])
     for node in (2031,2041):
         inputs(node,resolution=settings["texture_size"])
-    inputs(3001,target_quads=settings["quad_count"],texture_size=settings["texture_size"])
+    inputs(3001,target_quads=settings["quad_count"],texture_size=settings["texture_size"],**node_options(settings))
     inputs(2050,height_mm=settings["print_height_mm"])
     if stage == "turnaround":
         graph.update(compile_turnaround(run))

@@ -2,6 +2,18 @@
 
 The companion MCP uses the same local HTTP services as the wizard. It does not load GPU models, implement another workflow engine, or require an agent to manipulate individual graph nodes.
 
+## Agent quick start
+
+Install the bundled [Mumblebox Assets skill](../comfyui_asset_workshop/skills/mumblebox-assets/SKILL.md) by copying its folder into your agent's skills directory. It explains when to run local asset generation and how to bring an export into Blender.
+
+1. Start Foundry and connect the MCP using the instructions below.
+2. Call `foundry_workflows` for the available groups and again with a group to get its actions, accepted path/query parameters and body fields. Call `foundry_workflow_action` with action `capabilities` for current models, settings and export options.
+3. Import only authorized inputs. For CCORE Image + Text set `target` to `ccore` when importing a local image. For Garment drape, use `foundry_garment_upload_character` on a sewn run and pass the returned ID into drape.
+4. Save or start the run using its documented action. For 3D-Guided, call `show` on the saved run first and check `bound`. You can inspect its graph without starting generation.
+5. Follow progress using the group's `status`. Use `show` to open the result in Foundry and the file or package actions to obtain local download URLs.
+
+The groups are `mesh` (Single Image and Turnaround), `guided`, `splat`, `hair`, `ccore` (Text and Image + Text), `garment`, `images`, and `workspace`. Workspace includes the packaged graph, History, preferences, model management, integration and maintenance controls. Model and file removal use the same preview tokens as the GUI and require the user's authorization for the listed items.
+
 ## HairDeck workflow
 
 Use `foundry_hair_capabilities` before configuring hair. Import an authorized local image with `foundry_import_reference`, then pass its `filename` as the hair configuration's `image`. `foundry_hair_create` saves options without downloading or generating. Start `generate`, inspect saved variations with `foundry_hair_status`, and select a variation for `preview`, `motion_preview` or `export` with `foundry_hair_start`. The material and export operations reuse saved card/chain data. Reuse a request ID only for retries of the same operation. Cancel/show tools use the same owner and existing visible Foundry wizard. Static GLB is unrigged; VRM 0.x contains skinning and spring groups. The motion output is a video preview, not an animation clip.

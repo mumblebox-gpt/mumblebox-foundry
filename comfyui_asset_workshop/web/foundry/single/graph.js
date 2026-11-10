@@ -39,10 +39,11 @@ export function syncSingleGraph(recipe,owner,run=null){
         bind('122','image',run.references[0].filename);const settings=run.settings;
         const fields=[['94','shape_resolution','target_resolution'],['2003','refine_steps','steps'],['2003','refine_resolution','resolution'],
             ['2003','refine_seed','seed'],['2003','cpu_offload','cpu_offload'],['2003','attention','attention'],
-            ['2023','texture_seed','seed'],['2023','texture_steps','steps'],['2023','texture_size','texture_size'],['2023','texture_guidance','guidance'],
+            ['2023','texture_seed','seed'],['2023','texture_steps','steps'],['2023','texture_size','texture_size'],['2023','texture_guidance','guidance'],['2023','texture_mode','texture_mode'],
             ['2030','balanced_triangles','target_triangles'],['2040','compact_triangles','target_triangles'],['3001','quad_count','target_quads'],['2050','print_height_mm','height_mm']];
         for(const [id,key,name] of fields)bind(id,name,settings[key]);
         for(const [id,offset] of [['3',14],['18',0],['23',0]])bind(id,'seed',(settings.shape_seed??42)+offset);
+        for(const [name,value] of Object.entries(run.quad_inputs||{method:settings.quad_method||'quadriflow'}))bind('3001',name,value);
         bind('3011','mode',settings.export_grounding||'level');bind('3010','asset_name',run.name);bind('3010','selection_json',JSON.stringify(run.selection));
     }
     graph.change?.();graph.setDirtyCanvas(true,true);

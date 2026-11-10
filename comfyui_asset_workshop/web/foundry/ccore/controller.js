@@ -22,13 +22,14 @@ const fileUrl = (id, kind, download = false) =>
     '/mumblebox-foundry/v1/' + runUrl(id) + '/file?' + new URLSearchParams({kind, ...(download ? {download: '1'} : {})});
 
 export class CcoreWizard {
-    constructor(shell, {resume = false, image = false, handoff = null} = {}) {
+    constructor(shell, {resume = false, image = false, handoff = null, runId = null} = {}) {
         this.shell = shell;
         this.withImage = image;
         this.saved = shell.node.properties[ccoreDraftKey(image)] || {};
         this.draft = {...defaults, ...this.saved.draft};
         if (image && handoff?.references[0]) this.draft.image = handoff.references[0].filename;
-        this.id = resume ? this.saved.id : null;
+        this.id = runId || (resume ? this.saved.id : null);
+        if (runId) this.saved = {...this.saved, id: runId};
         this.runStartedAt = this.saved.startedAt;
         this.page = 0;
         this.element = el('div', {class: 'wizard', 'data-ccore-wizard': ''});

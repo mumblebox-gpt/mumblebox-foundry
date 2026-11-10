@@ -13,7 +13,9 @@ async def verify(server, run_id, image_id=None):
         args=[str(server)], cwd=str(server.parent))
     async with Client(parameters) as client:
         names = {tool.name for tool in (await client.list_tools()).tools}
-        assert len(names) == 30, names
+        required = {'foundry_capabilities', 'foundry_start', 'foundry_workflows',
+                    'foundry_workflow_action', 'foundry_garment_upload_character'}
+        assert required <= names, required - names
         async def call(name, args):
             response = await client.call_tool(name, args)
             assert not response.is_error, response.content

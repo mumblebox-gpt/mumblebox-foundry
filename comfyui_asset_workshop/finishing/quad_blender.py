@@ -86,8 +86,11 @@ elif stage=="repair":
         if len(loop_edges)==3 and len(loop_verts)==3 and all(
                 sum(v in e.verts for e in loop_edges)==2 for v in loop_verts):
             caps.append(bm.faces.new(list(loop_verts)))
-    if caps:
-        bmesh.ops.triangulate(bm,faces=list(caps),quad_method="FIXED",ngon_method="BEAUTY")
+    # Keep four-sided caps as quads. The shared fixed-triangle adapter
+    # reserves unique diagonals even when two caps share opposite corners.
+    large_caps = [face for face in caps if len(face.verts) > 4]
+    if large_caps:
+        bmesh.ops.triangulate(bm,faces=large_caps,quad_method="FIXED",ngon_method="BEAUTY")
     bmesh.ops.recalc_face_normals(bm,faces=list(bm.faces))
     bm.verts.ensure_lookup_table();bm.verts.index_update()
     write_obj(job/"remeshed-repaired.obj",[list(v.co) for v in bm.verts],[[v.index for v in f.verts] for f in bm.faces])

@@ -89,11 +89,20 @@ def ensure_files(items, root, receipt_path, download, cancelled, progress):
         temporary.replace(receipt_path)
 
 
-def ensure_texture(state_root, cancelled=lambda:False, owner=None, progress=lambda value:None):
+def texture_dependencies(lock, mode):
+    groups = lock["worker_models"]
+    base = groups["trellis_texture"]
+    return base + groups["trellis_smd_texture"] if mode == "smd" else base
+
+
+def ensure_texture(state_root, cancelled=lambda:False, owner=None, progress=lambda value:None, *, texture_mode="standard"):
     from .... import models
     from ....finishing.runtime import settings
     root = Path(settings()["trellis_models"])
-    items = json.loads((Path(models.__file__).parent/"models.lock.json").read_text(encoding="utf-8"))["worker_models"]["trellis_texture"]
+    if texture_mode not in ("standard", "smd"):
+        raise ValueError("Choose Standard or SMD texturing.")
+    lock = json.loads((Path(models.__file__).parent/"models.lock.json").read_text(encoding="utf-8"))
+    items = texture_dependencies(lock, texture_mode)
     if not models.DOWNLOAD_LOCK.acquire(blocking=False):
         raise ValueError("Another model download is running. Retry after it finishes.")
     try:

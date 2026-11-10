@@ -1,0 +1,84 @@
+--- a/src/core/include/cyber/core/guidance.hpp
++++ b/src/core/include/cyber/core/guidance.hpp
+@@ -1,5 +1,6 @@
+ #pragma once
+ 
++#include <array>
+ #include <cstddef>
+ #include <memory>
+ #include <vector>
+--- a/src/core/src/mesh_ops.cpp
++++ b/src/core/src/mesh_ops.cpp
+@@ -1,4 +1,5 @@
+ #include <algorithm>
++#include <array>
+ #include <cassert>
+ #include <unordered_map>
+ #include <unordered_set>
+--- a/src/core/src/io_stl.cpp
++++ b/src/core/src/io_stl.cpp
+@@ -1,4 +1,5 @@
+ #include <algorithm>
++#include <array>
+ #include <bit>
+ #include <cstdint>
+ #include <cstring>
+--- a/src/core/include/cyber/core/progress.hpp
++++ b/src/core/include/cyber/core/progress.hpp
+@@ -50,6 +50,7 @@
+ 
+     ProgressSink() = default;
+     explicit ProgressSink(Callback callback) : m_callback(std::move(callback)) {}
++    ProgressSink(ProgressSink&& other) noexcept : m_callback(std::move(other.m_callback)), m_best(other.m_best.load(std::memory_order_relaxed)) {}
+ 
+     void report(float progress, std::string_view stage = {}) {
+         if (!m_callback) {
+--- a/src/quadrangulate/src/half_lattice_components.cpp
++++ b/src/quadrangulate/src/half_lattice_components.cpp
+@@ -2,9 +2,14 @@
+ 
+ #include <algorithm>
+ #include <cmath>
++#include <iterator>
+ #include <limits>
+ #include <map>
+ #include <queue>
++
++#if defined(_MSC_VER) && defined(_M_X64)
++#include <intrin.h>
++#endif
+ 
+ namespace cyber::remesh::halflattice {
+ 
+@@ -23,7 +28,13 @@
+ }
+ 
+ bool multiplyChecked(const std::int64_t left, const std::int64_t right, std::int64_t& product) {
++#if defined(_MSC_VER) && defined(_M_X64)
++    std::int64_t high = 0;
++    product = _mul128(left, right, &high);
++    return high == (product < 0 ? -1 : 0);
++#else
+     return !__builtin_mul_overflow(left, right, &product);
++#endif
+ }
+ 
+ RejectionReason firstRejection(const RejectionReason current, const RejectionReason candidate) {
+--- a/src/accel/src/cuda_backend.cu
++++ b/src/accel/src/cuda_backend.cu
+@@ -12,6 +12,7 @@
+ 
+ #include <algorithm>
+ #include <cstdio>
++#include <cstdlib>
+ #include <memory>
+ #include <mutex>
+ #include <string>
+@@ -35,6 +36,7 @@
+ // never crashing or producing partial results").
+ void reportFallback(const char* primitive, const char* what) {
+     detail::reportFallbackOnce("CUDA", primitive, what);
++    if (std::getenv("FOUNDRY_CYBER_STRICT_CUDA")) { std::exit(86); }
+ }
+ 
+ bool cudaOk(cudaError_t status, const char* primitive) {

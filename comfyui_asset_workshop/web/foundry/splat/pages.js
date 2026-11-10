@@ -15,12 +15,18 @@ function input(w){
         el('div',{class:'actions'},...w.cap.models.map(m=>link(m.name+' · '+m.creator,m.url))),w.nav({next:()=>w.go(2)}));
 }
 function options(w){
+    const mode=w.draft.generation_mode||'standard';
+    const modes=el('fieldset',{},el('legend',{},'Idol generation mode'),
+        ...[['standard','Standard (default)','Use the established recipe with adjustable steps and guidance.'],
+            ['turbo','Turbo (experimental)','Use the two Idol Turbo adapters and five sampling steps. Fine detail may be softer.']].map(([value,label,description])=>
+            el('label',{class:'check-row'},el('input',{type:'radio',name:'idol-generation-mode',value,checked:mode===value,
+                onchange:()=>{w.draft.generation_mode=value;w.remember();w.render();}}),el('span',{},label,hint(description)))));
     const names={splat:'Gaussian splat (SPZ)',raw:'Original extracted mesh (GLB)',master:'Cleaned master (GLB)',companion:'Lightweight companion (GLB)',presentation:'Crease-normal presentation copies (GLB)',orbit:'Splat orbit video (MP4)',previews:'Untextured preview images (PNG)',zip:'Downloadable ZIP package'};
     const selection=el('fieldset',{},el('legend',{},'Files to keep in the package'),...Object.entries(names).map(([key,label])=>el('label',{class:'check-row'},el('input',{type:'checkbox',checked:w.draft.outputs[key],onchange:e=>{w.draft.outputs[key]=e.target.checked;w.remember();}}),el('span',{},label))));
-    const advanced=el('details',{},el('summary',{},'Advanced generation settings'),w.number('seed','Idol seed',0,2**53-16),w.number('steps','Sampling steps',1,100),w.number('cfg','Guidance',.1,20,.1),w.number('image_size','Reference preparation size',256,2048,64),w.number('gaussians','Gaussian count',32768,1048576,32768),w.number('decoder_seed','Decoder seed',0,2**53-16),w.number('mesh_resolution','Splat mesh extraction resolution',128,1024,64),w.number('orbit_size','Orbit image size',256,2048,64),w.number('orbit_frames','Orbit frames',16,180),w.number('orbit_fps','Orbit frames per second',1,60));
+    const advanced=el('details',{},el('summary',{},'Advanced generation settings'),w.number('seed','Idol seed',0,2**53-16),mode==='standard'?w.number('steps','Sampling steps',1,100):null,mode==='standard'?w.number('cfg','Guidance',.1,20,.1):null,w.number('image_size','Reference preparation size',256,2048,64),w.number('gaussians','Gaussian count',32768,1048576,32768),w.number('decoder_seed','Decoder seed',0,2**53-16),w.number('mesh_resolution','Splat mesh extraction resolution',128,1024,64),w.number('orbit_size','Orbit image size',256,2048,64),w.number('orbit_frames','Orbit frames',16,180),w.number('orbit_fps','Orbit frames per second',1,60));
     return el('div',{},hint('The defaults reproduce our tested lander workflow. Higher settings increase memory use and processing time; they do not guarantee a better reconstruction.'),
-        w.check('refine','Use Hi3D geometry refinement','Can improve the extracted mesh before cleanup. Adds processing time. The original splat and extracted mesh are preserved.'),
-        selection,advanced,hint('Selected model files are checked and downloaded before processing. The splat supplies visual detail; the companion is separate polygon geometry.'),w.nav({next:()=>w.start('generation'),nextText:'Generate with Idol'}));
+        modes,w.check('refine','Use Hi3D geometry refinement','Can improve the extracted mesh before cleanup. Adds processing time. The original splat and extracted mesh are preserved.'),
+        selection,advanced,hint('Selected model files are checked and downloaded before processing. The splat supplies visual detail; the companion is separate polygon geometry.'),w.nav({next:()=>w.start('generation'),nextText:mode==='turbo'?'Generate with Idol Turbo':'Generate with Idol'}));
 }
 function generation(w){return el('div',{},hint('Review the splat and its original mesh. The splat preserves appearance; the mesh is the starting geometry for optional refinement and cleanup.'),w.artifact('orbit','Splat orbit'),w.artifact('splat','Gaussian splat',{preview:true}),w.artifact('raw','Original mesh',{preview:true}),w.nav({next:()=>w.go(4),nextText:'Review cleanup settings'}));}
 function cleanup(w){

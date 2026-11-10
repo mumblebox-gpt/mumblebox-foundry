@@ -32,21 +32,33 @@ def read_obj(path):
     return vertices,faces
 
 def normalize_quad_diagonals(faces):
-    """Preserve polygons and winding while avoiding an existing edge as a diagonal.
+    """Keep fixed fan diagonals distinct from polygon edges and one another."""
+    def edge(a, b):
+        return (a, b) if a < b else (b, a)
 
-    Fixed fan triangulation is used for validation and baking. A legal polygon
-    surface can otherwise appear nonmanifold solely because of its start index.
-    """
-    edge_set={tuple(sorted((p[i],p[(i+1)%len(p)]))) for p in faces for i in range(len(p))}
-    result=[];rotations=0
-    for face in faces:
-        p=list(face)
-        if len(p)==4 and tuple(sorted((p[0],p[2]))) in edge_set:
-            if tuple(sorted((p[1],p[3]))) in edge_set:
-                raise ValueError("Quad has no safe fixed diagonal")
-            p=p[1:]+p[:1];rotations+=1
-        result.append(p)
-    return result,rotations
+    result = [list(face) for face in faces]
+    occupied = {edge(face[i], face[(i + 1) % len(face)])
+                for face in result for i in range(len(face))}
+    choices = {}
+    for index, face in enumerate(result):
+        if len(face) == 4:
+            options = (edge(face[0], face[2]), edge(face[1], face[3]))
+            choices[index] = [(i, key) for i, key in enumerate(options) if key not in occupied]
+
+    rotations = 0
+    # Give quads with only one safe choice first access to that diagonal.
+    for index in sorted(choices, key=lambda i: len(choices[i])):
+        selected = next(((rotation, key) for rotation, key in choices[index] if key not in occupied), None)
+        if selected is None:
+            raise ValueError("Quad has no safe fixed diagonal")
+        rotation, key = selected
+        occupied.add(key)
+        if rotation:
+            face = result[index]
+            result[index] = face[1:] + face[:1]
+            rotations += 1
+    return result, rotations
+
 
 def allocate_budget(areas,total,minimum=24):
     if not areas or total<len(areas)*minimum or any(not math.isfinite(float(a)) or a<0 for a in areas) or sum(areas)<=0:raise ValueError('Invalid component budget')
@@ -57,16 +69,22 @@ def allocate_budget(areas,total,minimum=24):
     for i in order[:total-sum(result)]:result[i]+=1
     return result
 
-def triangles_to_quads(vertices,faces):
-    """Exact planar subdivision for tiny components; no smoothing or point welding."""
-    v=[list(map(float,x)) for x in vertices]; edges={}; quads=[]
-    for a,b,c in faces:
-        face=[int(a),int(b),int(c)]; mids=[]
-        for left,right in zip(face,face[1:]+face[:1]):
-            key=tuple(sorted((left,right)))
+def subdivide_to_quads(vertices, faces):
+    """Subdivide polygons conformingly with shared edge midpoints."""
+    v = [list(map(float, x)) for x in vertices]
+    edges = {}
+    quads = []
+    for polygon in faces:
+        face = [int(index) for index in polygon]
+        mids = []
+        for left, right in zip(face, face[1:] + face[:1]):
+            key = tuple(sorted((left, right)))
             if key not in edges:
-                edges[key]=len(v);v.append([(v[left][j]+v[right][j])/2 for j in range(3)])
+                edges[key] = len(v)
+                v.append([(v[left][j] + v[right][j]) / 2 for j in range(3)])
             mids.append(edges[key])
-        center=len(v);v.append([sum(v[k][j] for k in face)/3 for j in range(3)])
-        for i in range(3):quads.append([face[i],mids[i],center,mids[(i-1)%3]])
-    return v,quads
+        center = len(v)
+        v.append([sum(v[index][j] for index in face) / len(face) for j in range(3)])
+        for i, corner in enumerate(face):
+            quads.append([corner, mids[i], center, mids[i - 1]])
+    return v, quads

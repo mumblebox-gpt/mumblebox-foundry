@@ -5,7 +5,12 @@ from ..image_creation.definition import filename
 
 TITLE='Splat & Solid'
 METHOD='splat-solid/v1'
-DEFAULTS=dict(name='Untitled splat asset',image='',seed=46,steps=20,cfg=3.,image_size=1024,
+TURBO_EXPERTS={
+    'slow': 'idol_turbo_slow_comfy.safetensors',
+    'fast': 'idol_turbo_fast_comfy.safetensors',
+}
+TURBO_MODELS=('idol_turbo_slow','idol_turbo_fast')
+DEFAULTS=dict(name='Untitled splat asset',image='',generation_mode='standard',seed=46,steps=20,cfg=3.,image_size=1024,
     gaussians=262144,decoder_seed=790219963981395,mesh_resolution=512,refine=True,
     refine_resolution=1536,refine_steps=25,refine_seed=42,cpu_offload=True,
     master_resolution=384,master_smoothing=3,master_band=1.,drop_small_components=0.,
@@ -21,6 +26,8 @@ def validate(data):
     c={**deepcopy(DEFAULTS),**deepcopy(data)}
     if not isinstance(c['name'],str) or not 1<=len(c['name'].strip())<=120:raise ValueError('Name the asset (up to 120 characters).')
     c['name']=c['name'].strip();c['image']=filename(c['image'])
+    if c['generation_mode'] not in ('standard','turbo'):
+        raise ValueError('Choose Standard or Turbo generation mode.')
     bounds=dict(seed=(0,2**53-16),decoder_seed=(0,2**53-16),refine_seed=(0,2**53-16),steps=(1,100),cfg=(.1,20),
         image_size=(256,2048),gaussians=(32768,1048576),mesh_resolution=(128,1024),refine_steps=(1,100),
         master_resolution=(64,1024),master_smoothing=(0,10),master_band=(.5,4),drop_small_components=(0,.1),
@@ -45,5 +52,6 @@ def capabilities():
     from ..image_to_3d.readiness import viewer_module
     return dict(title=TITLE,method=METHOD,defaults=deepcopy(DEFAULTS),viewer_module=viewer_module(),
         models=[dict(name='Idol',creator='Sperid Labs',url='https://huggingface.co/speridlabs/idol',role='Single-image Gaussian splat generation and mesh extraction'),
+                dict(name='Idol Turbo',creator='Sperid Labs and contributors',url='https://huggingface.co/speridlabs/idol-turbo',role='Optional phase adapters for five-step splat generation'),
                 dict(name='Hi3D',creator='Hi3D researchers',url='https://github.com/hi3d-official/Hi3Dv1.0',role='Optional image-guided geometry refinement'),
                 dict(name='ComfyUI',creator='Comfy-Org and contributors',url='https://github.com/Comfy-Org/ComfyUI',role='Mesh cleanup, simplification, previews and exports')])

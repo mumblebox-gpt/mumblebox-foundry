@@ -200,7 +200,7 @@ def install(root,source=None,repair=False):
     # Probe software imports without loading weights or allocating GPU models.
     run([layout.host_python,'-c','import torch,torchvision,trimesh,keyring,scipy,networkx; from trimesh.poses import compute_stable_poses; print("Host imports and stable support-pose entry point OK",torch.__version__)'])
     run([layout.host_python,'-c','import sys; sys.path.insert(0,sys.argv[1]); from comfy.ldm.moge.model import MoGeModel; from PIL import Image; import numpy,psutil; print("Guided camera/render adapter imports OK")',layout.comfy])
-    run([layout.worker_python,'-c','import torch,cumesh,flex_gemm,nvdiffrast,nvdiffrec_render,o_voxel,pymeshlab,meshlib; print("Finishing imports OK",torch.__version__)'])
+    run([layout.worker_python,'-c','import torch,cumesh,flex_gemm,nvdiffrast,nvdiffrec_render,o_voxel,pymeshlab,meshlib,pyquadriflow,pynanoinstantmeshes; print("Finishing and quad solver imports OK",torch.__version__)'])
     run([layout.host_python,'-c','import sys; sys.path.insert(0,sys.argv[1]); import comfy_extras.nodes_triposplat,comfy_extras.nodes_gaussian_splat,comfy_extras.nodes_mesh_postprocess,comfy_extras.nodes_mesh_io; print("Native Idol splat, mesh extraction and cleanup imports OK")',layout.comfy])
     run([layout.worker_python,'-c','import runpy,sys; runpy.run_path(sys.argv[1],run_name="splat_quality_probe"); import numpy,trimesh,pymeshlab; print("Splat geometry audit imports OK")',layout.comfy/'custom_nodes/comfyui_asset_workshop/foundry/workflows/splat_solid/quality.py'])
     # Import the real texture entry point, including its ComfyUI dependencies.

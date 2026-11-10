@@ -55,7 +55,10 @@ class SplatRuns:
     def fingerprint(self,r,stage):
         keys=GROUPS['generation'] if stage=='generation' else GROUPS['refinement'] if stage=='refinement' else GROUPS['cleanup']
         previous=None if stage=='generation' else r['completed'].get('generation' if stage=='refinement' or not r['config']['refine'] else 'refinement')
-        return signature([r['source_sha256'],{k:r['config'][k] for k in keys},r['config']['outputs']['orbit'] if stage=='generation' else previous])
+        settings={k:r['config'][k] for k in keys}
+        if stage=='generation' and r['config'].get('generation_mode')=='turbo':
+            settings.update(generation_mode='turbo',steps=5,cfg=1.0)
+        return signature([r['source_sha256'],settings,r['config']['outputs']['orbit'] if stage=='generation' else previous])
     def fresh(self,r,stage):
         saved=r['completed'].get(stage)
         return bool(saved and saved['signature']==self.fingerprint(r,stage) and all(k in r['artifacts'] and self.artifact_path(r,k).is_file() for k in saved['roles']))
@@ -92,7 +95,8 @@ class SplatRuns:
         self.event(r,'Preparing all selected models before processing',2)
         loop=asyncio.get_running_loop()
         progress=lambda d:loop.call_soon_threadsafe(lambda:r.update(dependency=d))
-        await asyncio.to_thread(ensure,'splat',self.state,lambda:r.get('cancel',False),r['id'],progress)
+        mode='splat_turbo' if r['config'].get('generation_mode')=='turbo' else 'splat'
+        await asyncio.to_thread(ensure,mode,self.state,lambda:r.get('cancel',False),r['id'],progress)
         if r['config']['refine'] and needs_mesh(r['config']):await asyncio.to_thread(ensure,'refinement',self.state,lambda:r.get('cancel',False),r['id'],progress)
         r.pop('dependency',None);self.check(r)
     async def execute(self,r):
@@ -122,7 +126,8 @@ class SplatRuns:
         self.check(r)
         if self.fresh(r,stage):self.event(r,'Reused saved '+stage+' stage',progress);return
         await self.lifecycle().barrier();await self.lifecycle().release('before splat '+stage)
-        self.event(r,{'generation':'Idol · generating the splat and original mesh','refinement':'Hi3D · refining the original geometry','cleanup':'ComfyUI · closing and simplifying the geometry'}[stage],progress)
+        generator='Idol Turbo' if r['config'].get('generation_mode')=='turbo' else 'Idol'
+        self.event(r,{'generation':generator+' · generating the splat and original mesh','refinement':'Hi3D · refining the original geometry','cleanup':'ComfyUI · closing and simplifying the geometry'}[stage],progress)
         prompt=compile_stage(r,stage);ident=str(uuid.uuid4())
         r['pending']=dict(id=ident,stage=stage,graph=prompt,signature=self.fingerprint(r,stage));self.save(r)
         await self.native.submit(prompt,ident,r.get('client_id',''));await self.accept(r)

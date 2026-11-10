@@ -19,7 +19,7 @@ const stepLabels=["Starting images","Four views","Mesh settings","Refine & expor
 const stepDescriptions=["References and image model","Review the turnaround","Detail and refinement controls","Preview and output choices","Files and production record"];
 const stageNames={turnaround:"Qwen Image 2.1 · Creating four views",geometry:"Pixal3D / TRELLIS.2 · Building the initial mesh",
  refinement:"Hi3D · Refining and cleaning the geometry",texture:"TRELLIS.2 · Texturing the finished geometry",
- balanced:"Baking the balanced game mesh",compact:"Baking the compact game mesh",quads:"QuadriFlow · Retopology, UVs and detail baking",
+ balanced:"Baking the balanced game mesh",compact:"Baking the compact game mesh",quads:"Retopology, UVs and detail baking",
  print:"Preparing and measuring the print mesh",package:"Writing exports, README and ZIP",cleanup:"Releasing models and temporary work"};
 export class Wizard {
     constructor(shell,{resume=false,runId=null,method="turnaround"}={}) {
@@ -120,16 +120,33 @@ export class Wizard {
         this.remember();this.render();
     }
     go(page){this.page=page;this.remember();this.render();this.shell.content.scrollTop=0;}
+    quadChoice(overrides=this.draft.overrides){
+        const remember=()=>{if(overrides===this.draft.overrides)this.remember();};
+        return {
+            methods:this.cap.quad_methods||[], value:overrides.quad_method||this.cap.defaults.quad_method||"quadriflow",
+            controls:this.cap.quad_options||{}, name:"foundry-quad-"+this.sessionId,
+            change:value=>{overrides.quad_method=value;remember();},
+            getOption:(group,id,fallback)=>overrides.quad_options?.[group]?.[id]??fallback,
+            setOption:(group,id,value)=>{
+                const options=overrides.quad_options??={};
+                (options[group]??={})[id]=value;
+                remember();
+            },
+        };
+    }
     rocket(){
         const selection=structuredClone(this.draft.selection);
+        const overrides=structuredClone(this.draft.overrides);
+        const quad=this.quadChoice(overrides);
+        quad.name+="-rocket";
         const error=el("p",{class:"error-panel",role:"alert",hidden:true});
         dialog(this.shell,"Finish this asset with Rocket Mode?",el("div",{class:"rocket-confirmation"},
             hint("Continue from this point using your current settings. Saved, unchanged stages are reused. The remaining stages run automatically without further Next clicks."),
-            exportChoices(this.cap.exports,selection),error),[
+            exportChoices(this.cap.exports,selection,undefined,quad),error),[
             {label:"Keep working manually",run:close=>close()},
             {label:"Start Rocket Mode",primary:true,run:close=>{
-                try{validateExports(selection);}catch(e){error.textContent=e.message;error.hidden=false;return;}
-                this.draft.selection=selection;this.remember();close();this.act(()=>this.start("rocket"));
+                try{validateExports(selection,quad);}catch(e){error.textContent=e.message;error.hidden=false;return;}
+                this.draft.overrides=overrides;this.draft.selection=selection;this.remember();close();this.act(()=>this.start("rocket"));
             }}]);
     }
     confirmReset(){
@@ -174,7 +191,7 @@ export class Wizard {
             el("img",{src:new URL("../../assets/foundry-chaos-star.svg",import.meta.url).href,alt:"",class:"working-star"}),
             el("div",{class:"stage-progress"},this.overallText,this.overallMeter,this.overallCount,
                 el("strong",{},this.run.dependency?"Preparing required models":this.run.stage==="turnaround"?(this.run.turnaround?.name||"Image model")+" · Creating four views":stageNames[this.run.progress?.current||this.run.stage]||"Preparing the next stage"),this.sampleProgress,elapsed,
-                hint(this.run.dependency?FIRST_USE_MESSAGE:this.run.stage==="quads"?"QuadriFlow uses the CPU. High CPU use and spikes are normal. Retopology can take several minutes.":this.run.stage==="refinement"?"Refinement can take several minutes. The saved initial mesh is retained.":"Your completed stages are saved as the workflow progresses."),stages));
+                hint(this.run.dependency?FIRST_USE_MESSAGE:this.run.stage==="quads"?((this.cap.quad_methods||[]).find(m=>m.id===(this.run.settings?.quad_method||"quadriflow"))?.description||"Preparing editable quads."):this.run.stage==="refinement"?"Refinement can take several minutes. The saved initial mesh is retained.":"Your completed stages are saved as the workflow progresses."),stages));
     }
     updateOverall(sample=0){
         const p=this.run?.progress;if(!p||!this.overallMeter)return;

@@ -31,11 +31,13 @@ class LocalAPI:
         self.input_files = {Path(p).resolve(strict=True) for p in input_files}
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
 
-    def request(self, path, body=None, method=None, content_type=None, *, binary=False):
+    def request(self, path, body=None, method=None, content_type=None, *, binary=False, content_length=None):
         if not path.startswith('/') or '\\' in path or '..' in path:
             raise ValueError('Use a supported local Mumblebox action.')
-        data = body if isinstance(body, bytes) else json.dumps(body).encode() if body is not None else None
+        data = body if isinstance(body, bytes) or hasattr(body, 'read') else json.dumps(body).encode() if body is not None else None
         headers = {'Content-Type': content_type or 'application/json'} if data is not None else {}
+        if content_length is not None:
+            headers['Content-Length'] = str(content_length)
         request = urllib.request.Request(self.base_url+path, data=data, headers=headers,
                                          method=method or ('POST' if body is not None else 'GET'))
         try:

@@ -60,7 +60,7 @@ Do not remove `.pinokio` as a troubleshooting step: it contains your work and mo
 
 ## Connect a coding agent
 
-After startup, `.pinokio/mcp.json` contains a ready configuration entry for the installed companion MCP. Copy that entry into the agent client's MCP settings; keep any unrelated servers. See [Agent setup](AGENT-SETUP.md) for the available tools and reference-file permissions. The MCP uses the same workflow services and gallery as the interface.
+After startup, `.pinokio/mcp.json` contains a ready configuration entry for the installed companion MCP. Copy that entry into the agent client's MCP settings; keep any unrelated servers. See [Agent setup](AGENT-SETUP.md) for the available tools, reference-file permissions and how to add the bundled companion skill. The MCP uses the same workflow services and gallery as the interface.
 
 ## If something fails
 

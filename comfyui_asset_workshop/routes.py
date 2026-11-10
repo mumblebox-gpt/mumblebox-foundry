@@ -116,7 +116,8 @@ def idle():
     from .foundry.workflows.guided_mesh.runs import busy as guided_busy
     from .foundry.workflows.splat_solid.runs import busy as splat_busy
     from .foundry.workflows.ccore_prop.runs import busy as ccore_busy
-    if single_image_jobs_active() or foundry_busy() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy():
+    from .foundry.workflows.garment_particles.runs import busy as garment_busy
+    if single_image_jobs_active() or foundry_busy() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy():
         raise JobConflict("A Mumblebox job is still active. Wait for it to finish or stop it before changing the library or History.")
     if description_helper.STATE.get("running"):
         raise ValueError("The description assistant is working. Wait for it or stop it before generating an image.")
@@ -175,10 +176,9 @@ def reconcile(asset):
 @endpoint
 async def status(request):
     from .civitai_routes import DOWNLOADS
-    from .pipeline_workers.activity import snapshot as worker_snapshot, host_residency
+    from .pipeline_workers.activity import model_snapshot
     from .foundry.cache import busy as maintenance_busy
-    workers=worker_snapshot()
-    residencies=host_residency(list(memory.current_loaded_models))+workers
+    residencies=model_snapshot(list(memory.current_loaded_models))
     workflow_activity=[]
     for name in ('image_to_3d','image_creation','hair_creation','splat_solid'):
         owner=__import__(__package__+'.foundry.workflows.'+name+'.runs',fromlist=['ACTIVE']).ACTIVE
@@ -197,7 +197,7 @@ async def status(request):
         "maintenance_active":maintenance_busy(),
         "loaded_models": len(memory.current_loaded_models),
         "helper_loaded": description_helper.PROCESS is not None and description_helper.PROCESS.poll() is None,
-        "running": queue().get_tasks_remaining() > 0 or any(__import__(__package__+".foundry.workflows."+name+".runs",fromlist=["busy"]).busy() for name in ('image_to_3d','image_creation','hair_creation','guided_mesh','splat_solid','ccore_prop')), "root": configuration()["root"],
+        "running": queue().get_tasks_remaining() > 0 or any(__import__(__package__+".foundry.workflows."+name+".runs",fromlist=["busy"]).busy() for name in ('image_to_3d','image_creation','hair_creation','guided_mesh','splat_solid','ccore_prop','garment_particles')), "root": configuration()["root"],
         "download": dict(models.DOWNLOAD), "profiles": PROFILES,
         "resource_download": DOWNLOADS.status(),
         "startup_vram_reserve_gb": memory.extra_reserved_memory() / 1024**3,

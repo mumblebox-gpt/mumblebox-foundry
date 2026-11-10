@@ -18,13 +18,14 @@ const stageNames={concept:'Creating the concept turnaround',proxy:'Building the 
     refine:'Refining and cleaning geometry',texture:'Texturing the finished mesh',balanced:'Preparing the balanced mesh',compact:'Preparing the compact mesh',
     quads:'Building editable quad topology and baking detail',print:'Preparing print geometry',package:'Writing and checking your asset package'};
 export class GuidedWizard{
-    constructor(shell,{resume=false,handoff=null}={}){
+    constructor(shell,{resume=false,handoff=null,runId=null,binding=null}={}){
         this.shell=shell;this.node=shell.node;this.disposed=false;this.page=1;
         this.key='mumblebox-foundry/guided/'+app.extensionManager.workflow.activeWorkflow.path;
         let saved=resume?this.node.properties.foundryGuided:null;
         if(resume)try{saved=JSON.parse(localStorage.getItem(this.key))||saved;}catch{}
         this.draft=clone(saved?.draft||{name:'Untitled object',original:'',controls:{},selection:null,finishing:{}});
-        this.id=saved?.id||null;this.page=saved?.page||1;
+        this.id=runId||saved?.id||null;this.page=saved?.page||1;
+        this.agentBinding=binding;
         if(handoff){this.draft.name=handoff.name;this.draft.original=handoff.references[0].filename;this.draft.image_creation=handoff.image_creation;this.draft.controls.asset_description=handoff.references[0].description||'';this.id=null;this.page=1;}
         this.host=el('section',{class:'wizard guided-wizard','aria-label':'3D-Guided wizard'});
         this.progressHandler=e=>{if(this.busyText&&this.active())this.busyText.textContent='Sampling step '+e.detail.value+' of '+e.detail.max;};
@@ -36,9 +37,20 @@ export class GuidedWizard{
         const available=new Set(this.cap.exports.map(item=>item.id));
         this.draft.selection.variants=Object.fromEntries(Object.entries(this.draft.selection.variants).filter(([key])=>available.has(key)));
         if(!this.cap.quad_retopology_enabled)delete this.draft.finishing.quad_count;
-        if(this.id){this.job=await request('guided/runs/'+this.id);await this.graph();}
+        if(this.id){
+            this.job=await request('guided/runs/'+this.id);
+            if(this.agentBinding){
+                const controls=Object.fromEntries((this.cap.controls||[]).map(key=>[key,this.job.spec[key]]).filter(([,value])=>value!==undefined));
+                this.draft={name:this.job.name,original:this.job.spec.original,controls,
+                    selection:clone(this.job.rocket_selection||this.cap.selection),
+                    finishing:clone(this.job.rocket_overrides||{}),image_creation:this.job.image_creation};
+                this.page=this.job.finishing?.package?6:stagePage[this.job.current_stage||this.job.awaiting_stage]||1;
+                this.remember();
+            }
+            await this.graph();
+        }
         setGuidedQuadAvailability(this.node,this.cap.quad_retopology_enabled);
-        await this.live();this.render();this.poll();return this.host;
+        await this.live(this.agentBinding);this.render();this.poll();return this.host;
     }
     active(){return !!(this.working||this.job?.active||this.job?.status==='running'||this.job?.preparing||this.job?.finishing?.active);}
     remember(){

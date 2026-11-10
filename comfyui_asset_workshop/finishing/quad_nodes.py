@@ -2,6 +2,8 @@
 import hashlib,json,os,shutil,subprocess,time,uuid
 from pathlib import Path
 from .quad_contract import safe_name
+from .quad_runtime import driver_memory, preflight
+from ..foundry.quad_policy import METHODS, resource_ids, validate_options
 HERE=Path(__file__).parent
 from .runtime import work_root, worker_python, settings
 
@@ -18,6 +20,9 @@ def run(req,stage,check_interrupt):
     (job/"request.json").write_text(json.dumps(req,indent=2),encoding="utf-8")
     cmd=[worker_python(),"-u",str(HERE/"quad_worker.py"),str(job/"request.json"),stage]
     start=time.monotonic();peak=0;children={}
+    gpu = req.get('quad_gpu_uuid') if stage=='geometry' else None
+    minimum_free=req.get('quad_gpu_free_mib')
+    sample_at=start
     with log.open("w",encoding="utf-8") as out:
         p=subprocess.Popen(cmd,stdout=out,stderr=subprocess.STDOUT,
                            creationflags=subprocess.CREATE_NO_WINDOW if os.name=="nt" else 0)
@@ -29,7 +34,15 @@ def run(req,stage,check_interrupt):
                     for child in current:children[child.pid]=child
                     peak=max(peak,sum(x.memory_info().rss for x in current if x.is_running()))
                 except psutil.Error:pass
-                if time.monotonic()-start>1800:raise TimeoutError("Finishing stage exceeded 30 minutes")
+                now=time.monotonic()
+                if gpu and now>=sample_at:
+                    try:
+                        free,_=driver_memory(gpu)
+                        minimum_free=min(minimum_free,free)
+                    except ValueError:
+                        pass
+                    sample_at=now+1
+                if now-start>1800:raise TimeoutError("Finishing stage exceeded 30 minutes")
                 time.sleep(.25)
         finally:
             if p.poll() is None:
@@ -39,8 +52,15 @@ def run(req,stage,check_interrupt):
                 try:p.wait(5)
                 except subprocess.TimeoutExpired:p.kill();p.wait()
     stats={"seconds":time.monotonic()-start,"peak_process_tree_rss_bytes":peak}
-    (job/(stage+"-runtime.json")).write_text(json.dumps(stats,indent=2))
-    if p.returncode:raise RuntimeError(stage+" failed: "+log.read_text(errors="replace")[-5000:])
+    if gpu:
+        stats.update(gpu_free_before_mib=req["quad_gpu_free_mib"], gpu_lowest_sampled_free_mib=minimum_free)
+    (job/(stage+"-runtime.json")).write_text(json.dumps(stats,indent=2),encoding="utf-8")
+    if p.returncode:
+        detail = log.read_text(encoding="utf-8", errors="replace").strip()[-5000:]
+        last_line = detail.rsplit("\n", 1)[-1]
+        if stage == "geometry" and last_line.startswith("ValueError: "):
+            raise RuntimeError(last_line.removeprefix("ValueError: ") + "\n" + detail)
+        raise RuntimeError(stage + " failed: " + detail)
     return stats
 
 def native_mesh(v,f,uv=None,normals=None,base=None,mr=None):
@@ -92,16 +112,16 @@ class Hi3DQuadFinish:
             "enabled":("BOOLEAN",{"default":True}),
             "target_quads":("INT",{"default":25000,"min":1000,"max":200000,"step":1000}),
             "texture_size":("INT",{"default":4096,"min":512,"max":4096,"step":512}),
-            "method":(["quadriflow","qremeshify","instant_meshes"],),
+            "method":([*METHODS,"qremeshify"],),
             "guide_triangles":("INT",{"default":100000,"min":10000,"max":200000,"step":10000}),
             "cage_distance":("FLOAT",{"default":.01,"min":.001,"max":.05,"step":.001}),
             "run_name":("STRING",{"default":"editable-25k"}),
             "reuse_geometry":("BOOLEAN",{"default":True})},
-            "optional":{"after":("STRING",)}}
+            "optional":{"after":("STRING",),"solver_options_json":("STRING",{"default":"{}"})}}
     RETURN_TYPES=("FILE_3D","STRING","STRING")
     RETURN_NAMES=("baked_runtime_glb","export_manifest","report")
     CATEGORY="Hi3D/Finishing";FUNCTION="finish";OUTPUT_NODE=True
-    def finish(self,mesh,textured_source,enabled,target_quads,texture_size,method,guide_triangles,cage_distance,run_name,reuse_geometry,after=None):
+    def finish(self,mesh,textured_source,enabled,target_quads,texture_size,method,guide_triangles,cage_distance,run_name,reuse_geometry,after=None,solver_options_json="{}"):
         if not enabled:return {"ui":{"text":["Optional quads disabled; original appearance retained"]},"result":(textured_source,"","disabled")}
         import numpy as np,torch
         from PIL import Image
@@ -109,13 +129,16 @@ class Hi3DQuadFinish:
         from comfy_api.latest import Types
         from comfy_extras.nodes_mesh_postprocess import BakeNormalMapFromMesh,ApplyTextureToMesh
         from comfy_extras.nodes_save_3d import MeshToFile3D
+        supplied = json.loads(solver_options_json)
+        solver_options = validate_options({method: supplied}) if method in METHODS else validate_options(supplied)
         name=safe_name(run_name);ident=uuid.uuid4().hex
         job=work_root()/"quad-jobs"/ident;job.mkdir(parents=True)
         dest=Path(folder_paths.get_output_directory())/"3d"/"Finishing"/(name+"-"+ident[:8]);dest.mkdir(parents=True)
         from .owned_scratch import register
         register(job,["master.npz","source-texture.glb","guide.obj","projection-source.npz","quadriflow-guide.npz",
                       "quadriflow-result.npz","remeshed-main.obj","remeshed-repair-input.obj","remeshed-repaired.obj",
-                      "bake-arrays.npz","native-arrays.npz","baked-base-color.png","baked-metallic-roughness.png","baked-normal-opengl.png"],
+                      "bake-arrays.npz","native-arrays.npz","baked-base-color.png","baked-metallic-roughness.png","baked-normal-opengl.png",
+                      "instant-contact-guide.obj","cyber-results"],
                  "Quad finishing intermediates; outputs, logs and reusable quad geometry retained")
         v,f=arrays(mesh)
         original_hash=hashlib.sha256(v.tobytes()+f.tobytes()).hexdigest()
@@ -125,12 +148,17 @@ class Hi3DQuadFinish:
             source=str(job/"source-texture.glb");textured_source.save_to(source)
         req={"job":str(job),"export_dir":str(dest),"target_quads":target_quads,"texture_size":texture_size,
              "method":method,"guide_triangles":guide_triangles,"cage_distance":cage_distance,"texture_source":source,"reuse_geometry":reuse_geometry,
+             "solver_options":solver_options,
              "input_geometry_sha256":original_hash,"input_texture_sha256":digest(source)}
         (job/"request.json").write_text(json.dumps(req,indent=2))
-        key=hashlib.sha256(json.dumps([original_hash,target_quads,guide_triangles,method,digest(HERE/"quad_worker.py"),digest(HERE/"quad_contract.py"),digest(HERE/"quad_blender.py"),"geometry-v2"]).encode()).hexdigest()
+        mm.unload_all_models();mm.soft_empty_cache()
+        req.update(preflight(method,guide_triangles))
+        runtime_hash=digest(req["cyber_cuda_executable"]) if method=="cyber_cuda" else ""
+        key=hashlib.sha256(json.dumps([original_hash,target_quads,guide_triangles,method,solver_options,
+            *[digest(HERE/name) for name in ("quad_worker.py","quad_contract.py","quad_blender.py","quad_cuda.py")],
+            runtime_hash,"geometry-v4"]).encode()).hexdigest()
         cache=work_root()/"quad-jobs"/("geometry-"+key+".json")
         reused=False;timings={}
-        mm.unload_all_models();mm.soft_empty_cache()
         if reuse_geometry and cache.is_file():
             old=Path(json.loads(cache.read_text())["job"])
             if (old/"geometry-report.json").is_file() and (old/"quad-raw.obj").is_file():
@@ -174,7 +202,8 @@ class Hi3DQuadFinish:
         manifest=dest/"manifest.json";manifest.write_text(json.dumps(report,indent=2))
         from .owned_scratch import cleanup
         scratch=cleanup(job)
-        text=json.dumps({"cleanup":scratch,"quads":report["geometry"]["quads"],"triangles_runtime":report["geometry"]["runtime_triangles"],"watertight":report["geometry"]["watertight"],"warnings":report["geometry"].get("warnings",[]),"export_dir":str(dest)})
+        text=json.dumps({"cleanup":scratch,"quads":report["geometry"]["quads"],"triangles_runtime":report["geometry"]["runtime_triangles"],"watertight":report["geometry"]["watertight"],"warnings":report["geometry"].get("warnings",[]),"requested_method":method,
+                         "effective_methods":report["geometry"].get("effective_methods",[]),"export_dir":str(dest)})
         return {"ui":{"text":[text]},"result":(Types.File3D(str(dest/"runtime.glb")),str(manifest),text)}
 
 class Hi3DExportBundle:
@@ -252,7 +281,7 @@ class Hi3DExportBundle:
                 topology={k:g[k] for k in ("boundary_edges","nonmanifold_edges","watertight","winding_consistent","components","degenerate_triangles") if k in g}
                 receipts=({"variant_id":variant,"sha256":digest(files["blend"]),"topology":topology,
                     "validation":[{"name":"Source quad export checks","status":"pass","note":"Matching authoring-file digest and original roundtrip receipt"}],
-                    "resources":["quadriflow"] if any(str(x.get("method","")).startswith("QuadriFlow") for x in g.get("methods",[])) else [],"provenance_scope":"finishing_only"},)
+                    "resources":resource_ids(g),"provenance_scope":"finishing_only"},)
                 sources[variant]=SourceArtifact(variant,files,receipts)
             else:
                 value=args[input_name]

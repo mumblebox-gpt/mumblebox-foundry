@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-preview.20 — Foundry for agents and three quad solvers
+
+- Expand the Foundry MCP to the mesh, 3D-Guided, Splat & Solid, HairDeck, both CCORE modes, Garment Particles and image workflows. Discover live options and advanced settings, attach saved runs to the app, inspect ComfyUI graphs, and retrieve previews and exports through the same services as the wizards.
+- Bundle the Mumblebox Assets companion skill. It helps coding agents choose a Foundry workflow, run local generation while other work continues, then inspect and use the exported asset in Blender.
+- Choose QuadriFlow, Instant Meshes, or CyberRemesher CUDA in Single Image and Turnaround. Each solver has advanced controls. Run receipts identify the requested and effective solver and any repair or recovery.
+- Show the names of the models that are currently resident, including models offloaded to system memory. The indicator updates as workflows load and release them.
+- Add experimental Garment Particles controls for users who have configured its isolated runtime and author weights. Add optional Idol Turbo and SMD-TRELLIS.2 choices to their existing workflows.
+- Add Tripo, Meshy and expanded Hi3D integration to the roadmap.
+
 ## 0.1.0-preview.19 — CCORE Image + Text and GPU memory checks
 
 - Add a separate **CCORE Image + Text** wizard. Drop in one reference or make one in Foundry, then describe what to keep or change. Preview the prop in 3D and save GLB or ZIP with model and projector credits.

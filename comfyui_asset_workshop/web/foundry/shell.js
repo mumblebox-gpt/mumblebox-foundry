@@ -51,6 +51,19 @@ export class FoundryShell {
         api.addEventListener('mumblebox-foundry-hair',this.agentHairHandler);
         this.agentSplatHandler=e=>{if(this.node.graph===app.graph&&this.host.isConnected&&/^[a-f0-9]{32}$/.test(e.detail?.id||''))this.openSplatWizard({runId:e.detail.id});};
         api.addEventListener('mumblebox-foundry-splat',this.agentSplatHandler);
+        this.agentWorkflowHandlers = {
+            'mumblebox-foundry-ccore': data => this.openCcoreWizard({runId:data.id,image:data.with_image}),
+            'mumblebox-foundry-garment': data => this.openGarmentWizard({runId:data.id}),
+            'mumblebox-foundry-guided': data => this.openGuidedWizard({runId:data.id,binding:data.request_id}),
+        };
+        for (const [eventName, show] of Object.entries(this.agentWorkflowHandlers)) {
+            const listener = event => {
+                if (this.node.graph !== app.graph || !this.host.isConnected || !/^[a-f0-9]{32}$/.test(event.detail?.id || '')) return;
+                show(event.detail).catch(error => this.message(error.message, true));
+            };
+            this.agentWorkflowHandlers[eventName] = listener;
+            api.addEventListener(eventName, listener);
+        }
         // Native processing belongs to the selected graph, not a particular
         // wizard page. Navigation within Foundry must not disconnect Rocket.
         this.guidedBindHandler=e=>this.bindGuided(e.detail).catch(error=>this.message(error.message,true));
@@ -74,7 +87,7 @@ export class FoundryShell {
             el("div",{class:"header-tools"},el("div",{class:"header-actions"},languages,this.themeButton,this.fontControl.element,this.settingsButton,donate),this.updateSlot));
         this.vram=resourceMeter("VRAM");this.ram=resourceMeter("RAM");this.cpu=resourceMeter("CPU",{percent:true});
         this.loadedDot=el("span",{class:"loaded-dot","aria-hidden":"true"});
-        this.loadedLabel=el("small",{},"Model state unavailable");
+        this.loadedLabel=el("small",{"aria-live":"polite"},"Model state unavailable");
         this.unload=button([this.loadedDot,"Unload Models"],()=>this.unloadModels(),{disabled:true});
         this.activity=activity();
         this.resourceBar=el("div",{class:"resources"},this.vram.element,this.ram.element,this.cpu.element,
@@ -133,7 +146,8 @@ export class FoundryShell {
         this.ram.update(data?.ram_used,data?.ram_total);
         this.cpu.update(data?.cpu_percent,100);
         const residency=loadedState(data);
-        this.loadedDot.dataset.state=residency.state;this.loadedLabel.textContent=residency.label;
+        this.loadedDot.dataset.state=residency.state;
+        if(this.loadedLabel.textContent!==residency.label)this.loadedLabel.textContent=residency.label;
         this.activity.update(activityState(this.unloading?{...data,resource_cleanup:{status:"releasing"}}:data));
         this.unload.disabled=!data||data.running||this.unloading;
         this.unload.title=data?.running?"Wait for the current run to finish":"Release loaded models and reusable model caches";
@@ -229,7 +243,7 @@ export class FoundryShell {
     }
     async openGuidedWizard(options={}){
         const current=this.node.properties?.foundryGuided?.id;
-        if(current&&!options.resume){
+        if(current&&!options.resume&&current!==options.runId){
             try{
                 const run=await request('guided/runs/'+current);
                 if(run.active||run.preparing||run.finishing?.active){
@@ -295,6 +309,29 @@ export class FoundryShell {
         }
     }
 
+    async openGarmentWizard(options = {}) {
+        this.viewDispose?.();
+        this.viewDispose = null;
+        const sequence = this.sequence = (this.sequence || 0) + 1;
+        this.tab = 'Choose a Workflow';
+        this.content.replaceChildren(hint('Opening Garment Particles…'));
+        let wizard;
+        try {
+            const {GarmentWizard} = await import('./garment/controller.js');
+            wizard = new GarmentWizard(this, options);
+            const element = await wizard.init();
+            if (sequence !== this.sequence) {wizard.dispose();return;}
+            this.content.replaceChildren(element);
+            this.content.scrollTop = 0;
+            this.content.setAttribute('aria-label', 'Garment Particles wizard');
+            this.viewDispose = () => wizard.dispose();
+            [...this.nav.children].forEach((node, index) => node.setAttribute('aria-selected', String(index === 0)));
+        } catch (error) {
+            wizard?.dispose();
+            if (sequence === this.sequence) this.content.replaceChildren(el('p', {role:'alert'}, error.message));
+        }
+    }
+
     async openHairWizard(options={}) {
         this.viewDispose?.();this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;
@@ -322,5 +359,5 @@ export class FoundryShell {
         try{const module=await import("./views/settings.js");return module.render(this,options);}
         catch(error){this.message(error.message,true);}
     }
-    dispose() {this.fontControl.dispose();this.statusListeners.clear();api.removeEventListener('mumblebox-foundry-splat',this.agentSplatHandler);clearInterval(this.guidedHeartbeat);api.removeEventListener('guided.bind',this.guidedBindHandler);this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
+    dispose() {for(const [name,listener] of Object.entries(this.agentWorkflowHandlers))api.removeEventListener(name,listener);this.fontControl.dispose();this.statusListeners.clear();api.removeEventListener('mumblebox-foundry-splat',this.agentSplatHandler);clearInterval(this.guidedHeartbeat);api.removeEventListener('guided.bind',this.guidedBindHandler);this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
 }

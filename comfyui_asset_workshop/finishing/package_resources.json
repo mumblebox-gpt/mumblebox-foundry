@@ -116,6 +116,17 @@
     "license_url": "https://github.com/TencentARC/Pixal3D/blob/main/LICENSE",
     "license_summary": "Retain the copyright and permission notice for licensed material; separately supplied dependencies retain their own terms."
   },
+  "trellis_smd_texture": {
+    "id": "trellis_smd_texture",
+    "name": "SMD-TRELLIS.2 texture student",
+    "stage": "Four-step material sampling on the finished mesh",
+    "version": "b56718082a05d18df01dc34c2b6e88189c5d5c74",
+    "source": "https://huggingface.co/zjwfufu/SMD-TRELLIS.2",
+    "notices": ["Apache-2.0.txt"],
+    "license": "MIT adapter; Apache-2.0 inference code",
+    "license_url": "https://huggingface.co/zjwfufu/SMD-TRELLIS.2/tree/b56718082a05d18df01dc34c2b6e88189c5d5c74",
+    "license_summary": "Uses the SMD authors' released texture adapter and student schedule. TRELLIS.2 base components retain their own terms."
+  },
   "trellis2": {
     "id": "trellis2",
     "stage": "Shape decoding and post-refinement texture generation",
@@ -156,6 +167,28 @@
     "license": "MIT",
     "license_url": "https://github.com/hjwdzh/QuadriFlow/blob/master/LICENSE",
     "license_summary": "Retain the copyright and permission notice when redistributing licensed material."
+  },
+  "instant_meshes": {
+    "id": "instant_meshes",
+    "stage": "Optional CPU quad retopology",
+    "name": "Instant Meshes via PyNanoInstantMeshes",
+    "version": "0.0.3",
+    "source": "https://igl.ethz.ch/projects/instant-meshes/",
+    "notices": ["Instant-Meshes-BSD.txt", "Instant-Meshes-TBB.txt", "Instant-Meshes-Eigen.txt"],
+    "license": "BSD and linked library notices",
+    "license_url": "https://github.com/wjakob/instant-meshes/blob/master/LICENSE.txt",
+    "license_summary": "See the retained notices for the solver and its linked libraries."
+  },
+  "cyber_cuda": {
+    "id": "cyber_cuda",
+    "stage": "Optional NVIDIA CUDA quad retopology",
+    "name": "CyberRemesher",
+    "version": "0.10.0 Foundry CUDA build",
+    "source": "https://github.com/CyberdyneCorp/CyberRemesherAndUV",
+    "notices": ["CyberRemesher-MIT.txt", "CyberRemesher-THIRD-PARTY.md", "CyberRemesher-ufbx.txt", "CUDA-12.9-Runtime.txt", "CUDA-12.9-CCCL.txt"],
+    "license": "MIT and third-party runtime terms",
+    "license_url": "https://github.com/CyberdyneCorp/CyberRemesherAndUV/blob/f6eddeac7f31f32dde9561a14f4076f60093dee9/LICENSE",
+    "license_summary": "See the retained engine and dependency notices, including the NVIDIA CUDA runtime terms."
   },
   "pymeshlab": {
     "id": "pymeshlab",
@@ -503,6 +536,17 @@
     "license": "Apache-2.0",
     "license_url": "https://huggingface.co/speridlabs/idol",
     "license_summary": "Idol by Sperid Labs; repackaged for ComfyUI by Comfy-Org. Encoders retain their own terms."
+  },
+  "idol_turbo": {
+    "id": "idol_turbo",
+    "name": "Idol Turbo",
+    "stage": "Five-step single-image Gaussian splat generation",
+    "version": "Sperid Labs revision 45cdd41f1f4d6d70496daa7d619f57ad79307a37",
+    "source": "https://huggingface.co/speridlabs/idol-turbo",
+    "notices": ["Apache-2.0.txt"],
+    "license": "Apache-2.0",
+    "license_url": "https://huggingface.co/speridlabs/idol-turbo/blob/45cdd41f1f4d6d70496daa7d619f57ad79307a37/README.md",
+    "license_summary": "Sperid Labs and contributors. Uses the released slow and fast phase adapters with the ComfyUI Idol base."
   },
   "idol_dino": {
     "id": "idol_dino",

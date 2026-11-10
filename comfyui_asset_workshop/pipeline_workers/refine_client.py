@@ -169,7 +169,7 @@ class Hi3DRefine:
         jid=job['id'];pbar=ProgressBar(steps*({512:1,1024:2,1536:3}[resolution]))
         from .activity import update as worker_update, remove as worker_remove
         worker_key='hi3d:'+jid
-        worker_update(worker_key,'Hi3D')
+        worker_update(worker_key,'Hi3D refinement')
         try:
             while True:
                 if time.monotonic()-started>3600:raise TimeoutError('Hi3D exceeded one hour')
@@ -182,7 +182,7 @@ class Hi3DRefine:
                 # CPU offload is reported explicitly; do not claim full GPU residency.
                 phase=event.get('stage',j.get('stage'))
                 if phase in {'conditioning','sampling','decoding','extracting','postprocessing','exporting'}:
-                    worker_update(worker_key,'Hi3D','loaded',device='CPU offload enabled' if cpu_offload else 'CUDA')
+                    worker_update(worker_key,'Hi3D refinement','loaded',device='CPU offload enabled' if cpu_offload else 'GPU')
                 if event.get('stage')=='sampling' and 'step' in event and 'pass_index' in event:pbar.update_absolute(event['pass_index']*steps+event['step'])
                 time.sleep(.5)
         except BaseException:

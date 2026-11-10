@@ -1,5 +1,5 @@
 """Install this release into an existing ComfyUI; preserve models, outputs and prior files."""
-import argparse,json,shutil,subprocess
+import argparse,json,runpy,shutil,subprocess,sys
 from datetime import datetime,timezone
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -39,6 +39,10 @@ def install(args):
     backup=user/"mumblebox-foundry/install-backups"/datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     config=user/"asset-workshop.json"
     existing=json.loads(config.read_text(encoding="utf-8")) if config.exists() else {}
+    if sys.platform=="win32":
+        quad_runtime=runpy.run_path(str(source/"finishing/quad_runtime.py"))
+        version=quad_runtime["verify_bundle"]()
+        print("Verified CyberRemesher CUDA runtime "+version)
     existing.setdefault("pipeline_runtime",{}).update(runtime)
     hi3d_models=getattr(args,'hi3d_models',None)
     if hi3d_models:

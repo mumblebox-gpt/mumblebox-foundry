@@ -13,6 +13,8 @@ Shared direction: square, professional sculptural 3D product render; charcoal st
 
 - `ccore-image.webp`: a brass and olive field radio with an orange handle beside its cream reference sketch. Generated with the built-in OpenAI image tool as illustration for the Image + Text card.
 
+- `garment.webp`: warm studio render of a canvas jacket on a dress form with an illustrated pattern and green polygon overlay. Generated with the built-in image tool as card artwork.
+
 ## Approved logo
 
 `hair.png`: generated specifically for the HairDeck workflow card on 2026-11-02. A copper stylized hairstyle on an ivory head with a restrained hair-card/bone cutaway. Generated with the built-in image-generation tool; no third-party artwork copied. This is interface artwork, not an example of inference output.

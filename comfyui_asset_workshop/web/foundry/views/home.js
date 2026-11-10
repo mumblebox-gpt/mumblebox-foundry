@@ -53,10 +53,10 @@ export function home(shell) {
         el("div",{class:"art workflow-art"},artwork("image-to-3d","Reference image becoming a sculpted 3D figure")),
         el("div",{class:"card-body"},el("span",{class:"eyebrow"},"IMAGE TO 3D  /  01"),
             el("h3",{},"Create a Mesh from an Image"),
-            el("p",{},"Choose how to turn a reference—or an image you create—into a 3D asset."),
-            hint("Each method has its own steps, previews and exports. Start with Single Image or Text for the most direct route."),
+            el("p",{},"Choose a guided workflow to turn a reference image into a 3D asset. Build directly from one image, generate a turnaround, guide reconstruction with measured views, or create a splat with a companion mesh."),
+            hint("Each option opens its own wizard with previews and export choices. Start with Single Image or Text for the most direct route."),
             el("div",{class:"formats"},["SPZ","GLB","FBX","OBJ","BLEND","STL","PNG","MP4","ZIP"].map(x=>el("span",{class:"badge"},x))),
-            el('span',{class:'method-disclosure'},'Choose your workflow method \u25be'))),
+            el('span',{class:'method-disclosure'},'Explore image-to-3D workflows \u25be'))),
         shell.pendingMeshHandoff?hint('Your created image is ready. Choose which mesh method should use it.'):null,methods);
     const imageCard=el('article',{class:'planned-workflow'},artwork('text','Develop images from a description'),el('div',{},
         el('div',{class:'workflow-card-heading'},el('span',{class:'badge'},'Available'),
@@ -84,5 +84,19 @@ export function home(shell) {
                     shell.node.properties[image?'foundryCcoreImage':'foundryCcore']?.id?button('Resume',()=>shell.openCcoreWizard({image,resume:true}),{title:image?'Resume Image + Text prop':'Resume CCORE prop'}):null)),
             el('h3',{},image?'Create a Prop from Image + Text':'Create a Prop from Text'),
             hint(image?'Give CCORE GLB-3D-Coder one reference and describe what to keep or change. Review the stylized prop in 3D and export GLB or ZIP.':'Describe a stylized game prop, such as a crate, lantern or control panel. Powered by CCORE GLB-3D-Coder on Qwen3.5. Review the generated prop in 3D and export GLB or ZIP.')));
-    return el("div",{},card,el("div",{class:"future-workflows"},ccoreCard(false),ccoreCard(true),hairCard,imageCard,...planned.map(([id,name,description])=>el("article",{class:"planned-workflow"},artwork(id,name),el("div",{},el("span",{class:"badge"},"Coming soon"),el("h3",{},name),hint(description))))));
+    const garmentCard = el('article', {class:'planned-workflow', 'data-workflow':'garment-particles'},
+        el('img', {src:new URL('../../assets/foundry/garment.webp', import.meta.url).href,
+            alt:'Tailored utility jacket with a sewing pattern and mesh overlay', loading:'lazy', decoding:'async'}),
+        el('div', {}, el('div', {class:'workflow-card-heading'}, el('span', {class:'badge'}, 'Garment Particles · Experimental'),
+            el('div', {class:'workflow-card-controls'},
+                button('Open Garment Wizard', () => shell.openGarmentWizard(), {class:'primary'}),
+                button('View Graph', async () => {
+                    const {showGarmentGraph} = await import('../garment/graph.js');
+                    showGarmentGraph(shell.node);
+                }, {title:'View Garment Particles workflow'}),
+                shell.node.properties.foundryGarment?.id
+                    ? button('Resume', () => shell.openGarmentWizard({resume:true}), {title:'Resume garment'}) : null)),
+        el('h3', {}, 'Create Clothing with Garment Particles'),
+        hint('Powered by Garment Particles from Kiyohiro Nakayama and collaborators. Design and edit clothing in 2D and 3D, then export a sewing pattern, drape reference and sewn mesh for Blender. Character preview is optional.')));
+    return el("div",{},card,el("div",{class:"future-workflows"},ccoreCard(false),ccoreCard(true),hairCard,garmentCard,imageCard,...planned.map(([id,name,description])=>el("article",{class:"planned-workflow"},artwork(id,name),el("div",{},el("span",{class:"badge"},"Coming soon"),el("h3",{},name),hint(description))))));
 }

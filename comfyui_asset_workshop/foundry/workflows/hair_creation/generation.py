@@ -61,6 +61,8 @@ def predict_colors(model,hair,crop,matte):
         if (args.vae,args.dino,args.res)!=(expected.vae,expected.dino,expected.res):
             raise ValueError('The HairDeck color model does not match the selected card model.')
         model.foundry_color=ModelPatcher(net,model.device,torch.device('cpu'))
+        from ....pipeline_workers.activity import identify
+        identify(model.foundry_color, "HairDeck · Color DiT")
     weights=model.load(model.hair,2)
     pixels=torch.from_numpy(crop.copy()).permute(2,0,1)[None].to(model.device).float()
     with torch.no_grad(),torch.autocast('cuda',dtype=torch.bfloat16):
@@ -85,6 +87,10 @@ class FoundryHairGenerate:
     RETURN_TYPES=('HAIRDECK_RESULT',);FUNCTION='generate';CATEGORY='Mumblebox Foundry/Hair'
     def generate(self,model,image,seed,steps,cfg,generate_bones,colors,external_image=None,transparent_mask=None):
         started=time.monotonic();native=upstream();rt=native.runtime
+        from ....pipeline_workers.activity import identify
+        identify(model.preprocess, "HairDeck · SAM 3", "HairDeck · BiRefNet")
+        identify(model.hair, "HairDeck · Image DiT", "HairDeck · DINOv3", "HairDeck · Card VAE")
+        identify(model.chain, "HairDeck · Chain DiT")
         pixels,mask=native.load_input(image,external_image,transparent_mask)
         data,cache_hit=prepare(model,pixels,mask)
         signature=hashlib.sha256(data['crop'].tobytes()+model.signature.encode()).hexdigest()

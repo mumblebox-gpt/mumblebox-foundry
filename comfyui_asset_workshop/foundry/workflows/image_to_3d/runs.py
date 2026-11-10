@@ -13,6 +13,7 @@ import uuid
 from pathlib import Path
 from urllib.parse import urlencode
 from .definition import DEFAULT_SELECTION, VERSION, resolve_settings
+from ...quad_policy import active_options, fingerprint_fields, manifest_resources, node_options
 from .prompts import bind_references
 from .graph import compile_stage, STAGE_KEYS, DEPENDENCIES
 from .turnaround import model_spec
@@ -143,6 +144,7 @@ class WizardRuns:
                 for key in keys[stage]:
                     run["checkpoints"].pop(key,None);run["previews"].pop(key,None)
                 run["stages"].pop(stage,None)
+                if stage=="quads":run.pop("quad_report",None)
         run.pop("package",None)
         self.save(run)
         return self.public(run)
@@ -157,6 +159,7 @@ class WizardRuns:
             path=Path(run["checkpoints"]["print"])
             relative=path.relative_to(self.output_root)
             result.setdefault("previews",{})["print"]=view_url({"filename":path.name,"subfolder":relative.parent.as_posix(),"type":"output"})
+        result["quad_inputs"] = node_options(run.get("settings", {}))
         result["completed"]=list(run["stages"])
         result["active"]=run["id"] in self.tasks
         result["progress"]=progress_snapshot(run)
@@ -177,7 +180,12 @@ class WizardRuns:
         if run.get('method')=='single-image':
             from ..single_image.policy import fingerprint
             return fingerprint(run,stage,self.input_root)
-        settings={k:run["settings"][k] for k in STAGE_KEYS[stage]}
+        settings={k:run["settings"][k] for k in STAGE_KEYS[stage] if k!="quad_method"}
+        if stage=="quads":
+            settings.update(fingerprint_fields(run["settings"]))
+        if stage=="texture":
+            from .definition import texture_sampling_settings
+            settings=texture_sampling_settings(run["settings"],settings)
         if stage=="turnaround":
             # Detect a file replaced outside the wizard as well as changed notes/order.
             refs=[{**r,"sha256":digest(owned_path(self.input_root,self.input_root/r["filename"]))} for r in run["references"]]
@@ -303,7 +311,8 @@ class WizardRuns:
                 continue
             self.require_not_cancelled(run)
             await asyncio.to_thread(ensure, stage, self.root, lambda: run.get("cancel", False),
-                                    run["id"], progress, run.get("turnaround_model", "qwen21"),run.get("settings",{}).get("geometry_model","pixal3d"))
+                                    run["id"], progress, run.get("turnaround_model", "qwen21"),run.get("settings",{}).get("geometry_model","pixal3d"),
+                                    run.get("settings",{}).get("texture_mode","standard"))
         run.pop("dependency", None)
         self.require_not_cancelled(run)
 
@@ -323,7 +332,8 @@ class WizardRuns:
             run["dependency"]=value
         run["dependency"]={"phase":"checking required models"}
         await asyncio.to_thread(ensure,"single_geometry" if stage=="geometry" and run.get("method")=="single-image" else stage,self.root,lambda:run.get("cancel",False),run["id"],
-                                lambda value:loop.call_soon_threadsafe(progress,value),run.get("turnaround_model","qwen21"),run.get("settings",{}).get("geometry_model","pixal3d"))
+                                lambda value:loop.call_soon_threadsafe(progress,value),run.get("turnaround_model","qwen21"),run.get("settings",{}).get("geometry_model","pixal3d"),
+                                run.get("settings",{}).get("texture_mode","standard"))
         run.pop("dependency",None)
         self.require_not_cancelled(run)
         graph=compile_stage(stage,run)
@@ -428,6 +438,7 @@ class WizardRuns:
             return metadata(run)
         spec=model_spec(run.get("turnaround_model","qwen21"))
         resources=spec["resources"]+["pixal3d","trellis2","hi3d","pymeshlab","dinov3","birefnet","pixelartistry"]
+        texture_mode=run["settings"].get("texture_mode","standard")
         receipts=[]
         keys={"detailed":"texture","game_balanced":"balanced","game_compact":"compact","print":"print"}
         for variant in run["selection"]["variants"]:
@@ -436,7 +447,8 @@ class WizardRuns:
             else:path=Path(run["checkpoints"][keys[variant]])
             used=resources+([] if variant=="print" else ["trellis_wrapper"])
             if variant=="print" and run.get("print_report",{}).get("contact_repair"):used+=["meshlib"]
-            if variant=="quad_light":used+=["quadriflow"]
+            if variant!="print" and texture_mode=="smd":used+=["trellis_smd_texture"]
+            if variant=="quad_light":used+=manifest_resources(run["checkpoints"]["quad_manifest"])
             receipts.append({"variant_id":variant,"sha256":digest(path),"resources":used,
                 "validation":[{"name":"Current wizard production","status":"matched",
                  "note":"File hash bound to run "+run["id"]+"; completed stage requests and inputs retained."}]})
@@ -452,7 +464,14 @@ class WizardRuns:
         lineage["models"]={key:{field:lock[key][field] for field in ("repo","file","revision","sha256")}
                            for key in (*spec["keys"],"birefnet","pixal_multiview","shape_vae","dino")}
         if any(variant != "print" for variant in run["selection"]["variants"]):
+            from .worker_models import texture_dependencies
             lineage["texture_models"] = [{field:item[field] for field in ("name","repo","file","revision","sha256")}
-                                        for item in model_lock["worker_models"]["trellis_texture"]]
+                                        for item in texture_dependencies(model_lock,texture_mode)]
         if run.get('image_creation'):lineage['image_creation']=run['image_creation']
+        if "quad_light" in run["selection"]["variants"]:
+            quad = run.get("quad_report", {})
+            lineage["quad_retopology"] = {key: quad[key] for key in ("requested_method", "effective_methods") if key in quad}
+            options = active_options(run["settings"])
+            if options:
+                lineage["quad_retopology"]["advanced_settings"] = options
         return {"workflow_version":VERSION,"receipts":receipts,"production":lineage,"warnings":run.get("quad_report",{}).get("warnings",[])}

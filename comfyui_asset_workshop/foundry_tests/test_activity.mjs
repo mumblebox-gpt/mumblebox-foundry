@@ -43,3 +43,12 @@ test('first-use preparations from either workflow drive actual busy activity',()
     const state=behavior.activityState({workflow_activity:[{workflow:'image_creation',dependency:{phase:'downloading',name:'Qwen',bytes:5,total:10}}]});
     assert.equal(state.busy,true);assert.equal(state.fraction,.5);assert.match(state.label,/Downloading/);
 });
+
+test('names GPU and offloaded models together without making idle busy', () => {
+    const status={running:false,model_residency:[
+        {name:'Pixal3D',state:'loaded',device:'GPU'},
+        {name:'TRELLIS decoder',state:'offloaded',device:'CPU offload'},
+    ]};
+    assert.match(behavior.loadedState(status).label,/Pixal3D \(GPU\).*TRELLIS decoder \(CPU offload\)/);
+    assert.equal(behavior.activityState(status).busy,false);
+});

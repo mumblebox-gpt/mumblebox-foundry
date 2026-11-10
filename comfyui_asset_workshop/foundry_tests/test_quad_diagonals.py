@@ -22,6 +22,12 @@ class QuadDiagonalTests(unittest.TestCase):
                 edges.update(tuple(sorted((tri[j],tri[(j+1)%3]))) for j in range(3))
         self.assertLessEqual(max(edges.values()),2)
 
+    def test_separate_quads_cannot_reuse_the_same_diagonal(self):
+        polygons = [[0, 1, 2, 3], [0, 4, 2, 5]]
+        normalized, rotations = normalize_quad_diagonals(polygons)
+        self.assertEqual(rotations, 1)
+        self.assertEqual(normalized, [[0, 1, 2, 3], [4, 2, 5, 0]])
+
     def test_ambiguous_diagonals_still_fail(self):
         with self.assertRaisesRegex(ValueError,'no safe fixed diagonal'):
             normalize_quad_diagonals([[0,1,2,3],[0,2,4],[1,3,5]])

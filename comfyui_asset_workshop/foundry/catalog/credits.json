@@ -127,5 +127,13 @@
     "id": "moge2",
     "creator": "Microsoft Research and collaborators",
     "observation": "Estimating a camera from the source image gives controlled reconstruction a measurable starting point."
+  },
+  {
+    "id": "garment_particles",
+    "name": "Garment Particles",
+    "creator": "Kiyohiro Nakayama and collaborators from Stanford University, The University of Tokyo, Institute of Science Tokyo and ETH Zurich",
+    "stage": "Clothing generation and sewing patterns",
+    "source": "https://garment-particles.github.io/",
+    "observation": "The authors’ joint 2D and 3D representation lets you generate, edit and rebuild garments from patterns, silhouettes and points. Foundry adds cloth simulation on your character and optional skinning."
   }
 ]

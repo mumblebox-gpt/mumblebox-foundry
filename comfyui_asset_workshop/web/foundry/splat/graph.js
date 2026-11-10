@@ -17,6 +17,13 @@ export function syncSplatGraph(recipe,owner){
         const text='## Splat & Solid\n\n**Idol by Sperid Labs**, native ComfyUI integration by Comfy-Org and contributors. Optional image-guided refinement: **Hi3D**. Native mesh cleanup/rendering: **ComfyUI**; independent exported-file checks: **PyMeshLab and trimesh**. DINOv3, FLUX.2 autoencoder and BiRefNet retain their original credits and terms.\n\nOne image → splat + original mesh → optional refinement → closed master + lightweight companion. Appearance lives in the splat; the companion is separate geometry in its frame. Thin features may be lost. Closed geometry does not certify engine collision or physical printing.\n\nThis branch is independent of Turnaround, 3D-Guided and HairDeck. The wizard queues only its selected stage; nodes stay disabled for the global Run button. Saved loaders resume completed stages. Original files are preserved.\n\nhttps://huggingface.co/speridlabs/idol\nhttps://github.com/Comfy-Org/ComfyUI\nhttps://github.com/hi3d-official/Hi3Dv1.0';
         if(note.widgets?.[0])note.widgets[0].value=text;
     }
+    if(Object.values(recipe).some(item=>item.class_type==='VAEDecodeTripoSplat')){
+        for(const n of [...graph._nodes]){
+            if(n.id!==noteId&&n.properties?.splatOwner===owner.id&&n.properties.splatStage==='generation'&&!Object.hasOwn(recipe,n.id)){
+                graph.remove(n);
+            }
+        }
+    }
     for(const [id,item] of Object.entries(recipe)){
         let n=graph.getNodeById(+id);
         if(n&&n.properties?.splatOwner!==owner.id)throw Error('Another workflow owns node '+id);

@@ -67,9 +67,10 @@ export function syncWizardGraph(run,interfaceNode,branch){
     set(1574,"prompt",run.reference_prompt);set(1574,"text",run.reference_prompt);
     set(1558,"seed",s.turnaround_seed);set(94,"target_resolution",s.shape_resolution);
     for(const [field,key] of [["resolution","refine_resolution"],["steps","refine_steps"],["seed","refine_seed"],["cpu_offload","cpu_offload"],["attention","attention"]])set(2003,field,s[key]);
-    for(const [field,key] of [["seed","texture_seed"],["steps","texture_steps"],["texture_size","texture_size"],["guidance","texture_guidance"]])set(2023,field,s[key]);
+    for(const [field,key] of [["seed","texture_seed"],["steps","texture_steps"],["texture_size","texture_size"],["guidance","texture_guidance"],["texture_mode","texture_mode"]])set(2023,field,s[key]);
     set(2030,"target_triangles",s.balanced_triangles);set(2040,"target_triangles",s.compact_triangles);
     set(3001,"target_quads",s.quad_count);set(2050,"height_mm",s.print_height_mm);
+    for(const [name,value] of Object.entries(run.quad_inputs||{method:s.quad_method||"quadriflow"}))set(3001,name,value);
     for(const id of [2030,2040,3001])set(id,"texture_size",s.texture_size);
     for(const id of [2031,2041])set(id,"resolution",s.texture_size);
     set(3010,"asset_name",run.name);set(3010,"selection_json",JSON.stringify(run.selection));

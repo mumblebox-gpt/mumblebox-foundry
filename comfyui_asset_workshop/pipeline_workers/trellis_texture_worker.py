@@ -59,7 +59,17 @@ def main():
     pipeline = Trellis2ImageTo3DPipeline.from_pretrained(str(model), keep_models_loaded=False)
     pipeline.low_vram = True
     pipeline.cuda()
-    telemetry = monitor(pipeline, request_path)
+    texture_mode = request.get('texture_mode', 'standard')
+    if texture_mode not in ('standard', 'smd'):
+        raise ValueError('Choose Standard or SMD texturing.')
+    slot_names = {}
+    if texture_mode == 'smd':
+        if request['resolution'] != 1024:
+            raise ValueError('SMD texturing needs the 1024 TRELLIS.2 texture model.')
+        from smd_texture import TEXTURE_FLOW, enable_smd_texture
+        enable_smd_texture(pipeline, request['trellis_models'])
+        slot_names[TEXTURE_FLOW] = "SMD-TRELLIS.2 · Texture flow"
+    telemetry = monitor(pipeline, request_path, slot_names)
 
     node = pack.NODE_CLASS_MAPPINGS['Trellis2MeshTexturing']()
     params = {}
@@ -75,6 +85,9 @@ def main():
                   texture_guidance_rescale=request.get('guidance_rescale', .2),
                   dino_lock=request.get('reference_lock', 0.),
                   dino_substeps=request.get('reference_substeps', 2), dino_foundation_cap=.92)
+    if texture_mode == 'smd':
+        params.update(texture_steps=4, texture_guidance_strength=1.0, texture_guidance_rescale=0.0,
+                      sampler='euler', dino_lock=0.0)
     torch.cuda.reset_peak_memory_stats()
     started = time.monotonic()
     print('TEXTURING FINISHED MESH', len(mesh.vertices), len(mesh.faces), params['resolution'], flush=True)
@@ -95,6 +108,9 @@ def main():
     report = {'implementation': 'visualbruno/ComfyUI-Trellis2',
               'revision': 'b0e84c0f29857a444e8bcb5b9be2ea218e96efd0',
               'node': 'Trellis2MeshTexturing', 'torch': torch.__version__,
+              'texture_mode': texture_mode,
+              'sampling': {'steps': params['texture_steps'], 'sampler': params['sampler'],
+                           'guidance': 'distilled' if texture_mode == 'smd' else params['texture_guidance_strength']},
               'seconds': time.monotonic() - started,
               'peak_cuda_allocated_bytes': torch.cuda.max_memory_allocated(),
               'peak_cuda_reserved_bytes': torch.cuda.max_memory_reserved(),

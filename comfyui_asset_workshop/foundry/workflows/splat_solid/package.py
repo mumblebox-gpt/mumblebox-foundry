@@ -3,6 +3,7 @@ import json,shutil,uuid
 from datetime import datetime,timezone
 from pathlib import Path
 from ...artifacts import digest
+from .definition import TURBO_MODELS
 from ....finishing.package_catalog import FileRecord,VariantRecord,build_catalog
 from ....finishing.package_archive import publish_archive
 
@@ -38,8 +39,13 @@ def build(service,r):
                 limitations=['No UV/PBR, rigging, exact hidden-surface recovery, physical print or game-engine collision certification is implied.']))
     metadata=target/'Metadata';metadata.mkdir()
     model_catalog=json.loads((PACK/'models.lock.json').read_text(encoding='utf-8'))['models']
-    production=dict(method='splat-solid/v1',workflow_title='Splat & Solid · Idol',settings=c,reference_sha256=r['source_sha256'],stages=r['completed'],quality=r.get('quality',{}),
-        models={key:model_catalog[key] for key in ('idol','idol_dino','idol_decoder','idol_image_vae','birefnet')})
+    model_keys=('idol','idol_dino','idol_decoder','idol_image_vae','birefnet')
+    turbo=c.get('generation_mode')=='turbo'
+    settings=dict(c,steps=5,cfg=1.0) if turbo else c
+    if turbo:
+        model_keys+=TURBO_MODELS
+    production=dict(method='splat-solid/v1',workflow_title='Splat & Solid · Idol Turbo' if turbo else 'Splat & Solid · Idol',settings=settings,reference_sha256=r['source_sha256'],stages=r['completed'],quality=r.get('quality',{}),
+        models={key:model_catalog[key] for key in model_keys})
     # Paths in the public production record are package relative; no private runtime locations.
     (metadata/'generation.json').write_text(json.dumps(production,indent=2),encoding='utf-8')
     files.extend([FileRecord('Metadata/generation.json','metadata',None,'Selected workflow settings, completed stages and geometry checks.','json','provenance'),
@@ -47,6 +53,7 @@ def build(service,r):
     pack=PACK
     registry=json.loads((pack/'finishing/package_resources.json').read_text(encoding='utf-8'))
     keys=['idol','comfyui','idol_dino','flux_vae','birefnet']
+    if turbo:keys.append('idol_turbo')
     if r['completed'].get('cleanup'):keys.append('pymeshlab')
     if c['refine'] and r['completed'].get('refinement'):keys.append('hi3d')
     resources=[registry[key] for key in keys]

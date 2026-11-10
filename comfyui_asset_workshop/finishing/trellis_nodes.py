@@ -20,6 +20,7 @@ class Hi3DTrellis2TextureMesh:
             'guidance': ('FLOAT', {'default': 3., 'min': 0., 'max': 20., 'step': .1}),
             'filename_prefix': ('STRING', {'default': '3d/Trellis2Frog/finished-frog'}),
         }, 'optional': {
+            'texture_mode': (['standard', 'smd'], {'default': 'standard'}),
             'sampler': (['euler', 'heun'], {'default': 'euler'}),
             'guidance_rescale': ('FLOAT', {'default': .2, 'min': 0., 'max': 1., 'step': .01}),
             'reference_lock': ('FLOAT', {'default': 0., 'min': 0., 'max': 1., 'step': .01}),
@@ -33,7 +34,8 @@ class Hi3DTrellis2TextureMesh:
     OUTPUT_NODE = True
 
     def texture(self, mesh, image, seed, steps, resolution, texture_size, guidance, filename_prefix,
-                sampler='euler', guidance_rescale=.2, reference_lock=0., reference_substeps=2):
+                sampler='euler', guidance_rescale=.2, reference_lock=0., reference_substeps=2,
+                texture_mode='standard'):
         import numpy as np
         import torch
         from PIL import Image
@@ -47,7 +49,7 @@ class Hi3DTrellis2TextureMesh:
             mm.throw_exception_if_processing_interrupted()
             return False
         ensure_texture(Path(folder_paths.get_user_directory())/"mumblebox-foundry"/"models",
-                       cancelled,owner="native-texture")
+                       cancelled,owner="native-texture",texture_mode=texture_mode)
         vertices, faces = arrays(mesh)
         job = work_root() / 'trellis-jobs' / uuid.uuid4().hex
         job.mkdir(parents=True)
@@ -61,7 +63,7 @@ class Hi3DTrellis2TextureMesh:
                    'output': str(output), 'comfy_core': str(Path(folder_paths.__file__).parent),
                    'seed': seed, 'steps': steps, 'resolution': resolution,
                    'texture_size': texture_size, 'guidance': guidance,
-                   'sampler': sampler, 'guidance_rescale': guidance_rescale,
+                   'texture_mode': texture_mode, 'sampler': sampler, 'guidance_rescale': guidance_rescale,
                    'reference_lock': reference_lock, 'reference_substeps': reference_substeps}
         request.update(settings())
         (job / 'request.json').write_text(json.dumps(request, indent=2), encoding='utf-8')

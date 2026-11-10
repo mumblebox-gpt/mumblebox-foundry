@@ -3,7 +3,9 @@ import json
 from pathlib import Path
 from ..image_to_3d.runs import signature
 from ..image_to_3d.graph import STAGE_KEYS,DEPENDENCIES
+from ..image_to_3d.definition import texture_sampling_settings
 from ...artifacts import digest,owned_path
+from ...quad_policy import fingerprint_fields, manifest_resources
 
 def fingerprint(run,stage,input_root):
     if stage=='geometry':
@@ -13,16 +15,24 @@ def fingerprint(run,stage,input_root):
     else:
         source=run['selection'] if stage=='package' else [fingerprint(run,s,input_root) for s in DEPENDENCIES.get(stage,[]) if s!='turnaround']
         keys=['export_grounding'] if stage=='package' else STAGE_KEYS[stage]
-    return signature(['single-image/1',stage,{k:run['settings'].get(k) for k in keys},source])
+    settings={k:run['settings'].get(k) for k in keys if k!='quad_method'}
+    if stage=='quads':
+        settings.update(fingerprint_fields(run['settings']))
+    if stage=='texture':
+        settings=texture_sampling_settings(run['settings'],settings)
+    return signature(['single-image/1',stage,settings,source])
 
 def metadata(run):
+    texture_mode=run['settings'].get('texture_mode','standard')
     resources=['pixal3d_single','moge2','dinov3','birefnet','hi3d','pymeshlab']
     keys={'detailed':'texture','game_balanced':'balanced','game_compact':'compact','print':'print','quad_light':'quad_manifest'}
     receipts=[]
     for variant in run['selection']['variants']:
         path=Path(run['checkpoints'][keys[variant]])
         if variant=='quad_light':path=path.parent/'editable-quads.blend'
-        used=resources+(['trellis2','trellis_wrapper'] if variant!='print' else [])+(['quadriflow'] if variant=='quad_light' else [])
+        used=resources+(['trellis2','trellis_wrapper'] if variant!='print' else [])
+        if variant=='quad_light':used+=manifest_resources(run['checkpoints']['quad_manifest'])
+        if variant!='print' and texture_mode=='smd':used+=['trellis_smd_texture']
         if variant=='print' and run.get('print_report',{}).get('contact_repair'):used+=['meshlib']
         receipts.append({'variant_id':variant,'sha256':digest(path),'resources':list(dict.fromkeys(used)),
             'validation':[{'name':'Single Image production','status':'matched','note':'Bound to saved run '+run['id']}]})
@@ -31,5 +41,9 @@ def metadata(run):
         'source_sha256':run['references'][0]['sha256'],
         'models':{key:{k:v for k,v in lock['models'][key].items() if k in ('repo','file','revision','sha256','license','license_url')} for key in ('pixal_single','shape_vae','dino','moge2','birefnet')},
         'template':'Comfy-Org/workflow_templates@ea7faae6999fb31338f43408ff4a575bd3f7d9a0/3d_pixal3d_trellis2_image_to_model.json'}
+    if any(variant!='print' for variant in run['selection']['variants']):
+        from ..image_to_3d.worker_models import texture_dependencies
+        production['texture_models']=texture_dependencies(lock,texture_mode)
     if run.get('image_creation'):production['image_creation']=run['image_creation']
+    if 'quad_light' in run['selection']['variants']:production['quad_retopology']=run.get('quad_report',{})
     return {'workflow_version':'single-image/1','receipts':receipts,'production':production,'warnings':run.get('quad_report',{}).get('warnings',[])}

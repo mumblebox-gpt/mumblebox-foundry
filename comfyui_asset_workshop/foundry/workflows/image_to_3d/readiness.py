@@ -20,7 +20,7 @@ def required_stages(operation, selection):
     first = {"turnaround": 0, "rocket": 0, "mesh": 1, "finish": 3}[operation]
     return stages[first:]
 
-def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambda value:None, turnaround_model="qwen21",geometry_model="pixal3d"):
+def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambda value:None, turnaround_model="qwen21",geometry_model="pixal3d",texture_mode="standard"):
     import folder_paths
     from .... import models
     path=Path(state_root)/"verified-models.json"
@@ -28,6 +28,9 @@ def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambd
     except (FileNotFoundError,ValueError):receipts={}
     from .turnaround import dependency_keys
     required = dependency_keys(turnaround_model) if stage == "turnaround" else MODELS.get(stage,())
+    if stage=='splat_turbo':
+        from ..splat_solid.definition import TURBO_MODELS
+        required=MODELS['splat']+TURBO_MODELS
     if stage=='single_geometry' and geometry_model=='trellis2':required=tuple('trellis_single' if k=='pixal_single' else k for k in required)
     for key in required:
         if cancelled():raise InterruptedError("Cancelled before model loading.")
@@ -65,7 +68,7 @@ def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambd
         ensure_hi3d(settings().get("hi3d_url","http://127.0.0.1:8378"),request,cancelled,progress)
     elif stage == "texture":
         from .worker_models import ensure_texture
-        ensure_texture(state_root,cancelled,owner,progress)
+        ensure_texture(state_root,cancelled,owner,progress,texture_mode=texture_mode)
 
 def viewer_module():
     # Comfy 0.42 moved the native viewer from the old global factory into a

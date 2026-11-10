@@ -18,7 +18,10 @@ def checked(function):
     return call
 
 def create_server(client):
-    server=MCPServer("Mumblebox 3D Asset Foundry",version="0.1.0",instructions=(
+    server=MCPServer("Mumblebox 3D Asset Foundry",version="0.2.0",instructions=(
+        "List workflow groups with foundry_workflows and request one group's actions and capabilities before use. "
+        "The catalog exposes Guided, both CCORE modes, Garment, graph reads and shared workspace controls. "
+        "Use current capability defaults unless the user specifies otherwise. "
         "Use the existing ComfyUI Foundry workflow. Read capabilities first. Upload only authorized references, "
         "label the first primary and describe each additional reference's purpose. Select the model, category, "
         "settings and export formats explicitly or use returned defaults. Model licenses vary. "
@@ -39,9 +42,9 @@ def create_server(client):
 
     @server.tool(structured_output=True)
     @checked
-    def foundry_import_reference(path:str,role:str="primary",description:str="")->dict[str,Any]:
-        """Upload an allowed local image; returns the reference card for create/update. Never overwrites the source."""
-        return client.import_reference(path,role,description)
+    def foundry_import_reference(path:str,role:str="primary",description:str="",target:str="")->dict[str,Any]:
+        """Upload an authorized image; returns its reference card. Set target='ccore' for Image + Text."""
+        return client.import_reference(path,role,description,target)
 
     @server.tool(structured_output=True)
     @checked
@@ -93,6 +96,8 @@ def create_server(client):
     register_hair(server,client,checked)
     from splat_tools import register as register_splat
     register_splat(server,client,checked)
+    from workspace import register as register_workspace
+    register_workspace(server,client,checked)
     return server
 
 def main():

@@ -13,6 +13,45 @@ class SplatContracts(unittest.TestCase):
         for data in [{'steps':0},{'image':'../secret.png'},{'cpu_offload':'yes'},{'outputs':{'fake':True}}]:
             with self.assertRaises(ValueError):self.record(**data)
         self.assertEqual(DEFAULTS['image'],'')
+    def test_idol_turbo_uses_both_experts_in_one_euler_schedule(self):
+        standard = compile_stage(self.record(), 'generation')
+        self.assertEqual(sum(n['class_type'] == 'KSampler' for n in standard.values()), 1)
+        turbo = compile_stage(self.record(generation_mode='turbo'), 'generation')
+        phases = sorted((n['inputs'] for n in turbo.values() if n['class_type'] == 'KSamplerAdvanced'),
+                        key=lambda p: p['start_at_step'])
+        self.assertEqual([(p['start_at_step'], p['end_at_step'], p['add_noise'],
+                           p['return_with_leftover_noise']) for p in phases],
+                         [(0, 4, 'enable', 'enable'), (4, 5, 'disable', 'disable')])
+        for phase, expert in zip(phases, ('slow', 'fast')):
+            self.assertEqual((phase['steps'], phase['cfg'], phase['sampler_name'], phase['scheduler']),
+                             (5, 1.0, 'euler', 'simple'))
+            lora = turbo[phase['model'][0]]
+            self.assertEqual(lora['class_type'], 'LoraLoaderModelOnly')
+            self.assertEqual(lora['inputs']['lora_name'], f'idol_turbo_{expert}_comfy.safetensors')
+            self.assertEqual(lora['inputs']['strength_model'], 1.0)
+        self.assertIs(turbo[phases[1]['latent_image'][0]]['inputs'], phases[0])
+        for node in turbo.values():
+            for value in node['inputs'].values():
+                if isinstance(value, list):
+                    self.assertIn(value[0], turbo)
+        with self.assertRaisesRegex(ValueError, 'generation mode'):
+            self.record(generation_mode='unknown')
+
+    def test_saved_standard_signature_survives_the_new_mode(self):
+        from foundry.workflows.splat_solid.runs import SplatRuns, signature
+        record = self.record()
+        config = record['config']
+        legacy_keys = ('image', 'seed', 'steps', 'cfg', 'image_size', 'gaussians',
+                       'decoder_seed', 'mesh_resolution', 'orbit_size', 'orbit_frames', 'orbit_fps')
+        legacy_signature = signature([record['source_sha256'],
+                                      {key: config[key] for key in legacy_keys}, config['outputs']['orbit']])
+        self.assertEqual(SplatRuns.fingerprint(None, record, 'generation'), legacy_signature)
+        config['generation_mode'] = 'turbo'
+        turbo = SplatRuns.fingerprint(None, record, 'generation')
+        self.assertNotEqual(turbo, legacy_signature)
+        config.update(steps=42, cfg=5)
+        self.assertEqual(SplatRuns.fingerprint(None, record, 'generation'), turbo)
+
     def test_cleanup_has_no_generator_or_foreign_graph_dependency(self):
         g=compile_stage(self.record(),'cleanup')
         self.assertFalse(any(n['class_type'] in ('KSampler','Hi3DRefine') for n in g.values()))

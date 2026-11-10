@@ -81,6 +81,13 @@ def render_readme(catalog):
             for lora in p.get('loras',[]):
                 lines += ['- Image LoRA: '+text(lora.get('name','Not recorded'))+'. Source and terms: '+text(lora.get('civitai',{}).get('source_url','Not recorded; consult its provider.'))]
         lines += ['', 'Image-model terms are separate from the downstream geometry and texturing resources below. The structured record binds each originating image to its accepted revision and checksum.','']
+    quad=c.production.get("quad_retopology") or {}
+    if quad.get("requested_method"):
+        names={"quadriflow":"QuadriFlow CPU","instant_meshes":"Instant Meshes CPU","cyber_cuda":"CyberRemesher NVIDIA CUDA",
+               "topology_preserving":"Foundry topology-preserving subdivision"}
+        used=", ".join(names.get(method,method) for method in quad.get("effective_methods",[]))
+        lines += ["### Quad retopology","", "- Requested method: "+text(names.get(quad["requested_method"],quad["requested_method"]))+".",
+                  "- Methods used on major parts: "+text(used or "No major parts needed remeshing")+".",""]
     turnaround=c.production.get("turnaround",{})
     if turnaround:
         lines += ["### Turnaround settings", "", "| Setting | Recorded value |", "|---|---|"]

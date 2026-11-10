@@ -2,9 +2,10 @@
 import asyncio
 import json
 import time
+from uuid import uuid4
 from pathlib import Path
 from aiohttp import web
-from .definition import initial_spec,reconnect_spec,METHOD_ID,VERSION,QUAD_RETOPOLOGY_ENABLED,export_variants
+from .definition import initial_spec,reconnect_spec,METHOD_ID,VERSION,QUAD_RETOPOLOGY_ENABLED,CONTROLS,export_variants
 from .fvb import runtime
 from .fvb.recipes import editable_api
 
@@ -29,7 +30,7 @@ def register(routes,factory,endpoint):
         from ....finishing.runtime import settings
         registry=json.loads(Path(__file__).resolve().parents[3].joinpath('finishing/package_resources.json').read_text(encoding='utf-8'))
         ids=('qwen21','qwen21_union','pixal3d','trellis2','hi3d','dinov3','birefnet','moge2')+(('quadriflow',) if QUAD_RETOPOLOGY_ENABLED else ())
-        return {'id':METHOD_ID,'version':VERSION,'defaults':initial_spec(),'selection':DEFAULT_SELECTION,
+        return {'id':METHOD_ID,'version':VERSION,'defaults':initial_spec(),'controls':CONTROLS,'selection':DEFAULT_SELECTION,
             'finishing_defaults':DEFAULTS,'viewer':viewer_module(),
             'runtime':{'blender_configured':Path(settings().get('blender','')).is_file()},
             'quad_retopology_enabled':QUAD_RETOPOLOGY_ENABLED,
@@ -59,6 +60,23 @@ def register(routes,factory,endpoint):
     @routes.get(PREFIX+'/runs/{id}/graph')
     @endpoint
     async def graph(request):return editable_api(factory().get(request.match_info['id'])['spec'])
+    @routes.post(PREFIX+'/runs/{id}/show')
+    @endpoint
+    async def show(request):
+        from server import PromptServer
+
+        svc = factory()
+        ident = svc.get(request.match_info['id'])['id']
+        nonce = uuid4().hex
+        await PromptServer.instance.send_json('mumblebox-foundry-guided', {'id': ident, 'request_id': nonce})
+        deadline = time.monotonic() + 12
+        while time.monotonic() < deadline:
+            live = svc.engine.live
+            if live.get('job_id') == ident and live.get('request_id') == nonce:
+                return {'id': ident, 'bound': True}
+            await asyncio.sleep(.1)
+        raise ValueError('Open the selected Foundry graph before attaching this 3D-Guided run.')
+
     @routes.post(PREFIX+'/runs/{id}/action')
     @endpoint
     async def action(request):

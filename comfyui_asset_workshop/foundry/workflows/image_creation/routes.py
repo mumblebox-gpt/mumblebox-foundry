@@ -68,6 +68,15 @@ def register(routes,factory,endpoint,notify=lambda ident:None):
         await body(request);record=factory().get(request.match_info['id']);notify(record['id'])
         return {'id':record['id'],'display_requested':True}
 
+    @routes.get(PREFIX+'/{id}/graph')
+    @endpoint
+    async def graph(request):
+        record = factory().get(request.match_info['id'])
+        stage = record.get('pending') or record.get('last_stage')
+        if not stage or not stage.get('graph'):
+            raise ValueError('This creation has no compiled graph yet. Use the shipped workspace graph for drafts.')
+        return stage['graph']
+
     @routes.get(PREFIX+'/{id}/files/{revision}')
     @endpoint
     async def image(request):

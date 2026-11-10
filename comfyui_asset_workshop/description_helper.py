@@ -490,6 +490,9 @@ def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None
     log_path = runtime_folder / "mumblebox-last-run.log"
     headers = {"Authorization": "Bearer " + key, "Content-Type": "application/json"}
     base = f"http://127.0.0.1:{port}"
+    from .pipeline_workers import activity
+    key_id = "description-helper"
+    activity.update(key_id, "Description assistant")
     try:
         with log_path.open("wb") as log:
             PROCESS = subprocess.Popen(command, cwd=runtime_folder, stdin=subprocess.DEVNULL,
@@ -511,6 +514,9 @@ def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None
                     time.sleep(.5)
             else:
                 raise ValueError("Description assistant took too long to load. Try Q4 precision in Settings.")
+            names = ["Description assistant · " + activity.checkpoint_name(model)]
+            names.extend("Description vision · " + activity.checkpoint_name(path) for path in projectors)
+            activity.update_models(key_id, [{"name": name, "state": "loaded"} for name in names])
             STATE["phase"] = writing_phase or ("Preparing instructions for each angle" if response_format
                                                  else "Writing your suggested description")
             body = {"messages": [{"role": "system", "content": system}, {"role": "user", "content": content}],
@@ -536,4 +542,5 @@ def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None
                     PROCESS.kill()
                     PROCESS.wait(timeout=5)
             PROCESS = None
+        activity.remove(key_id)
         log_path.unlink(missing_ok=True)
