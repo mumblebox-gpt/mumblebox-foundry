@@ -137,6 +137,16 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
             data=await body(request)
             return await asyncio.to_thread(cache.purge,data.get('token',''),data.get('groups'))
 
+    @routes.post(PREFIX + "/workspace/show")
+    @endpoint
+    async def workspace_show(request):
+        section = (await body(request)).get("section")
+        if section not in ("workflow", "images", "gallery", "history", "integrations", "about", "roadmap", "settings"):
+            raise ValueError("Choose a Foundry section from the workspace action catalog.")
+        from server import PromptServer
+        PromptServer.instance.send_sync("mumblebox-foundry-workspace", {"section": section})
+        return {"section": section, "display_requested": True}
+
     @routes.patch(PREFIX + "/preferences")
     @endpoint
     async def save_preferences(request):
@@ -284,7 +294,19 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
         async def wizard_graph(request):
             from .workflows.image_to_3d.graph import compile_stage
             run=wizard_factory().get(request.match_info["id"])
-            return compile_stage(run["stage"],run)
+            supported = ("geometry", "refinement", "texture", "balanced", "compact", "quads", "print", "package")
+            if run.get("method") != "single-image":
+                supported = ("turnaround", *supported)
+            requested = request.query.get("stage")
+            if requested is not None and requested not in supported:
+                raise ValueError("Choose a supported stage: " + ", ".join(supported))
+            stage = requested or run["stage"]
+            if stage not in supported:
+                stage = "package" if run.get("package") else supported[0]
+            try:
+                return compile_stage(stage, run)
+            except KeyError as error:
+                raise ValueError("This stage needs a saved upstream checkpoint. Inspect the shipped graph for an unconfigured stage.") from error
 
         @routes.get(PREFIX + "/wizard/runs/{id}/package")
         @endpoint

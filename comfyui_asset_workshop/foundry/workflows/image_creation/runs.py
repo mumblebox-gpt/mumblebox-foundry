@@ -237,12 +237,19 @@ class ImageRuns:
         self.library.accept(record,revision_id,expected);record.pop('candidate',None)
         self.library.save(record);return self.public(record)
 
-    def handoff(self,ident,single=False):
+    def handoff(self,ident,single=False,side=None,revision_id=None):
         record=self.get(ident)
         if not record['config']['paired'] and not single:raise ValueError('This standalone image creation has no 3D asset handoff.')
+        default_side = 'front' if record['config']['paired'] else 'single'
+        if side is not None and (not single or side not in record['accepted']):
+            raise ValueError('Choose one accepted Gallery side in single-image mode.')
+        sides = ((side or default_side, 'primary'),) if single else (('front','primary'),('back','back'))
+        if revision_id is not None and (not single or record['accepted'].get(sides[0][0]) != revision_id):
+            raise ValueError('The selected Gallery revision changed. Review the current image and try again.')
+        if any(key not in record['accepted'] for key, _ in sides):
+            raise ValueError('Generate and accept the selected image before sending it to a workflow.')
         self.library.publish(record)
         references=[]
-        sides=(('single','primary'),) if not record['config']['paired'] else ((('front','primary'),) if single else (('front','primary'),('back','back')))
         for side,role in sides:
             revision=self.library.revision(record,record['accepted'][side]);source=self.library.file(record,revision['id'])
             relative=Path('foundry-created')/ident/(side+'-'+revision['sha256'][:16]+'.png')

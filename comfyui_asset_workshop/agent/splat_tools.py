@@ -20,7 +20,6 @@ def register(server,client,checked):
     @tool
     def foundry_splat_start(creation_id:str,request_id:str,operation:str='rocket')->dict[str,Any]:
         """Run generation, cleanup, export or Rocket using the same visible wizard; retries are idempotent."""
-        client.request(path(creation_id,'/show'),{})
         return client.request(path(creation_id,'/start'),dict(operation=operation,request_id=request_id,client_id='foundry-agent'))
     @tool
     def foundry_splat_cancel(creation_id:str)->dict[str,Any]:

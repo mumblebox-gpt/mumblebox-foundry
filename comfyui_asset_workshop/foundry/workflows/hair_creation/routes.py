@@ -3,6 +3,7 @@ import asyncio
 import json
 from aiohttp import web
 from .definition import catalog
+from .examples import catalog as example_catalog, example_file, use_example
 PREFIX='/mumblebox-foundry/v1/hair'
 
 async def body(request):
@@ -15,7 +16,19 @@ async def body(request):
 def register(routes,factory,endpoint,notify):
     @routes.get(PREFIX+'/capabilities')
     @endpoint
-    async def capabilities(request):return catalog()
+    async def capabilities(request):return {**catalog(), 'examples': example_catalog()}
+
+    @routes.get(PREFIX+'/examples/{example_id}/file')
+    @endpoint
+    async def preview_example(request):
+        path, _ = example_file(request.match_info['example_id'])
+        return web.FileResponse(path, headers={'X-Content-Type-Options':'nosniff'})
+
+    @routes.post(PREFIX+'/examples/{example_id}/use')
+    @endpoint
+    async def import_example(request):
+        await body(request)
+        return await asyncio.to_thread(use_example, factory().input_root, request.match_info['example_id'])
     @routes.post(PREFIX+'/runs')
     @endpoint
     async def create(request):return factory().create(await body(request))

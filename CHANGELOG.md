@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-preview.21 — Shared Foundry controls and previews
+
+- Share the same CCORE presets, official HairDeck examples, Gallery handoffs and model sort preferences between the GUI and MCP.
+- Let agents retrieve saved image previews as pixels, look up Image Creator's installed models and LoRAs, inspect a named mesh stage and open sections in the selected Foundry window.
+- Expose the garment editor's supported operations and controls, and reject a stale Gallery revision before handing it off.
+
 ## 0.1.0-preview.20 — Foundry for agents and three quad solvers
 
 - Expand the Foundry MCP to the mesh, 3D-Guided, Splat & Solid, HairDeck, both CCORE modes, Garment Particles and image workflows. Discover live options and advanced settings, attach saved runs to the app, inspect ComfyUI graphs, and retrieve previews and exports through the same services as the wizards.

@@ -6,7 +6,7 @@ You don’t need to know ComfyUI or build a node graph. [Install with Pinokio](d
 
 Foundry brings together work from talented researchers and the open-source community. Our contribution is a practical toolbox: connected workflows, clear choices, previews and saved results.
 
-> **Windows / NVIDIA preview.** Preview **0.1.0-preview.20** expands the local Foundry MCP, bundles its companion skill and adds three editable quad solvers. See the [changelog](CHANGELOG.md) and [published downloads](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) for release availability.
+> **Windows / NVIDIA preview.** Preview **0.1.0-preview.21** shares more controls and previews between the Foundry wizards and MCP. It includes the companion skill and three editable quad solvers. See the [changelog](CHANGELOG.md) and [published downloads](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) for release availability.
 
 **Create a Prop from Text · CCORE** turns a description into a stylized prop with a rotatable preview and GLB download. Start from **Choose a Workflow → Open Prop Wizard**, choose one of 12 editable examples, or write your own brief. **Enhance description** optionally uses Foundry’s local Qwen assistant to develop the design. **Create a Prop from Image + Text · CCORE** adds one reference image, with the option to create it in the wizard. Describe what to keep and what to change. Both wizards run locally on an NVIDIA GPU, check available memory before generating, and offer smaller settings when available. Foundry downloads the selected model and, for Image + Text, the vision projector on first use. The ZIP adds Foundry’s file catalog and upstream credits.
 

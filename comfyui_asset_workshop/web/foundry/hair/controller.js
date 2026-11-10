@@ -5,7 +5,7 @@ import {el,button,hint,field} from '../dom.js';
 import {request} from '../services.js';
 import {dialog} from '../dialogs.js';
 import {activity,elapsedTime} from '../activity.js';
-import {uploadReference,capturePhoto,inputURL} from '../images/references.js';
+import {uploadReference,capturePhoto,galleryReference,inputURL} from '../images/references.js';
 import {hairFileURL,displayFiles,imageSheet,hairViewer,variationCards,preprocessingWarnings} from './review.js';
 
 const titles=['Starting image','Generation options','Generate and review','Head and materials','Motion and exports','Finished result'];
@@ -98,8 +98,8 @@ export class HairWizard {
             for(const item of page.items){for(const [side,id] of Object.entries(item.accepted||{})){
                 const url='/mumblebox-foundry/v1/images/'+item.id+'/files/'+id;
                 list.append(button([el('img',{src:url,alt:item.name+' '+side}),el('span',{},item.name+' · '+side)],()=>this.act(async()=>{
-                    const response=await fetch(url);if(!response.ok)throw Error('This Gallery image is unavailable.');
-                    await this.add(new File([await response.blob()],'gallery-'+id+'.png',{type:'image/png'}));modal.close();
+                    const handoff=await galleryReference(item.id,side,id);
+                    this.draft.image=handoff.references[0].filename;this.remember();modal.close();
                 }),{class:'image-preview'}));
             }}more.hidden=!cursor;if(!list.children.length)list.append(hint('No saved images yet. Upload a reference or take a photo.'));
         };
@@ -108,11 +108,10 @@ export class HairWizard {
     examples(){
         const list=el('div',{class:'hair-gallery'});
         const modal=dialog(this.shell,'Try an official HairDeck reference',el('div',{},list,hint('Reference examples provided by the HairDeck authors.')));
-        for(const [index,name] of ['ex01.png','ex02.png','ex03.png','ex04.png'].entries()){
-            const url=new URL('./examples/'+name,import.meta.url).href;
-            list.append(button([el('img',{src:url,alt:'HairDeck reference example '+(index+1)}),el('span',{},'Example '+(index+1))],()=>this.act(async()=>{
-                const response=await fetch(url);if(!response.ok)throw Error('This HairDeck example is unavailable.');
-                await this.add(new File([await response.blob()],'hairdeck-'+name,{type:'image/png'}));modal.close();
+        for(const item of this.cap.examples||[]){
+            list.append(button([el('img',{src:item.url,alt:'HairDeck reference '+item.label}),el('span',{},item.label)],()=>this.act(async()=>{
+                const reference=await request('hair/examples/'+item.id+'/use',{});
+                this.draft.image=reference.filename;this.remember();modal.close();
             }),{class:'image-preview'}));
         }
     }

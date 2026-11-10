@@ -67,9 +67,9 @@ def register(server, client, checked):
         return {'creation':record,'download_url':client.base_url+path(creation_id,'/package')}
 
     @tool
-    def foundry_image_handoff(creation_id:str)->dict[str,Any]:
-        """Copy accepted front/back images to 3D inputs with verified provenance. Merge the result into foundry_create_run configuration. Does not generate a mesh."""
-        return client.request(path(creation_id,'/handoff'),{})
+    def foundry_image_handoff(creation_id:str,mode:str='pair',side:str|None=None,revision_id:str|None=None)->dict[str,Any]:
+        """Copy an accepted pair or one selected Gallery side into 3D inputs with provenance. Does not generate a mesh."""
+        return client.request(path(creation_id,'/handoff'),dict(mode=mode,side=side,revision_id=revision_id))
 
     @tool
     def foundry_image_gallery(search:str='',category:str='',kind:str='all',sort:str='newest',cursor:str='',limit:int=24)->dict[str,Any]:

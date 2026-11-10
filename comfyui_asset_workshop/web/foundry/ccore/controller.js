@@ -5,7 +5,6 @@ import {inputURL, uploadReference} from '../images/references.js';
 import {pollResources, request} from '../services.js';
 import {mountMesh} from '../wizard/preview.js';
 import {ccoreDraftKey, ccoreTitle, syncPropGraph} from './graph.js';
-import {propExamples} from './examples.js';
 
 const titles = ['Describe your prop', 'Review your prop', 'Download your asset'];
 const credits = 'https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder';
@@ -59,7 +58,7 @@ export class CcoreWizard {
     }
 
     chooseExample(id) {
-        const example = propExamples.find(item => item.id === id);
+        const example = this.capabilities.examples.find(item => item.id === id);
         if (!example && id !== 'custom') return;
         this.example = id;
         this.originalDescription = undefined;
@@ -273,7 +272,7 @@ export class CcoreWizard {
         const examples = el('select', {disabled: working, onchange: e => this.chooseExample(e.target.value)},
             el('option', {value: '', disabled: true}, 'Choose an example'),
             el('option', {value: 'custom'}, 'Custom'),
-            propExamples.map(({id, name, category}) =>
+            this.capabilities.examples.map(({id, name, category}) =>
                 el('option', {value: id}, category + ' · ' + name)));
         examples.value = this.example || '';
         const enhance = button('Enhance description', () => this.enhance(), {

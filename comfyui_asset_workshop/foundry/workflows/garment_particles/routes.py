@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from aiohttp import web
 
-from . import character, runtime
+from . import character, edits, runtime
 from .nodes import directory
 from .contract import AUTHOR, EXAMPLE, GENERATION_PRESETS, WEIGHTS
 
@@ -32,6 +32,15 @@ def register(routes, factory, endpoint):
         return {"modes": runtime.availability(), "viewer_module": viewer_module(),
                 "example": EXAMPLE, "source": AUTHOR, "weights": WEIGHTS,
                 "generation_presets": GENERATION_PRESETS,
+                "edit_operations": edits.OPERATIONS,
+                "edit_fields": {
+                    "pattern": ["guide", "objective", "strength", "rate", "iterations", "steps"],
+                    "silhouette": ["guide", "objective", "azimuth", "elevation", "center", "strength", "rate", "iterations", "steps"],
+                    "shape": ["guide", "strength", "rate", "iterations", "steps"],
+                    "completion": ["guide", "strength", "rate", "iterations", "steps"],
+                    "mix": ["guide", "strength", "rate", "iterations", "steps"],
+                    "blend": ["second_seed", "blend", "second_points"],
+                },
                 "drape_controls": {"character": "uploaded character ID", "transform": character.DEFAULT_FIT,
                                    "fabric": character.FABRICS, "frames": [48, 16, 120]}}
 

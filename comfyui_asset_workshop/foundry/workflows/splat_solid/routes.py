@@ -38,7 +38,13 @@ def register(routes,factory,endpoint):
         return compile_stage(r,stage,full=request.query.get('full')=='1')
     @routes.post(PREFIX+'/runs/{id}/start')
     @endpoint
-    async def start(request):return factory().start(request.match_info['id'],await body(request))
+    async def start(request):
+        data = await body(request)
+        result = factory().start(request.match_info['id'], data)
+        if data.get('client_id') == 'foundry-agent':
+            from server import PromptServer
+            PromptServer.instance.send_sync('mumblebox-foundry-splat', {'id': result['id']})
+        return result
     @routes.post(PREFIX+'/runs/{id}/cancel')
     @endpoint
     async def cancel(request):

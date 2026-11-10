@@ -1,5 +1,6 @@
 """Foundry routes for the CCORE prop wizard."""
 import json
+from pathlib import Path
 from aiohttp import web
 
 from .contract import EXAMPLE, IMAGE_MODE, MODEL_KEYS, TEXT_MODE, TOKEN_LIMITS, default_model_variant
@@ -7,6 +8,7 @@ from .nodes import graph as compile_graph
 from .enhancement import enhancement_input
 
 PREFIX = "/mumblebox-foundry/v1/ccore"
+EXAMPLES = json.loads(Path(__file__).with_name("examples.json").read_text(encoding="utf-8-sig"))
 
 
 def register(routes, factory, endpoint):
@@ -15,7 +17,7 @@ def register(routes, factory, endpoint):
     async def capabilities(request):
         from ..image_to_3d.readiness import viewer_module
 
-        return {"viewer_module": viewer_module(), "example": EXAMPLE, "token_limits": TOKEN_LIMITS,
+        return {"viewer_module": viewer_module(), "example": EXAMPLE, "examples": EXAMPLES, "token_limits": TOKEN_LIMITS,
                 "model_variants": list(MODEL_KEYS), "default_model_variant": default_model_variant(),
                 "modes": [TEXT_MODE, IMAGE_MODE], "default_seed": 42, "default_max_tokens": TOKEN_LIMITS[-1]}
 

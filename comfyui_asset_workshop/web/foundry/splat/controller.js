@@ -5,7 +5,7 @@ import {el,button,hint,field,link} from '../dom.js';
 import {request} from '../services.js';
 import {dialog} from '../dialogs.js';
 import {activity,elapsedTime} from '../activity.js';
-import {uploadReference,capturePhoto,inputURL} from '../images/references.js';
+import {uploadReference,capturePhoto,galleryReference,inputURL} from '../images/references.js';
 import {mountMesh} from '../wizard/preview.js';
 import {syncSplatGraph,syncSplatOutputs,showSplatWorkflow} from './graph.js';
 import {page,titles,blurbs} from './pages.js';
@@ -83,8 +83,8 @@ export class SplatWizard{
         for(const item of data.items||[])for(const [side,id] of Object.entries(item.accepted||{})){
             const url='/mumblebox-foundry/v1/images/'+item.id+'/files/'+id;
             list.append(button([el('img',{src:url,alt:item.name+' '+side,style:'max-width:150px'}),el('span',{},item.name+' · '+side)],()=>this.act(async()=>{
-                const response=await fetch(url);if(!response.ok)throw Error('Saved image unavailable.');
-                await this.upload(new File([await response.blob()],'gallery-'+id+'.png',{type:'image/png'}));modal.close();
+                const handoff=await galleryReference(item.id,side,id);
+                this.draft.image=handoff.references[0].filename;this.remember();modal.close();
             })));
         }
         if(!list.children.length)list.append(hint('No saved images yet. Upload a reference or take a photo.'));

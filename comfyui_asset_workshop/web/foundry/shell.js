@@ -55,10 +55,12 @@ export class FoundryShell {
             'mumblebox-foundry-ccore': data => this.openCcoreWizard({runId:data.id,image:data.with_image}),
             'mumblebox-foundry-garment': data => this.openGarmentWizard({runId:data.id}),
             'mumblebox-foundry-guided': data => this.openGuidedWizard({runId:data.id,binding:data.request_id}),
+            'mumblebox-foundry-workspace': data => this.openAgentSection(data.section),
         };
         for (const [eventName, show] of Object.entries(this.agentWorkflowHandlers)) {
             const listener = event => {
-                if (this.node.graph !== app.graph || !this.host.isConnected || !/^[a-f0-9]{32}$/.test(event.detail?.id || '')) return;
+                if (this.node.graph !== app.graph || !this.host.isConnected) return;
+                if (eventName !== 'mumblebox-foundry-workspace' && !/^[a-f0-9]{32}$/.test(event.detail?.id || '')) return;
                 show(event.detail).catch(error => this.message(error.message, true));
             };
             this.agentWorkflowHandlers[eventName] = listener;
@@ -159,6 +161,17 @@ export class FoundryShell {
         try{await request("/asset-workshop/release",{});this.message("Models unloaded. The resource readings will update shortly.");}
         catch(error){this.message(error.message,true);}
         finally{this.unloading=false;this.resources(this.status);}
+    }
+    async openAgentSection(section) {
+        if (section === "settings") {
+            this.data = await request("bootstrap");
+            return this.settings();
+        }
+        if (section === "images" || section === "gallery") {
+            return this.openImages(section === "gallery" ? "Gallery" : "Create Images");
+        }
+        const sections = {workflow:"Choose a Workflow", history:"History", integrations:"Integrations", about:"About", roadmap:"Roadmap"};
+        if (Object.hasOwn(sections, section)) return this.open(sections[section]);
     }
     async openImages(section="Create Images") {
         this.imageSection=section;

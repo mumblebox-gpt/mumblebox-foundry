@@ -12,11 +12,14 @@ export function resourceLists(shell){
     let disposed=false,cursor=0;
     const lists=el('ul',{class:'resource-rows'}),feedback=el('p',{role:'status',class:'muted'});
     const refresh=button('Refresh list',()=>load(true)),more=button('Show more models',()=>load(false),{hidden:true});
-    const sort = el('select', {onchange: () => {
-        localStorage.setItem(sortKey, sort.value);
-        load(true);
+    const sort = el('select', {onchange: async () => {
+        try {
+            shell.data.preferences = await request('preferences', {model_sort:sort.value}, {method:'PATCH'});
+            localStorage.removeItem(sortKey);
+            await load(true);
+        } catch (error) { feedback.textContent = error.message; }
     }}, Object.entries(sortOrders).map(([value, label]) => el('option', {value}, label)));
-    const savedSort = localStorage.getItem(sortKey);
+    const savedSort = shell.data?.preferences?.model_sort ?? localStorage.getItem(sortKey);
     sort.value = Object.hasOwn(sortOrders, savedSort) ? savedSort : 'name_asc';
     const open = button('Open Models Folder', async () => {
         try {await request('resources/open-folder', {});}

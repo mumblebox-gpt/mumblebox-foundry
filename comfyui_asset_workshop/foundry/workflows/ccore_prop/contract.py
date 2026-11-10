@@ -45,7 +45,7 @@ def options(data):
     mode, image = data.get("mode", TEXT_MODE), data.get("image")
     if mode == IMAGE_MODE:
         upload = r'foundry-references/[^/\\:<>"|?*\x00-\x1f]{1,200}\.(png|jpe?g|webp)'
-        created = r'foundry-created/[a-f0-9]{32}/single-[a-f0-9]{16}\.png'
+        created = r'foundry-created/[a-f0-9]{32}/(?:single|front|back)-[a-f0-9]{16}\.png'
         if not isinstance(image, str) or not re.fullmatch(f"(?:{upload}|{created})", image, re.IGNORECASE):
             raise ValueError("Upload one PNG, JPEG or WebP reference before generating.")
         config.update(mode=mode, image=image)

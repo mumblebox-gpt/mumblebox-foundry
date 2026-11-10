@@ -1,5 +1,10 @@
 import {el,button,hint,field} from '../dom.js';
 import {dialog} from '../dialogs.js';
+import {request} from '../services.js';
+
+export function galleryReference(creationId, side, revisionId) {
+    return request('images/'+creationId+'/handoff',{mode:'single',side,revision_id:revisionId});
+}
 
 export const inputURL=name=>{const parts=name.split('/');return '/view?'+new URLSearchParams({filename:parts.pop(),subfolder:parts.join('/'),type:'input'});};
 

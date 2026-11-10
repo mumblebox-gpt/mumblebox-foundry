@@ -10,7 +10,7 @@ Install the bundled [Mumblebox Assets skill](../comfyui_asset_workshop/skills/mu
 2. Call `foundry_workflows` for the available groups and again with a group to get its actions, accepted path/query parameters and body fields. Call `foundry_workflow_action` with action `capabilities` for current models, settings and export options.
 3. Import only authorized inputs. For CCORE Image + Text set `target` to `ccore` when importing a local image. For Garment drape, use `foundry_garment_upload_character` on a sewn run and pass the returned ID into drape.
 4. Save or start the run using its documented action. For 3D-Guided, call `show` on the saved run first and check `bound`. You can inspect its graph without starting generation.
-5. Follow progress using the group's `status`. Use `show` to open the result in Foundry and the file or package actions to obtain local download URLs.
+5. Follow progress using the group's `status`. Use `show` to open the result in Foundry and the file or package actions to obtain local download URLs. For a saved PNG, JPEG or WebP, `foundry_read_image_preview` returns actual pixels for the agent to review.
 
 The groups are `mesh` (Single Image and Turnaround), `guided`, `splat`, `hair`, `ccore` (Text and Image + Text), `garment`, `images`, and `workspace`. Workspace includes the packaged graph, History, preferences, model management, integration and maintenance controls. Model and file removal use the same preview tokens as the GUI and require the user's authorization for the listed items.
 

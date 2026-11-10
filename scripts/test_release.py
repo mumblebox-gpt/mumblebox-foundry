@@ -56,7 +56,7 @@ class InstallTests(unittest.TestCase):
         self.assertIn('comfyui_asset_workshop/web/assets/foundry/ccore-image.webp',names)
         self.assertIn('comfyui_asset_workshop/foundry/workflows/ccore_prop/gpu.py',names)
         self.assertIn('comfyui_asset_workshop/foundry/workflows/ccore_prop/vision.py',names)
-        self.assertIn('comfyui_asset_workshop/web/foundry/ccore/examples.js',names)
+        self.assertIn('comfyui_asset_workshop/foundry/workflows/ccore_prop/examples.json',names)
         self.assertIn('comfyui_asset_workshop/foundry/workflows/ccore_prop/enhancement.py',names)
         vendor = 'comfyui_asset_workshop/foundry/workflows/ccore_prop/three'
         manifest = json.loads((builder.ROOT/vendor/'source.json').read_text(encoding='utf-8'))

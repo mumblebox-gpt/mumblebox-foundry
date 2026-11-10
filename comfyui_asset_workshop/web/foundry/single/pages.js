@@ -1,5 +1,5 @@
 import {el,button,hint,field} from '../dom.js';
-import {capturePhoto,uploadReference,inputURL} from '../images/references.js';
+import {capturePhoto,galleryReference,uploadReference,inputURL} from '../images/references.js';
 import {dialog} from '../dialogs.js';
 import {request} from '../services.js';
 import {optionsPage} from '../wizard/pages.js';
@@ -14,9 +14,10 @@ async function gallery(w){
             for(const item of data.items||[])for(const [side,id] of Object.entries(item.accepted||{})){
                 const url='/mumblebox-foundry/v1/images/'+item.id+'/files/'+id;
                 list.append(button([el('img',{src:url,alt:item.name+' '+side,loading:'lazy'}),el('span',{},item.name+' · '+side)],()=>w.act(async()=>{
-                    const r=await fetch(url);if(!r.ok)throw Error('Saved image unavailable.');
-                    const blob=await r.blob(),type=blob.type||'image/png',ext=type==='image/webp'?'webp':type==='image/jpeg'?'jpg':'png';
-                    await replace(w,new File([blob],'gallery-'+id+'.'+ext,{type}));modal.close();
+                    const handoff=await galleryReference(item.id,side,id);
+                    w.draft.references=handoff.references;
+                    w.draft.image_creation=handoff.image_creation;
+                    w.remember();modal.close();
                 })));
             }
             cursor=data.next_cursor||'';more.hidden=!cursor;status.textContent=list.children.length?'':'No saved images yet. Create an image or upload one.';

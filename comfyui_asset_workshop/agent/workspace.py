@@ -1,7 +1,11 @@
 """Discoverable MCP actions backed by the same service routes as Foundry's GUI."""
 from dataclasses import dataclass
 from typing import Any
-from urllib.parse import quote, urlencode
+from urllib.parse import quote, urlencode, urlsplit
+
+import base64
+
+from mcp.types import ImageContent
 
 from client import identifier
 
@@ -41,7 +45,7 @@ GROUPS = {
         "start": write("/wizard/runs/{run_id}/start", "Queue an owned stage. Single Image uses mesh, finish or rocket. Turnaround also offers turnaround.", "operation, request_id", RUN),
         "cancel": write("/wizard/runs/{run_id}/cancel", "Stop this run and keep its checkpoints.", params=RUN),
         "show": write("/wizard/runs/{run_id}/show", "Display this run in the open Foundry window.", params=RUN),
-        "graph": read("/wizard/runs/{run_id}/graph", "Compiled native graph for the run's current mesh or finishing stage.", RUN),
+        "graph": read("/wizard/runs/{run_id}/graph", "Compiled native graph for the run's current stage or a recorded stage selected by name.", RUN, ("stage",)),
         "turnaround_graph": read("/wizard/runs/{run_id}/turnaround-graph", "Compiled Turnaround graph.", RUN),
         "single_template": read("/wizard/single-template", "Read the Single Image canvas recipe."),
         "package": file("/wizard/runs/{run_id}/package", "Download the completed asset ZIP.", RUN),
@@ -77,7 +81,9 @@ GROUPS = {
         "file": file("/splat/runs/{run_id}/file", "Retrieve a saved preview, asset or package.", RUN, ("path", "download")),
     },
     "hair": {
-        "capabilities": read("/hair/capabilities", "HairDeck models, defaults, previews, rig, material and export controls."),
+        "capabilities": read("/hair/capabilities", "HairDeck models, defaults, official examples, previews, rig, material and export controls."),
+        "example_image": file("/hair/examples/{example_id}/file", "Preview an official bundled HairDeck example.", ("example_id",)),
+        "use_example": write("/hair/examples/{example_id}/use", "Select an official bundled HairDeck reference. Returns a Foundry input filename.", params=("example_id",)),
         "create": write("/hair/runs", "Save hair settings without generation.", "Configuration returned by capabilities, with one imported image"),
         "update": write("/hair/runs/{run_id}", "Update idle settings. Export-only changes retain matching cards and chains.", "Full configuration from create", RUN, "PATCH"),
         "status": read("/hair/runs/{run_id}", "Read variations, preview artifacts, exports and state.", RUN),
@@ -88,7 +94,7 @@ GROUPS = {
         "file": file("/hair/runs/{run_id}/file", "Retrieve a recorded HairDeck file.", RUN, ("path", "download")),
     },
     "ccore": {
-        "capabilities": read("/ccore/capabilities", "Both Text and Image + Text modes, model precisions and token limits."),
+        "capabilities": read("/ccore/capabilities", "Text and Image + Text modes, the twelve wizard examples, model precisions and token limits."),
         "start": write("/ccore/runs", "Queue a prop generation. For Image + Text import an image with target ccore.", "request_id (32 lowercase hex), name, prompt, mode, image, seed, max_tokens, model_variant"),
         "status": read("/ccore/runs/{run_id}", "Read progress, retry choices, and model/package state.", RUN),
         "cancel": write("/ccore/runs/{run_id}/cancel", "Stop the selected prop job.", params=RUN),
@@ -105,7 +111,7 @@ GROUPS = {
         "show": write("/garment/runs/{run_id}/show", "Show this garment in Foundry.", params=RUN),
         "guide": read("/garment/runs/{run_id}/guide", "Read pattern and point selection information.", RUN),
         "mix_sources": read("/garment/runs/{run_id}/mix-sources", "List saved garment parts eligible for mixing.", RUN),
-        "edit": write("/garment/runs/{run_id}/edit", "Queue an author-supported pattern edit using the saved guide.", "request_id, edit, prompt, points", RUN),
+        "edit": write("/garment/runs/{run_id}/edit", "Queue an author-supported pattern edit using the saved guide.", "request_id, edit (fields by operation in capabilities), prompt, seed, points, steps", RUN),
         "sew": write("/garment/runs/{run_id}/sew", "Build a sewn mesh.", "budget", RUN),
         "drape": write("/garment/runs/{run_id}/drape", "Simulate cloth using the uploaded rigged character.", "character and drape controls from capabilities", RUN),
         "fit": write("/garment/runs/{run_id}/fit", "Transfer skin weights after reviewing the current drape.", "approve (current drape_id)", RUN),
@@ -116,8 +122,10 @@ GROUPS = {
     },
     "images": {
         "capabilities": read("/images/capabilities", "Read image models, categories, reference slots, editing settings and defaults."),
+        "loras": read("/asset-workshop/v2/loras", "List the same installed LoRAs and metadata used by Image Creator."),
+        "checkpoints": read("/asset-workshop/v2/civitai/installed", "Read the installed image checkpoints available to Image Creator."),
         "gallery": read("/images", "Search and page through accepted images and pairs.", query=("search", "category", "kind", "sort", "cursor", "limit")),
-        "create": write("/images", "Save a draft.", "name, category, model, description, front, back, references, settings, checkpoint, loras"),
+        "create": write("/images", "Save a draft.", "name, category, model, description, front, back, references, settings, checkpoint, loras, graph_scope (optional ccore-reference)"),
         "update": write("/images/{creation_id}", "Update idle image settings.", "Full configuration from create", IMAGE, "PATCH"),
         "status": read("/images/{creation_id}", "Read progress, previews, edits and revisions.", IMAGE),
         "start": write("/images/{creation_id}/start", "Queue generate, regenerate or an edit prepared with foundry_image_prepare_edit.", "operation, request_id", IMAGE),
@@ -125,7 +133,7 @@ GROUPS = {
         "show": write("/images/{creation_id}/show", "Show the current image creation in Foundry.", params=IMAGE),
         "accept": write("/images/{creation_id}/accept", "Accept a reviewed candidate or restore a revision.", "revision_id, expected (current revision)", IMAGE),
         "save": write("/images/{creation_id}/save", "Save the accepted images to Gallery.", params=IMAGE),
-        "handoff": write("/images/{creation_id}/handoff", "Copy accepted images to the 3D inputs with provenance.", "mode (single or pair)", IMAGE),
+        "handoff": write("/images/{creation_id}/handoff", "Copy accepted images to the 3D inputs with provenance.", "mode (single or pair), side (optional accepted single, front or back for single mode), revision_id (optional expected accepted revision)", IMAGE),
         "reuse": write("/images/{creation_id}/reuse", "Make a new draft from the saved image settings.", params=IMAGE),
         "removal_preview": write("/images/removal-preview", "Review exact Gallery entries/files before removal.", "ids, delete_files"),
         "remove": write("/images/remove", "Apply a preview token only after the user authorizes the listed removal.", "token"),
@@ -136,7 +144,8 @@ GROUPS = {
     "workspace": {
         "bootstrap": read("/bootstrap", "Read Foundry version, preferences, credits and saved package import candidates."),
         "graph": file("/workflow", "Read the full shipped Foundry ComfyUI graph. This graph contains the branches behind the wizards.", ()),
-        "preferences": write("/preferences", "Update the shared Foundry settings.", "theme, language, profile, font_size, busy_motion, auto_check_updates", method="PATCH"),
+        "preferences": write("/preferences", "Update the shared Foundry settings.", "theme, language, profile, font_size, busy_motion, model_sort, auto_check_updates", method="PATCH"),
+        "show": write("/workspace/show", "Open a section in the selected Foundry window without changing desktop focus.", "section (workflow, images, gallery, history, integrations, about, roadmap, settings)"),
         "status": read("/asset-workshop/status", "Read shared resource, workflow and model residency status."),
         "unload_models": write("/asset-workshop/release", "Ask the shared lifecycle owner to unload idle models."),
         "update_status": read("/updates/status", "Read the last version check."),
@@ -173,7 +182,13 @@ def describe(workflow=None):
         return {"workflows": list(GROUPS)}
     if workflow not in GROUPS:
         raise ValueError("Choose a workflow from foundry_workflows.")
-    return {"workflow": workflow, "actions": {
+    related = ["foundry_import_reference"] if workflow != "workspace" else []
+    if workflow == "images":
+        related.append("foundry_image_prepare_edit")
+    if workflow == "garment":
+        related.append("foundry_garment_upload_character")
+    related.append("foundry_read_image_preview")
+    return {"workflow": workflow, "related_tools": related, "actions": {
         name: {"description": action.help, "path_parameters": list(action.params),
                "query_parameters": list(action.query), "body_fields": action.fields,
                "method": action.method, "returns_link": action.link}
@@ -220,6 +235,31 @@ def call(client, workflow, action, params=None, body=None, query=None):
     return api.request(path, data, method=route.method)
 
 
+def image_preview(client, url):
+    parts = urlsplit(url)
+    origin = urlsplit(client.origin)
+    if parts.netloc and (parts.scheme, parts.netloc) != (origin.scheme, origin.netloc):
+        raise ValueError("Read only a recorded image from this Foundry installation.")
+    if parts.fragment or (parts.scheme and not parts.netloc):
+        raise ValueError("Use a recorded local image URL.")
+    path = parts.path
+    foundry_path = path.startswith("/mumblebox-foundry/v1/") and (
+        "/files/" in path or "/file/" in path or path.endswith("/file") or "/artifacts/" in path
+    )
+    if path != "/view" and not foundry_path:
+        raise ValueError("Use an image URL returned by a Foundry preview, run or library entry.")
+    data = client.upload_api.request(path + ("?" + parts.query if parts.query else ""), binary=True)
+    if data.startswith(b"\x89PNG\r\n\x1a\n"):
+        mime = "image/png"
+    elif data.startswith(b"\xff\xd8\xff"):
+        mime = "image/jpeg"
+    elif data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        mime = "image/webp"
+    else:
+        raise ValueError("This artifact is not a supported image. Follow its download URL instead.")
+    return ImageContent(type="image", mimeType=mime, data=base64.b64encode(data).decode("ascii"))
+
+
 def register(server, client, checked):
     def tool(function):
         return server.tool(structured_output=True)(checked(function))
@@ -235,6 +275,12 @@ def register(server, client, checked):
                                query: dict[str, str | int | bool] | None = None) -> dict[str, Any]:
         """Call a documented workflow action. Read foundry_workflows and the group's capabilities first."""
         return call(client, workflow, action, params, body, query)
+
+    @server.tool(structured_output=False)
+    @checked
+    def foundry_read_image_preview(url: str):
+        """Read a small Foundry PNG, JPEG or WebP as actual image content for review."""
+        return image_preview(client, url)
 
     @tool
     def foundry_garment_upload_character(run_id: str, path: str) -> dict[str, Any]:

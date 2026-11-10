@@ -3,6 +3,9 @@ import json
 import threading
 from pathlib import Path
 
+MODEL_SORTS = ("name_asc", "name_desc", "size_asc", "size_desc", "date_asc", "date_desc")
+
+
 class Preferences:
     def __init__(self, path):
         self.path = Path(path)
@@ -18,13 +21,16 @@ class Preferences:
                     "language": "en", "profile": "default",
                     "font_size": data.get("font_size","default") if data.get("font_size","default") in ("default","larger","large","extra-large","175","200") else "default",
                     "busy_motion": data.get("busy_motion", "system") if data.get("busy_motion", "system") in ("system", "full", "paused") else "system",
+                    "model_sort": data.get("model_sort") if data.get("model_sort") in MODEL_SORTS else None,
                     "auto_check_updates": data.get("auto_check_updates", True) is not False}
 
     def update(self, patch):
-        if not isinstance(patch, dict) or set(patch) - {"theme", "language", "profile", "auto_check_updates", "busy_motion", "font_size"}:
+        if not isinstance(patch, dict) or set(patch) - {"theme", "language", "profile", "auto_check_updates", "busy_motion", "font_size", "model_sort"}:
             raise ValueError("Only supported interface preferences can be saved here.")
         if patch.get("font_size","default") not in ("default","larger","large","extra-large","175","200"):
             raise ValueError("Choose Default or one of the supported text percentages.")
+        if "model_sort" in patch and patch["model_sort"] not in MODEL_SORTS:
+            raise ValueError("Choose a supported model sort order.")
         if "auto_check_updates" in patch and not isinstance(patch["auto_check_updates"], bool):
             raise ValueError("Automatic update checks must be on or off.")
         if "theme" in patch and patch["theme"] not in ("light", "dark"):
