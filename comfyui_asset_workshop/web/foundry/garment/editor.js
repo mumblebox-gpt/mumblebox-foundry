@@ -1,16 +1,17 @@
+import {msg, setText, replaceContent} from "../i18n.js";
 import {el, button, field, hint} from '../dom.js';
 import {request} from '../services.js';
 import {centerOf, editCanvas, projectGuide} from './edit-canvas.js';
 
 const operations = {
-    pattern: ['Sewing pattern', 'Paint or erase areas on the flat pattern. The model will rebuild the garment from the edited guide.'],
-    silhouette: ['Silhouette', 'Set a view and brush the outline you want the garment to follow.'],
-    shape: ['3D points', 'Add, move or erase points. Change the view to work around the garment.'],
-    completion: ['Complete a partial garment', 'Erase the areas you want the model to fill. The points you keep guide the new garment.'],
-    mix: ['Mix parts from two garments', 'Keep a region of this design and add a region from another design or revision.'],
-    blend: ['Blend two seeds', 'Explore a garment between two noise seeds using the same description. Use different point counts to vary the density.'],
+    pattern: [msg("garment.sewing_pattern"), msg("garment.paint_or_erase_areas_on_the_flat_pattern_the_model_will_rebuild_the_garment")],
+    silhouette: [msg("garment.silhouette"), msg("garment.set_a_view_and_brush_the_outline_you_want_the_garment_to_follow")],
+    shape: [msg("garment.3d_points"), msg("garment.add_move_or_erase_points_change_the_view_to_work_around_the_garment")],
+    completion: [msg("garment.complete_a_partial_garment"), msg("garment.erase_the_areas_you_want_the_model_to_fill_the_points_you_keep_guide_the_new")],
+    mix: [msg("garment.mix_parts_from_two_garments"), msg("garment.keep_a_region_of_this_design_and_add_a_region_from_another_design_or_revisio")],
+    blend: [msg("garment.blend_two_seeds"), msg("garment.explore_a_garment_between_two_noise_seeds_using_the_same_description_use_dif")],
 };
-export const operationName = operation => operations[operation]?.[0] || 'Original generation';
+export const operationName = operation => operations[operation]?.[0] || msg("garment.original_generation");
 const coordinateMode = operation => operation === 'pattern' || operation === 'silhouette' ? 2 : 3;
 const viewDefaults = {azimuth: 0, elevation: 0};
 
@@ -146,34 +147,34 @@ export class GarmentEditor {
         const is2D = coordinateMode(this.mode) === 2;
         const objective = this.objectives[this.mode] ?? 'reconstruction';
         const completion = this.mode === 'completion' || this.mode === 'mix' || objective === 'completion';
-        const goal = is2D ? field('Guide behavior', el('select', {onchange: e => {
+        const goal = is2D ? field(msg("garment.guide_behavior"), el('select', {onchange: e => {
             this.objectives[this.mode] = e.target.value;
             this.settings.iterations = undefined;
             this.settings.rate = undefined;
             this.render();
-        }}, el('option', {value:'reconstruction', selected:objective === 'reconstruction'}, 'Match the whole guide'),
-            el('option', {value:'completion', selected:objective === 'completion'}, 'Fill missing areas')),
-        objective === 'completion' ? 'Erase the area you want the model to invent. Keep the parts you want it to follow.'
-            : 'Use this when your guide describes the whole design.') : null;
-        const keyboard = hint('Drag on the guide, or use arrow keys to position the brush and Enter to apply it. Shift plus an arrow moves nearby points with the Move tool.');
+        }}, el('option', {value:'reconstruction', selected:objective === 'reconstruction'}, msg("garment.match_the_whole_guide")),
+            el('option', {value:'completion', selected:objective === 'completion'}, msg("garment.fill_missing_areas"))),
+        objective === 'completion' ? msg("garment.erase_the_area_you_want_the_model_to_invent_keep_the_parts_you_want_it_to_fo")
+            : msg("garment.use_this_when_your_guide_describes_the_whole_design")) : null;
+        const keyboard = hint(msg("garment.drag_on_the_guide_or_use_arrow_keys_to_position_the_brush_and_enter_to_apply"));
         keyboard.id = 'garment-edit-keys-' + this.id;
-        const count = el('p', {class:'muted', role:'status'}, this.guide.length.toLocaleString() + ' guide points');
-        const tools = ['paint', 'erase', 'move'].map(name => button(name[0].toUpperCase() + name.slice(1), event => {
+        const count = el('p', {class:'muted', role:'status'}, msg("garment.guide_points", {value1: this.guide.length.toLocaleString()}));
+        const tools = ['paint', 'erase', 'move'].map(name => button(msg("garment." + name), event => {
             this.tool = name;
             tools.forEach((control, i) => control.setAttribute('aria-pressed', String(['paint','erase','move'][i] === name)));
         }, {'aria-pressed': String(this.tool === name)}));
-        this.undo = button('Undo', () => {this.guide = this.history.pop();this.render();}, {disabled: !this.history.length});
-        const browse = el('details', {}, el('summary', {}, 'Advanced guidance'),
-            parameters('Follow edit', 'strength', .7, .1, .95, .05, 'Higher values follow the guide for more of the generation.'),
-            parameters('Guidance steps', 'steps', 100, 20, 1000, 10, 'More steps take longer.'),
-            parameters('Output drape points', 'points', edit.run.config.points, 100, 8192, 1),
-            parameters('Edit passes per step', 'iterations', completion ? 8 : 2, 1, 10, 1),
-            parameters('Learning rate', 'rate', completion ? .015 : .05, .005, .1, .005));
+        this.undo = button(msg("garment.undo"), () => {this.guide = this.history.pop();this.render();}, {disabled: !this.history.length});
+        const browse = el('details', {}, el('summary', {}, msg("garment.advanced_guidance")),
+            parameters(msg("garment.follow_edit"), 'strength', .7, .1, .95, .05, msg("garment.higher_values_follow_the_guide_for_more_of_the_generation")),
+            parameters(msg("garment.guidance_steps"), 'steps', 100, 20, 1000, 10, msg("garment.more_steps_take_longer")),
+            parameters(msg("garment.output_drape_points"), 'points', edit.run.config.points, 100, 8192, 1),
+            parameters(msg("garment.edit_passes_per_step"), 'iterations', completion ? 8 : 2, 1, 10, 1),
+            parameters(msg("garment.learning_rate"), 'rate', completion ? .015 : .05, .005, .1, .005));
         const editable = this.mode !== 'blend';
         const viewable = this.mode !== 'pattern' && editable;
         const pointView = coordinateMode(this.mode) === 3;
         const view = viewable ? el('div', {class:'garment-edit-pair'},
-            ...[['Horizontal view', 'azimuth', -180, 180],['Vertical view', 'elevation', -85, 85]].map(([label, key, low, high]) =>
+            ...[[msg("garment.horizontal_view"), 'azimuth', -180, 180],[msg("garment.vertical_view"), 'elevation', -85, 85]].map(([label, key, low, high]) =>
                 numeric(label, this.view[key], low, high, 5, value => {
                     const angle = Math.max(low, Math.min(high, value || 0));
                     if (pointView) {
@@ -187,27 +188,27 @@ export class GarmentEditor {
         const designs = this.mixSources ?? [];
         const option = (item, label) => el('option', {value:item.id, selected:item.id === this.regions.other}, label);
         const other = el('select', {onchange:e=>{this.regions.other=e.target.value;}},
-            el('option', {value:''}, 'Choose another garment or revision'),
-            versions.length ? el('optgroup', {label:'This design'}, versions.map(item =>
-                option(item, operationName(item.edit) + ' · seed ' + item.seed))) : null,
-            designs.length ? el('optgroup', {label:'Recent garment designs'}, designs.map(item =>
-                option(item, item.name + ' · seed ' + item.seed))) : null);
+            el('option', {value:''}, msg("garment.choose_another_garment_or_revision")),
+            versions.length ? el('optgroup', {label:msg("garment.this_design")}, versions.map(item =>
+                option(item, msg("garment.version_seed", {name:operationName(item.edit), seed:item.seed})))) : null,
+            designs.length ? el('optgroup', {label:msg("garment.recent_garment_designs")}, designs.map(item =>
+                option(item, msg("garment.version_seed", {name:item.name, seed:item.seed})))) : null);
         const region = key => el('select', {onchange:e=>{this.regions[key]=e.target.value;}},
-            el('option', {value:'upper', selected:this.regions[key] === 'upper'}, 'Upper half'),
-            el('option', {value:'lower', selected:this.regions[key] === 'lower'}, 'Lower half'));
+            el('option', {value:'upper', selected:this.regions[key] === 'upper'}, msg("garment.upper_half")),
+            el('option', {value:'lower', selected:this.regions[key] === 'lower'}, msg("garment.lower_half")));
         const keep = region('keep'), take = region('take');
-        const mix = this.mode === 'mix' ? el('div', {class:'garment-edit-mix'}, field('Second garment', other),
-            el('div', {class:'garment-edit-pair'}, field('Keep from current', keep), field('Take from second', take)),
-            button('Combine regions', () => this.mix(other.value, keep.value, take.value).catch(error => {
+        const mix = this.mode === 'mix' ? el('div', {class:'garment-edit-mix'}, field(msg("garment.second_garment"), other),
+            el('div', {class:'garment-edit-pair'}, field(msg("garment.keep_from_current"), keep), field(msg("garment.take_from_second"), take)),
+            button(msg("garment.combine_regions"), () => this.mix(other.value, keep.value, take.value).catch(error => {
                 this.error = error.message;this.render();
-            })), !versions.length && !designs.length ? hint('Create another garment or save a revision to mix parts.') : null) : null;
+            })), !versions.length && !designs.length ? hint(msg("garment.create_another_garment_or_save_a_revision_to_mix_parts")) : null) : null;
         const canvas = editable ? editCanvas({points:this.guide, dimensions:coordinateMode(this.mode), ...this.view,
             center:this.center, tool:()=>this.tool, radius:()=>this.brush, history:points=>this.push(points), keyboard,
-            update: points=>{this.guide=points;count.textContent=points.length.toLocaleString()+' guide points';}}) : null;
+            update: points=>{this.guide=points;setText(count, msg("garment.guide_points", {value1: points.length.toLocaleString()}));}}) : null;
         const blend = !editable ? el('div', {class:'garment-edit-pair'},
-            parameters('Second seed', 'second_seed', 43, 0, 2147483647, 1),
-            parameters('Second point count', 'second_points', edit.run.config.points, 100, 8192, 1),
-            parameters('Blend toward second seed', 'blend', .5, 0, 1, .05, '0 is the first seed. 1 is the second.')) : null;
+            parameters(msg("garment.second_seed"), 'second_seed', 43, 0, 2147483647, 1),
+            parameters(msg("garment.second_point_count"), 'second_points', edit.run.config.points, 100, 8192, 1),
+            parameters(msg("garment.blend_toward_second_seed"), 'blend', .5, 0, 1, .05, msg("garment.0_is_the_first_seed_1_is_the_second"))) : null;
         const payload = () => {
             const operation = this.mode;
             if (!editable) return {operation, second_seed:this.settings.second_seed, second_points:this.settings.second_points, blend:this.settings.blend};
@@ -215,16 +216,16 @@ export class GarmentEditor {
                 ...this.view, center:this.center, objective, strength:this.settings.strength, steps:this.settings.steps,
                 rate:this.settings.rate ?? (completion ? .015 : .05), iterations:this.settings.iterations ?? (completion ? 8 : 2)};
         };
-        this.element.replaceChildren(...[field('Edit mode', mode, operations[this.mode][1]), goal, view, mix,
+        replaceContent(this.element, ...[field(msg("garment.edit_mode"), mode, operations[this.mode][1]), goal, view, mix,
             editable ? el('div', {class:'actions garment-edit-tools'}, ...tools, this.undo,
-                button('Reset guide', () => this.reset())) : null,
-            canvas, editable ? field('Brush size', el('input', {type:'range', min:5, max:42, value:this.brush,
+                button(msg("garment.reset_guide"), () => this.reset())) : null,
+            canvas, editable ? field(msg("garment.brush_size"), el('input', {type:'range', min:5, max:42, value:this.brush,
                 oninput:e=>{this.brush=e.target.valueAsNumber;}})) : null,
             editable ? count : null, editable ? keyboard : null, blend,
-            field('Optional description', el('textarea', {rows:2, maxLength:500, value:this.prompt,
-                oninput:e=>{this.prompt=e.target.value;}}), 'Describe what to keep or change.'),
+            field(msg("garment.optional_description"), el('textarea', {rows:2, maxLength:500, value:this.prompt,
+                oninput:e=>{this.prompt=e.target.value;}}), msg("garment.describe_what_to_keep_or_change")),
             editable ? browse : null, this.error ? el('p', {role:'alert'}, this.error) : null,
-            button('Apply edit and save a version', () => edit.applyEdit(payload(), this.prompt, this.settings.points), {class:'primary'})].filter(Boolean));
+            button(msg("garment.apply_edit_and_save_a_version"), () => edit.applyEdit(payload(), this.prompt, this.settings.points), {class:'primary'})].filter(Boolean));
     }
 }
 

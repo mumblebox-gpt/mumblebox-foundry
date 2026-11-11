@@ -1,3 +1,5 @@
+import {sourceMessage} from "../i18n.js";
+import {msg, setText, replaceContent} from "../i18n.js";
 import {el,button,hint,field} from '../dom.js';
 import {request} from '../services.js';
 import {dialog} from '../dialogs.js';
@@ -8,16 +10,16 @@ export async function gallery(shell){
     const cap=await request('images/capabilities');
     const open=id=>{shell.openImageId=id;return shell.openImages('Create Images');};
     async function remove(ids){
-        const files=el('input',{type:'checkbox'}),detail=hint('Saved files stay on disk unless you select the separate file deletion option.');
-        dialog(shell,ids?'Remove selected images?':'Purge Image Gallery?',el('div',{},detail,
-            el('label',{class:'gallery-actions'},files,'Also delete this creation’s saved image files. Copies already used by the 3D workflow are preserved.')),[
-            {label:'Cancel',run:close=>close()},
-            {label:'Review removal',run:async close=>{
+        const files=el('input',{type:'checkbox'}),detail=hint(msg("images.saved_files_stay_on_disk_unless_you_select_the_separate_file_deletion_option"));
+        dialog(shell,ids?msg("images.remove_selected_images"):msg("images.purge_image_gallery"),el('div',{},detail,
+            el('label',{class:'gallery-actions'},files,msg("images.also_delete_this_creation_s_saved_image_files_copies_already_used_by_the_3d"))),[
+            {label:msg("images.cancel"),run:close=>close()},
+            {label:msg("images.review_removal"),run:async close=>{
                 const review=await request('images/removal-preview',{ids,delete_files:files.checked});close();
-                dialog(shell,'Confirm image removal',el('div',{},hint(review.entry_count+' creations · '+review.image_count+' image revisions.'),
-                    hint(review.delete_files?'These image files will also be deleted.':'Only the Gallery entries will be removed.')),[
-                    {label:'Cancel',run:done=>done()},
-                    {label:review.delete_files?'Delete entries and files':'Remove entries',run:async done=>{await request('images/remove',{token:review.token});done();selected.clear();state.cursor='';await load();}}
+                dialog(shell,msg("images.confirm_image_removal"),el('div',{},hint(msg("images.creations_image_revisions", {value1: review.entry_count, value2: review.image_count})),
+                    hint(review.delete_files?msg("images.these_image_files_will_also_be_deleted"):msg("images.only_the_gallery_entries_will_be_removed"))),[
+                    {label:msg("images.cancel"),run:done=>done()},
+                    {label:review.delete_files?msg("images.delete_entries_and_files"):msg("images.remove_entries"),run:async done=>{await request('images/remove',{token:review.token});done();selected.clear();state.cursor='';await load();}}
                 ]);
             }}]);
     }
@@ -25,44 +27,44 @@ export async function gallery(shell){
         const record=await request('images/'+id),sides=record.config.paired?['front','back']:['single'];
         const choices=sides.map(side=>{const revision=record.revisions.find(r=>r.id===record.accepted[side]);
             return el('figure',{class:'creator-frame'},el('figcaption',{},side),el('img',{src:revision.url,alt:record.config.name+' '+side}),
-                el('small',{},revision.size.join(' × ')+' px'));
+                el('small',{},msg("images.px", {value1: revision.size.join(' × ')})));
         });
         dialog(shell,record.config.name,el('div',{},el('div',{class:'creator-pair','data-paired':String(record.config.paired)},...choices),
             hint(record.config.category+' · '+new Date(record.created*1000).toLocaleString()),
-            el('details',{},el('summary',{},'Revisions and generation details'),...record.revisions.map(revision=>el('div',{class:'gallery-actions'},
+            el('details',{},el('summary',{},msg("images.revisions_and_generation_details")),...record.revisions.map(revision=>el('div',{class:'gallery-actions'},
                 el('a',{href:revision.url,target:'_blank',rel:'noopener noreferrer'},revision.side+' · '+new Date(revision.created*1000).toLocaleString()),
-                el('span',{class:'badge'},record.accepted[revision.side]===revision.id?'Current':'Retained revision'),
-                record.accepted[revision.side]!==revision.id?button('Restore revision',async()=>{await request('images/'+id+'/accept',{revision_id:revision.id,expected:record.accepted[revision.side]});await detail(id);}):null)),
+                el('span',{class:'badge'},record.accepted[revision.side]===revision.id?msg("images.current"):msg("images.retained_revision")),
+                record.accepted[revision.side]!==revision.id?button(msg("images.restore_revision"),async()=>{await request('images/'+id+'/accept',{revision_id:revision.id,expected:record.accepted[revision.side]});await detail(id);}):null)),
                 el('pre',{},JSON.stringify({model:record.config.model,settings:record.config.settings,loras:record.config.loras},null,2)))),[
-            {label:'Edit / Continue',primary:true,run:async close=>{close();await open(id);}},
-            {label:'Reuse settings',run:async close=>{const copy=await request('images/'+id+'/reuse',{});close();await open(copy.id);}},
-            {label:'Close',run:close=>close()}]);
+            {label:msg("images.edit_continue"),primary:true,run:async close=>{close();await open(id);}},
+            {label:msg("images.reuse_settings"),run:async close=>{const copy=await request('images/'+id+'/reuse',{});close();await open(copy.id);}},
+            {label:msg("images.close"),run:close=>close()}]);
     }
     function card(item){
         const thumbs=Object.entries(item.accepted).map(([side,id])=>el('img',{src:'/mumblebox-foundry/v1/images/'+item.id+'/files/'+id,alt:item.name+' '+side,loading:'lazy'}));
         return el('article',{class:'image-gallery-card'},el('div',{class:'pair-thumbnails'},...thumbs),el('div',{class:'card-copy'},
-            el('div',{class:'gallery-actions'},el('input',{type:'checkbox','aria-label':'Select '+item.name,checked:selected.has(item.id),onchange:e=>e.target.checked?selected.add(item.id):selected.delete(item.id)}),el('h3',{},item.name)),
+            el('div',{class:'gallery-actions'},el('input',{type:'checkbox','aria-label':msg("images.select", {name: item.name}),checked:selected.has(item.id),onchange:e=>e.target.checked?selected.add(item.id):selected.delete(item.id)}),el('h3',{},item.name)),
             hint((item.paired?'Front / Back pair':'Single image')+' · '+item.category),
-            el('div',{class:'actions'},button('View / Edit',()=>detail(item.id).catch(e=>shell.message(e.message,true))),
-                el('a',{href:'/mumblebox-foundry/v1/images/'+item.id+'/package',download:''},'Download Images'),
-                button('Delete',()=>remove([item.id]).catch(e=>shell.message(e.message,true)),{class:'danger'}))));
+            el('div',{class:'actions'},button(msg("images.view_edit"),()=>detail(item.id).catch(e=>shell.message(sourceMessage(e.message),true))),
+                el('a',{href:'/mumblebox-foundry/v1/images/'+item.id+'/package',download:''},msg("images.download_images")),
+                button(msg("images.delete"),()=>remove([item.id]).catch(e=>shell.message(sourceMessage(e.message),true)),{class:'danger'}))));
     }
     async function load(append=false){
-        const current=++sequence;message.textContent='Loading images…';
+        const current=++sequence;setText(message, msg("images.loading_images"));
         try{
             const result=await request('images?'+new URLSearchParams({...state,limit:24}));if(disposed||current!==sequence)return;
             if(!append)body.replaceChildren();body.append(...result.items.map(card));
-            message.textContent=body.childElementCount?body.childElementCount+' creations shown.':'No saved creations match these filters.';
-            more.replaceChildren(result.next_cursor?button('Load more',()=>{state.cursor=result.next_cursor;load(true);}):'');
-        }catch(error){message.textContent=error.message;}
+            setText(message, body.childElementCount?msg("images.creations_shown", {childElementCount: body.childElementCount}):msg("images.no_saved_creations_match_these_filters"));
+            replaceContent(more, result.next_cursor?button(msg("images.load_more"),()=>{state.cursor=result.next_cursor;load(true);}):'');
+        }catch(error){setText(message, sourceMessage(error.message));}
     }
     const filter=(key,label,choices)=>field(label,el('select',{onchange:e=>{state[key]=e.target.value;state.cursor='';load();}},
         ...choices.map(([value,name])=>el('option',{value,selected:state[key]===value},name))));
-    const search=el('input',{value:state.search,placeholder:'Search image names','aria-label':'Search image names',onchange:e=>{state.search=e.target.value;state.cursor='';load();}});
-    const host=el('section',{},el('div',{class:'gallery-actions'},button('Create images',()=>shell.openImages('Create Images'),{class:'primary'}),button('Refresh',()=>{state.cursor='';load();}),
-        button('Remove selected',()=>{if(!selected.size){message.textContent='Select at least one creation.';return;}remove([...selected]);}),button('Purge Gallery',()=>remove(null),{class:'danger'})),
-        el('div',{class:'gallery-filters'},field('Search',search),filter('category','Category',[['','All categories'],...cap.categories.map(c=>[c.id,c.name])]),
-            filter('kind','Image set',[['all','All'],['pair','Front / Back pairs'],['single','Single images']]),filter('sort','Order',[['newest','Newest first'],['oldest','Oldest first']])),message,body,more);
+    const search=el('input',{value:state.search,placeholder:msg("images.search_image_names"),'aria-label':msg("images.search_image_names"),onchange:e=>{state.search=e.target.value;state.cursor='';load();}});
+    const host=el('section',{},el('div',{class:'gallery-actions'},button(msg("images.create_images"),()=>shell.openImages('Create Images'),{class:'primary'}),button(msg("images.refresh"),()=>{state.cursor='';load();}),
+        button(msg("images.remove_selected"),()=>{if(!selected.size){setText(message, msg("images.select_at_least_one_creation"));return;}remove([...selected]);}),button(msg("images.purge_gallery"),()=>remove(null),{class:'danger'})),
+        el('div',{class:'gallery-filters'},field(msg("images.search"),search),filter('category',msg("images.category"),[['',msg("images.all_categories")],...cap.categories.map(c=>[c.id,c.name])]),
+            filter('kind',msg("images.image_set"),[['all',msg("images.all")],['pair',msg("images.front_back_pairs")],['single',msg("images.single_images")]]),filter('sort',msg("images.order"),[['newest',msg("images.newest_first")],['oldest',msg("images.oldest_first")]])),message,body,more);
     body.className='image-gallery-grid';state.cursor='';await load();
     return {element:host,dispose(){disposed=true;sequence++;shell.imageGalleryScroll=shell.content.scrollTop;}};
 }

@@ -1,3 +1,5 @@
+import {sourceText} from "../i18n.js";
+import {msg} from "../i18n.js";
 import {app} from '/scripts/app.js';
 
 const copy=value=>JSON.parse(JSON.stringify(value));
@@ -12,9 +14,9 @@ export function mergeHairBranch(workflow,template){
         const node=graph.nodes.find(n=>+n.id===id);
         if(node){
             if(node.type===source.type)continue;
-            if(id!==70002||node.type!=='HairDeckGenerate')throw Error('A reserved HairDeck node ID is occupied by another node. The graph was preserved.');
+            if(id!==70002||node.type!=='HairDeckGenerate')throw Error(msg("hair.a_reserved_hairdeck_node_id_is_occupied_by_another_node_the_graph_was_preser"));
             const values=node.widgets_values_named||{};
-            node.type=source.type;node.title=source.title;node.properties={...node.properties,'Node name for S&R':source.type};
+            node.type=source.type;node.title=sourceText(source.title);node.properties={...node.properties,'Node name for S&R':source.type};
             node.inputs=node.inputs.filter(i=>['model','external_image','transparent_mask'].includes(i.name));
             node.widgets_values=['',0,50,2,true,true].map((fallback,index)=>values[['image','seed','steps','cfg','generate_bones','colors'][index]]??fallback);
             node.widgets_values_named=Object.fromEntries(['image','seed','steps','cfg','generate_bones','colors'].map((key,i)=>[key,node.widgets_values[i]]));
@@ -32,7 +34,7 @@ export function mergeHairBranch(workflow,template){
         const [,from,fromSlot,to,toSlot,type]=source;
         if(graph.links.some(row=>+row[1]===+from&&row[2]===fromSlot&&+row[3]===+to&&row[4]===toSlot))continue;
         const target=graph.nodes.find(n=>+n.id===+to).inputs[toSlot];
-        if(target.link!=null)throw Error('A HairDeck input has a custom connection. The graph was preserved.');
+        if(target.link!=null)throw Error(msg("hair.a_hairdeck_input_has_a_custom_connection_the_graph_was_preserved"));
         const id=++nextLink;graph.links.push([id,from,fromSlot,to,toSlot,type]);target.link=id;
         graph.nodes.find(n=>+n.id===+from).outputs[fromSlot].links??=[];
         graph.nodes.find(n=>+n.id===+from).outputs[fromSlot].links.push(id);

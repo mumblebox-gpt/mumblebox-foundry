@@ -14,6 +14,12 @@ Install the bundled [Mumblebox Assets skill](../comfyui_asset_workshop/skills/mu
 
 The groups are `mesh` (Single Image and Turnaround), `guided`, `splat`, `hair`, `ccore` (Text and Image + Text), `garment`, `images`, and `workspace`. Workspace includes the packaged graph, History, preferences, model management, integration and maintenance controls. Model and file removal use the same preview tokens as the GUI and require the user's authorization for the listed items.
 
+## Keep the app and companion skill aligned
+
+At session start, read workspace.bootstrap for the app version, protocol and bundled skill revision. Read workspace.update_status for pending published releases. The skill's compatibility.json records its reviewed app version and protocol. A copied skill can lag behind an app update, so refresh both when appropriate.
+
+The agent should explain observed mismatches and available updates in the user's language, use live capabilities for current controls and avoid repeatedly interrupting an unchanged session. Interface language does not translate generation prompts.
+
 ## HairDeck workflow
 
 Use `foundry_hair_capabilities` before configuring hair. Import an authorized local image with `foundry_import_reference`, then pass its `filename` as the hair configuration's `image`. `foundry_hair_create` saves options without downloading or generating. Start `generate`, inspect saved variations with `foundry_hair_status`, and select a variation for `preview`, `motion_preview` or `export` with `foundry_hair_start`. The material and export operations reuse saved card/chain data. Reuse a request ID only for retries of the same operation. Cancel/show tools use the same owner and existing visible Foundry wizard. Static GLB is unrigged; VRM 0.x contains skinning and spring groups. The motion output is a video preview, not an animation clip.

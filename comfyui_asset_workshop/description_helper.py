@@ -445,8 +445,10 @@ def side_prompt(parts, view):
 
 
 def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None, temperature=.7,
-             retry_action=None, *, use_vision=True, writing_phase=None):
+             retry_action=None, *, use_vision=True, writing_phase=None, gpu_only=False, context_tokens=16384):
     global PROCESS
+    if gpu_only and memory.get_torch_device().type != "cuda":
+        raise ValueError("Translation requires an NVIDIA GPU and a CUDA-capable local helper runtime. Your description is unchanged.")
     if not models.DOWNLOAD_LOCK.acquire(blocking=False):
         raise ValueError("Another model download is running. Wait for it, then retry.")
     try:
@@ -481,9 +483,12 @@ def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None
     key = secrets.token_urlsafe(32)
     command = [str(executable), "--model", str(model),
                "--host", "127.0.0.1", "--port", str(port), "--api-key", key,
-               "--ctx-size", "16384", "--parallel", "1", "--fit", "on",
+               "--ctx-size", str(context_tokens), "--parallel", "1", "--fit", "off" if gpu_only else "on",
                "--fit-target", str(int(max(1, asset["settings"].get("extra_vram_headroom_gb", 0)) * 1024)),
                "--jinja", "--reasoning", "off", "--chat-template-kwargs", '{"enable_thinking":false}']
+    if gpu_only:
+        # Explicit full CUDA placement: no silent CPU/RAM fallback for translation.
+        command.extend(["--device", "CUDA0", "--gpu-layers", "all"])
     if projectors:
         command.extend(["--mmproj", str(projectors[0])])
     runtime_folder = executable.parent
@@ -505,6 +510,8 @@ def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None
                     with log_path.open("rb") as source:
                         source.seek(max(0, log_path.stat().st_size - 4000))
                         tail = source.read().decode("utf-8", errors="replace")
+                    if gpu_only:
+                        raise ValueError("The translation model could not load fully on the GPU. Choose Q4 or free GPU memory, then retry. Your description is unchanged. Details: " + tail[-1800:])
                     raise ValueError("Description assistant could not start: " + tail[-1800:])
                 try:
                     with urllib.request.urlopen(urllib.request.Request(base + "/health", headers=headers), timeout=3) as response:
@@ -516,7 +523,7 @@ def complete(asset, content, system=SYSTEM, max_tokens=768, response_format=None
                 raise ValueError("Description assistant took too long to load. Try Q4 precision in Settings.")
             names = ["Description assistant · " + activity.checkpoint_name(model)]
             names.extend("Description vision · " + activity.checkpoint_name(path) for path in projectors)
-            activity.update_models(key_id, [{"name": name, "state": "loaded"} for name in names])
+            activity.update_models(key_id, [{"name": name, "state": "loaded", **({"device": "cuda:0"} if gpu_only else {})} for name in names])
             STATE["phase"] = writing_phase or ("Preparing instructions for each angle" if response_format
                                                  else "Writing your suggested description")
             body = {"messages": [{"role": "system", "content": system}, {"role": "user", "content": content}],

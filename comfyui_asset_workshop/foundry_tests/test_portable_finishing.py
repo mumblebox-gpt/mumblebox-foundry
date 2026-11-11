@@ -2,9 +2,14 @@ import ast
 import dis
 import sys
 import unittest
+import importlib
+import types
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
+namespace = types.ModuleType("portable_foundry")
+namespace.__path__ = [str(ROOT)]
+sys.modules.setdefault("portable_foundry", namespace)
 
 class PortableFinishingTests(unittest.TestCase):
     def test_guided_camera_file_is_listed_once_in_readme(self):
@@ -18,7 +23,7 @@ class PortableFinishingTests(unittest.TestCase):
         self.assertEqual(links,['Metadata/cameras.json'])
 
     def test_quad_checkpoint_loading_does_not_shadow_mesh_extractor(self):
-        from finishing.quad_nodes import Hi3DQuadFinish
+        from portable_foundry.finishing.quad_nodes import Hi3DQuadFinish
         reads=[op for op in dis.get_instructions(Hi3DQuadFinish.finish)
                if op.argval=='arrays' and op.opname.startswith('LOAD_')]
         self.assertEqual(reads[0].opname,'LOAD_GLOBAL',
@@ -35,7 +40,7 @@ class PortableFinishingTests(unittest.TestCase):
 
     def test_package_contract_loads_without_experiment_sys_path(self):
         from finishing.package_catalog import parse_selection
-        from finishing.quad_nodes import Hi3DExportBundle
+        from portable_foundry.finishing.quad_nodes import Hi3DExportBundle
         selection=Hi3DExportBundle.selection(True,saved_print='asset.stl')
         self.assertEqual(set(selection.variants),{'print'})
 

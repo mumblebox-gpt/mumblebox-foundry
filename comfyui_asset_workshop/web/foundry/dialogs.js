@@ -1,10 +1,12 @@
+import {sourceMessage} from "./i18n.js";
+import {msg} from "./i18n.js";
 import {el, button} from "./dom.js";
 
 export function dialog(shell, title, content, actions = []) {
     shell.activeDialog?.close();
     const previous = shell.shadow.activeElement;
     const surface = el("section", {class:"dialog", role:"dialog", "aria-modal":"true", "aria-label":title, tabindex:-1},
-        el("div", {class:"dialog-title"}, el("h2", {}, title), button("Close", () => close(), {"aria-label":"Close " + title})),
+        el("div", {class:"dialog-title"}, el("h2", {}, title), button(msg("common.close"), () => close(), {"aria-label":msg("common.close_2", {title: title})})),
         el("div", {class:"dialog-content"}, content));
     const footer = el("div", {class:"dialog-actions"});
     const overlay = el("div", {class:"dialog-overlay"}, surface);
@@ -34,7 +36,7 @@ export function dialog(shell, title, content, actions = []) {
         const control = event.currentTarget;
         control.disabled = true;
         try { await action.run(close); }
-        catch (error) { shell.message(error.message, true); }
+        catch (error) { shell.message(sourceMessage(error.message), true); }
         finally { control.disabled = false; }
     }, {class:action.primary ? "primary" : ""}));
     if (actions.length) surface.append(footer);

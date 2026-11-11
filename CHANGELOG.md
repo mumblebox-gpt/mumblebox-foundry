@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-preview.22 — English and Simplified Chinese
+
+- Add English and 简体中文 interface choices with lightweight, in-place switching that preserves wizard inputs and loaded previews. Add a globe beside the language picker and local Chinese font fallbacks.
+- Localize workflow headings, controls, help, progress, model-resource explanations and package README content through shared, workflow-owned catalogs. Keep model names, file paths, technical identifiers and retained licenses intact.
+- Translate all twelve built-in CCORE examples, including the complete descriptions populated in the editor. Existing user edits are preserved when switching languages.
+- Add an author-guidance note and a separate **Translate to English** action in both CCORE wizards. It uses the existing local Qwen helper and shared resource/cancellation lifecycle for literal translation, with review and Restore before generation. Choose Q4 or Q8 with clear memory guidance and GPU-only execution; Q4 is the lighter default. A shared default-policy hook is ready for future memory profiles. Creative enhancement remains separate. Expose translation and precision through the MCP as well.
+- Rewrite the English README and add README.zh-CN.md for people and coding agents. Explain local workflows, setup, uses, limitations, community contributions, MCP and the growing companion skill.
+- Add app/skill compatibility metadata and guidance to check current capabilities and updates, explain mismatches in the user’s language, and refresh separately copied skill installations.
+
 ## 0.1.0-preview.21 — Shared Foundry controls and previews
 
 - Share the same CCORE presets, official HairDeck examples, Gallery handoffs and model sort preferences between the GUI and MCP.

@@ -1,3 +1,5 @@
+import {sourceMessage} from "../i18n.js";
+import {msg, setText, replaceContent} from "../i18n.js";
 import {problemPanel} from '../problem-panel.js';
 import {elapsedTime} from '../activity.js';
 import {api} from '/scripts/api.js';
@@ -11,12 +13,12 @@ import {editConcept} from './editor.js';
 import {exportChoices,validateExports} from '../wizard/export-choices.js';
 
 const clone=v=>JSON.parse(JSON.stringify(v));
-const titles=['Your object','Concept and measured guides','Enhance and choose views','Reconstruct, refine and texture','Output versions and formats','Your asset package'];
+const titles=[msg("guided.your_object"),msg("guided.concept_and_measured_guides"),msg("guided.enhance_and_choose_views"),msg("guided.reconstruct_refine_and_texture"),msg("guided.output_versions_and_formats"),msg("guided.your_asset_package")];
 const stagePage={concept:2,proxy:2,render:2,sheet:3,enhance_sheet:3,split:3,prepare:3,reconstruct:4,refine:4,texture:4};
-const stageNames={concept:'Creating the concept turnaround',proxy:'Building the rough mesh',render:'Rendering measured Blender views',sheet:'Assembling the guide sheet',
-    enhance_sheet:'Enhancing the measured views',split:'Separating views for review',prepare:'Preparing selected camera frames',reconstruct:'Reconstructing the mesh',
-    refine:'Refining and cleaning geometry',texture:'Texturing the finished mesh',balanced:'Preparing the balanced mesh',compact:'Preparing the compact mesh',
-    quads:'Building editable quad topology and baking detail',print:'Preparing print geometry',package:'Writing and checking your asset package'};
+const stageNames={concept:msg("guided.creating_the_concept_turnaround"),proxy:msg("guided.building_the_rough_mesh"),render:msg("guided.rendering_measured_blender_views"),sheet:msg("guided.assembling_the_guide_sheet"),
+    enhance_sheet:msg("guided.enhancing_the_measured_views"),split:msg("guided.separating_views_for_review"),prepare:msg("guided.preparing_selected_camera_frames"),reconstruct:msg("guided.reconstructing_the_mesh"),
+    refine:msg("guided.refining_and_cleaning_geometry"),texture:msg("guided.texturing_the_finished_mesh"),balanced:msg("guided.preparing_the_balanced_mesh"),compact:msg("guided.preparing_the_compact_mesh"),
+    quads:msg("guided.building_editable_quad_topology_and_baking_detail"),print:msg("guided.preparing_print_geometry"),package:msg("guided.writing_and_checking_your_asset_package")};
 export class GuidedWizard{
     constructor(shell,{resume=false,handoff=null,runId=null,binding=null}={}){
         this.shell=shell;this.node=shell.node;this.disposed=false;this.page=1;
@@ -27,8 +29,8 @@ export class GuidedWizard{
         this.id=runId||saved?.id||null;this.page=saved?.page||1;
         this.agentBinding=binding;
         if(handoff){this.draft.name=handoff.name;this.draft.original=handoff.references[0].filename;this.draft.image_creation=handoff.image_creation;this.draft.controls.asset_description=handoff.references[0].description||'';this.id=null;this.page=1;}
-        this.host=el('section',{class:'wizard guided-wizard','aria-label':'3D-Guided wizard'});
-        this.progressHandler=e=>{if(this.busyText&&this.active())this.busyText.textContent='Sampling step '+e.detail.value+' of '+e.detail.max;};
+        this.host=el('section',{class:'wizard guided-wizard','aria-label':msg("guided.3d_guided_wizard")});
+        this.progressHandler=e=>{if(this.busyText&&this.active())setText(this.busyText, msg("guided.sampling_step_of", {value1: e.detail.value, max: e.detail.max}));};
         api.addEventListener('progress',this.progressHandler);
     }
     async init(){
@@ -82,7 +84,7 @@ export class GuidedWizard{
                     if(current.finishing?.active||current.finishing?.package)this.page=6;
                     else if(current.current_stage)this.page=stagePage[current.current_stage]||this.page;
                 }if(current.finishing?.package){this.page=6;this.error='';}this.render();}
-                if(this.busyText&&current.dependency)this.busyText.textContent=[current.dependency.name,current.dependency.phase].filter(Boolean).join(' · ');
+                if(this.busyText&&current.dependency)setText(this.busyText, [current.dependency.name,current.dependency.phase].filter(Boolean).join(' · '));
             }
         }catch(error){this.error=error.message;if(!this.active())this.render();}
         if(!this.disposed)this.timer=setTimeout(()=>this.poll(),1800);
@@ -93,8 +95,8 @@ export class GuidedWizard{
         finally{this.working=false;if(!this.disposed){this.remember();this.render();}}
     }
     async save(){
-        if(!this.draft.original)throw Error('Upload or select a starting image.');
-        if(!this.draft.controls.asset_description?.trim())throw Error('Describe your object before starting.');
+        if(!this.draft.original)throw Error(msg("guided.upload_or_select_a_starting_image"));
+        if(!this.draft.controls.asset_description?.trim())throw Error(msg("guided.describe_your_object_before_starting"));
         if(!this.id){
             this.job=await request('guided/runs',{name:this.draft.name,original:this.draft.original,controls:this.draft.controls,
                 client_id:api.clientId||'',workflow_path:app.extensionManager.workflow.activeWorkflow.path,image_creation:this.draft.image_creation});
@@ -117,12 +119,12 @@ export class GuidedWizard{
     rocket(){
         const selection=clone(this.draft.selection);
         const error=el('p',{class:'error-panel',role:'alert',hidden:true});
-        dialog(this.shell,'Finish with Rocket Mode?',el('div',{},
-            hint('Run all remaining stages and selected exports automatically, without review stops. Rocket uses your current settings and selected views. If you have not reviewed the generated views, all four preset views are selected by default. Only a failure or cancellation stops the run.'),
+        dialog(this.shell,msg("guided.finish_with_rocket_mode"),el('div',{},
+            hint(msg("guided.run_all_remaining_stages_and_selected_exports_automatically_without_review_s")),
             exportChoices(this.cap.exports,selection),error),[
-            {label:'Keep working step by step',run:close=>close()},
-            {label:'Start Rocket Mode',primary:true,run:close=>{
-                try{validateExports(selection);}catch(e){error.textContent=e.message;error.hidden=false;return;}
+            {label:msg("guided.keep_working_step_by_step"),run:close=>close()},
+            {label:msg("guided.start_rocket_mode"),primary:true,run:close=>{
+                try{validateExports(selection);}catch(e){setText(error, sourceMessage(e.message));error.hidden=false;return;}
                 this.draft.selection=selection;this.remember();close();this.act(async()=>{
                     await this.save();await this.live();
                     this.job=await request('guided/runs/'+this.id+'/action',{operation:'rocket',selection,overrides:this.draft.finishing});
@@ -131,33 +133,33 @@ export class GuidedWizard{
             }}]);
     }
     go(page){this.page=page;this.remember();this.render();this.shell.content.scrollTop=0;}
-    image(url,label){return button(el('img',{src:url,alt:label,loading:'lazy'}),()=>dialog(this.shell,label,el('img',{src:url,alt:label,class:'enlarged-image'})),{class:'image-preview','aria-label':'Enlarge '+label});}
+    image(url,label){return button(el('img',{src:url,alt:label,loading:'lazy'}),()=>dialog(this.shell,label,el('img',{src:url,alt:label,class:'enlarged-image'})),{class:'image-preview','aria-label':msg("guided.enlarge", {label: label})});}
     artifact(key){return this.job?.artifacts?.[key]?.url;}
     previewArtifact(key){const value=this.job?.artifacts?.[key];return value?.preview?'/view?'+new URLSearchParams(value.preview):value?.url;}
-    nav({next,label='Continue',note='',back=this.page-1}={}){
+    nav({next,label=msg("guided.continue"),note='',back=this.page-1}={}){
         return el('footer',{class:'wizard-footer'},hint(note),el('div',{class:'actions'},
-            back>=1?button('Back',()=>this.go(back),{disabled:this.active()}):null,
+            back>=1?button(msg("guided.back"),()=>this.go(back),{disabled:this.active()}):null,
             next?button(label,()=>this.act(next),{class:'primary',disabled:this.active()}):null,
-            next&&this.draft.original?button('Rocket Mode',()=>this.rocket(),{disabled:this.active()}):null,
-            button('Save session',()=>this.act(()=>this.save()),{disabled:this.active()}),
-            this.active()?button('Cancel stage',()=>this.act(async()=>{this.job=await request('guided/runs/'+this.id+'/action',{operation:'cancel'});}),{class:'danger'}):null,
-            button('Choose a method',()=>{this.remember();this.shell.open('Choose a Workflow');},{disabled:this.active(),class:'quiet'})));
+            next&&this.draft.original?button(msg("guided.rocket_mode"),()=>this.rocket(),{disabled:this.active()}):null,
+            button(msg("guided.save_session"),()=>this.act(()=>this.save()),{disabled:this.active()}),
+            this.active()?button(msg("guided.cancel_stage"),()=>this.act(async()=>{this.job=await request('guided/runs/'+this.id+'/action',{operation:'cancel'});}),{class:'danger'}):null,
+            button(msg("guided.choose_a_method"),()=>{this.remember();this.shell.open('Choose a Workflow');},{disabled:this.active(),class:'quiet'})));
     }
     render(){
         if(this.disposed||!this.cap)return;
         this.previewDispose?.();this.previewDispose=null;
-        const rail=el('aside',{class:'wizard-rail','aria-label':'3D-Guided progress'},el('span',{class:'eyebrow'},'3D-GUIDED'),el('h3',{},'One shape.\nMeasured views.'),
+        const rail=el('aside',{class:'wizard-rail','aria-label':msg("guided.3d_guided_progress")},el('span',{class:'eyebrow'},msg("guided.3d_guided")),el('h3',{},msg("guided.one_shape_measured_views")),
             el('ol',{class:'wizard-steps'},...titles.map((t,i)=>el('li',{class:i+1===this.page?'current':'',...(i+1===this.page?{'aria-current':'step'}:{})},
                 el('span',{class:'step-number'},String(i+1).padStart(2,'0')),el('div',{},el('strong',{},t))))),
-            el('div',{class:'wizard-rail-note'},hint('Objects preset · four measured views. Defaults follow the completed chest workflow.')));
+            el('div',{class:'wizard-rail-note'},hint(msg("guided.objects_preset_four_measured_views_defaults_follow_the_completed_chest_workf"))));
         const pages=[startingPage,guidePage,enhancementPage,meshPage,exportPage,resultPage];
         this.busyText=el('span',{class:'muted'});
         const active=this.active();const error=this.error||this.job?.error||this.job?.finishing?.error;
-        this.host.replaceChildren(rail,el('div',{class:'wizard-panel'},el('div',{class:'page-head'},el('span',{class:'eyebrow'},'3D-GUIDED / PAGE '+this.page+' OF 6'),el('h2',{},titles[this.page-1])),
+        replaceContent(this.host, rail, el('div',{class:'wizard-panel'},el('div',{class:'page-head'},el('span',{class:'eyebrow'},msg("guided.3d_guided_page_of_6", {page: this.page})),el('h2',{},titles[this.page-1])),
             error?problemPanel(error):null,
-            active?el('section',{class:'wizard-busy',role:'status','aria-live':'polite'},el('strong',{},this.job?.preparing?'Preparing required resources':stageNames[this.job?.finishing?.stage||this.job?.current_stage]||'Starting selected stage'),this.busyText,
+            active?el('section',{class:'wizard-busy',role:'status','aria-live':'polite'},el('strong',{},this.job?.preparing?msg("guided.preparing_required_resources"):stageNames[this.job?.finishing?.stage||this.job?.current_stage]||'Starting selected stage'),this.busyText,
                 elapsedTime((this.job?.started_at||this.job?.finishing?.started_at)*1000),
-                hint(Object.keys(this.job?.completed||{}).length+' of 10 generation stages saved. Completed files remain available.')):null,
+                hint(msg("guided.of_10_generation_stages_saved_completed_files_remain_available", {value1: Object.keys(this.job?.completed||{}).length}))):null,
             pages[this.page-1](this)));
         this.remember();
     }

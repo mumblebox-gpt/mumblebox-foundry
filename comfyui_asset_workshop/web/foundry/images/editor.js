@@ -1,3 +1,4 @@
+import {msg} from "../i18n.js";
 import {openImageEditor} from '../../image-editor.js';
 import {el} from '../dom.js';
 import {request} from '../services.js';
@@ -5,9 +6,9 @@ import {showImageStage} from './graph.js';
 
 export async function editImage(c,side){
     const image=c.revision(side),other=c.revision(side==='front'?'back':'front');
-    if(!image)throw Error('Generate this image before opening the editor.');
+    if(!image)throw Error(msg("images.generate_this_image_before_opening_the_editor"));
     const scroll=c.shell.content.scrollTop;
-    const download=revision=>el('a',{href:revision.url,download:c.draft.name+'-'+revision.side+'.png'},'Download '+revision.side);
+    const download=revision=>el('a',{href:revision.url,download:c.draft.name+'-'+revision.side+'.png'},msg("images.download", {side: revision.side}));
     const modal=await openImageEditor({element:el,sourceURL:image.url,title:c.draft.name+' · '+side,
         model:c.cap.models.find(m=>m.id===c.run.config.model)?.label||c.run.config.model,container:c.shell.root,comparison:other?{url:other.url,label:other.side}:null,
         onSwitch:other?()=>editImage(c,other.side):null,download:()=>download(image),
@@ -22,7 +23,7 @@ export async function editImage(c,side){
             while(c.run.active){await new Promise(resolve=>setTimeout(resolve,1000));c.run=await request('images/'+c.id);showImageStage(c.run,c.node);}
             if(c.run.status!=='complete')throw Error(c.run.error||'The edit did not finish.');
             const revision=c.run.revisions.find(r=>r.id===c.run.candidate);
-            if(!revision)throw Error('The edit completed without a preview.');
+            if(!revision)throw Error(msg("images.the_edit_completed_without_a_preview"));
             return {...revision,recipe:revision.provenance,download:download(revision)};
         },
         accept:async candidate=>{c.run=await request('images/'+c.id+'/accept',{revision_id:candidate.id,expected:image.id});c.render();}

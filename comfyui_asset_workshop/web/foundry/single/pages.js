@@ -1,3 +1,5 @@
+import {sourceMessage} from "../i18n.js";
+import {msg, setText} from "../i18n.js";
 import {el,button,hint,field} from '../dom.js';
 import {capturePhoto,galleryReference,uploadReference,inputURL} from '../images/references.js';
 import {dialog} from '../dialogs.js';
@@ -5,10 +7,10 @@ import {request} from '../services.js';
 import {optionsPage} from '../wizard/pages.js';
 async function replace(w,file){if(!file)return;w.draft.references=[{...await uploadReference(file),role:'primary'}];delete w.draft.image_creation;w.remember();}
 async function gallery(w){
-    const list=el('div',{class:'hair-gallery'}),status=el('p',{role:'status',class:'muted'}),more=button('Load more',()=>load()),modal=dialog(w.shell,'Choose your reference',el('div',{},list,status,more));
+    const list=el('div',{class:'hair-gallery'}),status=el('p',{role:'status',class:'muted'}),more=button(msg("mesh.load_more"),()=>load()),modal=dialog(w.shell,msg("mesh.choose_your_reference"),el('div',{},list,status,more));
     let cursor='',loading=false;
     async function load(){
-        if(loading)return;loading=true;more.disabled=true;status.textContent='Loading saved images…';
+        if(loading)return;loading=true;more.disabled=true;setText(status, msg("mesh.loading_saved_images"));
         try{
             const data=await request('images?'+new URLSearchParams({limit:24,...(cursor?{cursor}:{})}));
             for(const item of data.items||[])for(const [side,id] of Object.entries(item.accepted||{})){
@@ -20,32 +22,32 @@ async function gallery(w){
                     w.remember();modal.close();
                 })));
             }
-            cursor=data.next_cursor||'';more.hidden=!cursor;status.textContent=list.children.length?'':'No saved images yet. Create an image or upload one.';
-        }catch(error){status.textContent=error.message;more.hidden=false;more.textContent='Retry';}
+            cursor=data.next_cursor||'';more.hidden=!cursor;setText(status, list.children.length?'':msg("mesh.no_saved_images_yet_create_an_image_or_upload_one"));
+        }catch(error){setText(status, sourceMessage(error.message));more.hidden=false;setText(more, msg("mesh.retry"));}
         finally{loading=false;more.disabled=false;}
     }
     await load();
 }
 export function singleInputPage(w){
-    const file=el('input',{type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':'Upload single reference',onchange:e=>w.act(()=>replace(w,e.target.files[0]))});
+    const file=el('input',{type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':msg("mesh.upload_single_reference"),onchange:e=>w.act(()=>replace(w,e.target.files[0]))});
     const ref=w.draft.references[0];
-    return el('div',{},hint('One image is all you need. A three-quarter view shows more of the shape; keep the complete subject in frame.'),
-        field('Asset name',el('input',{value:w.draft.name,maxLength:100,placeholder:'Name this asset','aria-label':'Asset name',oninput:e=>{w.draft.name=e.target.value;w.remember();}})),file,
+    return el('div',{},hint(msg("mesh.one_image_is_all_you_need_a_three_quarter_view_shows_more_of_the_shape_keep")),
+        field(msg("mesh.asset_name"),el('input',{value:w.draft.name,maxLength:100,placeholder:msg("mesh.name_this_asset"),'aria-label':msg("mesh.asset_name"),oninput:e=>{w.draft.name=e.target.value;w.remember();}})),file,
         el('div',{class:'upload-zone',ondragover:e=>{e.preventDefault();e.currentTarget.classList.add('dragging');},ondragleave:e=>e.currentTarget.classList.remove('dragging'),ondrop:e=>{
             e.preventDefault();e.currentTarget.classList.remove('dragging');if(e.dataTransfer.files.length!==1){w.error='Drop exactly one image.';w.render();return;}w.act(()=>replace(w,e.dataTransfer.files[0]));}},
-            el('strong',{},ref?'Your starting image':'Drop an image here'),
-            ref?w.image(inputURL(ref.filename),'Starting reference'):hint('PNG, JPEG or WebP · Up to 20 MB'),
-            el('div',{class:'actions'},button(ref?'Replace image':'Upload image',()=>file.click()),
-                button('Take a photo',()=>capturePhoto(w.shell,f=>w.act(()=>replace(w,f))),{disabled:!navigator.mediaDevices}),
-                button('Choose from Gallery',()=>gallery(w)),
-                button('Create Image',()=>{w.remember();w.shell.imageOrigin={method:'single-image',sessionId:w.sessionId};w.shell.openImages('Create Images');},{class:'primary'}))),
-        hint('No image? Create one from a description, then choose Use in 3D to return here. Text is used by the image creator; Pixal3D receives your chosen image.'),
-        el('details',{},el('summary',{},'How this method works'),hint('Pixal3D by Tencent ARC builds geometry from one view using the official ComfyUI recipe. Hi3D refines it against your reference, then Foundry cleans and textures the finished shape. Hidden surfaces are inferred.')),
-        w.nav({next:async()=>{if(!w.draft.references.length)throw Error('Choose or create an image first.');w.go(2);}}));
+            el('strong',{},ref?msg("mesh.your_starting_image"):msg("mesh.drop_an_image_here")),
+            ref?w.image(inputURL(ref.filename),msg("mesh.starting_reference")):hint(msg("mesh.png_jpeg_or_webp_up_to_20_mb")),
+            el('div',{class:'actions'},button(ref?msg("mesh.replace_image"):msg("mesh.upload_image"),()=>file.click()),
+                button(msg("mesh.take_a_photo"),()=>capturePhoto(w.shell,f=>w.act(()=>replace(w,f))),{disabled:!navigator.mediaDevices}),
+                button(msg("mesh.choose_from_gallery"),()=>gallery(w)),
+                button(msg("mesh.create_image"),()=>{w.remember();w.shell.imageOrigin={method:'single-image',sessionId:w.sessionId};w.shell.openImages('Create Images');},{class:'primary'}))),
+        hint(msg("mesh.no_image_create_one_from_a_description_then_choose_use_in_3d_to_return_here")),
+        el('details',{},el('summary',{},msg("mesh.how_this_method_works")),hint(msg("mesh.pixal3d_by_tencent_arc_builds_geometry_from_one_view_using_the_official_comf"))),
+        w.nav({next:async()=>{if(!w.draft.references.length)throw Error(msg("mesh.choose_or_create_an_image_first"));w.go(2);}}));
 }
 export function singleOptionsPage(w){
     const page=optionsPage(w);
-    page.firstChild.textContent='Pixal3D builds from your one reference. Hi3D refines the initial mesh using that same original image, followed by geometry cleanup.';
-    page.insertBefore(field('Geometry seed',el('input',{type:'number',value:w.draft.overrides.shape_seed??42,min:0,max:9007199254740976,'aria-label':'Geometry seed',onchange:e=>{w.draft.overrides.shape_seed=Number(e.target.value);w.remember();}}),'Keep the seed fixed to compare settings.'),page.lastChild);
+    setText(page.firstChild, msg("mesh.pixal3d_builds_from_your_one_reference_hi3d_refines_the_initial_mesh_using_t"));
+    page.insertBefore(field(msg("mesh.geometry_seed"),el('input',{type:'number',value:w.draft.overrides.shape_seed??42,min:0,max:9007199254740976,'aria-label':msg("mesh.geometry_seed"),onchange:e=>{w.draft.overrides.shape_seed=Number(e.target.value);w.remember();}}),msg("mesh.keep_the_seed_fixed_to_compare_settings")),page.lastChild);
     return page;
 }

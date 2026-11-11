@@ -1,3 +1,4 @@
+import {msg} from "../i18n.js";
 /** Desktop paint and point controls for the author's projected guide coordinates. */
 import {el} from '../dom.js';
 
@@ -21,7 +22,7 @@ export const centerOf = points => [0, 1, 2].map(i =>
 export function editCanvas({points, dimensions, azimuth, elevation, center, tool, radius, update, history, keyboard}) {
     const width = 560, height = 360;
     const canvas = el('canvas', {width, height, class: 'garment-guide-canvas', tabIndex: 0,
-        'aria-label': dimensions === 3 ? '3D point guide, projected from the selected view' : '2D garment guide',
+        'aria-label': dimensions === 3 ? msg("garment.3d_point_guide_projected_from_the_selected_view") : msg("garment.2d_garment_guide"),
         'aria-describedby': keyboard.id});
     const context = canvas.getContext('2d');
     let cursor = [width / 2, height / 2], last = cursor, pressed = false, frame;

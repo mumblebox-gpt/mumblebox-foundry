@@ -1,10 +1,12 @@
+import {sourceText} from "../i18n.js";
+import {msg} from "../i18n.js";
 import {app} from '/scripts/app.js';
 
 // Separate ID spaces and ownership tags protect Turnaround and HairDeck.
 export function syncGuidedBranch(recipe,owner,{offset=100000,replace=true}={}){
-    if(owner.graph!==app.graph)throw Error('Open the Foundry graph before continuing.');
+    if(owner.graph!==app.graph)throw Error(msg("guided.open_the_foundry_graph_before_continuing"));
     const entries=Object.entries(recipe).filter(([,n])=>!['control','repair_control'].includes(n._meta?.fvb_stage));
-    for(const [,n] of entries)if(!LiteGraph.registered_node_types[n.class_type])throw Error('Required node is not installed: '+n.class_type);
+    for(const [,n] of entries)if(!LiteGraph.registered_node_types[n.class_type])throw Error(msg("guided.required_node_is_not_installed", {value1: n.class_type}));
     const graph=app.graph;graph.extra??={};
     const origin=graph.extra.guided_origin||[Math.max(0,...graph._nodes.filter(n=>!n.properties?.guidedOwner).map(n=>n.pos[0]+n.size[0]))+1000,100];
     graph.extra.guided_origin=origin;
@@ -14,12 +16,12 @@ export function syncGuidedBranch(recipe,owner,{offset=100000,replace=true}={}){
     for(const [index,[id,definition]] of entries.entries()){
         const nativeId=Number(id)+offset;
         let n=graph.getNodeById(nativeId);
-        if(n&&n.properties?.guidedOwner!==owner.id)throw Error('Another workflow owns node '+nativeId);
+        if(n&&n.properties?.guidedOwner!==owner.id)throw Error(msg("guided.another_workflow_owns_node", {nativeId: nativeId}));
         if(n&&n.type!==definition.class_type){graph.remove(n);n=null;}
         if(!n){n=LiteGraph.createNode(definition.class_type);n.id=nativeId;graph.add(n);}
         n.properties.guidedOwner=owner.id;n.properties.guidedOffset=offset;
         n.properties.guidedStage=definition._meta?.fvb_stage||(offset===200000?'exports':'processing');
-        n.title='3D-Guided · '+(definition._meta?.title||definition.class_type);
+        n.title=sourceText(msg("guided.3d_guided_2", {value1: definition._meta?.title||definition.class_type}));
         n.mode=2;
         for(const [name,value] of Object.entries(definition.inputs||{}))if(!Array.isArray(value)){
             const widget=n.widgets?.find(w=>w.name===name);
@@ -30,7 +32,7 @@ export function syncGuidedBranch(recipe,owner,{offset=100000,replace=true}={}){
     }
     for(const [id,definition] of entries)for(const [name,value] of Object.entries(definition.inputs||{})){
         if(!Array.isArray(value)||value.length!==2)continue;
-        const source=made.get(String(value[0]));if(!source)throw Error('Missing guided connection '+value[0]);
+        const source=made.get(String(value[0]));if(!source)throw Error(msg("guided.missing_guided_connection", {value1: value[0]}));
         const n=made.get(id);let slot=n.inputs.findIndex(i=>i.name===name);
         if(slot<0){n.addInput(name,source.outputs[value[1]]?.type||'*');slot=n.inputs.length-1;}
         source.connect(value[1],n,slot);
@@ -66,7 +68,7 @@ export function setGuidedQuadAvailability(owner,enabled){
         const widget=node.widgets?.find(w=>w.name==='enabled');
         if(widget)widget.value=enabled;
         node.properties.guidedQuadDisabled=!enabled;
-        node.title=enabled?'3D-Guided · Quad retopology':'3D-Guided · Quad retopology — disabled (retained)';
+        node.title=sourceText(enabled?msg("guided.3d_guided_quad_retopology"):msg("guided.3d_guided_quad_retopology_disabled_retained"));
     }
     owner.graph.change?.();owner.graph.setDirtyCanvas(true,true);
 }

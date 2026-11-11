@@ -5,7 +5,7 @@ from aiohttp import web
 
 from .contract import EXAMPLE, IMAGE_MODE, MODEL_KEYS, TEXT_MODE, TOKEN_LIMITS, default_model_variant
 from .nodes import graph as compile_graph
-from .enhancement import enhancement_input
+from .enhancement import enhancement_input, translation_input, default_translation_precision, TRANSLATION_PRECISIONS, TRANSLATION_MODEL
 
 PREFIX = "/mumblebox-foundry/v1/ccore"
 EXAMPLES = json.loads(Path(__file__).with_name("examples.json").read_text(encoding="utf-8-sig"))
@@ -19,6 +19,8 @@ def register(routes, factory, endpoint):
 
         return {"viewer_module": viewer_module(), "example": EXAMPLE, "examples": EXAMPLES, "token_limits": TOKEN_LIMITS,
                 "model_variants": list(MODEL_KEYS), "default_model_variant": default_model_variant(),
+                "translation": {"model": TRANSLATION_MODEL, "precisions": TRANSLATION_PRECISIONS, "default_precision": default_translation_precision()},
+                "description_actions": ["enhance", "translate"], "recommended_prompt_language": "en",
                 "modes": [TEXT_MODE, IMAGE_MODE], "default_seed": 42, "default_max_tokens": TOKEN_LIMITS[-1]}
 
     @routes.post(PREFIX + "/enhance")
@@ -26,6 +28,12 @@ def register(routes, factory, endpoint):
     async def enhance(request):
         ident, prompt = enhancement_input(await read_object(request))
         return await factory().enhance(ident, prompt)
+
+    @routes.post(PREFIX + "/translate")
+    @endpoint
+    async def translate_description(request):
+        ident, prompt, precision = translation_input(await read_object(request))
+        return await factory().enhance(ident, prompt, operation="translate", precision=precision)
 
     @routes.post(PREFIX + "/enhance/{id}/cancel")
     @endpoint

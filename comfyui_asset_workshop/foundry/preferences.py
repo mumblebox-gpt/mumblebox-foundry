@@ -2,6 +2,7 @@
 import json
 import threading
 from pathlib import Path
+from .localization import SUPPORTED_LOCALES, locale_name
 
 MODEL_SORTS = ("name_asc", "name_desc", "size_asc", "size_desc", "date_asc", "date_desc")
 
@@ -18,7 +19,7 @@ class Preferences:
             except (FileNotFoundError, ValueError):
                 data = {}
             return {"theme": data.get("theme") if data.get("theme") in ("light", "dark") else None,
-                    "language": "en", "profile": "default",
+                    "language": locale_name(data.get("language")), "profile": "default",
                     "font_size": data.get("font_size","default") if data.get("font_size","default") in ("default","larger","large","extra-large","175","200") else "default",
                     "busy_motion": data.get("busy_motion", "system") if data.get("busy_motion", "system") in ("system", "full", "paused") else "system",
                     "model_sort": data.get("model_sort") if data.get("model_sort") in MODEL_SORTS else None,
@@ -39,8 +40,8 @@ class Preferences:
             raise ValueError("Choose system, full or paused busy animations.")
         if patch.get("profile", "default") != "default":
             raise ValueError("Only the Default memory profile is configured.")
-        if patch.get("language", "en") != "en":
-            raise ValueError("Translations are not available yet.")
+        if patch.get("language", "en") not in SUPPORTED_LOCALES:
+            raise ValueError("Choose a supported interface language.")
         with self.lock:
             data = {**self.read(), **patch}
             self.path.parent.mkdir(parents=True, exist_ok=True)

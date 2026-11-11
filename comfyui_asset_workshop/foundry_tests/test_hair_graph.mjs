@@ -1,8 +1,9 @@
+import {msg, sourceText, sourceMessage, setText} from "../web/foundry/i18n.js";
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 const source=await readFile(new URL('../web/foundry/hair/graph.js',import.meta.url),'utf8');
-const merge=new Function(source.replace(/^import .*;\r?\n/gm,'').replaceAll('export ','')+';return mergeHairBranch;')();
+const merge=new Function("msg","sourceText",source.replace(/^import .*;\r?\n/gm,'').replaceAll('export ','')+';return mergeHairBranch;')(msg,sourceText);
 const full=JSON.parse(await readFile(new URL('../workflows/Mumblebox 3D Asset Foundry.json',import.meta.url),'utf8'));
 const ids=new Set([70000,70001,70002,70003,70004,70005]);
 const template={nodes:full.nodes.filter(n=>ids.has(+n.id)),links:full.links.filter(l=>ids.has(+l[1])&&ids.has(+l[3])),groups:full.groups.filter(g=>g.title.startsWith('HAIR /'))};

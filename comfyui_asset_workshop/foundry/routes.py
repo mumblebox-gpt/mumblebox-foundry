@@ -12,6 +12,7 @@ from .artifacts import owned_path, open_folder
 from .catalog import catalog
 from .library import Library
 from .preferences import Preferences
+from .localization import source_message
 from .receipts import sync
 
 PREFIX = "/mumblebox-foundry/v1"
@@ -27,11 +28,12 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
                 if isinstance(result, web.StreamResponse): return result
                 return web.json_response(result, headers={"Cache-Control": "no-store"})
             except (ValueError, KeyError, TypeError, json.JSONDecodeError) as error:
-                return web.json_response({"error": str(error) if isinstance(error, ValueError) else "The request was incomplete."}, status=400)
+                return web.json_response({"error": str(error) if isinstance(error, ValueError) else "The request was incomplete.",
+                                          "error_i18n": source_message(str(error) if isinstance(error, ValueError) else "The request was incomplete.")}, status=400)
             except OSError:
-                return web.json_response({"error": "The saved files could not be accessed. Check their location and try again."}, status=409)
+                return web.json_response({"error": "The saved files could not be accessed. Check their location and try again.", "error_i18n": source_message("The saved files could not be accessed. Check their location and try again.")}, status=409)
             except Exception:
-                return web.json_response({"error": "The Foundry operation could not finish. Your workflow has not been changed."}, status=500)
+                return web.json_response({"error": "The Foundry operation could not finish. Your workflow has not been changed.", "error_i18n": source_message("The Foundry operation could not finish. Your workflow has not been changed.")}, status=500)
         return wrapped
 
     if garment_factory:
@@ -105,7 +107,9 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
     @endpoint
     async def bootstrap(request):
         data=catalog();data["workflow"]["wizard"]=bool(wizard_factory)
-        return {"version": VERSION, "preferences": preferences.read(), **data,
+        skill_path = Path(__file__).resolve().parents[1] / "skills" / "mumblebox-assets" / "compatibility.json"
+        skill = json.loads(skill_path.read_text(encoding="utf-8"))
+        return {"version": VERSION, "preferences": preferences.read(), "agent": {"protocol": 1, "bundled_skill": skill}, **data,
                 "wizard_available": bool(wizard_factory),
                 "import_candidates": [{"id": i, "name": p.name} for i, p in candidates().items()]}
 

@@ -37,3 +37,11 @@ textarea{font:inherit;max-width:100%}
 
 .foundry[data-font-size="175"]{--font-scale:1.75}
 .foundry[data-font-size="200"]{--font-scale:2}
+
+.foundry:lang(zh-CN) {font-family:"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",system-ui,sans-serif;}
+.foundry:lang(zh-CN) h1,.foundry:lang(zh-CN) h2,.foundry:lang(zh-CN) h3 {font-family:inherit;letter-spacing:0;line-height:1.4;}
+
+/* The globe identifies the language control without another text label. */
+.language-picker{display:inline-flex;align-items:center;gap:.45rem;min-width:0}
+.language-picker>.ui-icon{flex:none;color:var(--muted)}
+.language-picker>.language{min-width:0;max-width:100%}

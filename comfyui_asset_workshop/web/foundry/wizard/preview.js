@@ -1,3 +1,4 @@
+import {msg} from "../i18n.js";
 import {el,hint} from "../dom.js";
 export async function mountMesh(container,url,module,filename) {
     // Earlier wizards supply owned URLs, without a separate display filename.
@@ -7,7 +8,7 @@ export async function mountMesh(container,url,module,filename) {
     filename??=(artifact.searchParams.get('filename')||artifact.searchParams.get('path')||artifact.pathname).split('/').at(-1);
     let factory=window.comfyAPI?.createLoad3d?.createLoad3d;
     if(!factory&&module)factory=(await import(module.url))[module.export];
-    if(!factory)throw Error("The native Comfy 3D viewer is not available.");
+    if(!factory)throw Error(msg("mesh.the_native_comfy_3d_viewer_is_not_available"));
     const viewer=module?.host?factory(container,createModelHost(window.comfyAPI.load3dHost.load3dHost,url,filename)):factory(container);
     let disposed=false;
     const resize=new ResizeObserver(()=>viewer.handleResize());
@@ -23,7 +24,7 @@ export async function mountMesh(container,url,module,filename) {
         // name. Owned artifact routes have neither a filename nor an extension.
         const loadURL=module?.host?url+(url.includes('?')?'&':'?')+'filename='+encodeURIComponent(filename):url;
         const status=await viewer.loadModel(loadURL,filename,{silent:true});
-        if(status&&status!=='loaded')throw Error('The mesh preview could not load: '+status);
+        if(status&&status!=='loaded')throw Error(msg("mesh.the_mesh_preview_could_not_load", {status: status}));
         if(disposed)return dispose;
         viewer.handleResize();viewer.fitToViewer();
         // Apply the native viewer's intended light multiplier, which its bare

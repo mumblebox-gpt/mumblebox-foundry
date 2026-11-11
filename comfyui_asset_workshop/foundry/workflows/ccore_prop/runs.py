@@ -83,19 +83,21 @@ class PropRuns:
         self.tasks[ident] = asyncio.create_task(self.execute(run, str(data.get("client_id", ""))[:100]))
         return self.public(run)
 
-    async def enhance(self, ident, prompt):
+    async def enhance(self, ident, prompt, operation="enhance", precision=None):
         from .... import description_helper
-        from .enhancement import write_brief
+        from .enhancement import write_description
 
+        if operation not in ("enhance", "translate"):
+            raise ValueError("Choose enhancement or translation.")
         if self.tasks or self.enhancement or self.native.active_ids() or self.other_busy():
             raise ValueError("Wait for the current Foundry workflow to finish before enhancing.")
         description_helper.claim(ident)
         self.enhancement = ident
         try:
             await self.lifecycle().barrier()
-            await self.lifecycle().release("before CCORE description enhancement")
+            await self.lifecycle().release("before CCORE description " + operation)
             description_helper.check_cancelled()
-            task = asyncio.create_task(asyncio.to_thread(write_brief, ident, prompt))
+            task = asyncio.create_task(asyncio.to_thread(write_description, ident, prompt, operation, precision))
             try:
                 text = await asyncio.shield(task)
             except asyncio.CancelledError:

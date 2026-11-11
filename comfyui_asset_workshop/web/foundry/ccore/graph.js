@@ -1,3 +1,5 @@
+import {sourceText} from "../i18n.js";
+import {msg} from "../i18n.js";
 import {app} from '/scripts/app.js';
 import {appMode, presentation} from '../app-mode.js';
 
@@ -6,20 +8,20 @@ export const ccoreTitle = image => image ? 'Create a Prop from Image + Text' : '
 const type = 'FoundryCCOREProp';
 
 export function syncPropGraph(owner, options = {}, image = false) {
-    if (owner.graph !== app.graph) throw Error('Open the Foundry graph before generating a CCORE prop.');
+    if (owner.graph !== app.graph) throw Error(msg("ccore.open_the_foundry_graph_before_generating_a_ccore_prop"));
     const graph = app.graph;
     graph.beforeChange();
     try {
         let node = graph._nodes.find(item => item.type === type && item.properties?.ccoreOwner === owner.id && Boolean(item.properties.ccoreImage) === image);
         if (!node) {
             node = LiteGraph.createNode(type);
-            if (!node) throw Error('The CCORE node is missing. Restart the local Foundry installation.');
+            if (!node) throw Error(msg("ccore.the_ccore_node_is_missing_restart_the_local_foundry_installation"));
             node.properties.ccoreOwner = owner.id;
             if (image) node.properties.ccoreImage = true;
             const right = Math.max(0, ...graph._nodes.map(item => item.pos[0] + item.size[0]));
             node.pos = [right + 600, 160];
             node.size = [425, 345];
-            node.title = image ? 'CCORE · Generate from image and text' : 'CCORE · Generate and export prop';
+            node.title=sourceText(image ? msg("ccore.ccore_generate_from_image_and_text") : msg("ccore.ccore_generate_and_export_prop"));
             node.mode = 2; // Foundry queues the selected workflow independently.
             graph.add(node);
             const group = new LiteGraph.LGraphGroup('CCORE / ' + ccoreTitle(image));

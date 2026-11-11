@@ -1,3 +1,5 @@
+import {sourceMessage} from "./i18n.js";
+import {msg, setText, bindAttribute, appendContent, prependContent, replaceContent} from "./i18n.js";
 import {maintenanceBusy} from './maintenance-state.js';
 import {el,button,link,hint,icon} from "./dom.js";
 import {request} from "./services.js";
@@ -7,9 +9,9 @@ export class UpdateChecks {
     constructor(shell) {
         this.shell=shell;
         this.listeners=new Set();
-        this.banner=el("aside",{class:"update-notice",hidden:true,"aria-label":"Foundry update"});
+        this.banner=el("aside",{class:"update-notice",hidden:true,"aria-label":msg("common.foundry_update")});
         shell.content.before(this.banner);
-        this.flag=button('Check for updates',async()=>{
+        this.flag=button(msg("common.check_for_updates"),async()=>{
             if(this.result?.state==='available'){if(!maintenanceBusy(shell.status))this.details();return;}
             try{await this.check(true);}catch(error){this.result={state:'unavailable',message:error.message};this.notify();}
         },{class:'update-flag'});
@@ -33,20 +35,20 @@ export class UpdateChecks {
     notify() {this.refreshFlag();for(const listener of this.listeners)listener();}
     refreshFlag(){
         if(!this.flag)return;const state=this.checking?'checking':this.result?.state||'unchecked';
-        const labels={current:'Up to date',available:'Update available',checking:'Checking…',unavailable:'Couldn’t check',unchecked:'Check for updates',disabled:'Check for updates',no_release:'No release yet'};
+        const labels={current:msg("common.up_to_date"),available:msg("common.update_available"),checking:msg("common.checking"),unavailable:msg("common.couldn_t_check"),unchecked:msg("common.check_for_updates"),disabled:msg("common.check_for_updates"),no_release:msg("common.no_release_yet")};
         const busy=state==='available'&&maintenanceBusy(this.shell.status);
         const key=[state,busy,this.result?.message].join('|');if(key===this.flagKey)return;this.flagKey=key;
-        this.flag.dataset.state=state;this.flag.replaceChildren(icon(state==='current'?'check':state==='available'?'download':'refresh',14),labels[state]||'Check for updates');
+        this.flag.dataset.state=state;replaceContent(this.flag,icon(state==='current'?'check':state==='available'?'download':'refresh',14),labels[state]||msg('common.check_for_updates'));
         this.flag.disabled=this.checking||busy;
-        this.flag.title=busy?'Wait for processing and downloads to finish before updating':state==='available'?'View the update and installation options':this.result?.message||'Check published GitHub releases';
+        bindAttribute(this.flag, "title", busy?msg("common.wait_for_processing_and_downloads_to_finish_before_updating"):state==='available'?msg("common.view_the_update_and_installation_options"):state === "current" ? msg("common.current_release_notice") : sourceMessage(this.result?.message)||msg('common.check_releases'));
     }
     refreshBanner() {this.banner.hidden=true;this.refreshFlag();}
     details() {
         const result=this.result;if(!result?.release_url||maintenanceBusy(this.shell.status))return;
-        const actions=el("div",{class:"actions"},link("Release notes on GitHub",result.release_url));
-        if(result.download_url)actions.prepend(link("Download update",result.download_url));
-        dialog(this.shell,"Foundry "+result.latest,el("div",{},
-            hint("In Pinokio, choose Update in the left sidebar to install and restart Foundry. For standalone ComfyUI, download the archive and follow INSTALL.md. Saved assets, models and settings are preserved."),
+        const actions=el("div",{class:"actions"},link(msg("common.release_notes_on_github"),result.release_url));
+        if(result.download_url)prependContent(actions, link(msg("common.download_update"),result.download_url));
+        dialog(this.shell,msg("common.foundry", {latest: result.latest}),el("div",{},
+            hint(msg("common.in_pinokio_choose_update_in_the_left_sidebar_to_install_and_restart_foundry")),
             actions,el("pre",{class:"release-notes"},result.notes||"See GitHub for release notes.")));
     }
     settings() {
@@ -56,29 +58,29 @@ export class UpdateChecks {
         const notes=el("div",{class:"actions"});
         const draw=()=>{
             const data=this.result;
-            status.textContent=data?.message||"No update check has been made yet.";
-            if(data?.checked_at)status.textContent+=" Last checked: "+new Date(data.checked_at*1000).toLocaleString()+".";
+            setText(status, sourceMessage(data?.message)||msg("common.no_update_check"));
+            if(data?.checked_at)setText(status, status.textContent + (msg("common.last_checked", {value1: new Date(data.checked_at*1000).toLocaleString()})));
             notes.replaceChildren();
-            if(data?.state==="available")notes.append(button("View update and download",()=>this.details(),{disabled:maintenanceBusy(shell.status)}));
+            if(data?.state==="available")appendContent(notes, button(msg("common.view_update_and_download"),()=>this.details(),{disabled:maintenanceBusy(shell.status)}));
         };
-        const check=button("Check for updates",async()=>{
-            check.disabled=true;status.textContent="Checking GitHub releases…";
-            try{await this.check(true);draw();}catch(error){status.textContent=error.message;}
+        const check=button(msg("common.check_for_updates"),async()=>{
+            check.disabled=true;setText(status, msg("common.checking_github_releases"));
+            try{await this.check(true);draw();}catch(error){setText(status, sourceMessage(error.message));}
             finally{check.disabled=false;}
         });
         automatic.addEventListener("change",async()=>{
             automatic.disabled=true;
             try{shell.data.preferences=await request("preferences",{auto_check_updates:automatic.checked},{method:"PATCH"});}
-            catch(error){automatic.checked=!automatic.checked;status.textContent=error.message;}
+            catch(error){automatic.checked=!automatic.checked;setText(status, sourceMessage(error.message));}
             finally{automatic.disabled=false;}
         });
-        const element=el("section",{class:"settings-section update-settings"},el("h3",{},"Updates"),
-            hint("Installed version: "+shell.data.version),
-            el("label",{class:"choice"},automatic,"Check for updates on startup"),
-            hint("Checks published GitHub versions on startup, with a five-minute cache. Check for updates requests a fresh result. Checks releases, not unpublished source changes. No images or project data are sent."),
+        const element=el("section",{class:"settings-section update-settings"},el("h3",{},msg("common.updates")),
+            hint(msg("common.installed_version", {version: shell.data.version})),
+            el("label",{class:"choice"},automatic,msg("common.check_for_updates_on_startup")),
+            hint(msg("common.checks_published_github_versions_on_startup_with_a_five_minute_cache_check_f")),
             el("div",{class:"actions"},check),status,notes);
         this.listeners.add(draw);draw();
-        request("updates/status").then(result=>{if(element.isConnected&&!this.pending){this.result=result;draw();}}).catch(error=>{if(element.isConnected)status.textContent=error.message;});
+        request("updates/status").then(result=>{if(element.isConnected&&!this.pending){this.result=result;draw();}}).catch(error=>{if(element.isConnected)setText(status, sourceMessage(error.message));});
         return {element,dispose:()=>this.listeners.delete(draw)};
     }
     dispose() {this.disposed=true;this.listeners.clear();this.banner.remove();this.flag.remove();}

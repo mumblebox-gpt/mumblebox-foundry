@@ -7,6 +7,16 @@ description: Use Mumblebox 3D Asset Foundry and its local MCP to create or recov
 
 Use Foundry for a new asset or reference when local generation can save modeling work. Use Blender directly for edits to existing scene objects, assembly, and precise modeling. Preserve the user's design, dimensions, intended use, and chosen reference. Start fresh unless asked to resume a saved result.
 
+## Start with the running app and current guidance
+
+On the first connection in a session, and after the app is updated or reconnected, use the workflow catalog to read workspace.bootstrap. Compare the returned app version and agent protocol with this skill's [compatibility record](compatibility.json). The record identifies the skill revision, required protocol and app versions last reviewed. Also read workspace.update_status. For a fresh result, use check_updates subject to the user's update-check preference.
+
+Explain an observed app/skill incompatibility, an app newer than this skill's reviewed version, or a pending update briefly in the user's language. State which version or revision you observed and where the user can refresh it. When version or update information is unavailable, describe that uncertainty. Use live capabilities for actual supported operations.
+
+Remind users at a useful point that new app and skill releases can improve guidance and add workflows. Updating Foundry refreshes its bundled skill. A skill copied into the agent's own skills folder must be refreshed separately. Offer the normal update route after active work finishes. Repeated polling and repeated reminders during one unchanged session are unnecessary.
+
+Use the user's conversation language for explanations and notices. Interface language, generation language and machine identifiers are separate. Preserve prompts, filenames, model names, tool names and parameter keys. Treat the language in workspace.bootstrap.preferences as a UI preference.
+
 Call `foundry_workflows` to discover groups and their actions. Read the selected group's capabilities before setting fields. Keep the Foundry graph open in the existing ComfyUI or Pinokio app. If the tools are unavailable, follow [Foundry MCP setup](../../../docs/AGENT-SETUP.md) in the distribution or [the published setup guide](https://github.com/mumblebox-gpt/mumblebox-foundry/blob/codex/initial-import/docs/AGENT-SETUP.md).
 
 - **Mesh:** Start with Single Image for a clear image, or create one in the image workflow. Use Turnaround when more views improve the starting material and 3D-Guided for a controlled set of object views. 3D-Guided needs its run attached with `show` before queueing.
@@ -19,3 +29,5 @@ Start work through the owned run action. Use the same request ID and payload if 
 
 Read status and previews before requesting the export. Use `foundry_read_image_preview` when you need to judge a recorded image visually. Follow the recorded artifact link to download a GLB, FBX or other appropriate asset locally. Import it through the existing Blender tools and inspect shape, scale, orientation and materials against the user's requirements. Treat generated geometry as a starting point. Verify the properties the project needs, such as print closure, deformation or collision, before calling it ready.
 
+
+For CCORE, the author recommends English generation requests. Built-in example descriptions follow the GUI language. For a non-English request, offer the CCORE translate action and review the returned English with the user before starting. Choose its q4 or q8 precision from live capabilities; q4 is the lighter default. Translation requires full GPU placement and keeps the description if loading fails; do not substitute CPU offloading. This literal translation uses the same local Qwen helper and resource lifecycle as enhancement, but must not invent design details. Preserve the original text; creative enhancement is a separate choice.

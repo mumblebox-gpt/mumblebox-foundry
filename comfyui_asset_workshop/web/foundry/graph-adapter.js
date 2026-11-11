@@ -1,3 +1,4 @@
+import {msg, setText} from "./i18n.js";
 import {app} from "/scripts/app.js";
 import {appMode,presentation,launchMessage} from "./app-mode.js";
 import {hasWork,retainSession} from "./wizard/session.js";
@@ -40,7 +41,7 @@ export function showHairWorkflow() {
 export function installReturnControl(node) {
     returnControl?.remove();
     const control = document.createElement("button");
-    control.textContent = "Return to Foundry";
+    setText(control, msg("common.return_to_foundry"));
     control.type = "button";
     control.style.cssText = "position:fixed;left:84px;bottom:20px;z-index:130;background:#1f2d26;color:#fff;border:1px solid #9aaf9b;border-radius:8px;padding:12px 18px;font:14px 'Segoe UI',sans-serif;cursor:pointer";
     control.onclick = () => showInterface(node);
@@ -60,7 +61,7 @@ export function syncWizardGraph(run,interfaceNode,branch){
         const widget=node?.widgets?.find(w=>w.name===name);
         if(widget&&value!==undefined){widget.value=value;widget.callback?.(value);}
     };
-    if(interfaceNode.graph!==app.graph)throw Error("Open the Foundry workflow before starting this stage.");
+    if(interfaceNode.graph!==app.graph)throw Error(msg("common.open_the_foundry_workflow_before_starting_this_stage"));
     if(branch)syncTurnaroundBranch(branch,interfaceNode);
     const s=run.settings;
     set(900,"image",run.references[0].filename);

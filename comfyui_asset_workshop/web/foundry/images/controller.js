@@ -1,3 +1,5 @@
+import {sourceMessage} from "../i18n.js";
+import {msg, setText} from "../i18n.js";
 import {api} from '/scripts/api.js';
 import {app} from '/scripts/app.js';
 import {el} from '../dom.js';
@@ -12,7 +14,7 @@ export function creatorOrigin(shell){
 
 export class ImageCreator{
     constructor(shell){
-        this.shell=shell;this.node=shell.node;this.host=el('section',{class:'image-creator','aria-label':'Image creator'});
+        this.shell=shell;this.node=shell.node;this.host=el('section',{class:'image-creator','aria-label':msg("images.image_creator")});
         this.origin=creatorOrigin(shell);
         this.singleOrigin=Boolean(this.origin);
         this.ccoreOrigin=this.origin==='ccore-image';
@@ -26,7 +28,7 @@ export class ImageCreator{
         if(this.singleOrigin)this.draft.category='general';
         this.openedSaved=!!shell.openImageId;this.id=shell.openImageId||saved.id;delete shell.openImageId;
         this.progress=e=>{if(this.run?.active&&(!e.detail?.prompt_id||e.detail.prompt_id===this.run.pending?.prompt_id)&&this.progressText)
-            this.progressText.textContent='Sampling '+e.detail.value+' of '+e.detail.max;};
+            setText(this.progressText, msg("images.sampling_of", {value1: e.detail.value, max: e.detail.max}));};
         api.addEventListener('progress',this.progress);
     }
     async init(){
@@ -55,7 +57,7 @@ export class ImageCreator{
     }
     async act(action){
         if(this.working)return;this.working=true;this.error='';
-        try{return await action();}catch(error){this.error=error.message;this.shell.message(error.message,true);}
+        try{return await action();}catch(error){this.error=error.message;this.shell.message(sourceMessage(error.message),true);}
         finally{this.working=false;this.remember();this.render();}
     }
     async configure(){
@@ -71,8 +73,8 @@ export class ImageCreator{
             const changed=JSON.stringify([run.status,run.active,run.stage,run.accepted,run.candidate,run.pending?.prompt_id,run.dependency])!==
                 JSON.stringify([this.run?.status,this.run?.active,this.run?.stage,this.run?.accepted,this.run?.candidate,this.run?.pending?.prompt_id,this.run?.dependency]);
             this.run=run;showImageStage(run,this.node);if(changed){this.error=run.error||'';this.render();}
-            if(this.connectionFailed){this.connectionFailed=false;this.shell.message('Image workflow connected.');}
-        }}catch(error){if(!this.disposed){this.connectionFailed=true;this.shell.message(error.message,true);}}
+            if(this.connectionFailed){this.connectionFailed=false;this.shell.message(msg("images.image_workflow_connected"));}
+        }}catch(error){if(!this.disposed){this.connectionFailed=true;this.shell.message(sourceMessage(error.message),true);}}
         if(!this.disposed)this.timer=setTimeout(()=>this.poll(),1500);
     }
     revision(side){return this.run?.revisions.find(r=>r.id===this.run.accepted[side]);}

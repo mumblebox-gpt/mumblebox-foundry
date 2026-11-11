@@ -1,22 +1,28 @@
+import {appendContent, bindAttribute, isMessage, msg} from "./i18n.js";
 export function el(tag, attrs = {}, ...children) {
     const node = document.createElement(tag);
     for (const [key, value] of Object.entries(attrs)) {
         if (value === undefined || value === null) continue;
-        if (key.startsWith("on")) node.addEventListener(key.slice(2), value);
+        if (isMessage(value)) {
+            bindAttribute(node, key, value);
+            if (key === "aria-label") node.dataset.i18nControl = value.key;
+        }
+        else if (key.startsWith("on")) node.addEventListener(key.slice(2), value);
         else if (key === "class") node.className = value;
         else if (key in node) node[key] = value;
         else node.setAttribute(key, value);
     }
-    node.append(...children.flat().filter(value => value !== null && value !== undefined));
+    appendContent(node, ...children);
     return node;
 }
 export const button = (label, action, attrs = {}) => el("button", {type:"button", onclick:action, ...attrs}, label);
 export const link = (label, href) => el("a", {href, target:"_blank", rel:"noopener noreferrer"}, label);
 export const hint = text => el("p", {class:"muted"}, text);
 export const field = (label, control, description) => el("label", {class:"field"}, el("span", {}, label), control, description ? hint(description) : null);
-export const bytes = value => Number.isFinite(value) ? (value / 1024 ** 3).toFixed(1) + " GB" : "Unavailable";
+export const bytes = value => Number.isFinite(value) ? (value / 1024 ** 3).toFixed(1) + " GB" : msg("common.unavailable");
 
 const paths = {
+    globe:'M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM3 12h18M12 3c5 5 5 13 0 18M12 3c-5 5-5 13 0 18',
     glasses:'M3 12l2-6h2M21 12l-2-6h-2M10 13h4M10 14a4 4 0 1 1-8 0 4 4 0 0 1 8 0m12 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
     chevron:'m6 9 6 6 6-6',
     check:'m5 12 4 4 10-10',

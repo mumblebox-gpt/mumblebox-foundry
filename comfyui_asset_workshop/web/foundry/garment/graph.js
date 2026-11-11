@@ -1,12 +1,14 @@
+import {sourceText} from "../i18n.js";
+import {msg} from "../i18n.js";
 import {app} from '/scripts/app.js';
 import {appMode, presentation} from '../app-mode.js';
 
 const types = ['FoundryGarmentParticles', 'FoundryGarmentSewMesh', 'FoundryGarmentDrape', 'FoundryGarmentFit'];
-const titles = ['Generate or edit a pattern', 'Sew and UV-map panels', 'Drape on character', 'Skin approved drape'];
+const titles = [msg("garment.generate_or_edit_a_pattern"), msg("garment.sew_and_uv_map_panels"), msg("garment.drape_on_character"), msg("garment.skin_approved_drape")];
 
 export function syncGarmentGraph(owner, config = {}, budget = 20000) {
     const graph = app.graph;
-    if (owner.graph !== graph) throw Error('Open the Foundry graph to use this garment workflow.');
+    if (owner.graph !== graph) throw Error(msg("garment.open_the_foundry_graph_to_use_this_garment_workflow"));
     graph.beforeChange();
     try {
         const existing = types.map(type => graph._nodes.find(n => n.type === type && n.properties?.garmentOwner === owner.id));
@@ -15,12 +17,12 @@ export function syncGarmentGraph(owner, config = {}, budget = 20000) {
             return existing[0];
         }
         const nodes = types.map((type, index) => existing[index] || LiteGraph.createNode(type));
-        if (nodes.some(node => !node)) throw Error('Reload ComfyUI to register the Garment Particles nodes.');
+        if (nodes.some(node => !node)) throw Error(msg("garment.reload_comfyui_to_register_the_garment_particles_nodes"));
         const right = Math.max(0, ...graph._nodes.map(n => n.pos[0] + n.size[0])) + 440;
         const left = existing[0]?.pos[0] ?? right;
         nodes.forEach((node, index) => {
             if (existing[index]) return;
-            node.title = 'Garment Particles · ' + titles[index];
+            node.title=sourceText(msg("garment.garment_particles", {value1: titles[index]}));
             node.properties.garmentOwner = owner.id;
             node.pos = [left + index * 425, 180];
             node.size = [385, index === 0 ? 410 : 305];
@@ -31,8 +33,8 @@ export function syncGarmentGraph(owner, config = {}, budget = 20000) {
         nodes[1].connect(0, nodes[2], nodes[2].findInputSlot('mesh_token'));
         nodes[2].connect(0, nodes[3], nodes[3].findInputSlot('mesh_token'));
         nodes[3].pos = [left + 3 * 425, 180];
-        nodes[3].title = 'Garment Particles · ' + titles[3];
-        nodes[0].title = 'Garment Particles · ' + titles[0];
+        nodes[3].title=sourceText(msg("garment.garment_particles", {value1: titles[3]}));
+        nodes[0].title=sourceText(msg("garment.garment_particles", {value1: titles[0]}));
         const present = graph._groups?.find(group => group.title === 'Garment Particles / Character clothing');
         if (present) present.size = [1715, 500];
         if (!present) {

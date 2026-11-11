@@ -40,7 +40,13 @@ def validate_archive(path):
             for dep in f["depends_on"]:
                 if dep not in by:raise ValueError("Required package dependency missing: "+dep)
         return {"file_count":len(names),"schema":m["schema"],"variants":[v["id"] for v in m["variants"]]}
-def publish_archive(catalog,root,archive,check_interrupt):
+def publish_archive(catalog,root,archive,check_interrupt,locale=None):
+    if locale is None:
+        try:
+            from ..foundry.localization import interface_locale
+        except ImportError:
+            from foundry.localization import interface_locale
+        locale=interface_locale()
     root=Path(root);archive=Path(archive);partial=archive.with_suffix(".zip.partial")
     if archive.exists() or partial.exists():raise FileExistsError("Package destination already exists")
     check_interrupt()
@@ -51,7 +57,7 @@ def publish_archive(catalog,root,archive,check_interrupt):
         if not p.is_file():raise FileNotFoundError("Required file missing: "+f.path)
         f.bytes=p.stat().st_size;f.sha256=digest(p)
     # The renderer sees the manifest record but not its own README record.
-    (root/"README.md").write_text(render_readme(catalog),encoding="utf-8",newline="\n")
+    (root/"README.md").write_text(render_readme(catalog,locale),encoding="utf-8",newline="\n")
     catalog.files.append(FileRecord("README.md","documentation",None,"Directory inventory and recorded asset specifications.","md","catalog",bytes=(root/"README.md").stat().st_size,sha256=digest(root/"README.md")))
     mp=root/MANIFEST;mp.parent.mkdir(parents=True,exist_ok=True)
     own=next(f for f in catalog.files if f.path==MANIFEST)

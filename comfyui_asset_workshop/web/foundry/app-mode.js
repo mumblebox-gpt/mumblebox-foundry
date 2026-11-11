@@ -1,3 +1,5 @@
+import {bindAttribute} from "./i18n.js";
+import {msg} from "./i18n.js";
 /** Opt-in application presentation. The graph node and shell remain the sole owners. */
 export function createAppPresentation(doc=document) {
     let current=null,container=null,anchor=null,previousStyle="",hidden=[];
@@ -20,7 +22,7 @@ export function createAppPresentation(doc=document) {
         current=node;previousStyle=host.style.cssText;
         anchor=doc.createComment("Foundry graph widget position");host.before(anchor);
         container=doc.createElement("main");container.id="mumblebox-foundry-app";
-        container.setAttribute("aria-label","Mumblebox 3D Asset Foundry");
+        bindAttribute(container, "aria-label", msg("common.mumblebox_3d_asset_foundry"));
         container.style.cssText="position:fixed;inset:0;z-index:2147483000;background:#11150f;overflow:hidden";
         for(const element of doc.body.children){
             hidden.push([element,element.inert,element.getAttribute("aria-hidden")]);

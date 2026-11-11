@@ -1,3 +1,7 @@
+# Preview 0.1.0-preview.22 validation
+
+English/Simplified Chinese localization, bilingual CCORE presets and the local literal-translation action were verified in the existing Comfy Desktop. [Localization validation](LOCALIZATION-VALIDATION.md) records the actual GUI, preview preservation, 200% font, translation fidelity, GPU memory and cancellation checks, with their limits.
+
 # Preview 0.1.0-preview.18 validation
 
 The installed standalone ComfyUI Desktop workflow loaded all 12 example descriptions and cleared the editor with Custom. Two real local Qwen enhancements exercised creative elaboration and preservation of strict requirements. Restore recovered the original draft and Stop preserved the current draft. The CCORE generator received the edited description verbatim.

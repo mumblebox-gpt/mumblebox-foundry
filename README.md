@@ -1,73 +1,99 @@
 # Mumblebox 3D Asset Foundry
 
-**Local AI tools for creating 3D assets—with guided steps, useful defaults and room to experiment.**
+[English](README.md) · [简体中文](README.zh-CN.md)
 
-You don’t need to know ComfyUI or build a node graph. [Install with Pinokio](docs/PINOKIO.md), let the installer set up the software and dependencies, and work in Foundry’s interface. ComfyUI runs underneath; you can open the graphs whenever you want more control.
+**Make images and 3D assets locally, on your own or alongside your coding agent.**
 
-Foundry brings together work from talented researchers and the open-source community. Our contribution is a practical toolbox: connected workflows, clear choices, previews and saved results.
+Foundry brings practical AI workflows into guided wizards with useful defaults, previews and saved results. You can start without knowing ComfyUI. The Pinokio installer configures the software and dependencies. The underlying graphs stay available when you want more control.
 
-> **Windows / NVIDIA preview.** Preview **0.1.0-preview.21** shares more controls and previews between the Foundry wizards and MCP. It includes the companion skill and three editable quad solvers. See the [changelog](CHANGELOG.md) and [published downloads](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) for release availability.
+Explore game props, character parts, hair, splats and assets for creative projects or 3D printing. Inspect each result for its intended use. Generated geometry can still need editing, retopology, fitting or print preparation.
 
-**Create a Prop from Text · CCORE** turns a description into a stylized prop with a rotatable preview and GLB download. Start from **Choose a Workflow → Open Prop Wizard**, choose one of 12 editable examples, or write your own brief. **Enhance description** optionally uses Foundry’s local Qwen assistant to develop the design. **Create a Prop from Image + Text · CCORE** adds one reference image, with the option to create it in the wizard. Describe what to keep and what to change. Both wizards run locally on an NVIDIA GPU, check available memory before generating, and offer smaller settings when available. Foundry downloads the selected model and, for Image + Text, the vision projector on first use. The ZIP adds Foundry’s file catalog and upstream credits.
+[Install with Pinokio](docs/PINOKIO.md) · [Published downloads](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [Agent setup](docs/AGENT-SETUP.md) · [Changelog](CHANGELOG.md)
 
-## Choose your starting point
+## Give your coding agent a head start
 
-| Workflow | What it makes | When to choose it |
+Ask an agent to use Foundry to generate a starting asset, then continue together in Blender or another 3D editor.
+
+- **The MCP gives the agent tools.** Discover workflows and settings, submit jobs, follow progress, inspect previews and retrieve exports through the same services as the GUI.
+- **The companion skill provides guidance.** It helps the agent choose a workflow, respect inputs and memory limits, review results and bring an asset into the next tool.
+- **Generation runs locally.** The agent can work on independent tasks while Foundry processes a job. People can review results in the wizard and continue from the same saved work.
+
+Our aim is to reduce repetitive modeling and save time and agent tokens. Actual savings depend on the asset, workflow and amount of finishing required. Start with the [MCP and companion skill guide](docs/AGENT-SETUP.md). The skill is a growing foundation, informed by real projects and community feedback.
+
+## Choose a workflow
+
+| Workflow | What you get | When to choose it |
 | --- | --- | --- |
-| **Single Image or Text** | A refined, cleaned and textured mesh from one image. Create that image from text if you need one. Powered by **Pixal3D, Hi3D and TRELLIS.2**. | The simplest, most direct mesh workflow, with fewer stages and models. A clear three-quarter reference is a good start. |
-| **Turnaround** | Four generated views, reviewed before reconstruction, refinement and texturing. Uses **Qwen or FLUX, Pixal3D, Hi3D and TRELLIS.2**. | A strong starting point for humanoids. Vehicle, prop and creature recipes are still being improved. |
-| **3D-Guided** | A proxy mesh and measured camera views guide reconstruction, followed by refinement and texturing. Uses **Pixal3D, MoGe 2, Qwen, Hi3D and TRELLIS.2**. | Standalone objects where choosing and checking the views matters. More processing; comparative quality is still being evaluated. |
-| **Splat & Solid** | An **Idol** Gaussian splat from **Sperid Labs**, plus cleaned companion geometry and optional Hi3D refinement. | Detailed splat appearance with separate lightweight geometry. Includes orbit previews and mesh comparisons. |
-| **HairDeck Stylized Hair** | Editable stylized hair cards, materials and optional spring-bone VRM exports. Powered by **HairDeck**, with **FengLairh’s ComfyUI integration**. | Create and fit a hairstyle from a clear reference. Review variations, processing sheets, chains, materials and a head-turn preview. |
-| **Create Images** | Single images or front/back reference pairs, with editing, compatible LoRAs and a saved Gallery. Uses supported **Qwen and Black Forest Labs** models. | Make a reference, experiment with an idea, or create images without continuing into 3D. |
+| **Single Image or Text** | One image through Pixal3D geometry, Hi3D refinement, cleanup, TRELLIS.2 texturing and selected exports. Create the image from text inside the wizard if needed. | The most direct mesh workflow, with fewer stages and models. Try a clear three-quarter reference. |
+| **Turnaround** | Generate and review four views with supported Qwen or FLUX models, then reconstruct with Pixal3D and finish with Hi3D and TRELLIS.2. | Humanoids are a strong starting point. Vehicle, prop and creature recipes are still being improved. |
+| **3D-Guided** | A Pixal3D proxy, measured Blender views, MoGe 2 estimates and Qwen guidance before reconstruction and finishing. | Objects where choosing and checking camera views matters. More processing is involved. |
+| **Splat & Solid** | An Idol Gaussian splat from Sperid Labs, plus separate cleaned companion geometry and optional Hi3D refinement. | Rich appearance alongside lighter geometry, with orbit previews and mesh comparisons. |
+| **CCORE Text** | A procedural stylized prop described in words, 12 editable examples, optional local Qwen description enhancement, a 3D preview and GLB export. | Tools, furniture and individual game props. |
+| **CCORE Image + Text** | One image and a description through CCORE's vision projector and generation path. Create a reference inside the wizard if needed. | Keep or change features from a photo, sketch or render. |
+| **HairDeck** | Hair cards, variations, processing sheets, fitting, materials, optional spring chains, motion preview and selected GLB/VRM exports. | Clear hairstyle references. Powered by HairDeck and FengLairh's ComfyUI integration. |
+| **Garment Particles — experimental** | Clothing generation, author-supported editing, sewing patterns, mesh preparation, experimental Blender draping and character handoff. | Explore clothing designs. Fit and deformation require careful inspection and further work. |
+| **Create Images** | Single images or front/back pairs, editing, compatible LoRAs and a saved Gallery. | Prepare a reference for another wizard or keep the image itself. |
 
-Each method has its own wizard and independent graph section. Existing workflows remain available. Cards marked **Coming soon**—mesh repair, video, turntable capture and action figures—are future work.
+Each workflow has its own wizard and independently owned graph section. Cards marked Coming soon describe future work.
 
-## Get started
+## Start creating
 
-1. Install [Pinokio](https://pinokio.co/) and follow the [Foundry installation guide](docs/PINOKIO.md) to add [this repository](https://github.com/mumblebox-gpt/mumblebox-foundry).
-2. Choose **Install**, then **Start Foundry**. **Open Foundry** opens the interface inside Pinokio.
-3. Start with **Single Image or Text**. Upload or drop one image, take a webcam photo, choose from Gallery, or select **Create Image** to make a reference from a description.
-4. Use the recommended defaults, review the mesh, and choose your exports. **Rocket Mode** runs the remaining selected stages without optional review stops.
+1. Install [Pinokio](https://pinokio.co/) and follow the [Foundry install guide](docs/PINOKIO.md) to add this repository.
+2. Choose **Install**, then **Start Foundry** and **Open Foundry**.
+3. Open **Single Image or Text**. Upload or drop an image, use your webcam, choose from Gallery, or create an image from a description.
+4. Review previews and choose outputs. **Rocket Mode** can run the remaining selected stages without optional review stops.
 
-Already use ComfyUI? Follow [manual installation](INSTALL.md) and open `Mumblebox 3D Asset Foundry.json`. The [agent setup guide](docs/AGENT-SETUP.md) covers the local MCP tools and bundled companion skill for Blender workflows.
+For an existing ComfyUI installation, follow [INSTALL.md](INSTALL.md), then open Mumblebox 3D Asset Foundry.json. Installation prepares software. The selected workflow prepares missing weights before processing on first use. Opening Foundry does not download the whole library. Allow disk space for weights, working files and outputs.
 
-The installer prepares software. Missing model weights for your selected workflow are downloaded before processing on first use; opening Foundry alone does not download every model. Keep enough disk space for weights, working files and outputs.
+## Review and export
 
-## Review, refine and keep your results
+Available outputs depend on the workflow. Wizards expose supported choices such as GLB, FBX, OBJ, BLEND, STL, SPZ, textures, previews and ZIP packages. Detailed and reduced meshes can include UVs and baked maps.
 
-- **Interactive previews:** inspect the initial, refined and finished meshes. Rotate and zoom, switch output versions, and return through History without regenerating.
-- **Useful outputs:** detailed and reduced triangle meshes, textures, baking and selected GLB, FBX, OBJ, BLEND or STL formats where supported. The wizard shows the choices available for each method.
-- **Floor placement:** Single Image can level a near-upright support pose, place the object on the floor without rotating it, or keep its original orientation. The measured rigid correction is applied after baking to the actual files and final preview. Source checkpoints stay unchanged; automatic placement does not reshape uneven feet or infer the intended pose of every object.
-- **Optional editable quads:** Single Image and Turnaround can add quad-preserving authoring files. Choose QuadriFlow or Instant Meshes on the **CPU**, or CyberRemesher on **NVIDIA CUDA**. QuadriFlow can take several minutes. Turning quads off still produces textured triangle assets. GLB previews triangulate quads; they do not preserve editable quad faces.
-- **Honest geometry checks:** cleanup and export reports describe the actual mesh. An editable quad result is a starting point, not a promise of animation-ready edge flow. When QuadriFlow opens an already closed component, a reported topology-preserving fallback can retain closure. Printing and collision still need checks for their intended use.
-- **Saved packages:** selected files, measurements, a readable README, checksums and model/tool credits. Source images, prompts and private working files are kept out of the ordinary asset package.
+**Editable quads are optional.** Single Image and Turnaround offer QuadriFlow and Instant Meshes on the CPU, or CyberRemesher on NVIDIA CUDA. Their advanced controls and guidance are available in the wizard. CPU spikes during QuadriFlow are normal, and processing can take time. Turning quads off still produces textured triangle assets. GLB previews use triangles, while authoring exports preserve supported quad faces.
 
-HairDeck creates stylized volumetric hair cards—not strand Groom or a complete character rig. Static GLB and spring-bone VRM are separate export choices. Its head-turn video demonstrates hair motion; it does not animate a complete character. HairDeck software is installed with Foundry; its weights and selected export tools are prepared when that workflow needs them.
+Review topology for deformation, geometry for printing and collision, and materials in the target editor or engine. HairDeck's static GLB and spring-bone VRM are different outputs. Its head-turn preview demonstrates hair motion. Garment Particles remains experimental, especially character fitting and draping.
 
-## Make the interface comfortable
+Packages include selected files, a README, measurements, checksums, provenance and applicable notices. Ordinary packages exclude private source images, prompts and working files. History keeps saved results available for review and resuming supported operations.
 
-Choose a light or dark **Theme**, or use **Font** beside it for **Default, 112%, 125%, 150%, 175% or 200%** text. Controls reflow as text grows. Advanced settings stay available without crowding the normal path.
+## Language and accessibility
 
-**Settings → Purge Cache** first shows temporary files, unfinished downloads and their sizes. Choose categories and confirm before clearing. Saved assets, references, models and settings are protected; clearing waits until processing and downloads finish. Installed-model management is a separate control for deliberately removing weights. Required published models are prepared again when their workflow needs them.
+Choose **English** or **简体中文** in the header or Settings. Switching language updates interface text in place using local catalogs. It preserves entered text, references, previews and running jobs.
 
-The header shows **Up to date**, **Update available**, or an honest check status. It checks published releases, not unpublished Git changes. Open the update details for the supported installation route. In Pinokio, finish any work, stop Foundry, then choose **Update** in the sidebar. Updates preserve saved assets, settings and models.
+Interface language is separate from generation language. Foundry preserves your prompts and model instructions. Check the selected model's guidance when choosing a generation prompt's language.
 
-## Hardware and model terms
+CCORE’s author recommends English generation prompts. Its built-in examples follow the selected interface language. Use **Translate to English** to translate a description with the local Qwen helper, review it, then generate. Choose Q4 for lower GPU memory use or Q8 for higher numerical precision. Q4 is the recommended starting point; Q8 does not guarantee a better translation. Translation requires the chosen model to fit on the GPU and keeps your text if it cannot. Translation preserves the design; **Enhance description** is a separate creative choice.
 
-The reference machine is **Windows, NVIDIA RTX 4080 SUPER with 16 GB VRAM, and 64 GB RAM**. This is not an 8 GB compatibility claim. Workflows can use CPU offloading and substantial system RAM; lower-memory profiles are still being evaluated.
+Use **Theme** for light or dark appearance. **Font** offers Default, 112%, 125%, 150%, 175% and 200%. Advanced controls stay available as you need them.
 
-Original Foundry code is **Apache-2.0**. Models, weights and third-party tools retain their own terms. Read [third-party notices](THIRD-PARTY.md), especially before commercial use. Public defaults use pinned acquisition sources; optional access-gated alternatives may require their own accounts, tokens and terms.
+## Keep Foundry and the skill current
 
-## Built with the community
+New versions can bring workflows, repairs and improved agent guidance. Check for updates regularly, especially when returning after a while.
 
-Thank you to the researchers behind **Pixal3D, TRELLIS.2, Hi3D, Idol, HairDeck, Qwen, FLUX and MoGe**, and to **ComfyUI, Blender, Meta and the community integrations** that make these workflows possible. Powered by [Hi3D](http://hi3d.ai/).
+The header reports update status. In Pinokio, let active work finish and use the normal **Update** action. Standalone ComfyUI users follow [INSTALL.md](INSTALL.md).
 
-Foundry’s **About** tab includes model credits and a growing contributor Thank You section. Useful workflow suggestions, clear bug reports and pull requests are welcome. We’re building a collection of practical local tools and learning together.
+Updating Foundry updates its bundled skill. **If you copied the skill into your agent's skills directory, refresh that copy too.** App and copied-skill updates are separate steps.
+
+The companion skill tells the agent to read the running app's version and capabilities, check its compatibility record and look for an available update. It should explain observed mismatches or pending updates in your language. Live capabilities remain the authority for the controls actually available.
+
+## Hardware, storage and model terms
+
+This is a **Windows / NVIDIA preview**. The reference machine has an RTX 4080 SUPER with 16 GB VRAM and 64 GB RAM. Requirements vary by workflow. That setup is not a minimum-hardware guarantee. CCORE checks GPU memory and offers supported smaller settings when a requested combination will not fit.
+
+Settings includes installed-model management and a reviewed cache purge. Required published models are prepared again when a workflow needs them. Review listed files before clearing cache or removing weights.
+
+Original Foundry code is **Apache-2.0**. Models, weights and other tools retain their own terms. Read [THIRD-PARTY.md](THIRD-PARTY.md), particularly before commercial use.
+
+## Built together
+
+Foundry gathers and connects useful work from researchers, model authors and workflow creators. Thank you to the people behind Pixal3D, TRELLIS.2, Hi3D, Idol, HairDeck, CCORE, Garment Particles, Qwen, FLUX, MoGe, ComfyUI, Blender and the community integrations.
+
+About includes model credits and a growing contributor Thank You section. Workflow suggestions, bug reports, translation corrections and pull requests are welcome. Help us make useful local workflows easier for others to use.
 
 - [Report a problem or suggest a workflow](https://github.com/mumblebox-gpt/mumblebox-foundry/issues)
-- The **Roadmap** tab in Foundry lists planned workflows and improvements
-- [Install and update guide](docs/PINOKIO.md)
+- [Agent setup](docs/AGENT-SETUP.md)
+- [Localization ownership and contribution guide](docs/LOCALIZATION.md)
 - [Dependencies and runtime ownership](dependencies.json)
 - [Validation evidence and limits](docs/RELEASE-VALIDATION.md)
 - [More Mumblebox projects](https://github.com/mumblebox-gpt?tab=repositories)
+
+The in-app Roadmap lists planned features. Published releases identify the builds available to install.

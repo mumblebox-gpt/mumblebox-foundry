@@ -1,3 +1,6 @@
+import {sourceMessage} from "./i18n.js";
+import {languages as supportedLanguages, setLanguage as activateLanguage, currentLanguage, onLanguageChange} from "./i18n.js";
+import {msg, setText, bindAttribute, replaceContent} from "./i18n.js";
 import {fontControl,TEXT_SIZES} from './typography.js';
 import {el,button,icon,hint} from "./dom.js";
 import {activityState,loadedState} from "./activity-state.js";
@@ -22,6 +25,12 @@ export class FoundryShell {
         for (const file of ["theme.css","layout.css","images.css","roadmap.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
         this.root=el("div",{class:"foundry","data-theme":matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"});
         this.shadow.append(this.root);
+        this.root.lang=currentLanguage();
+        this.stopLanguage=onLanguageChange(locale=>{
+            this.root.lang=locale;
+            if(this.language)this.language.value=locale;
+            if(this.status)this.resources(this.status);
+        });
         this.stopTextClipboard=installTextClipboard(this.root);
         // OrbitControls receives pointerup at the shadow root. Let releases
         // reach it; swallowing them leaves the viewer stuck in a drag.
@@ -61,42 +70,46 @@ export class FoundryShell {
             const listener = event => {
                 if (this.node.graph !== app.graph || !this.host.isConnected) return;
                 if (eventName !== 'mumblebox-foundry-workspace' && !/^[a-f0-9]{32}$/.test(event.detail?.id || '')) return;
-                show(event.detail).catch(error => this.message(error.message, true));
+                show(event.detail).catch(error => this.message(sourceMessage(error.message), true));
             };
             this.agentWorkflowHandlers[eventName] = listener;
             api.addEventListener(eventName, listener);
         }
         // Native processing belongs to the selected graph, not a particular
         // wizard page. Navigation within Foundry must not disconnect Rocket.
-        this.guidedBindHandler=e=>this.bindGuided(e.detail).catch(error=>this.message(error.message,true));
+        this.guidedBindHandler=e=>this.bindGuided(e.detail).catch(error=>this.message(sourceMessage(error.message),true));
         api.addEventListener('guided.bind',this.guidedBindHandler);
         this.guidedHeartbeat=setInterval(()=>{
             if(this.node.properties.foundryGuided?.id)this.guidedLive().catch(()=>{});
         },15000);
     }
     build() {
-        this.version=el("small",{},"Interface loading");
-        const languages=el("select",{class:"language","aria-label":"Language"},el("option",{value:"en"},"English"),
-            ...["Korean","Japanese","Mandarin","Spanish","Portuguese","German"].map(name=>el("option",{disabled:true},name+" — Coming soon")));
-        this.themeButton=button([icon("contrast",18),"Theme"],()=>this.setTheme(this.root.dataset.theme==="dark"?"light":"dark"));
-        this.themeButton.setAttribute("aria-label","Switch color theme");
+        this.version=el("small",{},msg("common.interface_loading"));
+        this.language=el("select", {class:"language", "aria-label":msg("common.language"),
+            onchange:event=>this.setLanguage(event.target.value)},
+            ...supportedLanguages.map(language=>el("option", {value:language.id}, language.label)),
+            ...["한국어","日本語","Español","Português","Deutsch"].map(name=>
+                el("option", {disabled:true}, msg("common.coming_soon", {name}))));
+        this.themeButton=button([icon("contrast",18),msg("common.theme")],()=>this.setTheme(this.root.dataset.theme==="dark"?"light":"dark"));
+        bindAttribute(this.themeButton,"aria-label",msg("common.switch_color_theme"));
         this.fontControl=fontControl(this);
         this.updateSlot=el("div",{class:"header-update",role:"status","aria-live":"polite"});
-        this.settingsButton=button([icon("gear",18),"Settings"],()=>this.settings());
-        const donate=button("Coffee",()=>{}, {disabled:true,title:"Coffee link coming soon"});
+        this.settingsButton=button([icon("gear",18),msg("common.settings")],()=>this.settings());
+        const donate=button(msg("common.coffee"),()=>{}, {disabled:true,title:msg("common.coffee_link_coming_soon")});
         const identity=el("div",{class:"identity"},el("div",{class:"brand"},el("div",{class:"brand-lockup"},
-            el("h1",{},el("img",{class:"brand-logo",src:new URL("../assets/foundry/logo-approved.png",import.meta.url).href,alt:"Mumblebox 3D Asset Foundry",width:2172,height:724})),this.version)),
-            el("div",{class:"header-tools"},el("div",{class:"header-actions"},languages,this.themeButton,this.fontControl.element,this.settingsButton,donate),this.updateSlot));
+            el("h1",{},el("img",{class:"brand-logo",src:new URL("../assets/foundry/logo-approved.png",import.meta.url).href,alt:msg("common.mumblebox_3d_asset_foundry"),width:2172,height:724})),this.version)),
+            el("div",{class:"header-tools"},el("div",{class:"header-actions"},el("div",{class:"language-picker"},icon("globe",20),this.language),this.themeButton,this.fontControl.element,this.settingsButton,donate),this.updateSlot));
         this.vram=resourceMeter("VRAM");this.ram=resourceMeter("RAM");this.cpu=resourceMeter("CPU",{percent:true});
         this.loadedDot=el("span",{class:"loaded-dot","aria-hidden":"true"});
-        this.loadedLabel=el("small",{"aria-live":"polite"},"Model state unavailable");
-        this.unload=button([this.loadedDot,"Unload Models"],()=>this.unloadModels(),{disabled:true});
+        this.loadedLabel=el("small",{"aria-live":"polite"},msg("common.model_state_unavailable"));
+        this.unload=button([this.loadedDot,msg("common.unload_models")],()=>this.unloadModels(),{disabled:true});
         this.activity=activity();
         this.resourceBar=el("div",{class:"resources"},this.vram.element,this.ram.element,this.cpu.element,
             this.activity.element,el("div",{class:"model-residency"},this.unload,this.loadedLabel));
-        this.nav=el("nav",{class:"tabs",role:"tablist","aria-label":"Foundry sections"});
+        this.nav=el("nav",{class:"tabs",role:"tablist","aria-label":msg("common.foundry_sections")});
         this.tabs=["Choose a Workflow","Images","History","Integrations","About","Roadmap"];
-        this.tabs.forEach((name,i)=>this.nav.append(button([icon(["cube","image","history","plug","info","map"][i],16),name],()=>this.open(name),{class:i===2?"secondary-start":"",role:"tab","aria-selected":name===this.tab,tabindex:name===this.tab?0:-1})));
+        const tabLabels=["choose_a_workflow","images","history","integrations","about","roadmap"];
+        this.tabs.forEach((name,i)=>this.nav.append(button([icon(["cube","image","history","plug","info","map"][i],16),msg("common."+tabLabels[i])],()=>this.open(name),{class:i===2?"secondary-start":"",role:"tab","aria-selected":name===this.tab,tabindex:name===this.tab?0:-1})));
         this.nav.addEventListener("keydown",e=>{
             if(!["ArrowRight","ArrowLeft","Home","End"].includes(e.key))return;
             e.preventDefault();
@@ -105,38 +118,52 @@ export class FoundryShell {
             this.open(this.tabs[next]);this.nav.children[next].focus();
         });
         this.content=el("main",{class:"content",role:"tabpanel","aria-label":this.tab});
-        this.notice=el("div",{class:"status",role:"status","aria-live":"polite"},"Loading Foundry services…");
+        this.notice=el("div",{class:"status",role:"status","aria-live":"polite"},msg("common.loading_foundry_services"));
         this.root.append(el("header",{class:"top"},identity,this.resourceBar),this.nav,this.content,this.notice);
         this.resources(null);this.open(this.tab);
     }
     async bootstrap() {
         try {
             this.data=await request("bootstrap");
+            activateLanguage(this.data.preferences.language);
             if(!this.node.graph._nodes.some(n=>n.properties?.guidedOwner===this.node.id))
                 syncGuidedBranch(await request('guided/template'),this.node);
-            this.version.textContent="v"+this.data.version;
+            setText(this.version, "v"+this.data.version);
             await this.setFontSize(this.data.preferences.font_size||"default",false);
             this.root.dataset.motion=this.data.preferences.busy_motion||"system";
             if(this.data.preferences.theme) await this.setTheme(this.data.preferences.theme,false);
             else await this.setTheme(this.root.dataset.theme,false);
-            this.message("Local workspace · Image-to-3D workflow");
+            this.message(msg("common.local_workspace_image_to_3d_workflow"));
             this.open(this.tab);
             this.updates.startup();
-        } catch(error) {this.message(error.message,true);}
+        } catch(error) {this.message(sourceMessage(error.message),true);}
+    }
+    async setLanguage(locale) {
+        const previous=currentLanguage();
+        this.language.disabled=true;
+        try {
+            this.data.preferences=await request("preferences",{language:locale},{method:"PATCH"});
+            activateLanguage(this.data.preferences.language);
+        } catch(error) {
+            this.language.value=previous;
+            this.message(sourceMessage(error.message),true);
+        } finally {
+            this.language.disabled=false;
+        }
     }
     async setTheme(theme,save=true) {
         this.root.dataset.theme=theme;
-        this.themeButton.title=theme==="dark"?"Switch to light theme":"Switch to dark theme";
+        bindAttribute(this.themeButton, "title", theme==="dark"?msg("common.switch_to_light_theme"):msg("common.switch_to_dark_theme"));
         this.themeButton.setAttribute("aria-pressed",String(theme==="dark"));
-        if(save)try{await request("preferences",{theme},{method:"PATCH"});}catch(e){this.message(e.message,true);}
+        if(save)try{await request("preferences",{theme},{method:"PATCH"});}catch(e){this.message(sourceMessage(e.message),true);}
     }
     async setFontSize(value,save=true){
         if(!TEXT_SIZES.some(x=>x[0]===value))return;
         const before=this.root.dataset.fontSize||'default';this.root.dataset.fontSize=value;this.fontControl.update(value);
         if(save)try{this.data.preferences=await request('preferences',{font_size:value},{method:'PATCH'});}
-        catch(error){this.root.dataset.fontSize=before;this.fontControl.update(before);this.message(error.message,true);}
+        catch(error){this.root.dataset.fontSize=before;this.fontControl.update(before);this.message(sourceMessage(error.message),true);}
     }
-    message(text,error=false) {this.notice.textContent=text;this.notice.dataset.error=String(error);}
+    message(text,error=false) {setText(this.notice, text);this.notice.dataset.error=String(error);}
     resources(data) {
         const reconnect=this.disconnected&&!!data;
         this.disconnected=!data;
@@ -149,17 +176,17 @@ export class FoundryShell {
         this.cpu.update(data?.cpu_percent,100);
         const residency=loadedState(data);
         this.loadedDot.dataset.state=residency.state;
-        if(this.loadedLabel.textContent!==residency.label)this.loadedLabel.textContent=residency.label;
+        if(this.loadedLabel.textContent!==residency.label)setText(this.loadedLabel, residency.label);
         this.activity.update(activityState(this.unloading?{...data,resource_cleanup:{status:"releasing"}}:data));
         this.unload.disabled=!data||data.running||this.unloading;
-        this.unload.title=data?.running?"Wait for the current run to finish":"Release loaded models and reusable model caches";
+        bindAttribute(this.unload, "title", data?.running?msg("common.wait_for_the_current_run_to_finish"):msg("common.release_loaded_models_and_reusable_model_caches"));
         this.updates?.refreshFlag();for(const listener of this.statusListeners)listener();
-        if(wasRunning&&!data?.running&&this.data)request("library/sync",{}).catch(e=>this.message(e.message,true));
+        if(wasRunning&&!data?.running&&this.data)request("library/sync",{}).catch(e=>this.message(sourceMessage(e.message),true));
     }
     async unloadModels() {
         this.unloading=true;this.resources(this.status);
-        try{await request("/asset-workshop/release",{});this.message("Models unloaded. The resource readings will update shortly.");}
-        catch(error){this.message(error.message,true);}
+        try{await request("/asset-workshop/release",{});this.message(msg("common.models_unloaded_the_resource_readings_will_update_shortly"));}
+        catch(error){this.message(sourceMessage(error.message),true);}
         finally{this.unloading=false;this.resources(this.status);}
     }
     async openAgentSection(section) {
@@ -183,9 +210,11 @@ export class FoundryShell {
         this.viewDispose?.();this.viewDispose=null;
         this.tab=name;this.sequence=(this.sequence||0)+1;const sequence=this.sequence;
         [...this.nav.children].forEach((n,i)=>{n.setAttribute("aria-selected",String(this.tabs[i]===name));n.tabIndex=this.tabs[i]===name?0:-1;});
-        this.content.setAttribute("aria-label",name);this.content.scrollTop=0;
+        bindAttribute(this.content,"aria-label",msg("common."+({
+            "Choose a Workflow":"choose_a_workflow",Images:"images",History:"history",Integrations:"integrations",About:"about",Roadmap:"roadmap"
+        })[name]));this.content.scrollTop=0;
         if(name==="Choose a Workflow"){this.content.replaceChildren(home(this));return;}
-        this.content.replaceChildren(el("p",{class:"muted"},"Loading "+name.toLowerCase()+"…"));
+        replaceContent(this.content, el("p",{class:"muted"},msg("common.loading", {value1: name.toLowerCase()})));
         try {
             const files={"About":"about","History":"library","Images":"images","Integrations":"integrations","Roadmap":"roadmap"};
             const module=await import("./views/"+files[name]+".js");
@@ -193,7 +222,7 @@ export class FoundryShell {
             const view=await module.render(this,"mesh");
             if(sequence!==this.sequence){view.dispose?.();return;}
             this.content.replaceChildren(view.element||view);this.viewDispose=view.dispose;
-        } catch(error) {if(sequence===this.sequence)this.content.replaceChildren(el("p",{"data-connection-error":String(error.code==="FOUNDRY_OFFLINE")},error.message),button("Retry",()=>this.open(name)));}
+        } catch(error) {if(sequence===this.sequence)replaceContent(this.content, el("p",{"data-connection-error":String(error.code==="FOUNDRY_OFFLINE")},sourceMessage(error.message)), button(msg("common.retry"),()=>this.open(name)));}
     }
 
     async openWizard({resume=false,runId=null,method="turnaround"}={}){
@@ -201,7 +230,7 @@ export class FoundryShell {
         this.viewDispose?.();this.viewDispose=null;this.sequence=(this.sequence||0)+1;
         const sequence=this.sequence;
         this.tab="Choose a Workflow";
-        this.content.replaceChildren(el("p",{},"Opening the image-to-3D workflow…"));
+        replaceContent(this.content, el("p",{},msg("common.opening_the_image_to_3d_workflow")));
         let wizard;
         try{
             const {Wizard}=await import("./wizard/controller.js");
@@ -211,10 +240,10 @@ export class FoundryShell {
             this.content.replaceChildren(element);
             this.content.scrollTop=0;
             [...this.nav.children].forEach((n,i)=>{n.setAttribute("aria-selected",String(i===0));n.tabIndex=i===0?0:-1;});
-            this.content.setAttribute("aria-label","Image to 3D wizard");
+            bindAttribute(this.content, "aria-label", msg("common.image_to_3d_wizard"));
             this.viewDispose=()=>wizard.dispose();
             this.wizard=wizard;
-        }catch(error){wizard?.dispose();this.content.replaceChildren(el("p",{role:"alert","data-connection-error":String(error.code==="FOUNDRY_OFFLINE")},error.message));}
+        }catch(error){wizard?.dispose();this.content.replaceChildren(el("p",{role:"alert","data-connection-error":String(error.code==="FOUNDRY_OFFLINE")},sourceMessage(error.message)));}
     }
 
     async chooseMesh(handoff,origin){
@@ -260,42 +289,42 @@ export class FoundryShell {
             try{
                 const run=await request('guided/runs/'+current);
                 if(run.active||run.preparing||run.finishing?.active){
-                    this.message('The current 3D-Guided asset is still running. Resume it, or wait before starting another object.',true);
+                    this.message(msg("common.the_current_3d_guided_asset_is_still_running_resume_it_or_wait_before_starti"),true);
                     return false;
                 }
-            }catch(error){this.message(error.message,true);return false;}
+            }catch(error){this.message(sourceMessage(error.message),true);return false;}
         }
         this.viewDispose?.();this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;
-        this.tab='Choose a Workflow';this.content.replaceChildren(hint('Opening the independent 3D-Guided workflow…'));
+        this.tab='Choose a Workflow';replaceContent(this.content, hint(msg("common.opening_the_independent_3d_guided_workflow")));
         let wizard;
         try{
             const {GuidedWizard}=await import('./guided/controller.js');wizard=new GuidedWizard(this,options);
             const element=await wizard.init();
             if(sequence!==this.sequence){wizard.dispose();return;}
             this.content.replaceChildren(element);this.content.scrollTop=0;this.guidedWizard=wizard;
-            this.viewDispose=()=>wizard.dispose();this.content.setAttribute('aria-label','3D-Guided wizard');
+            this.viewDispose=()=>wizard.dispose();bindAttribute(this.content, 'aria-label', msg("common.3d_guided_wizard"));
             [...this.nav.children].forEach((n,i)=>n.setAttribute('aria-selected',String(i===0)));
             return true;
-        }catch(error){wizard?.dispose();this.content.replaceChildren(el('p',{role:'alert'},error.message));return false;}
+        }catch(error){wizard?.dispose();this.content.replaceChildren(el('p',{role:'alert'},sourceMessage(error.message)));return false;}
     }
 
     async openSplatWizard(options={}) {
         const current=this.node.properties.foundrySplat?.runId;
         if(current&&!options.resume){
             const active=await request('splat/runs/'+current);
-            if(active.active){this.message('Resume the running splat asset before starting another.',true);return false;}
+            if(active.active){this.message(msg("common.resume_the_running_splat_asset_before_starting_another"),true);return false;}
         }
         this.viewDispose?.();this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;this.tab='Choose a Workflow';
-        this.content.replaceChildren(hint('Opening Splat & Solid…'));
+        replaceContent(this.content, hint(msg("common.opening_splat_solid")));
         let wizard;
         try {
             const {SplatWizard}=await import('./splat/controller.js');wizard=new SplatWizard(this,options);
             const element=await wizard.init();if(sequence!==this.sequence){wizard.dispose();return false;}
             this.content.replaceChildren(element);this.content.scrollTop=0;this.splatWizard=wizard;
-            this.viewDispose=()=>wizard.dispose();this.content.setAttribute('aria-label','Splat & Solid wizard');return true;
-        } catch(error){wizard?.dispose();this.content.replaceChildren(el('p',{role:'alert'},error.message));return false;}
+            this.viewDispose=()=>wizard.dispose();bindAttribute(this.content, 'aria-label', msg("common.splat_solid_wizard"));return true;
+        } catch(error){wizard?.dispose();this.content.replaceChildren(el('p',{role:'alert'},sourceMessage(error.message)));return false;}
     }
 
     async openCcoreWizard(options={}) {
@@ -304,7 +333,7 @@ export class FoundryShell {
         this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;
         this.tab='Choose a Workflow';
-        this.content.replaceChildren(hint('Opening the CCORE prop workflow…'));
+        replaceContent(this.content, hint(msg("common.opening_the_ccore_prop_workflow")));
         let wizard;
         try {
             const {CcoreWizard}=await import('./ccore/controller.js');
@@ -313,12 +342,12 @@ export class FoundryShell {
             if(sequence!==this.sequence){wizard.dispose();return;}
             this.content.replaceChildren(element);
             this.content.scrollTop=0;
-            this.content.setAttribute('aria-label',options.image?'CCORE Image + Text wizard':'CCORE text-only prop wizard');
+            bindAttribute(this.content, 'aria-label', options.image?msg("common.ccore_image_text_wizard"):msg("common.ccore_text_only_prop_wizard"));
             this.viewDispose=()=>wizard.dispose();
             [...this.nav.children].forEach((node,index)=>node.setAttribute('aria-selected',String(index===0)));
         } catch(error) {
             wizard?.dispose();
-            if(sequence===this.sequence)this.content.replaceChildren(el('p',{role:'alert'},error.message));
+            if(sequence===this.sequence)this.content.replaceChildren(el('p',{role:'alert'},sourceMessage(error.message)));
         }
     }
 
@@ -327,7 +356,7 @@ export class FoundryShell {
         this.viewDispose = null;
         const sequence = this.sequence = (this.sequence || 0) + 1;
         this.tab = 'Choose a Workflow';
-        this.content.replaceChildren(hint('Opening Garment Particles…'));
+        replaceContent(this.content, hint(msg("common.opening_garment_particles")));
         let wizard;
         try {
             const {GarmentWizard} = await import('./garment/controller.js');
@@ -336,19 +365,19 @@ export class FoundryShell {
             if (sequence !== this.sequence) {wizard.dispose();return;}
             this.content.replaceChildren(element);
             this.content.scrollTop = 0;
-            this.content.setAttribute('aria-label', 'Garment Particles wizard');
+            bindAttribute(this.content, 'aria-label', msg("common.garment_particles_wizard"));
             this.viewDispose = () => wizard.dispose();
             [...this.nav.children].forEach((node, index) => node.setAttribute('aria-selected', String(index === 0)));
         } catch (error) {
             wizard?.dispose();
-            if (sequence === this.sequence) this.content.replaceChildren(el('p', {role:'alert'}, error.message));
+            if (sequence === this.sequence) this.content.replaceChildren(el('p', {role:'alert'}, sourceMessage(error.message)));
         }
     }
 
     async openHairWizard(options={}) {
         this.viewDispose?.();this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;
-        this.tab='Choose a Workflow';this.content.replaceChildren(hint('Opening the HairDeck workflow…'));
+        this.tab='Choose a Workflow';replaceContent(this.content, hint(msg("common.opening_the_hairdeck_workflow")));
         try{
             const {HairWizard}=await import('./hair/controller.js');
             const {ensureHairBranch}=await import('./hair/graph.js');
@@ -356,21 +385,21 @@ export class FoundryShell {
             const {presentation}=await import('./app-mode.js');const inApp=presentation.current===this.node;
             if(capabilities.graph_template&&await ensureHairBranch(capabilities.graph_template)){
                 const node=app.graph.getNodeById(this.node.id);
-                if(!node?.shell)throw Error('The updated HairDeck graph did not reopen its Foundry interface.');
+                if(!node?.shell)throw Error(msg("common.the_updated_hairdeck_graph_did_not_reopen_its_foundry_interface"));
                 await node.shell.openHairWizard(options);if(inApp)presentation.show(node);return;
             }
             const wizard=new HairWizard(this,{...options,capabilities});
             const element=await wizard.init();
             if(sequence!==this.sequence){wizard.dispose();return;}
             this.content.replaceChildren(element);this.content.scrollTop=0;this.hairWizard=wizard;
-            this.viewDispose=()=>wizard.dispose();this.content.setAttribute('aria-label','HairDeck creation wizard');
+            this.viewDispose=()=>wizard.dispose();bindAttribute(this.content, 'aria-label', msg("common.hairdeck_creation_wizard"));
             [...this.nav.children].forEach((n,i)=>n.setAttribute('aria-selected',String(i===0)));
-        }catch(error){this.content.replaceChildren(el('p',{role:'alert'},error.message));}
+        }catch(error){this.content.replaceChildren(el('p',{role:'alert'},sourceMessage(error.message)));}
     }
 
     async settings(options={}) {
         try{const module=await import("./views/settings.js");return module.render(this,options);}
-        catch(error){this.message(error.message,true);}
+        catch(error){this.message(sourceMessage(error.message),true);}
     }
-    dispose() {for(const [name,listener] of Object.entries(this.agentWorkflowHandlers))api.removeEventListener(name,listener);this.fontControl.dispose();this.statusListeners.clear();api.removeEventListener('mumblebox-foundry-splat',this.agentSplatHandler);clearInterval(this.guidedHeartbeat);api.removeEventListener('guided.bind',this.guidedBindHandler);this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
+    dispose() {this.stopLanguage?.();for(const [name,listener] of Object.entries(this.agentWorkflowHandlers))api.removeEventListener(name,listener);this.fontControl.dispose();this.statusListeners.clear();api.removeEventListener('mumblebox-foundry-splat',this.agentSplatHandler);clearInterval(this.guidedHeartbeat);api.removeEventListener('guided.bind',this.guidedBindHandler);this.stopTextClipboard?.();this.updates.dispose();api.removeEventListener("mumblebox-foundry-run",this.agentRunHandler);api.removeEventListener('mumblebox-foundry-image',this.agentImageHandler);api.removeEventListener('mumblebox-foundry-hair',this.agentHairHandler);this.stopPolling?.();this.viewDispose?.();this.imageCreator?.dispose();this.activeDialog?.close();this.root.remove();this.sequence++;}
 }

@@ -1,24 +1,26 @@
+import {sourceText} from "../i18n.js";
+import {msg} from "../i18n.js";
 import {app} from '/scripts/app.js';
 const OFFSET=500000;
 // Independent ownership: no edits to the Turnaround, Guided, Splat or Hair branches.
 export function syncSingleGraph(recipe,owner,run=null){
-    if(owner.graph!==app.graph)throw Error('Open the Foundry graph before continuing.');
+    if(owner.graph!==app.graph)throw Error(msg("mesh.open_the_foundry_graph_before_continuing"));
     const graph=app.graph;graph.extra??={};
     const origin=graph.extra.single_origin??=[Math.max(0,...graph._nodes.map(n=>n.pos[0]+n.size[0]))+900,100];
     const made=new Map(),fresh=[];
     for(const [id,definition] of Object.entries(recipe)){
         const nativeId=Number(id)+OFFSET;let n=graph.getNodeById(nativeId);
-        if(n&&n.properties?.singleOwner!==owner.id)throw Error('Another method owns node '+nativeId);
-        if(!n){n=LiteGraph.createNode(definition.class_type);if(!n)throw Error('Required node missing: '+definition.class_type);n.id=nativeId;graph.add(n);fresh.push(n);}
+        if(n&&n.properties?.singleOwner!==owner.id)throw Error(msg("mesh.another_method_owns_node", {nativeId: nativeId}));
+        if(!n){n=LiteGraph.createNode(definition.class_type);if(!n)throw Error(msg("mesh.required_node_missing", {value1: definition.class_type}));n.id=nativeId;graph.add(n);fresh.push(n);}
         n.properties.singleOwner=owner.id;n.properties.singleStage=definition._meta?.single_stage||'processing';n.mode=2;
-        n.title='Single Image · '+(definition._meta?.title||definition.class_type);
+        n.title=sourceText(msg("mesh.single_image", {value1: definition._meta?.title||definition.class_type}));
         for(const [name,value] of Object.entries(definition.inputs||{}))if(!Array.isArray(value)){
             const widget=n.widgets?.find(w=>w.name===name);if(widget){widget.value=value;widget.callback?.(value);}
         }
         const fixed=n.widgets?.find(w=>w.name==='control_after_generate');if(fixed)fixed.value='fixed';made.set(id,n);
     }
     for(const [id,d] of Object.entries(recipe))for(const [name,v] of Object.entries(d.inputs||{}))if(Array.isArray(v)&&v.length===2){
-        const n=made.get(id),source=made.get(String(v[0]));if(!source)throw Error('Missing single-image connection '+v[0]);
+        const n=made.get(id),source=made.get(String(v[0]));if(!source)throw Error(msg("mesh.missing_single_image_connection", {value1: v[0]}));
         let slot=n.inputs.findIndex(i=>i.name===name);if(slot<0){n.addInput(name,source.outputs[v[1]]?.type||'*');slot=n.inputs.length-1;}
         if(!n.inputs[slot].link)source.connect(v[1],n,slot);
     }

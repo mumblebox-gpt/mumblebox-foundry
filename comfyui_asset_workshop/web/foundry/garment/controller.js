@@ -1,3 +1,5 @@
+import {sourceMessage} from "../i18n.js";
+import {msg, setText, replaceContent} from "../i18n.js";
 import {api} from '/scripts/api.js';
 import {elapsedTime, workingStar} from '../activity.js';
 import {el, button, field, hint, link} from '../dom.js';
@@ -7,7 +9,7 @@ import {mountMesh} from '../wizard/preview.js';
 import {syncGarmentGraph} from './graph.js';
 import {GarmentEditor, operationName} from './editor.js';
 
-const titles = ['Start your garment', 'Edit & compare', 'Prepare for Blender', 'Preview on a character', 'Export your garment'];
+const titles = [msg("garment.start_your_garment"), msg("garment.edit_compare"), msg("garment.prepare_for_blender"), msg("garment.preview_on_a_character"), msg("garment.export_your_garment")];
 const mainSteps = [0, 1, 2, 4];
 const modes = {
     text: ['Description', 'Describe one garment. Give its silhouette, length, sleeves and closures.'],
@@ -93,7 +95,7 @@ export class GarmentWizard {
         if (!this.canGenerate()) return;
         await this.act(async () => {
             if (this.id && (await request(base(this.id))).active) {
-                throw Error('Resume or stop the running garment before starting another.');
+                throw Error(msg("garment.resume_or_stop_the_running_garment_before_starting_another"));
             }
             syncGarmentGraph(this.shell.node, this.draft, this.budget);
             const id = crypto.randomUUID().replaceAll('-', '');
@@ -119,7 +121,7 @@ export class GarmentWizard {
         if (!id || this.id === id) return;
         await this.act(async () => {
             const run = await request(base(id));
-            if (!run.result) throw Error('Choose a completed garment version.');
+            if (!run.result) throw Error(msg("garment.choose_a_completed_garment_version"));
             this.run = run;
             this.id = id;
             this.showEditor = false;
@@ -146,7 +148,7 @@ export class GarmentWizard {
                 this.run = await request(base(this.id));
                 if (this.disposed) return;
                 if (this.run.active) {
-                    if (this.phase) this.phase.textContent = this.run.phase;
+                    if (this.phase) setText(this.phase, sourceMessage(this.run.phase));
                     this.poll();
                 } else {
                     if (this.run.archive) this.page = 4;
@@ -183,13 +185,13 @@ export class GarmentWizard {
                 e.preventDefault();
                 if (e.dataTransfer.files[0]) add(e.dataTransfer.files[0]);
             }},
-            this.draft[key] ? el('img', {src: inputURL(this.draft[key]), alt: back ? 'Back garment reference' : 'Front garment reference', class: 'webcam-preview'}) : null,
+            this.draft[key] ? el('img', {src: inputURL(this.draft[key]), alt: back ? msg("garment.back_garment_reference") : msg("garment.front_garment_reference"), class: 'webcam-preview'}) : null,
             el('div', {class: 'actions'},
-                button(back ? 'Upload back reference' : 'Upload front reference', () => picker.click(), {disabled: this.pending}),
+                button(back ? msg("garment.upload_back_reference") : msg("garment.upload_front_reference"), () => picker.click(), {disabled: this.pending}),
                 this.draft.mode === 'image' && navigator.mediaDevices
-                    ? button('Take a photo', () => capturePhoto(this.shell, add), {disabled: this.pending}) : null,
-                this.draft[key] ? button('Remove reference', () => {this.update(key, '');this.render();}) : null),
-            hint('Drop one PNG, JPEG or WebP here.')));
+                    ? button(msg("garment.take_a_photo"), () => capturePhoto(this.shell, add), {disabled: this.pending}) : null,
+                this.draft[key] ? button(msg("garment.remove_reference"), () => {this.update(key, '');this.render();}) : null),
+            hint(msg("garment.drop_one_png_jpeg_or_webp_here"))));
     }
 
     number(key, low, high, edit = value => this.update(key, value)) {
@@ -201,8 +203,8 @@ export class GarmentWizard {
         const presets = Object.entries(this.generationPresets);
         const preset = el('select', {},
             presets.map(([value, {label, points, steps}]) => el('option', {value},
-                label + ' · ' + points.toLocaleString() + ' points · ' + steps + ' steps')),
-            el('option', {value: 'custom'}, 'Custom'));
+                msg("garment.points_steps", {label: label, value2: points.toLocaleString(), steps: steps}))),
+            el('option', {value: 'custom'}, msg("garment.custom")));
         const match = presets.find(([, {points, steps}]) => points === this.draft.points && steps === this.draft.steps);
         preset.value = this.customGeneration ? 'custom' : match?.[0] ?? 'custom';
         const customize = (key, value) => {
@@ -212,10 +214,10 @@ export class GarmentWizard {
         };
         const points = this.number('points', 100, 8192, value => customize('points', value));
         const steps = this.number('steps', 2, 250, value => customize('steps', value));
-        const advanced = el('details', {open: preset.value === 'custom'}, el('summary', {}, 'Advanced'),
-            field('Seed', this.number('seed', 0, 2147483647), 'Change it for another design from the same input.'),
-            field('Drape points', points, 'More points use more GPU memory.'),
-            field('Sampling steps', steps, 'More steps take longer.'));
+        const advanced = el('details', {open: preset.value === 'custom'}, el('summary', {}, msg("garment.advanced")),
+            field(msg("garment.seed"), this.number('seed', 0, 2147483647), msg("garment.change_it_for_another_design_from_the_same_input")),
+            field(msg("garment.drape_points"), points, msg("garment.more_points_use_more_gpu_memory")),
+            field(msg("garment.sampling_steps"), steps, msg("garment.more_steps_take_longer")));
         preset.addEventListener('change', () => {
             this.customGeneration = preset.value === 'custom';
             if (this.customGeneration) {
@@ -229,44 +231,44 @@ export class GarmentWizard {
             }
             this.remember();
         });
-        return [field('Generation preset', preset,
-            'Use Balanced to start. Choose Custom to set your own point count and steps.'), advanced];
+        return [field(msg("garment.generation_preset"), preset,
+            msg("garment.use_balanced_to_start_choose_custom_to_set_your_own_point_count_and_steps")), advanced];
     }
 
     describe() {
         const mode = this.draft.mode;
         return [
-            hint('Design clothing from a description, image or sketch. Edit the sewing pattern or 3D shape, then export a sewn mesh, editable pattern and 3D drape reference for Blender. You can export without a character. Tailor the garment and check its movement in your 3D editor.'),
-            field('Garment name', el('input', {value: this.draft.name, maxLength: 80, oninput: e => this.update('name', e.target.value)})),
-            el('fieldset', {class: 'ccore-precision', disabled: this.pending}, el('legend', {}, 'Starting point'),
+            hint(msg("garment.design_clothing_from_a_description_image_or_sketch_edit_the_sewing_pattern_o")),
+            field(msg("garment.garment_name"), el('input', {value: this.draft.name, maxLength: 80, oninput: e => this.update('name', e.target.value)})),
+            el('fieldset', {class: 'ccore-precision', disabled: this.pending}, el('legend', {}, msg("garment.starting_point")),
                 Object.entries(modes).map(([value, [label, detail]]) => el('label', {class: 'check-row'},
                     el('input', {type: 'radio', name: 'garment-mode', value, checked: value === mode,
                         onchange: () => {this.update('mode', value);this.render();}}),
                     el('span', {}, el('strong', {}, label), el('small', {class: 'muted'}, detail))))),
-            mode === 'text' ? field('Description', el('textarea', {rows: 4, maxLength: 500, value: this.draft.prompt,
+            mode === 'text' ? field(msg("garment.description"), el('textarea', {rows: 4, maxLength: 500, value: this.draft.prompt,
                 placeholder: this.capabilities.example, oninput: e => this.update('prompt', e.target.value)})) : null,
             ['image','sketch'].includes(mode) ? [this.reference(), el('details', {open:Boolean(this.draft.back_image)},
-                el('summary', {}, 'Add a matching back view'), hint('Use the back of the same garment, framed like the front.'),
+                el('summary', {}, msg("garment.add_a_matching_back_view")), hint(msg("garment.use_the_back_of_the_same_garment_framed_like_the_front")),
                 this.reference('back_image'))] : null,
-            mode === 'text' ? button('Try the waistcoat example', () => {
+            mode === 'text' ? button(msg("garment.try_the_waistcoat_example"), () => {
                 this.update('prompt', this.capabilities.example);this.render();
             }) : null,
             ...this.generationSettings(),
             this.capabilities.modes[mode] ? el('p', {role: 'alert'}, this.capabilities.modes[mode]) :
-                hint('The generator and sewing-pattern model take turns using the GPU. Keep enough free VRAM for both stages.'),
+                hint(msg("garment.the_generator_and_sewing_pattern_model_take_turns_using_the_gpu_keep_enough")),
         ];
     }
 
     busy() {
-        this.phase = el('strong', {}, this.run.phase);
+        this.phase = el('strong', {}, sourceMessage(this.run.phase));
         return el('div', {class: 'activity-feedback', 'data-busy': 'true', role: 'status'}, workingStar(),
-            el('div', {}, this.phase, elapsedTime(this.run.started_at * 1000)),
-            button('Stop this stage', () => this.stage('cancel'), {disabled: this.pending}));
+            el('div', {}, sourceMessage(this.phase), elapsedTime(this.run.started_at * 1000)),
+            button(msg("garment.stop_this_stage"), () => this.stage('cancel'), {disabled: this.pending}));
     }
 
     preview(filename, label, id = this.id) {
         const host = el('div', {class: 'wizard-mesh', 'aria-label': label});
-        const status = hint('Loading 3D preview…');
+        const status = hint(msg("garment.loading_3d_preview"));
         const revision = this.revision;
         requestAnimationFrame(async () => {
             if (this.disposed || revision !== this.revision) return;
@@ -275,35 +277,35 @@ export class GarmentWizard {
                 if (this.disposed || revision !== this.revision) {dispose();return;}
                 this.viewers.push(dispose);
                 host.dataset.loaded = 'true';
-                status.textContent = 'Drag to rotate. Scroll to zoom.';
-            } catch (error) { status.textContent = error.message; }
+                setText(status, msg("garment.drag_to_rotate_scroll_to_zoom"));
+            } catch (error) { setText(status, sourceMessage(error.message)); }
         });
         return el('section', {}, el('h3', {}, label), host, status);
     }
 
     review() {
-        if (!this.run?.result) return [hint('Your 3D drape and sewing sheet will appear here.')];
+        if (!this.run?.result) return [hint(msg("garment.your_3d_drape_and_sewing_sheet_will_appear_here"))];
         const {panels, stitches, points} = this.run.result;
         const versions = this.run.versions || [];
         const version = el('select', {onchange: e => this.selectVersion(e.target.value)},
             versions.map((item, index) => el('option', {value:item.id, selected:item.id === this.id},
-                (index + 1) + ' · ' + operationName(item.edit) + ' · seed ' + item.seed)));
+                msg("garment.seed_2", {value1: index + 1, value2: operationName(item.edit), seed: item.seed}))));
         const previous = this.run.parent;
         const pattern = (id, label) => el('img', {src: url(id, 'garment_pattern.png'), alt: label, class: 'garment-pattern-sheet'});
         const workspace = this.showEditor && this.editor?.source && this.editor.id === this.id ? this.editor.element : null;
         const compare = previous && this.compare;
         const visuals = compare ? el('div', {class:'garment-review-grid'},
-            el('section', {}, this.preview('drape-particles.glb', 'Before this edit', previous), pattern(previous, 'Previous sewing pattern')),
-            el('section', {}, this.preview('drape-particles.glb', 'Current version'), pattern(this.id, 'Current sewing pattern')))
+            el('section', {}, this.preview('drape-particles.glb', 'Before this edit', previous), pattern(previous, msg("garment.previous_sewing_pattern"))),
+            el('section', {}, this.preview('drape-particles.glb', 'Current version'), pattern(this.id, msg("garment.current_sewing_pattern"))))
             : el('div', {class:'garment-review-grid'},
                 this.preview('drape-particles.glb', '3D particle drape'),
-                el('section', {}, el('h3', {}, 'Sewing pattern'), pattern(this.id, 'Labeled sewing panels and stitching')));
+                el('section', {}, el('h3', {}, msg("garment.sewing_pattern")), pattern(this.id, msg("garment.labeled_sewing_panels_and_stitching"))));
         return [
-            hint('Use the editing tools to paint changes to a pattern, silhouette or 3D guide. Each edit generates a new garment with its own sewing sheet and 3D drape to compare.'),
-            hint(panels + ' panels · ' + stitches + ' stitches · ' + points.toLocaleString() + ' drape points'),
-            versions.length > 1 ? field('Saved version', version, 'Choose the version you want to edit, drape or export.') : null,
+            hint(msg("garment.use_the_editing_tools_to_paint_changes_to_a_pattern_silhouette_or_3d_guide_e")),
+            hint(msg("garment.panels_stitches_drape_points", {panels: panels, stitches: stitches, value3: points.toLocaleString()})),
+            versions.length > 1 ? field(msg("garment.saved_version"), version, msg("garment.choose_the_version_you_want_to_edit_drape_or_export")) : null,
             el('div', {class:'actions'},
-                button(workspace ? 'Close edit tools' : 'Open edit tools', () => {
+                button(workspace ? msg("garment.close_edit_tools") : msg("garment.open_edit_tools"), () => {
                     if (workspace) {this.showEditor = false;this.render();return;}
                     this.act(async () => {
                         this.editor ??= new GarmentEditor(this);
@@ -311,11 +313,11 @@ export class GarmentWizard {
                         this.showEditor = true;
                     });
                 }, {disabled:this.pending, 'aria-expanded':String(Boolean(workspace))}),
-                previous ? button(compare ? 'Show current only' : 'Compare with previous', () => {this.compare = !this.compare;this.render();},
+                previous ? button(compare ? msg("garment.show_current_only") : msg("garment.compare_with_previous"), () => {this.compare = !this.compare;this.render();},
                     {'aria-pressed':String(Boolean(compare))}) : null),
             workspace ? el('div', {class:'garment-workbench'}, workspace, visuals) : visuals,
-            el('details', {}, el('summary', {}, '3D panel placement sheet'),
-                el('img', {src: url(this.id, 'garment_3d_pattern.png'), alt: 'Author panel placement sheet', class: 'garment-pattern-sheet'})),
+            el('details', {}, el('summary', {}, msg("garment.3d_panel_placement_sheet")),
+                el('img', {src: url(this.id, 'garment_3d_pattern.png'), alt: msg("garment.author_panel_placement_sheet"), class: 'garment-pattern-sheet'})),
         ];
     }
 
@@ -324,18 +326,18 @@ export class GarmentWizard {
             onchange:e=>{this.budget=e.target.valueAsNumber;this.remember();}});
         const mesh = this.run.mesh;
         return [
-            hint('Build a UV-mapped mesh from the sewing panels. The export includes this mesh, the editable pattern and the model’s 3D drape reference. Use these to tailor, rig and test the garment in Blender.'),
-            field('Triangle limit', budget),
+            hint(msg("garment.build_a_uv_mapped_mesh_from_the_sewing_panels_the_export_includes_this_mesh")),
+            field(msg("garment.triangle_limit"), budget),
             el('div', {class:'actions'},
-                button(mesh ? 'Rebuild sewn mesh' : 'Build sewn mesh', () => this.stage('sew', {budget:this.budget}),
+                button(mesh ? msg("garment.rebuild_sewn_mesh") : msg("garment.build_sewn_mesh"), () => this.stage('sew', {budget:this.budget}),
                     {class:mesh ? 'quiet' : 'primary', disabled:this.pending})),
-            mesh ? hint(mesh.triangles.toLocaleString() + ' triangles · Pattern UVs and fabric atlas included') : null,
+            mesh ? hint(msg("garment.triangles_pattern_uvs_and_fabric_atlas_included", {value1: mesh.triangles.toLocaleString()})) : null,
             mesh ? el('section', {class:'garment-drape-controls'},
-                el('h3', {}, 'Optional character preview'),
-                hint('Try a rough rest-pose cloth simulation on a rigged character. Use it to spot clipping or loose placement before tailoring.'),
-                button(this.run.drape || this.run.rig ? 'Review saved character preview' : 'Preview on a character',
-                    () => this.go(3), {disabled:this.pending})) : el('details', {}, el('summary', {}, 'Pattern-only export'),
-                button('Export pattern and drape only', () => this.go(4), {disabled:this.pending})),
+                el('h3', {}, msg("garment.optional_character_preview")),
+                hint(msg("garment.try_a_rough_rest_pose_cloth_simulation_on_a_rigged_character_use_it_to_spot")),
+                button(this.run.drape || this.run.rig ? msg("garment.review_saved_character_preview") : msg("garment.preview_on_a_character"),
+                    () => this.go(3), {disabled:this.pending})) : el('details', {}, el('summary', {}, msg("garment.pattern_only_export")),
+                button(msg("garment.export_pattern_and_drape_only"), () => this.go(4), {disabled:this.pending})),
         ];
     }
 
@@ -346,25 +348,25 @@ export class GarmentWizard {
             type:'number', value:this.fit?.[key] ?? initial, min, max, step,
             onchange:e=>update(key,e.target.valueAsNumber)}));
         const fabric = el('select', {onchange:e=>update('fabric',e.target.value)},
-            [['light','Light · soft, flowing cloth'], ['medium','Medium · everyday fabric'], ['heavy','Heavy · more structure']]
+            [['light',msg("garment.light_soft_flowing_cloth")], ['medium',msg("garment.medium_everyday_fabric")], ['heavy',msg("garment.heavy_more_structure")]]
                 .map(([value,label]) => el('option', {value, selected:value === (this.fit?.fabric || 'medium')}, label)));
         return el('section', {class:'garment-drape-controls'},
-            field('Rigged character GLB', body, this.fit?.characterName ? 'Current target · ' + this.fit.characterName
-                : this.fit?.character ? 'Using the character from the saved drape.' : 'Use a closed, skin-weighted body in its rest pose.'),
-            field('Fabric', fabric, 'Changes how the material bends and settles.'),
-            el('details', {}, el('summary', {}, 'Placement and simulation settings'),
+            field(msg("garment.rigged_character_glb"), body, this.fit?.characterName ? 'Current target · ' + this.fit.characterName
+                : this.fit?.character ? msg("garment.using_the_character_from_the_saved_drape") : msg("garment.use_a_closed_skin_weighted_body_in_its_rest_pose")),
+            field(msg("garment.fabric"), fabric, msg("garment.changes_how_the_material_bends_and_settles")),
+            el('details', {}, el('summary', {}, msg("garment.placement_and_simulation_settings")),
                 el('div', {class:'garment-edit-pair'},
-                    number('Uniform scale', 'scale', 1, .05, 10, .01),
-                    number('Side offset (m)', 'x', 0, -5, 5, .01),
-                    number('Depth offset (m)', 'y', 0, -5, 5, .01),
-                    number('Height offset (m)', 'z', 0, -5, 5, .01),
-                    number('Clearance (mm)', 'clearance', 4, 0, 30, 1),
-                    number('Settling frames', 'frames', 48, 16, 120, 1))),
-            button(this.run.drape ? 'Run another preview' : 'Run cloth preview', () => this.act(async () => {
+                    number(msg("garment.uniform_scale"), 'scale', 1, .05, 10, .01),
+                    number(msg("garment.side_offset_m"), 'x', 0, -5, 5, .01),
+                    number(msg("garment.depth_offset_m"), 'y', 0, -5, 5, .01),
+                    number(msg("garment.height_offset_m"), 'z', 0, -5, 5, .01),
+                    number(msg("garment.clearance_mm"), 'clearance', 4, 0, 30, 1),
+                    number(msg("garment.settling_frames"), 'frames', 48, 16, 120, 1))),
+            button(this.run.drape ? msg("garment.run_another_preview") : msg("garment.run_cloth_preview"), () => this.act(async () => {
                 const file = body.files[0];
                 if (file) {
                     if (!/\.glb$/i.test(file.name) || file.size > 150 * 1024 ** 2) {
-                        throw Error('Choose one rigged GLB smaller than 150 MB.');
+                        throw Error(msg("garment.choose_one_rigged_glb_smaller_than_150_mb"));
                     }
                     const response = await fetch('/mumblebox-foundry/v1/' + base(this.id) + '/character', {
                         method:'POST', headers:{'Content-Type':'application/octet-stream'}, body:file});
@@ -372,7 +374,7 @@ export class GarmentWizard {
                     if (!response.ok) throw Error(data.error || 'The character could not be uploaded.');
                     this.fit = {...this.fit, character:data.character, characterName:file.name};
                 }
-                if (!this.fit?.character) throw Error('Choose a rigged character GLB before draping.');
+                if (!this.fit?.character) throw Error(msg("garment.choose_a_rigged_character_glb_before_draping"));
                 this.run = await request(base(this.id) + '/drape', {...this.fit, client_id:api.clientId});
                 this.approved = null;
                 this.fitView = 'draped-fit.glb';
@@ -382,9 +384,9 @@ export class GarmentWizard {
 
     reviewFit() {
         const {drape, rig} = this.run;
-        const purpose = hint('This is a rough rest-pose preview. Check for loose areas, folds and clipping. Use Blender to tailor the fit, transfer or clean up skin weights, and test the poses you plan to use.');
+        const purpose = hint(msg("garment.this_is_a_rough_rest_pose_preview_check_for_loose_areas_folds_and_clipping_u"));
         if (!drape) return rig
-            ? [purpose, hint('This saved wearable was produced with the earlier fit workflow.'),
+            ? [purpose, hint(msg("garment.this_saved_wearable_was_produced_with_the_earlier_fit_workflow")),
                 this.preview('wearable.glb', 'Saved wearable'), this.fitControls()]
             : [purpose, this.fitControls()];
         const files = {'draped-fit.glb':'Settled with body and clipping', 'starting-fit.glb':'Before simulation',
@@ -392,24 +394,23 @@ export class GarmentWizard {
         const shown = Object.hasOwn(files, this.fitView) ? this.fitView : 'draped-fit.glb';
         const selector = el('select', {onchange:e=>{this.fitView=e.target.value;this.render();}},
             Object.entries(files).map(([value,label])=>el('option', {value, selected:value === shown}, label)));
-        const accept = button('Transfer test skin weights', () => this.stage('fit', {approve:drape.drape_id}),
+        const accept = button(msg("garment.transfer_test_skin_weights"), () => this.stage('fit', {approve:drape.drape_id}),
             {disabled:this.pending || this.approved !== drape.drape_id});
         const review = el('label', {class:'check-row'},
             el('input', {type:'checkbox', checked:this.approved === drape.drape_id, onchange:e=>{
                 this.approved = e.target.checked ? drape.drape_id : null;
                 accept.disabled = this.approved !== drape.drape_id;
-            }}), el('span', {}, 'I checked the drape for loose areas and clipping.'));
+            }}), el('span', {}, msg("garment.i_checked_the_drape_for_loose_areas_and_clipping")));
         return [
             purpose,
-            hint('Blender Cloth · ' + drape.fabric + ' fabric · ' + drape.frames + ' settling frames'),
-            el('p', {role:'status'}, 'Rest-pose clipping went from ' + drape.before.vertices.toLocaleString() + ' to ' +
-                drape.after.vertices.toLocaleString() + ' vertices. Deepest remaining mark · ' + drape.after.depth_mm + ' mm.'),
-            field('Preview', selector, 'Red marks show vertices inside the body. Also look for gaps where the fabric hangs away from it.'),
+            hint(msg("garment.blender_cloth_fabric_settling_frames", {fabric: drape.fabric, frames: drape.frames})),
+            el('p', {role:'status'}, msg("garment.rest_pose_clipping_went_from_to_vertices_deepest_remaining_mark_mm", {value1: drape.before.vertices.toLocaleString(), value2: drape.after.vertices.toLocaleString(), value3: drape.after.depth_mm})),
+            field(msg("garment.preview"), selector, msg("garment.red_marks_show_vertices_inside_the_body_also_look_for_gaps_where_the_fabric")),
             this.preview(shown, files[shown]),
-            el('details', {}, el('summary', {}, 'Adjust preview settings'), this.fitControls()),
-            rig ? hint('Test skin weights saved. Sampled poses · ' + rig.pose_checks.map(pose => pose.name + ' ' + pose.penetrating + ' clipping').join(' · '))
-                : el('details', {}, el('summary', {}, 'Experimental skin transfer'),
-                    hint('Transfer weights from this character as a starting point. Refine the result and test poses in Blender.'), review, accept),
+            el('details', {}, el('summary', {}, msg("garment.adjust_preview_settings")), this.fitControls()),
+            rig ? hint(msg("garment.test_skin_weights_saved_sampled_poses", {value1: rig.pose_checks.map(pose => pose.name + ' ' + pose.penetrating + ' clipping').join(' · ')}))
+                : el('details', {}, el('summary', {}, msg("garment.experimental_skin_transfer")),
+                    hint(msg("garment.transfer_weights_from_this_character_as_a_starting_point_refine_the_result_a")), review, accept),
         ];
     }
 
@@ -418,21 +419,21 @@ export class GarmentWizard {
         const dl = (title, file) => el('a', {class: 'download-link', href: url(this.id, file, true)}, title);
         return [
             hint(this.run.mesh
-                ? 'Import the sewn GLB into Blender as your starting mesh. Use the sewing pattern and 3D point drape as references while you adjust fit and prepare the garment for animation.'
-                : 'This export contains the editable pattern and 3D point drape. Go back to build a sewn mesh for Blender.'),
+                ? msg("garment.import_the_sewn_glb_into_blender_as_your_starting_mesh_use_the_sewing_patter")
+                : msg("garment.this_export_contains_the_editable_pattern_and_3d_point_drape_go_back_to_buil")),
             el('div', {class: 'actions'}, dl('Editable pattern (JSON)', 'garment_specification.json'),
                 dl('Sewing sheet (SVG)', 'garment_pattern.svg'), dl('3D drape reference (PLY)', 'drape-particles.ply'),
                 this.run.mesh ? dl('Sewn mesh (GLB)', 'sewn-garment.glb') : null,
                 this.run.archive ? dl('Download ZIP', 'archive') : null),
-            this.run.drape || this.run.rig ? el('details', {}, el('summary', {}, 'Optional character preview files'),
-                hint('These files are a fit and rigging starting point. Review loose areas and clipping on your character.'),
+            this.run.drape || this.run.rig ? el('details', {}, el('summary', {}, msg("garment.optional_character_preview_files")),
+                hint(msg("garment.these_files_are_a_fit_and_rigging_starting_point_review_loose_areas_and_clip")),
                 el('div', {class:'actions'},
                     this.run.drape ? dl('Settled GLB', 'draped-garment.glb') : null,
                     this.run.drape ? dl('Drape report', 'drape-report.json') : null,
                     this.run.rig ? dl('Test skin GLB', 'wearable.glb') : null,
                     this.run.rig ? dl('Test skin FBX', 'wearable.fbx') : null,
                     this.run.rig ? dl('Fit report', 'fit-report.json') : null)) : null,
-            this.run.archive ? hint('Saved in Foundry History.') : null,
+            this.run.archive ? hint(msg("garment.saved_in_foundry_history")) : null,
         ];
     }
 
@@ -455,33 +456,31 @@ export class GarmentWizard {
         const actions = [];
         this.generate = null;
         if (this.page === 0) {
-            this.generate = button(this.pending ? 'Preparing…' : 'Generate garment', () => this.start(),
+            this.generate = button(this.pending ? msg("garment.preparing") : msg("garment.generate_garment"), () => this.start(),
                 {class: 'primary', disabled: !this.canGenerate()});
             actions.push(this.generate);
         } else if (!running) {
-            actions.push(button(this.page === 1 ? 'Edit starting point' : 'Back', () => this.go(this.page === 4 ? this.downloadFrom ?? 2 : this.page - 1), {disabled: this.pending}));
-            if (this.page === 1 && this.run.result) actions.push(button('Prepare for Blender', () => this.go(2), {class:'primary'}));
-            if ((this.page === 2 || this.page === 3) && this.run.mesh) actions.push(button('Continue to export', () => this.go(4), {class:'primary', disabled:this.pending}));
-            if (this.page === 4 && !this.run.archive) actions.push(button('Save ZIP to History', () => this.stage('package'),
+            actions.push(button(this.page === 1 ? msg("garment.edit_starting_point") : msg("garment.back"), () => this.go(this.page === 4 ? this.downloadFrom ?? 2 : this.page - 1), {disabled: this.pending}));
+            if (this.page === 1 && this.run.result) actions.push(button(msg("garment.prepare_for_blender"), () => this.go(2), {class:'primary'}));
+            if ((this.page === 2 || this.page === 3) && this.run.mesh) actions.push(button(msg("garment.continue_to_export"), () => this.go(4), {class:'primary', disabled:this.pending}));
+            if (this.page === 4 && !this.run.archive) actions.push(button(msg("garment.save_zip_to_history"), () => this.stage('package'),
                 {class: 'primary', disabled: this.pending}));
         }
-        actions.push(button('Choose a workflow', () => this.shell.open('Choose a Workflow'), {class: 'quiet'}));
+        actions.push(button(msg("garment.choose_a_workflow"), () => this.shell.open('Choose a Workflow'), {class: 'quiet'}));
         const content = running ? [this.busy()] : this[pages[this.page]]();
-        this.element.replaceChildren(
-            el('aside', {class: 'wizard-rail'}, el('span', {class: 'eyebrow'}, 'GARMENT PARTICLES / CLOTHING'),
-                el('h3', {}, 'Create Clothing'),
+        replaceContent(this.element, el('aside', {class: 'wizard-rail'}, el('span', {class: 'eyebrow'}, msg("garment.garment_particles_clothing")),
+                el('h3', {}, msg("garment.create_clothing")),
                 el('ol', {class: 'wizard-steps'}, mainSteps.map((page, index) => el('li', {
                     class: page === (this.page === 3 ? 2 : this.page) ? 'current' : '',
                     'aria-current': page === (this.page === 3 ? 2 : this.page) ? 'step' : null,
                 }, el('span', {class: 'step-number'}, String(index + 1)), el('strong', {}, titles[page])))),
-                el('div', {class: 'wizard-rail-note'}, link('Garment Particles by Kiyohiro Nakayama and collaborators', this.capabilities.source))),
-            el('section', {class: 'wizard-panel'},
+                el('div', {class: 'wizard-rail-note'}, link(msg("garment.garment_particles_by_kiyohiro_nakayama_and_collaborators"), this.capabilities.source))), el('section', {class: 'wizard-panel'},
                 el('header', {class: 'page-head'}, el('span', {class: 'eyebrow'},
-                    this.page === 3 ? 'OPTIONAL PREVIEW' : 'STEP ' + (mainSteps.indexOf(this.page) + 1) + ' OF ' + mainSteps.length),
+                    this.page === 3 ? msg("garment.optional_preview") : msg("garment.step_of", {value1: mainSteps.indexOf(this.page) + 1, value2: mainSteps.length})),
                     el('h2', {tabIndex: -1}, titles[this.page])),
                 this.page === 0 ? el('div', {class: 'note-panel'},
-                    el('strong', {}, 'Experimental'),
-                    hint('This workflow is still in development. Review how the garment fits your character and expect to make adjustments before using it in a project.')) : null,
+                    el('strong', {}, msg("garment.experimental")),
+                    hint(msg("garment.this_workflow_is_still_in_development_review_how_the_garment_fits_your_chara"))) : null,
                 ...content,
                 (this.error || this.run?.error) ? el('p', {role: 'alert'}, this.error || this.run.error) : null,
                 el('footer', {class: 'wizard-footer'}, el('div', {class: 'actions'}, actions))));
