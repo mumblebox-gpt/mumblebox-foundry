@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-[English](README.md) · [简体中文](README.zh-CN.md)
+[English](README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md)
 
 **Make images and 3D assets locally, on your own or alongside your coding agent.**
 
@@ -57,7 +57,7 @@ Packages include selected files, a README, measurements, checksums, provenance a
 
 ## Language and accessibility
 
-Choose **English** or **简体中文** in the header or Settings. Switching language updates interface text in place using local catalogs. It preserves entered text, references, previews and running jobs.
+Choose your interface language in the header or Settings. Switching language updates interface text in place using local catalogs. It preserves entered text, references, previews and running jobs.
 
 Interface language is separate from generation language. Foundry preserves your prompts and model instructions. Check the selected model's guidance when choosing a generation prompt's language.
 

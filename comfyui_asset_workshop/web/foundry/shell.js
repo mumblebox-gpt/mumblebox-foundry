@@ -87,9 +87,7 @@ export class FoundryShell {
         this.version=el("small",{},msg("common.interface_loading"));
         this.language=el("select", {class:"language", "aria-label":msg("common.language"),
             onchange:event=>this.setLanguage(event.target.value)},
-            ...supportedLanguages.map(language=>el("option", {value:language.id}, language.label)),
-            ...["한국어","日本語","Español","Português","Deutsch"].map(name=>
-                el("option", {disabled:true}, msg("common.coming_soon", {name}))));
+            ...supportedLanguages.map(language=>el("option", {value:language.id}, language.label)));
         this.themeButton=button([icon("contrast",18),msg("common.theme")],()=>this.setTheme(this.root.dataset.theme==="dark"?"light":"dark"));
         bindAttribute(this.themeButton,"aria-label",msg("common.switch_color_theme"));
         this.fontControl=fontControl(this);
@@ -210,11 +208,12 @@ export class FoundryShell {
         this.viewDispose?.();this.viewDispose=null;
         this.tab=name;this.sequence=(this.sequence||0)+1;const sequence=this.sequence;
         [...this.nav.children].forEach((n,i)=>{n.setAttribute("aria-selected",String(this.tabs[i]===name));n.tabIndex=this.tabs[i]===name?0:-1;});
-        bindAttribute(this.content,"aria-label",msg("common."+({
+        const label=msg("common."+({
             "Choose a Workflow":"choose_a_workflow",Images:"images",History:"history",Integrations:"integrations",About:"about",Roadmap:"roadmap"
-        })[name]));this.content.scrollTop=0;
+        })[name]);
+        bindAttribute(this.content,"aria-label",label);this.content.scrollTop=0;
         if(name==="Choose a Workflow"){this.content.replaceChildren(home(this));return;}
-        replaceContent(this.content, el("p",{class:"muted"},msg("common.loading", {value1: name.toLowerCase()})));
+        replaceContent(this.content, el("p",{class:"muted"},msg("common.loading", {value1:label})));
         try {
             const files={"About":"about","History":"library","Images":"images","Integrations":"integrations","Roadmap":"roadmap"};
             const module=await import("./views/"+files[name]+".js");

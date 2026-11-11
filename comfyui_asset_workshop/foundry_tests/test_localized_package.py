@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+from foundry.localization import MANIFEST, translate
 from finishing.package_catalog import PackageCatalog, FileRecord, VariantRecord
 from finishing.package_readme import render_readme
 from finishing.package_archive import publish_archive, validate_archive
@@ -23,13 +24,27 @@ class LocalizedPackageTests(unittest.TestCase):
         self.assertIn('Apache-2.0',zh);self.assertIn('Original retained license summary',zh)
         self.assertIn('Detailed/mesh.glb',zh);self.assertIn('123',zh)
         self.assertEqual(catalog.to_dict(),before)
-    def test_chinese_archive_keeps_inventory_links_and_checksums(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory)/'asset';(root/'Detailed').mkdir(parents=True)
-            (root/'Detailed/mesh.glb').write_bytes(b'unchanged mesh fixture')
-            archive=publish_archive(self.fixture(),root,Path(directory)/'asset.zip',lambda:None,locale='zh-CN')
-            self.assertEqual(validate_archive(archive)['file_count'],3)
-            self.assertIn('资产包信息',(root/'README.md').read_text(encoding='utf-8'))
-            self.assertEqual((root/'Detailed/mesh.glb').read_bytes(),b'unchanged mesh fixture')
+    def test_localized_archives_keep_inventory_links_and_checksums(self):
+        for language in MANIFEST["languages"]:
+            locale = language["id"]
+            with self.subTest(locale=locale), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory) / "asset"
+                (root / "Detailed").mkdir(parents=True)
+                mesh = root / "Detailed/mesh.glb"
+                mesh.write_bytes(b"unchanged mesh fixture")
+                catalog = self.fixture()
+                before = copy.deepcopy(catalog.to_dict())
+                archive = publish_archive(catalog, root, Path(directory) / "asset.zip", lambda: None, locale=locale)
+                self.assertEqual(validate_archive(archive)["file_count"], 3)
+                readme = (root / "README.md").read_text(encoding="utf-8")
+                self.assertIn(translate("package.package_info", locale=locale), readme)
+                self.assertIn("Settings", readme)
+                self.assertIn("Original retained license summary", readme)
+                after = catalog.to_dict()
+                self.assertEqual({key: value for key, value in after.items() if key != "files"},
+                                 {key: value for key, value in before.items() if key != "files"})
+                self.assertEqual([item["path"] for item in after["files"]],
+                                 [item["path"] for item in before["files"]] + ["README.md"])
+                self.assertEqual(mesh.read_bytes(), b"unchanged mesh fixture")
 
 if __name__=='__main__':unittest.main()

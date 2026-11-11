@@ -309,5 +309,6 @@
   "version_count_plural": "{count} 个版本",
   "format_count": "{count} 项格式选择",
   "format_count_plural": "{count} 项格式选择",
-  "output_selection_summary": "{versions} · {formats}"
+  "output_selection_summary": "{versions} · {formats}",
+  "starting_image": "起始图像"
 }

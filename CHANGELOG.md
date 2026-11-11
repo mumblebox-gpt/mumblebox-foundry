@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-preview.23 — Latin American Spanish
+
+- Add Español (Latinoamérica) to the interface, including wizard steps, help, accessibility labels, errors, all 12 CCORE examples, and exported package documentation. Add a Spanish README.
+- Localize the Single Image progress labels, quad mesh badges, and tab loading messages through the shared catalogs.
+- Use the shared language manifest for the picker and release README inventory. Verify raw catalog coverage, named placeholders, and archive integrity for every enabled language.
+
 ## 0.1.0-preview.22 — English and Simplified Chinese
 
 - Add English and 简体中文 interface choices with lightweight, in-place switching that preserves wizard inputs and loaded previews. Add a globe beside the language picker and local Chinese font fallbacks.

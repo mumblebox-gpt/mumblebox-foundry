@@ -5,7 +5,7 @@ English is the authoritative interface and documentation source. Simplified Chin
 ## One owner per responsibility
 
 - web/foundry/locales/manifest.json owns supported language IDs, native-language names and domain locations.
-- Each workflow owns its nearby locales/en.json and locales/zh-CN.json. Common shell messages live in web/foundry/locales; package explanations live in web/foundry/package/locales.
+- Each workflow owns its nearby English and translated JSON catalogs. Common shell messages live in web/foundry/locales; package explanations live in web/foundry/package/locales.
 - web/foundry/i18n.js owns browser resolution, named parameters and in-place text/attribute bindings. dom.js uses those bindings. preferences.py owns the saved language.
 - foundry/localization.py reads the same manifest and JSON for server message metadata and the shared package README renderer. There is no second set of Python translations.
 - finishing/package_readme.py owns human package documentation. The archive publisher selects the saved interface language at publication. Existing packages, machine catalogs, checksums and retained licenses are unchanged.
@@ -27,7 +27,7 @@ Keep all of these exact: user prompts and names, model instructions, model/file 
 1. Add its BCP 47 ID and native name to the manifest; create that language's JSON beside every English catalog.
 2. Keep keys and named placeholders identical. English fallback handles a missing translation; release review must check completeness.
 3. Review meaning, terminology, memory warnings, technical limitations and accessibility labels separately from authoring.
-4. Add a linked README for that language. Update the explicit release document inventory.
+4. Add a linked root README named README.<locale>.md. The release builder includes READMEs for all languages declared in the manifest.
 5. Run the focused Python and JavaScript localization checks. Test the real language selector with a filled form, selected reference and loaded preview, including 200% text. Confirm no reinitialization and no horizontal overflow.
 
 README.md and README.zh-CN.md describe the same product, benefits, limits and installation choices. English skill instructions remain the agent authority: check current app capabilities, app/skill compatibility and update availability, then explain relevant notices in the user's language. Do not translate model prompts merely because the interface language changed.

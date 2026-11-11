@@ -1,4 +1,5 @@
 """Localization contracts that protect stored inputs and locale compatibility."""
+from collections import Counter
 import json
 import sys
 import tempfile
@@ -6,18 +7,25 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from foundry.localization import MANIFEST, ROOT, catalog, locale_name, source_message, translate
+from foundry.localization import MANIFEST, PLACEHOLDER, ROOT, catalog, locale_name, source_message, translate
 from foundry.preferences import Preferences
 
 
 class LocalizationTests(unittest.TestCase):
-    def test_shared_catalogs_have_the_same_keys(self):
-        self.assertEqual(set(catalog("en")), set(catalog("zh-CN")))
-        for relative in MANIFEST["domains"].values():
+    def test_shared_catalogs_have_the_same_keys_and_placeholders(self):
+        for domain, relative in MANIFEST["domains"].items():
             directory = ROOT / relative
             english = json.loads((directory / "en.json").read_text(encoding="utf-8-sig"))
-            chinese = json.loads((directory / "zh-CN.json").read_text(encoding="utf-8-sig"))
-            self.assertEqual(set(english), set(chinese), str(directory))
+            for language in MANIFEST["languages"]:
+                locale = language["id"]
+                with self.subTest(domain=domain, locale=locale):
+                    translated = json.loads((directory / (locale + ".json")).read_text(encoding="utf-8-sig"))
+                    self.assertEqual(english.keys(), translated.keys())
+                    for key, text in translated.items():
+                        self.assertIsInstance(text, str, key)
+                        self.assertTrue(text.strip(), key)
+                        self.assertEqual(Counter(PLACEHOLDER.findall(english[key])),
+                                         Counter(PLACEHOLDER.findall(text)), key)
 
     def test_named_values_preserve_user_text(self):
         reference = "<script>Settings</script> 发型"
@@ -68,7 +76,11 @@ class LocalizationTests(unittest.TestCase):
             for field in ("name", "category", "prompt"):
                 key = "ccore.preset_" + example["id"] + "_" + field
                 self.assertEqual(translate(key), example[field])
-                self.assertNotEqual(translate(key, locale="zh-CN"), example[field])
+                for language in MANIFEST["languages"]:
+                    locale = language["id"]
+                    if locale != "en":
+                        with self.subTest(locale=locale, key=key):
+                            self.assertNotEqual(translate(key, locale=locale), example[field])
 
     def test_generation_instruction_is_outside_the_ui_catalog(self):
         self.assertNotIn("Preserve this exact subject and its proportions.", catalog("en").values())

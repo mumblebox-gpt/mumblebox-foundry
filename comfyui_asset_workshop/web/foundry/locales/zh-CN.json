@@ -570,5 +570,6 @@
   "translation_unusable": "助手未返回可用的英文译文，原始描述未更改。",
   "description_action_invalid": "请选择增强描述或翻译。",
   "translation_gpu_required": "翻译需要 NVIDIA GPU 和支持 CUDA 的本地助手运行环境。原始描述未更改。",
-  "translation_gpu_load_failed": "翻译模型无法完全加载到 GPU。请选择 Q4 或释放显存后重试。原始描述未更改。详细信息：{details}"
+  "translation_gpu_load_failed": "翻译模型无法完全加载到 GPU。请选择 Q4 或释放显存后重试。原始描述未更改。详细信息：{details}",
+  "quads_badge": "四边面"
 }

@@ -37,3 +37,26 @@ Verification passed: 168 Foundry Python tests, 34 browser-module tests, five CCO
 ## Scope
 
 This is an English/Simplified Chinese release. French, Latin American Spanish and the other languages remain pending a separate agreed plan. No new announcement or installed Pinokio update was performed. Asset generation was not repeated for every language or workflow; saved previews, inputs and GUI controls were exercised proportionally. The new inference test was the local text translation itself.
+
+## Six-language expansion
+
+The new pass uses the same nine domain owners and one manifest. The release builder derives translated root README filenames from the manifest, and the picker uses the same active language list. The live preview.22 baseline exposed four English Single Image step labels and two English Quads badges in Chinese. Their text now goes through the existing bindings, with a live recheck required for the new build.
+
+| Locale | Editorial review and catalogs | Archive check | Live app check |
+| --- | --- | --- | --- |
+| es-419 | All 2,415 entries reviewed, including 12 CCORE prompts and the README | Passed | 15 views at default and 200%, plus preserved form and preview |
+| fr | Pending | Pending | Pending |
+| pt-BR | Pending | Pending | Pending |
+| de | Pending | Pending | Pending |
+| ja | Pending | Pending | Pending |
+| ko | Pending | Pending | Pending |
+
+### Latin American Spanish checkpoint
+
+The local candidate adds Español (Latinoamérica) in the header and Settings, the nine catalog files and README.es-419.md. The Spanish editorial pass corrected workflow titles, model-memory language, mesh terminology, and all twelve CCORE prop descriptions against their English meaning. All raw catalog keys and named placeholders match. Remaining identical terms such as Rocket Mode are intentional product names.
+
+The actual Foundry Comfy Desktop app opened the workflow chooser, Images, History, Integrations, About, Roadmap, Settings, and eight wizard entries at both default and 200% text. There was no horizontal overflow, clipped action or error alert in those 30 checks. Single Image steps now resolve through the mesh catalog. Switching Spanish to English and back preserved the edited textarea and loaded preview canvas. The preset selector exposed all twelve examples and populated the full localized description. The normal preference endpoint returned a localized invalid-language error and retained Spanish.
+
+The package fixture retains its original user name, mesh bytes, license summary, catalog metadata and valid archive checksums. The final source checks passed 168 Foundry Python and 34 JavaScript tests, plus the seven release/installer tests during the Spanish install pass. Live check evidence is in bench/localization-six-20261110/live-es-419.json. Opening Splat during the live checks temporarily removed one graph note. Reloading the serialized graph restored the note, all 461 nodes and the selected preview. The final installed files match canonical source and Foundry is open in Spanish.
+
+The live Spanish checkpoint used the local candidate before the release version bump. Preview.23 is the Spanish release of that candidate. The remaining five locales are paused.

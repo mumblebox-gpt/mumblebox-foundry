@@ -18,6 +18,7 @@ const singleTitles=[msg("mesh.your_starting_image"),msg("mesh.mesh_and_refinemen
 const clone=value=>JSON.parse(JSON.stringify(value));
 const titles=[msg("mesh.your_starting_images"),msg("mesh.review_the_four_views"),msg("mesh.mesh_and_refinement"),msg("mesh.refined_mesh_and_exports"),msg("mesh.your_asset_package")];
 const stepLabels=[msg("mesh.starting_images"),msg("mesh.four_views"),msg("mesh.mesh_settings"),msg("mesh.refine_export"),msg("mesh.asset_package")];
+const singleStepLabels=[msg("mesh.starting_image"), ...stepLabels.slice(2)];
 const stepDescriptions=[msg("mesh.references_and_image_model"),msg("mesh.review_the_turnaround"),msg("mesh.detail_and_refinement_controls"),msg("mesh.preview_and_output_choices"),msg("mesh.files_and_production_record")];
 const stageNames={turnaround:msg("mesh.qwen_image_2_1_creating_four_views"),geometry:msg("mesh.pixal3d_trellis_2_building_the_initial_mesh"),
  refinement:msg("mesh.hi3d_refining_and_cleaning_the_geometry"),texture:msg("mesh.trellis_2_texturing_the_finished_geometry"),
@@ -209,7 +210,7 @@ export class Wizard {
         this.previewDispose?.();this.previewDispose=null;
         const rail=el("aside",{class:"wizard-rail","aria-label":msg("mesh.workflow_progress")},
             el("span",{class:"eyebrow"},msg("mesh.image_to_3d")),el("h3",{},this.single?msg("mesh.single_image_or_text"):msg("mesh.from_reference_to_asset")),
-            el("ol",{class:"wizard-steps"},...(this.single?["Starting image","Mesh settings","Refine & export","Asset package"]:stepLabels).map((title,i)=>el("li",{
+            el("ol",{class:"wizard-steps"},...(this.single?singleStepLabels:stepLabels).map((title,i)=>el("li",{
                 class:i+1===this.page?"current":i+1<this.page?"visited":"",
                 ...(i+1===this.page?{"aria-current":"step"}:{})},
                 el("span",{class:"step-number","aria-hidden":"true"},String(i+1).padStart(2,"0")),

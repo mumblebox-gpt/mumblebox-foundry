@@ -309,5 +309,6 @@
   "version_count_plural": "{count} versions",
   "format_count": "{count} format selection",
   "format_count_plural": "{count} format selections",
-  "output_selection_summary": "{versions} · {formats}"
+  "output_selection_summary": "{versions} · {formats}",
+  "starting_image": "Starting image"
 }

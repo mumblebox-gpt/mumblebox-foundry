@@ -570,5 +570,6 @@
   "translation_unusable": "The assistant did not return a usable English translation. Your original description is unchanged.",
   "description_action_invalid": "Choose enhancement or translation.",
   "translation_gpu_required": "Translation requires an NVIDIA GPU and a CUDA-capable local helper runtime. Your description is unchanged.",
-  "translation_gpu_load_failed": "The translation model could not load fully on the GPU. Choose Q4 or free GPU memory, then retry. Your description is unchanged. Details: {details}"
+  "translation_gpu_load_failed": "The translation model could not load fully on the GPU. Choose Q4 or free GPU memory, then retry. Your description is unchanged. Details: {details}",
+  "quads_badge": "Quads"
 }

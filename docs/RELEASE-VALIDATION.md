@@ -1,3 +1,7 @@
+# Preview 0.1.0-preview.23 validation
+
+Latin American Spanish was verified in 15 views at default and 200% text size in the existing Comfy Desktop. Language switching preserved an edited form and a rendered preview. [Spanish validation](LOCALIZATION-VALIDATION.md#latin-american-spanish-checkpoint) records the catalog, package and live checks.
+
 # Preview 0.1.0-preview.22 validation
 
 English/Simplified Chinese localization, bilingual CCORE presets and the local literal-translation action were verified in the existing Comfy Desktop. [Localization validation](LOCALIZATION-VALIDATION.md) records the actual GUI, preview preservation, 200% font, translation fidelity, GPU memory and cancellation checks, with their limits.

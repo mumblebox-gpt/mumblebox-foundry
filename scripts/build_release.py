@@ -3,7 +3,7 @@ import argparse, hashlib, json, shutil, zipfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 PACK=ROOT/"comfyui_asset_workshop"
-TOP=("README.md","README.zh-CN.md","CHANGELOG.md","INSTALL.md","THIRD-PARTY.md","LICENSE","NOTICE","dependencies.json","requirements-worker-windows.txt",
+TOP=("README.md","CHANGELOG.md","INSTALL.md","THIRD-PARTY.md","LICENSE","NOTICE","dependencies.json","requirements-worker-windows.txt",
      "pinokio.js","pinokio.json","install.js","start.js","update.js","repair.js","icon.png")
 DIRECTORIES=("agent","finishing","foundry","licenses","material_lab","pipeline_workers","skills","web","workflows")
 EXTENSIONS={".py",".json",".js",".css",".svg",".png",".webp",".md",".txt",".html"}
@@ -25,6 +25,8 @@ def validate_text_encoding(files):
 
 def inventory():
     files=[ROOT/name for name in TOP]
+    manifest=json.loads((PACK/"web/foundry/locales/manifest.json").read_text(encoding="utf-8-sig"))
+    files += [ROOT/f"README.{language['id']}.md" for language in manifest["languages"] if language["id"] != "en"]
     files+=list((ROOT/"licenses").glob("*.txt"))
     files.extend(CYBER_PAYLOAD/name for name in CYBER_BINARY_FILES)
     files+=[ROOT/"docs"/name for name in ("LOCALIZATION.md","LOCALIZATION-VALIDATION.md","AGENT-SETUP.md","RELEASE-VALIDATION.md","PINOKIO.md","HAIR-WORKFLOW.md","SPLAT-SOLID.md","LOCAL-UPDATE-VALIDATION.md","GROUNDING-VALIDATION.md")]

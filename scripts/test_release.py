@@ -37,6 +37,15 @@ class InstallTests(unittest.TestCase):
         spec=importlib.util.spec_from_file_location('builder',Path(__file__).with_name('build_release.py'))
         builder=importlib.util.module_from_spec(spec);spec.loader.exec_module(builder)
         names={p.relative_to(builder.ROOT).as_posix() for p in builder.inventory()}
+        locale_root = builder.PACK / 'web/foundry/locales'
+        locales = json.loads((locale_root / 'manifest.json').read_text(encoding='utf-8-sig'))
+        for language in locales['languages']:
+            locale = language['id']
+            readme = 'README.md' if locale == 'en' else f'README.{locale}.md'
+            self.assertIn(readme, names)
+            for relative in locales['domains'].values():
+                catalog = (locale_root / relative / (locale + '.json')).resolve()
+                self.assertIn(catalog.relative_to(builder.ROOT).as_posix(), names)
         self.assertIn('comfyui_asset_workshop/material_lab/material_editor.html',names)
         self.assertIn('comfyui_asset_workshop/agent/workspace.py',names)
         self.assertIn('comfyui_asset_workshop/skills/mumblebox-assets/SKILL.md',names)

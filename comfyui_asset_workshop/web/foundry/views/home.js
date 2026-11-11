@@ -47,7 +47,7 @@ export function home(shell) {
             shell.node.properties.foundrySplat?.runId?button(msg("common.resume_splat_solid"),()=>shell.openSplatWizard({resume:true})):null))));
     for(const [method,id,alt] of [['single','single',msg("common.one_reference_becoming_a_refined_robot_mesh")],['turnaround','turnaround',msg("common.consistent_character_views_beside_a_finished_mesh")],['3d-guided','guided',msg("common.measured_cameras_around_a_cargo_rover")],['splat','splat',msg("common.detailed_splat_and_simple_companion_geometry")]]){
         const card=methods.querySelector('[data-method="'+method+'"]');card.prepend(artwork('method-'+id,alt));
-        card.querySelector('div').append(el('div',{class:'formats'},...(method==='splat'?['SPZ','GLB','MP4','ZIP']:method==='3d-guided'?['GLB','FBX','STL','ZIP']:['GLB','FBX','Quads','STL','ZIP']).map(x=>el('span',{class:'badge'},x))));
+        card.querySelector('div').append(el('div',{class:'formats'},...(method==='splat'?['SPZ','GLB','MP4','ZIP']:method==='3d-guided'?['GLB','FBX','STL','ZIP']:['GLB','FBX',msg('common.quads_badge'),'STL','ZIP']).map(x=>el('span',{class:'badge'},x))));
     }
     const card = el("details",{class:"mesh-category",open:true},
       el('summary',{class:'workflow-card'},
