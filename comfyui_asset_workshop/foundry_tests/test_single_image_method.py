@@ -1,5 +1,5 @@
 """Single-image ancestry, input and finishing contracts (no model inference)."""
-import sys,unittest
+import json,sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from foundry.workflows.image_to_3d.definition import resolve_settings
@@ -27,6 +27,17 @@ class SingleImageMethod(unittest.TestCase):
         self.assertEqual(g['55']['inputs']['model_name'],'moge_2_vitl_normal_fp16.safetensors')
         self.assertEqual(g['119']['inputs']['resolution'],'32')
         self.assertEqual(g['242']['inputs']['axis'],'horizontal')
+    def test_first_run_prepares_the_checkpoint_required_by_the_moge_loader(self):
+        from foundry.workflows.image_to_3d.readiness import MODELS
+        lock = Path(__file__).resolve().parents[1] / 'models.lock.json'
+        catalog = json.loads(lock.read_text(encoding='utf-8'))['models']
+        graph = self.recipe().compile_stage('geometry', self.run_data())
+        requested = {node['inputs']['model_name'] for node in graph.values()
+                     if node['class_type'] == 'LoadMoGeModel'}
+        prepared = {catalog[key]['name'] for key in MODELS['single_geometry']
+                    if catalog[key]['category'] == 'geometry_estimation'}
+        self.assertEqual(prepared, requested)
+
     def test_refinement_and_texture_use_original_and_checkpoint_not_regeneration(self):
         for stage in ('refinement','texture'):
             g=self.recipe().compile_stage(stage,self.run_data())

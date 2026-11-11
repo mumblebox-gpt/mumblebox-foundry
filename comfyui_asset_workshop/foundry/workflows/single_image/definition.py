@@ -2,6 +2,7 @@
 from ..image_to_3d.definition import DEFAULTS as BASE,resolve_settings as base_settings
 METHOD='single-image'
 OFFSET=500000
+MOGE_MODEL_KEY = "moge2_fp16"
 DEFAULTS={**BASE,'shape_resolution':1024,'shape_seed':42,'geometry_model':'pixal3d','export_grounding':'level'}
 
 def validate_references(refs):

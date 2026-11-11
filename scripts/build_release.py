@@ -26,7 +26,7 @@ def validate_text_encoding(files):
 def inventory():
     files=[ROOT/name for name in TOP]
     manifest=json.loads((PACK/"web/foundry/locales/manifest.json").read_text(encoding="utf-8-sig"))
-    files += [ROOT/f"README.{language['id']}.md" for language in manifest["languages"] if language["id"] != "en"]
+    files += [ROOT/"docs"/f"README.{language['id']}.md" for language in manifest["languages"] if language["id"] != "en"]
     files+=list((ROOT/"licenses").glob("*.txt"))
     files.extend(CYBER_PAYLOAD/name for name in CYBER_BINARY_FILES)
     files+=[ROOT/"docs"/name for name in ("LOCALIZATION.md","LOCALIZATION-VALIDATION.md","AGENT-SETUP.md","RELEASE-VALIDATION.md","PINOKIO.md","HAIR-WORKFLOW.md","SPLAT-SOLID.md","LOCAL-UPDATE-VALIDATION.md","GROUNDING-VALIDATION.md")]

@@ -216,6 +216,8 @@
   "models_and_workflow_tools": "Modelos y herramientas de flujo de trabajo",
   "installed_workflow": "Flujo de trabajo instalado: {version}",
   "official_project": "Proyecto oficial",
+  "contributor_knomadaero_moge_report": "¡Gracias por compartir el registro completo del error de ComfyUI! Tu reporte nos ayudó a corregir el asistente de imagen única o texto para que prepare el modelo correcto desde el primer uso.",
+  "original_bug_report": "Reporte original",
   "thank_you": "Gracias",
   "to_the_people_who_share_fixes_useful_workflows_thoughtful_feedback_and_their": "A las personas que comparten correcciones, flujos de trabajo útiles, comentarios reflexivos y su tiempo: gracias por ayudar a que Foundry crezca. Este reconocimiento en tiempo real registra las contribuciones a medida que se integran en la caja de herramientas.",
   "package_specific_resources_measurements_and_license_notices_are_recorded_in": "Los recursos específicos del paquete, las mediciones y los avisos de licencia se registran en el README y los metadatos de cada exportación. Los créditos describen el flujo de trabajo actual; no otorgan derechos adicionales a los pesos del modelo ni a las salidas.",

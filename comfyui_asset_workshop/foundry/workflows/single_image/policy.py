@@ -6,6 +6,7 @@ from ..image_to_3d.graph import STAGE_KEYS,DEPENDENCIES
 from ..image_to_3d.definition import texture_sampling_settings
 from ...artifacts import digest,owned_path
 from ...quad_policy import fingerprint_fields, manifest_resources
+from .definition import MOGE_MODEL_KEY
 
 def fingerprint(run,stage,input_root):
     if stage=='geometry':
@@ -24,7 +25,7 @@ def fingerprint(run,stage,input_root):
 
 def metadata(run):
     texture_mode=run['settings'].get('texture_mode','standard')
-    resources=['pixal3d_single','moge2','dinov3','birefnet','hi3d','pymeshlab']
+    resources=['pixal3d_single',MOGE_MODEL_KEY,'dinov3','birefnet','hi3d','pymeshlab']
     keys={'detailed':'texture','game_balanced':'balanced','game_compact':'compact','print':'print','quad_light':'quad_manifest'}
     receipts=[]
     for variant in run['selection']['variants']:
@@ -39,7 +40,7 @@ def metadata(run):
     lock=json.loads(Path(__file__).resolve().parents[3].joinpath('models.lock.json').read_text(encoding='utf-8'))
     production={'method':'single-image','workflow_title':'Single Image or Text','run_id':run['id'],'settings':run['settings'],'selection':run['selection'],
         'source_sha256':run['references'][0]['sha256'],
-        'models':{key:{k:v for k,v in lock['models'][key].items() if k in ('repo','file','revision','sha256','license','license_url')} for key in ('pixal_single','shape_vae','dino','moge2','birefnet')},
+        'models':{key:{k:v for k,v in lock['models'][key].items() if k in ('repo','file','revision','sha256','license','license_url')} for key in ('pixal_single','shape_vae','dino',MOGE_MODEL_KEY,'birefnet')},
         'template':'Comfy-Org/workflow_templates@ea7faae6999fb31338f43408ff4a575bd3f7d9a0/3d_pixal3d_trellis2_image_to_model.json'}
     if any(variant!='print' for variant in run['selection']['variants']):
         from ..image_to_3d.worker_models import texture_dependencies

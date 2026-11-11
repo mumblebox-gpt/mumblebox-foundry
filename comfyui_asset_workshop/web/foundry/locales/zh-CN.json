@@ -216,6 +216,8 @@
   "models_and_workflow_tools": "模型与工作流工具",
   "installed_workflow": "已安装的工作流：{version}",
   "official_project": "官方项目",
+  "contributor_knomadaero_moge_report": "感谢你贴出完整的 ComfyUI 错误日志！你的反馈帮我们修复了「单图或文本」向导的模型下载问题，首次使用时就能准备好正确的模型。",
+  "original_bug_report": "原始问题反馈",
   "thank_you": "感谢",
   "to_the_people_who_share_fixes_useful_workflows_thoughtful_feedback_and_their": "感谢每一位分享修复、实用工作流、细致反馈并投入时间的人，帮助 Foundry 不断成长。随着这些贡献成为工具箱的一部分，我们会持续记录在此。",
   "package_specific_resources_measurements_and_license_notices_are_recorded_in": "各导出资源包的 README 和元数据会记录其资源、测量结果与许可证声明。此处的致谢介绍当前工作流，并不授予模型权重或输出的任何额外权利。",

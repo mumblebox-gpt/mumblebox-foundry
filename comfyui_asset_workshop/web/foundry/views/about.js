@@ -10,6 +10,10 @@ const contributors=[{
         ["HairDeck installer fix","https://github.com/halr9000/mumblebox-foundry/commit/7c731364e92fbec4bec7bb65bed086c59c2210b7"],
         ["Blender download improvement","https://github.com/halr9000/mumblebox-foundry/commit/3be2d2393e323d4edad404704671e13a9d85566e"]
     ]
+},{
+    name:"knomadaero",handle:"knomadaero",profile:"https://pinokio.co/u/knomadaero",
+    contribution:msg("common.contributor_knomadaero_moge_report"),
+    changes:[[msg("common.original_bug_report"),"https://pinokio.co/posts/01m758vg5evsbnrfs6sncad4yj"]]
 }];
 
 export async function render(shell) {

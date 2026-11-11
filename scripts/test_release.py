@@ -41,7 +41,7 @@ class InstallTests(unittest.TestCase):
         locales = json.loads((locale_root / 'manifest.json').read_text(encoding='utf-8-sig'))
         for language in locales['languages']:
             locale = language['id']
-            readme = 'README.md' if locale == 'en' else f'README.{locale}.md'
+            readme = 'README.md' if locale == 'en' else f'docs/README.{locale}.md'
             self.assertIn(readme, names)
             for relative in locales['domains'].values():
                 catalog = (locale_root / relative / (locale + '.json')).resolve()

@@ -3,12 +3,15 @@ import json
 from pathlib import Path
 from copy import deepcopy
 from ..image_to_3d.graph import ancestor_prompt,STAGE_OUTPUTS,template as finishing_template
+from .definition import MOGE_MODEL_KEY
+
 ROOT=Path(__file__).parent
 
 def geometry(run):
     graph=json.loads((ROOT/'sources/official.api.json').read_text(encoding='utf-8'))
     lock=json.loads(Path(__file__).resolve().parents[3].joinpath('models.lock.json').read_text(encoding='utf-8'))['models']
     graph['319']['inputs']['unet_name']=lock['pixal_single']['name']
+    graph['55']['inputs']['model_name'] = lock[MOGE_MODEL_KEY]['name']
     graph['312']['inputs']['background']='#000000'
     graph['56']['inputs']['batch_size']=1
     settings=run['settings'];seed=settings.get('shape_seed',42)

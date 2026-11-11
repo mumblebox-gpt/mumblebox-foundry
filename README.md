@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-[English](README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md)
+[English](README.md) · [简体中文](docs/README.zh-CN.md) · [Español (Latinoamérica)](docs/README.es-419.md)
 
 **Make images and 3D assets locally, on your own or alongside your coding agent.**
 

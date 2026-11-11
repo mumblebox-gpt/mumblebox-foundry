@@ -2,8 +2,9 @@
 import json
 from pathlib import Path
 from ...artifacts import digest
+from ..single_image.definition import MOGE_MODEL_KEY
 
-MODELS = {"single_geometry":("pixal_single","shape_vae","dino","moge2","birefnet"), "splat":("idol","idol_dino","idol_decoder","idol_image_vae","birefnet"), "guided":("pixal_single","moge2","qwen21_union"),
+MODELS = {"single_geometry":("pixal_single","shape_vae","dino",MOGE_MODEL_KEY,"birefnet"), "splat":("idol","idol_dino","idol_decoder","idol_image_vae","birefnet"), "guided":("pixal_single","moge2","qwen21_union"),
           "turnaround":("qwen21","qwen21_clip","qwen21_vae","birefnet"),
           "geometry":("pixal_multiview","shape_vae","dino"),
           "refinement":("birefnet",), "texture":("birefnet",)}

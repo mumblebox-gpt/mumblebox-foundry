@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-[English](README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md)
+[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md)
 
 **在自己的电脑上制作图片和 3D 资产，也可以让编程智能体一起帮忙。**
 
@@ -8,7 +8,7 @@ Foundry 把实用的 AI 工作流整理成一步步的向导，提供合适的�
 
 用它探索游戏道具、角色部件、头发、高斯泼溅，以及创意项目或 3D 打印所需的资产。生成后仍应按实际用途检查，部分结果还需要修改、重拓扑、适配或打印准备。
 
-[通过 Pinokio 安装](docs/PINOKIO.md) · [已发布版本](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [MCP 与技能设置](docs/AGENT-SETUP.md) · [更新记录](CHANGELOG.md)
+[通过 Pinokio 安装](PINOKIO.md) · [已发布版本](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [MCP 与技能设置](AGENT-SETUP.md) · [更新记录](../CHANGELOG.md)
 
 ## 给编程智能体一个好起点
 
@@ -18,7 +18,7 @@ Foundry 把实用的 AI 工作流整理成一步步的向导，提供合适的�
 - **配套技能提供使用指引。** 帮助智能体选择合适的流程，理解输入要求及内存、显存限制，检查结果，再把资产交给下一个工具。
 - **生成在本机进行。** Foundry 处理任务时，智能体可以继续做其他独立工作。你也能在向导里查看结果，接着处理同一份已保存的内容。
 
-我们的目标是减少重复建模工作，节省时间和智能体消耗的 token。实际能省多少，取决于资产类型、流程和后续加工量。请先阅读 [MCP 与配套技能设置说明](docs/AGENT-SETUP.md)。配套技能还在持续完善，我们会结合真实项目和社区反馈继续改进。
+我们的目标是减少重复建模工作，节省时间和智能体消耗的 token。实际能省多少，取决于资产类型、流程和后续加工量。请先阅读 [MCP 与配套技能设置说明](AGENT-SETUP.md)。配套技能还在持续完善，我们会结合真实项目和社区反馈继续改进。
 
 ## 选择适合的工作流
 
@@ -38,12 +38,12 @@ Foundry 把实用的 AI 工作流整理成一步步的向导，提供合适的�
 
 ## 开始制作
 
-1. 安装 [Pinokio](https://pinokio.co/)，按照 [Foundry 安装说明](docs/PINOKIO.md) 添加此仓库。
+1. 安装 [Pinokio](https://pinokio.co/)，按照 [Foundry 安装说明](PINOKIO.md) 添加此仓库。
 2. 依次选择 **Install**（安装）、**Start Foundry**（启动）和 **Open Foundry**（打开界面）。这些是 Pinokio 启动器里的按钮名称。
 3. 打开“单图或文字”向导。上传或拖入图片、用摄像头拍照、从图库选择，或根据描述创建一张图片。
 4. 检查预览并选择输出。**火箭模式**可以连续执行剩余的已选步骤，跳过可选的中途检查。
 
-已有 ComfyUI 的用户可以按照 [INSTALL.md](INSTALL.md) 手动安装，再打开 Mumblebox 3D Asset Foundry.json。安装阶段准备软件；首次运行所选工作流时，会在处理前下载缺少的模型权重。打开 Foundry 不会下载整个模型库。请为权重、临时文件和输出预留磁盘空间。
+已有 ComfyUI 的用户可以按照 [INSTALL.md](../INSTALL.md) 手动安装，再打开 Mumblebox 3D Asset Foundry.json。安装阶段准备软件；首次运行所选工作流时，会在处理前下载缺少的模型权重。打开 Foundry 不会下载整个模型库。请为权重、临时文件和输出预留磁盘空间。
 
 ## 检查与导出
 
@@ -69,7 +69,7 @@ CCORE 作者建议使用英文提示词生成资产。内置示例会随界面�
 
 新版本可能带来新的工作流、问题修复和更好的智能体使用指引。建议定期检查更新，尤其是在一段时间后重新使用时。
 
-顶部会显示更新状态。Pinokio 用户应等待当前任务结束，再使用正常的 **Update** 操作。独立 ComfyUI 用户请按照 [INSTALL.md](INSTALL.md) 的更新说明操作。
+顶部会显示更新状态。Pinokio 用户应等待当前任务结束，再使用正常的 **Update** 操作。独立 ComfyUI 用户请按照 [INSTALL.md](../INSTALL.md) 的更新说明操作。
 
 更新 Foundry 会更新它附带的技能。**如果你把技能复制到了智能体的技能目录，也需要刷新那份副本。** 在这种安装方式下，应用更新和技能副本更新是两件事。
 
@@ -81,7 +81,7 @@ CCORE 作者建议使用英文提示词生成资产。内置示例会随界面�
 
 设置中提供已安装模型管理和先预览再清理的缓存功能。工作流需要某个已发布模型时，会重新准备缺少的权重。清理缓存或移除权重前，请核对列出的文件。
 
-Foundry 原创代码采用 **Apache-2.0** 许可证。模型、权重和其他工具各自保留原有条款，尤其在商用前请阅读 [第三方声明](THIRD-PARTY.md)。
+Foundry 原创代码采用 **Apache-2.0** 许可证。模型、权重和其他工具各自保留原有条款，尤其在商用前请阅读 [第三方声明](../THIRD-PARTY.md)。
 
 ## 一起把工具做好
 
@@ -90,10 +90,10 @@ Foundry 把研究者、模型作者和工作流创作者的优秀成果连接起
 “关于”页列有模型来源和持续增加的贡献者致谢。欢迎提出工作流建议、问题报告、翻译改进和拉取请求，帮我们把实用的本地工作流分享给更多人。
 
 - [报告问题或推荐工作流](https://github.com/mumblebox-gpt/mumblebox-foundry/issues)
-- [智能体设置说明](docs/AGENT-SETUP.md)
-- [本地化架构与贡献说明](docs/LOCALIZATION.md)
-- [依赖与运行环境的归属](dependencies.json)
-- [验证记录与适用范围](docs/RELEASE-VALIDATION.md)
+- [智能体设置说明](AGENT-SETUP.md)
+- [本地化架构与贡献说明](LOCALIZATION.md)
+- [依赖与运行环境的归属](../dependencies.json)
+- [验证记录与适用范围](RELEASE-VALIDATION.md)
 - [更多 Mumblebox 项目](https://github.com/mumblebox-gpt?tab=repositories)
 
 应用内“开发计划”列出后续功能。可安装的具体版本以已发布版本页面为准。

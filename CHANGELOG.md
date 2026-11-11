@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-preview.24
+
+- Fix first-use model preparation for Single Image or Text. Foundry verifies and downloads the FP16 MoGe 2 checkpoint that the workflow requests. Export metadata records that checkpoint.
+- Keep the Simplified Chinese and Latin American Spanish READMEs in the release in a location that existing Pinokio updaters accept.
+- Thank [@knomadaero](https://pinokio.co/posts/01m758vg5evsbnrfs6sncad4yj) in About for sharing the error log that helped track down the issue.
+
 ## 0.1.0-preview.23 — Latin American Spanish
 
 - Add Español (Latinoamérica) to the interface, including wizard steps, help, accessibility labels, errors, all 12 CCORE examples, and exported package documentation. Add a Spanish README.

@@ -216,6 +216,8 @@
   "models_and_workflow_tools": "Models and workflow tools",
   "installed_workflow": "Installed workflow: {version}",
   "official_project": "Official project",
+  "contributor_knomadaero_moge_report": "Thank you for sharing the full ComfyUI error log. Your report helped us fix the Single Image or Text wizard so it prepares the right model on first use.",
+  "original_bug_report": "Original bug report",
   "thank_you": "Thank You",
   "to_the_people_who_share_fixes_useful_workflows_thoughtful_feedback_and_their": "To the people who share fixes, useful workflows, thoughtful feedback and their time: thank you for helping Foundry grow. This running acknowledgment records contributions as they become part of the toolbox.",
   "package_specific_resources_measurements_and_license_notices_are_recorded_in": "Package-specific resources, measurements and license notices are recorded in each export's README and metadata. Credits describe the current workflow; they do not grant additional rights to model weights or outputs.",

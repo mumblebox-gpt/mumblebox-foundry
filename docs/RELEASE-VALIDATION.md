@@ -1,3 +1,11 @@
+# Preview 0.1.0-preview.24 validation
+
+The current packaged Foundry graph completed Single Image or Text geometry and Hi3D refinement in the existing Comfy Desktop. The wizard displayed the initial and cleaned mesh. Separately, starting with an empty temporary model directory, the real first-use downloader fetched and verified the pinned 661,859,924-byte MoGe 2 FP16 file without credentials, and ComfyUI's model registry listed the exact filename requested by the graph.
+
+The model dependency audit compared the files requested by the shipping Single Image, all nine Turnaround choices, 3D-Guided, both Splat & Solid modes, and Image Creator recipes with their preparation lists. CCORE text and image, HairDeck, Garment Particles, Hi3D and TRELLIS.2 were checked at their model or worker boundaries. These checks did not run every workflow through inference.
+
+The live Preview 24 About page displayed the new credit alongside Hal Rottenberg's and linked to the original report. The release retains the three interface languages. Foundry (169 tests), Pinokio (29 tests), release packaging (7 tests) and the localization checks passed. Pinokio compatibility was checked with updater fixtures.
+
 # Preview 0.1.0-preview.23 validation
 
 Latin American Spanish was verified in 15 views at default and 200% text size in the existing Comfy Desktop. Language switching preserved an edited form and a rendered preview. [Spanish validation](LOCALIZATION-VALIDATION.md#latin-american-spanish-checkpoint) records the catalog, package and live checks.

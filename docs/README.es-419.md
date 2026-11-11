@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-[English](README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md)
+[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md)
 
 **Crea imágenes y recursos 3D en tu equipo, por tu cuenta o con tu agente de programación.**
 
@@ -8,7 +8,7 @@ Foundry reúne flujos de trabajo de IA en asistentes que ofrecen ajustes útiles
 
 Explora objetos para videojuegos, partes de personajes, cabello, splats gaussianos y recursos para proyectos creativos o impresión 3D. Revisa cada resultado según el uso que le darás. La geometría generada puede requerir edición, retopología, ajustes o preparación para imprimir.
 
-[Instalar con Pinokio](docs/PINOKIO.md) · [Versiones disponibles](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [Configurar un agente](docs/AGENT-SETUP.md) · [Historial de cambios](CHANGELOG.md)
+[Instalar con Pinokio](PINOKIO.md) · [Versiones disponibles](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [Configurar un agente](AGENT-SETUP.md) · [Historial de cambios](../CHANGELOG.md)
 
 ## Empieza más rápido con tu agente de programación
 
@@ -18,7 +18,7 @@ Pídele a un agente que genere un recurso inicial con Foundry y sigue trabajando
 - **La habilidad complementaria le ofrece orientación.** Ayuda al agente a elegir un flujo de trabajo, respetar las entradas y los límites de memoria, revisar resultados y llevar un recurso a la siguiente herramienta.
 - **La generación se realiza en tu equipo.** El agente puede avanzar con otras tareas mientras Foundry procesa una solicitud. Puedes revisar el resultado en el asistente y retomar el mismo trabajo guardado.
 
-El objetivo es reducir el modelado repetitivo y ahorrar tiempo y tokens del agente. El ahorro real depende del recurso, del flujo y del acabado que necesite. Consulta la [guía del MCP y de la habilidad complementaria](docs/AGENT-SETUP.md). La habilidad evoluciona con proyectos reales y comentarios de la comunidad.
+El objetivo es reducir el modelado repetitivo y ahorrar tiempo y tokens del agente. El ahorro real depende del recurso, del flujo y del acabado que necesite. Consulta la [guía del MCP y de la habilidad complementaria](AGENT-SETUP.md). La habilidad evoluciona con proyectos reales y comentarios de la comunidad.
 
 ## Elige un flujo de trabajo
 
@@ -38,12 +38,12 @@ Cada flujo tiene su propio asistente y su propia sección del grafo. Las tarjeta
 
 ## Empieza a crear
 
-1. Instala [Pinokio](https://pinokio.co/) y sigue la [guía de instalación de Foundry](docs/PINOKIO.md) para agregar este repositorio.
+1. Instala [Pinokio](https://pinokio.co/) y sigue la [guía de instalación de Foundry](PINOKIO.md) para agregar este repositorio.
 2. Elige **Install**, luego **Start Foundry** y **Open Foundry**.
 3. Abre **Imagen única o texto**. Carga o arrastra una imagen, usa tu cámara web, elige una imagen de la galería o créala a partir de una descripción.
 4. Revisa las vistas previas y elige las salidas. **Rocket Mode** puede ejecutar las etapas pendientes que seleccionaste sin detenerse en revisiones opcionales.
 
-Si ya tienes ComfyUI, sigue [INSTALL.md](INSTALL.md) y abre Mumblebox 3D Asset Foundry.json. La instalación prepara el software. La primera vez que usas un flujo de trabajo, se preparan los pesos que faltan antes de procesar. Deja espacio en disco para los pesos, los archivos de trabajo y los resultados.
+Si ya tienes ComfyUI, sigue [INSTALL.md](../INSTALL.md) y abre Mumblebox 3D Asset Foundry.json. La instalación prepara el software. La primera vez que usas un flujo de trabajo, se preparan los pesos que faltan antes de procesar. Deja espacio en disco para los pesos, los archivos de trabajo y los resultados.
 
 ## Revisa y exporta
 
@@ -69,7 +69,7 @@ Usa **Tema** para elegir una apariencia clara u oscura. **Fuente** ofrece el tam
 
 Las versiones nuevas pueden traer flujos de trabajo, correcciones y mejores instrucciones para el agente. Busca actualizaciones con regularidad, en especial si hace tiempo que no usas Foundry.
 
-El encabezado muestra si hay una actualización disponible. En Pinokio, espera a que terminen las tareas activas y usa la opción normal **Update**. Si usas ComfyUI por separado, sigue [INSTALL.md](INSTALL.md).
+El encabezado muestra si hay una actualización disponible. En Pinokio, espera a que terminen las tareas activas y usa la opción normal **Update**. Si usas ComfyUI por separado, sigue [INSTALL.md](../INSTALL.md).
 
 Al actualizar Foundry se actualiza la habilidad que incluye. **Si copiaste la habilidad al directorio de habilidades del agente, actualiza también esa copia.** La aplicación y la copia de la habilidad se actualizan por separado.
 
@@ -81,7 +81,7 @@ Esta es una **versión preliminar para Windows y NVIDIA**. El equipo de referenc
 
 Desde Configuración puedes administrar los modelos instalados y revisar qué archivos se eliminarán al limpiar la caché. Si un flujo necesita un modelo publicado, lo prepara de nuevo. Revisa la lista de archivos antes de limpiar la caché o eliminar pesos.
 
-El código original de Foundry tiene licencia **Apache-2.0**. Los modelos, los pesos y otras herramientas conservan sus propias condiciones. Lee [THIRD-PARTY.md](THIRD-PARTY.md), especialmente antes de usar Foundry con fines comerciales.
+El código original de Foundry tiene licencia **Apache-2.0**. Los modelos, los pesos y otras herramientas conservan sus propias condiciones. Lee [THIRD-PARTY.md](../THIRD-PARTY.md), especialmente antes de usar Foundry con fines comerciales.
 
 ## Un proyecto en comunidad
 
@@ -90,10 +90,10 @@ Foundry reúne y conecta aportes de investigadores, autores de modelos y creador
 La sección **Acerca de** incluye créditos de los modelos y agradecimientos a quienes contribuyen. Nos ayudan las sugerencias de flujos de trabajo, los informes de errores, las correcciones de traducción y las solicitudes de cambios. Ayúdanos a que más personas puedan usar flujos locales que les sirvan.
 
 - [Informa un problema o sugiere un flujo de trabajo](https://github.com/mumblebox-gpt/mumblebox-foundry/issues)
-- [Configura un agente](docs/AGENT-SETUP.md)
-- [Organización de la localización y guía de contribución](docs/LOCALIZATION.md)
-- [Dependencias y entornos de ejecución](dependencies.json)
-- [Evidencia de validación y límites](docs/RELEASE-VALIDATION.md)
+- [Configura un agente](AGENT-SETUP.md)
+- [Organización de la localización y guía de contribución](LOCALIZATION.md)
+- [Dependencias y entornos de ejecución](../dependencies.json)
+- [Evidencia de validación y límites](RELEASE-VALIDATION.md)
 - [Más proyectos de Mumblebox](https://github.com/mumblebox-gpt?tab=repositories)
 
 La **Hoja de ruta** de la aplicación enumera las funciones planeadas. Las versiones publicadas indican qué compilaciones puedes instalar.

@@ -25,7 +25,7 @@ class ResourceInventory:
     def _scan(self):
         roots=self.roots();items=[];seen=set();truncated=False;in_use=self.busy()
         from .workflows.image_to_3d.readiness import MODELS
-        labels={'splat':['Splat & Solid'],'guided':['3D-Guided'],'turnaround':['Turnaround'],'geometry':['Turnaround','3D-Guided'],'refinement':['Turnaround','3D-Guided','Splat & Solid'],'texture':['Turnaround','3D-Guided']}
+        labels={'single_geometry':['Single Image or Text'],'splat':['Splat & Solid'],'guided':['3D-Guided'],'turnaround':['Turnaround'],'geometry':['Turnaround','3D-Guided'],'refinement':['Turnaround','3D-Guided','Splat & Solid'],'texture':['Turnaround','3D-Guided']}
         for location in roots:
             root=location['path']
             for directory,dirs,files in os.walk(root,followlinks=False):

@@ -522,6 +522,19 @@
     ],
     "license_summary": "See the model and software source for applicable terms."
   },
+  "moge2_fp16": {
+    "id": "moge2_fp16",
+    "name": "MoGe 2",
+    "stage": "Single-image camera estimation",
+    "version": "ComfyUI FP16 normal checkpoint; exact revision in production metadata",
+    "source": "https://huggingface.co/Comfy-Org/MoGe",
+    "license": "MIT",
+    "license_url": "https://github.com/microsoft/MoGe/blob/main/LICENSE",
+    "notices": [
+      "MoGe-LICENSE.txt"
+    ],
+    "license_summary": "Retain the copyright and permission notice for licensed material."
+  },
   "idol": {
     "id": "idol",
     "name": "Idol",
