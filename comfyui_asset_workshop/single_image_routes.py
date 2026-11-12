@@ -39,10 +39,11 @@ class NativeQueue:
     def history(self, prompt_id):
         return self.queue.get_history(prompt_id).get(prompt_id)
 
-    async def submit(self, graph, prompt_id, client_id):
+    async def submit(self, graph, prompt_id, client_id, *, preview_method=None):
         async with ClientSession(timeout=ClientTimeout(total=60)) as client:
             async with client.post(f"http://127.0.0.1:{args.port}/prompt", json={
-                "prompt": graph, "prompt_id": prompt_id, "client_id": client_id}) as response:
+                "prompt": graph, "prompt_id": prompt_id, "client_id": client_id,
+                "extra_data": {"preview_method": preview_method} if preview_method else {}}) as response:
                 result = await response.json()
                 from .foundry.queue_validation import rejection
                 error=rejection(result,response.status)

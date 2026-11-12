@@ -30,7 +30,8 @@ export async function render(shell) {
     const installed=el("div",{class:"library-list"});
     const searchButton=button(msg("common.search"),()=>search(false),{class:"primary"});
     const more=button(msg("common.load_more"),()=>search(true),{hidden:true});
-    const root=el("div",{class:"civitai-browser"},
+    const agent=shell.agentSetup.integration();
+    const root=el("div",{class:"civitai-browser"},agent.element,
         el("div",{class:"page-head civitai-heading"},el("h2",{},msg("common.civitai_model_browser")),
             button(msg("common.connection_settings"),()=>shell.settings({service:"civitai"}))),
         el("div",{class:"civitai-intro"},
@@ -135,5 +136,5 @@ export async function render(shell) {
     }
     await refreshStatus();
     search(false);
-    return {element:root,dispose:()=>{disposed=true;controller?.abort();clearTimeout(timer);sequence++;}};
+    return {element:root,dispose:()=>{disposed=true;agent.dispose();controller?.abort();clearTimeout(timer);sequence++;}};
 }

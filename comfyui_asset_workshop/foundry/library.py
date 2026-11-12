@@ -44,7 +44,7 @@ class Library:
 
     @staticmethod
     def kind(value):
-        if value not in ("mesh", "image"): raise ValueError("Choose mesh history or the image gallery.")
+        if value not in ("mesh", "image", "video"): raise ValueError("Choose mesh history, video history or the image gallery.")
         return value
 
     def import_package(self, archive):
@@ -107,6 +107,34 @@ class Library:
                            [(record_id, f["id"], f["path"], json.dumps(f)) for f in files])
         return self.public(record)
 
+    def import_video(self, path, name, workflow, created):
+        from .video_history import video_file
+
+        path = owned_path(self.output_root, path)
+        identity = fingerprint(path)
+        if not video_file(path) or not identity or not identity["size"]:
+            raise ValueError("Choose an existing Foundry video.")
+        relative = path.relative_to(self.output_root).as_posix()
+        record_id = hashlib.sha256(json.dumps(["video", relative.casefold(), identity], sort_keys=True).encode()).hexdigest()[:32]
+        file = {"id": "video", "path": str(path), "name": path.name, "role": "video", "fingerprint": identity}
+        record = {"id": record_id, "kind": "video", "name": str(name)[:200], "workflow": workflow,
+                  "created": created, "formats": [path.suffix.lstrip(".").lower()], "variants": [], "warnings": [],
+                  "file_count": 1, "filename": path.name, "bytes": identity["size"], "folder": str(path.parent),
+                  "revision": str(identity["mtime"]), "preview_id": None, "catalog": {"files": []}}
+        with self.lock, self.connect() as db:
+            # A replay never revives a removed file. A regenerated file at a reused
+            # name has a new identity, but an edited live record is left protected.
+            live = db.execute("SELECT r.id FROM files f JOIN records r ON f.record_id=r.id "
+                              "WHERE f.path=? AND r.removed=0", (str(path),)).fetchone()
+            if live:
+                return
+            added = db.execute("INSERT OR IGNORE INTO records VALUES(?,?,?,?,0,?)",
+                               (record_id, "video", created, record["revision"], json.dumps(record))).rowcount
+            if added:
+                db.execute("INSERT INTO files VALUES(?,?,?,?)",
+                           (record_id, file["id"], str(path), json.dumps(file)))
+        return self.public(record)
+
     def attach_front(self, record_id, source):
         """Keep a library-owned display copy; never acquire ownership of a source image."""
         from PIL import Image
@@ -132,6 +160,7 @@ class Library:
         keys = ("id", "kind", "name", "created", "workflow", "variants", "formats", "warnings",
                 "file_count", "bytes", "preview_id")
         result = {k: record.get(k) for k in keys}
+        if record["kind"] == "video": result["filename"] = record["filename"]
         if detail: result["catalog"] = record["catalog"]
         return result
 

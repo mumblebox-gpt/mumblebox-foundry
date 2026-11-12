@@ -43,7 +43,8 @@ export function dialog(shell, title, content, actions = []) {
     overlay.addEventListener("keydown", event => {
         if (event.key === "Escape") { event.preventDefault(); close(); }
         if (event.key !== "Tab") return;
-        const controls = [...surface.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),a[href],[tabindex="0"]')];
+        const controls = [...surface.querySelectorAll('button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),summary,a[href],[tabindex="0"]')]
+            .filter(control => control.getClientRects().length);
         if (!controls.length) return;
         const index = controls.indexOf(shell.shadow.activeElement);
         if (event.shiftKey && index <= 0) { event.preventDefault(); controls.at(-1).focus(); }

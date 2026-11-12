@@ -8,6 +8,7 @@ from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
 from client import APIError
 from foundry_client import FoundryAPI
+from connection import AgentConnection
 
 def checked(function):
     @wraps(function)
@@ -18,9 +19,14 @@ def checked(function):
     return call
 
 def create_server(client):
-    server=MCPServer("Mumblebox 3D Asset Foundry",version="0.2.0",instructions=(
+    connection = AgentConnection(client)
+    server=MCPServer("Mumblebox 3D Asset Foundry",version="0.2.0",
+        lifespan=connection.lifespan,middleware=[connection.observe],instructions=(
+        "Foundry includes the general-purpose Mumblebox Assets companion skill for setup and workflow guidance. "
+        "On each connection, read workspace.agent_connection for its local path and revision, the installed app version, and update status. "
+        "If checking is true, check back once. Report available updates and refresh an older copied skill from the bundled version. "
         "List workflow groups with foundry_workflows and request one group's actions and capabilities before use. "
-        "The catalog exposes Guided, both CCORE modes, Garment, graph reads and shared workspace controls. "
+        "The catalog exposes Guided, Virtual Turntable, both CCORE modes, Garment, graph reads and shared workspace controls. "
         "Use current capability defaults unless the user specifies otherwise. "
         "Use the existing ComfyUI Foundry workflow. Read capabilities first. Upload only authorized references, "
         "label the first primary and describe each additional reference's purpose. Select the model, category, "

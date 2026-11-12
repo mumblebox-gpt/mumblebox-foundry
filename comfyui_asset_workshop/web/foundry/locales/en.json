@@ -336,6 +336,7 @@
   "download_2": "Download · {name}",
   "choose_a_version_and_file_the_app_installs_it_in_the_correct_folder_for_init": "Choose a version and file. The app installs it in the correct folder for initial image creation.",
   "license_and_resource_page": "License and resource page",
+  "preview_release": "Preview release",
   "version": "Version",
   "author_permissions": "Author permissions",
   "downloading": "Downloading {value1}",
@@ -573,5 +574,17 @@
   "description_action_invalid": "Choose enhancement or translation.",
   "translation_gpu_required": "Translation requires an NVIDIA GPU and a CUDA-capable local helper runtime. Your description is unchanged.",
   "translation_gpu_load_failed": "The translation model could not load fully on the GPU. Choose Q4 or free GPU memory, then retry. Your description is unchanged. Details: {details}",
-  "quads_badge": "Quads"
+  "quads_badge": "Quads",
+  "model_added": "Added {date}",
+  "model_date_unknown": "Date added unavailable",
+  "model_file": "File: {name}",
+  "history_assets": "Assets",
+  "history_videos": "Videos",
+  "video_history_intro": "Play, download or delete saved workflow videos.",
+  "no_videos_in_history": "No saved videos yet",
+  "play_video": "Play video",
+  "download_video": "Download video",
+  "delete_video": "Delete video",
+  "video_deleted": "Video deleted.",
+  "delete_video_explanation": "Delete this video from disk? Finished asset packages and meshes will stay available."
 }

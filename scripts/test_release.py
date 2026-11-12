@@ -17,6 +17,7 @@ class InstallTests(unittest.TestCase):
             source.write_text('Front details \u00b7 optional',encoding='utf-8')
             builder.validate_text_encoding([source])
         builder.validate_text_encoding(builder.inventory())
+        builder.validate_documented_version()
 
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory(prefix="foundry-install-")
@@ -60,6 +61,9 @@ class InstallTests(unittest.TestCase):
         for method in ('single','turnaround','guided','splat'):
             self.assertIn('comfyui_asset_workshop/web/assets/foundry/method-'+method+'.webp',names)
         self.assertIn('comfyui_asset_workshop/finishing/grounding.py',names)
+        self.assertIn('comfyui_asset_workshop/foundry/workflows/virtual_turntable/object-turntable.mg',names)
+        for artwork in ('method-orbit-to-mesh.webp', 'method-virtual-turntable.webp', 'connect-agent.webp'):
+            self.assertIn('comfyui_asset_workshop/web/assets/foundry/'+artwork,names)
         self.assertIn('comfyui_asset_workshop/foundry/workflows/ccore_prop/renderer.py',names)
         self.assertIn('comfyui_asset_workshop/web/assets/foundry/ccore-prop.svg',names)
         self.assertIn('comfyui_asset_workshop/web/assets/foundry/ccore-image.webp',names)

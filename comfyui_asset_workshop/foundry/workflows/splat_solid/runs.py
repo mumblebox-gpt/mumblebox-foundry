@@ -32,6 +32,8 @@ class SplatRuns:
         return r
     def public(self,r):
         result=copy.deepcopy({k:v for k,v in r.items() if k not in ('pending','cancel','client_id')})
+        if 'orbit' in result['artifacts'] and not self.artifact_path(r,'orbit').is_file():
+            result['artifacts'].pop('orbit')
         result['active']=r['id'] in self.tasks
         if r.get('pending'):result['pending']={k:r['pending'][k] for k in ('id','stage')}
         return result
@@ -52,16 +54,26 @@ class SplatRuns:
         if sha!=r['source_sha256']:r['completed']={};r['artifacts']={};r['outputs']={}
         r.update(config=c,source_sha256=sha,status='idle',error='');r.pop('package',None);r.pop('request_id',None)
         self.save(r);return self.public(r)
-    def fingerprint(self,r,stage):
+    def fingerprint(self,r,stage,*,orbit=None):
         keys=GROUPS['generation'] if stage=='generation' else GROUPS['refinement'] if stage=='refinement' else GROUPS['cleanup']
         previous=None if stage=='generation' else r['completed'].get('generation' if stage=='refinement' or not r['config']['refine'] else 'refinement')
         settings={k:r['config'][k] for k in keys}
         if stage=='generation' and r['config'].get('generation_mode')=='turbo':
             settings.update(generation_mode='turbo',steps=5,cfg=1.0)
-        return signature([r['source_sha256'],settings,r['config']['outputs']['orbit'] if stage=='generation' else previous])
-    def fresh(self,r,stage):
+        if stage=='generation':
+            previous=r['config']['outputs']['orbit'] if orbit is None else orbit
+        return signature([r['source_sha256'],settings,previous])
+    def fresh(self,r,stage,*,require_orbit=False):
         saved=r['completed'].get(stage)
-        return bool(saved and saved['signature']==self.fingerprint(r,stage) and all(k in r['artifacts'] and self.artifact_path(r,k).is_file() for k in saved['roles']))
+        if not saved or (require_orbit and 'orbit' not in saved['roles']):return False
+        signatures={self.fingerprint(r,stage)}
+        if stage=='generation' and not r['config']['outputs']['orbit']:
+            signatures.add(self.fingerprint(r,stage,orbit=True))
+        # The video is an optional export. Mesh and splat stages can reuse
+        # their saved files after the standalone video has been deleted.
+        roles=[role for role in saved['roles'] if role!='orbit' or require_orbit]
+        return saved['signature'] in signatures and all(
+            role in r['artifacts'] and self.artifact_path(r,role).is_file() for role in roles)
     def artifact_path(self,r,role):return owned_path(self.output_root,self.output_root/r['artifacts'][role]['relative'])
     def file(self,ident,name):
         r=self.get(ident);allowed={x['relative'] for x in r['artifacts'].values()}
@@ -115,6 +127,9 @@ class SplatRuns:
             if op in ('export','rocket'):
                 if not self.fresh(r,'generation') or (needs_mesh(r['config']) and not self.fresh(r,'cleanup')):raise ValueError('Complete the selected generation and cleanup stages before exporting.')
                 if needs_mesh(r['config']) and (not r.get('quality') or not all(x['passed'] for x in r['quality'].values())):raise ValueError('The saved geometry audit must pass before export.')
+                if r['config']['outputs']['orbit'] and (
+                    'orbit' not in r['artifacts'] or not self.artifact_path(r,'orbit').is_file()):
+                    raise ValueError('The saved orbit is missing. Generate it again or turn off the orbit video in the export options.')
                 self.event(r,'Writing selected files, credits, README and History',95)
                 from .package import build
                 r['package']=await asyncio.to_thread(build,self,r)
@@ -124,7 +139,7 @@ class SplatRuns:
         finally:await self.finish(r)
     async def stage(self,r,stage,progress):
         self.check(r)
-        if self.fresh(r,stage):self.event(r,'Reused saved '+stage+' stage',progress);return
+        if self.fresh(r,stage,require_orbit=stage=='generation' and r['config']['outputs']['orbit']):self.event(r,'Reused saved '+stage+' stage',progress);return
         await self.lifecycle().barrier();await self.lifecycle().release('before splat '+stage)
         generator='Idol Turbo' if r['config'].get('generation_mode')=='turbo' else 'Idol'
         self.event(r,{'generation':generator+' · generating the splat and original mesh','refinement':'Hi3D · refining the original geometry','cleanup':'ComfyUI · closing and simplifying the geometry'}[stage],progress)

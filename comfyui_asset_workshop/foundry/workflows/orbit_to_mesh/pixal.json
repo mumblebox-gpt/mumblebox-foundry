@@ -1,0 +1,308 @@
+{
+  "3": {
+    "inputs": {
+      "seed": 56,
+      "steps": 12,
+      "cfg": 7.5,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "108",
+        0
+      ],
+      "positive": [
+        "324",
+        0
+      ],
+      "negative": [
+        "324",
+        1
+      ],
+      "latent_image": [
+        "87",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler",
+      "cnr_id": "comfy-core",
+      "ver": "0.17.0"
+    }
+  },
+  "15": {
+    "inputs": {
+      "clip_name": "dino_v3_L_naf_fp32.safetensors"
+    },
+    "class_type": "CLIPVisionLoader",
+    "_meta": {
+      "title": "Load CLIP Vision",
+      "cnr_id": "comfy-core",
+      "ver": "0.21.1"
+    }
+  },
+  "18": {
+    "inputs": {
+      "seed": 42,
+      "steps": 20,
+      "cfg": 7.5,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1,
+      "model": [
+        "126",
+        0
+      ],
+      "positive": [
+        "91",
+        0
+      ],
+      "negative": [
+        "91",
+        1
+      ],
+      "latent_image": [
+        "91",
+        2
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler",
+      "cnr_id": "comfy-core",
+      "ver": "0.17.0"
+    }
+  },
+  "23": {
+    "inputs": {
+      "seed": 42,
+      "steps": 12,
+      "cfg": 7.5,
+      "sampler_name": "euler",
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "126",
+        0
+      ],
+      "positive": [
+        "94",
+        0
+      ],
+      "negative": [
+        "94",
+        1
+      ],
+      "latent_image": [
+        "94",
+        2
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "KSampler",
+      "cnr_id": "comfy-core",
+      "ver": "0.17.0"
+    }
+  },
+  "87": {
+    "inputs": {
+      "batch_size": 1
+    },
+    "class_type": "EmptyTrellis2LatentStructure",
+    "_meta": {
+      "title": "Empty Trellis2 Latent Structure",
+      "cnr_id": "comfy-core",
+      "ver": "0.21.1"
+    }
+  },
+  "91": {
+    "inputs": {
+      "positive": [
+        "324",
+        0
+      ],
+      "negative": [
+        "324",
+        1
+      ],
+      "voxel": [
+        "119",
+        0
+      ]
+    },
+    "class_type": "Trellis2ShapeStage",
+    "_meta": {
+      "title": "Trellis2 Shape Stage",
+      "cnr_id": "comfy-core",
+      "ver": "0.33.0"
+    }
+  },
+  "92": {
+    "inputs": {
+      "samples": [
+        "23",
+        0
+      ],
+      "vae": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "VaeDecodeShapeTrellis",
+    "_meta": {
+      "title": "Decoded detailed geometry - preserve original",
+      "cnr_id": "comfy-core",
+      "ver": "0.17.0"
+    }
+  },
+  "94": {
+    "inputs": {
+      "target_resolution": 1024,
+      "positive": [
+        "91",
+        0
+      ],
+      "negative": [
+        "91",
+        1
+      ],
+      "shape_latent": [
+        "18",
+        0
+      ],
+      "vae": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "Trellis2UpsampleStage",
+    "_meta": {
+      "title": "Shape detail - 1024 initial profile",
+      "cnr_id": "comfy-core",
+      "ver": "0.33.0"
+    }
+  },
+  "108": {
+    "inputs": {
+      "shift": 5,
+      "model": [
+        "125",
+        0
+      ]
+    },
+    "class_type": "ModelSamplingSD3",
+    "_meta": {
+      "title": "ModelSamplingSD3",
+      "cnr_id": "comfy-core",
+      "ver": "0.33.0"
+    }
+  },
+  "117": {
+    "inputs": {
+      "vae_name": "trellis_2_shape_vae_bf16.safetensors"
+    },
+    "class_type": "VAELoader",
+    "_meta": {
+      "title": "Load VAE",
+      "cnr_id": "comfy-core",
+      "ver": "0.33.0"
+    }
+  },
+  "119": {
+    "inputs": {
+      "resolution": "32",
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "117",
+        0
+      ]
+    },
+    "class_type": "VaeDecodeStructureTrellis2",
+    "_meta": {
+      "title": "Trellis2 VAE Decode Structure",
+      "cnr_id": "comfy-core",
+      "ver": "0.17.0"
+    }
+  },
+  "125": {
+    "inputs": {
+      "multiplier": 0.7,
+      "model": [
+        "199",
+        0
+      ]
+    },
+    "class_type": "RescaleCFG",
+    "_meta": {
+      "title": "RescaleCFG",
+      "cnr_id": "comfy-core",
+      "ver": "0.33.0"
+    }
+  },
+  "126": {
+    "inputs": {
+      "multiplier": 0.5,
+      "model": [
+        "279",
+        0
+      ]
+    },
+    "class_type": "RescaleCFG",
+    "_meta": {
+      "title": "RescaleCFG",
+      "cnr_id": "comfy-core",
+      "ver": "0.33.0"
+    }
+  },
+  "199": {
+    "inputs": {
+      "cfg": 1,
+      "start_percent": 0.667,
+      "end_percent": 1,
+      "model": [
+        "319",
+        0
+      ]
+    },
+    "class_type": "CFGOverride",
+    "_meta": {
+      "title": "CFG Override",
+      "cnr_id": "comfy-core",
+      "ver": "0.33.0"
+    }
+  },
+  "279": {
+    "inputs": {
+      "cfg": 1,
+      "start_percent": 0.769,
+      "end_percent": 1,
+      "model": [
+        "319",
+        0
+      ]
+    },
+    "class_type": "CFGOverride",
+    "_meta": {
+      "title": "CFG Override",
+      "cnr_id": "comfy-core",
+      "ver": "0.33.0"
+    }
+  },
+  "319": {
+    "inputs": {
+      "unet_name": "pixal3d_multiview_bf16.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader",
+    "_meta": {
+      "title": "Installed Pixal3D MULTIVIEW - BF16",
+      "cnr_id": "comfy-core",
+      "ver": "0.33.0"
+    }
+  }
+}

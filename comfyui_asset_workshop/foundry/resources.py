@@ -1,6 +1,7 @@
 """Registered model locations and confirmed exact-file deletion."""
 import hashlib,os,secrets,threading,time
 from pathlib import Path
+from .model_names import model_name
 
 class ResourceInventory:
     EXTENSIONS={'.safetensors','.gguf','.ckpt','.pt','.pth','.bin','.onnx','.npz','.pkl','.sft'}
@@ -25,7 +26,8 @@ class ResourceInventory:
     def _scan(self):
         roots=self.roots();items=[];seen=set();truncated=False;in_use=self.busy()
         from .workflows.image_to_3d.readiness import MODELS
-        labels={'single_geometry':['Single Image or Text'],'splat':['Splat & Solid'],'guided':['3D-Guided'],'turnaround':['Turnaround'],'geometry':['Turnaround','3D-Guided'],'refinement':['Turnaround','3D-Guided','Splat & Solid'],'texture':['Turnaround','3D-Guided']}
+        labels={'single_geometry':['Single Image or Text'],'splat':['Splat & Solid'],'guided':['3D-Guided'],'turnaround':['Turnaround'],'geometry':['Turnaround','3D-Guided','Orbit to Mesh'],'refinement':['Turnaround','3D-Guided','Splat & Solid','Orbit to Mesh'],'texture':['Turnaround','3D-Guided','Orbit to Mesh']}
+        by_filename = {model['name']: (key, model) for key, model in self.models.items()}
         for location in roots:
             root=location['path']
             for directory,dirs,files in os.walk(root,followlinks=False):
@@ -39,7 +41,7 @@ class ResourceInventory:
                         seen.add(key)
                         reason='' if any(real.is_relative_to(x['path']) for x in roots) else 'Target is outside registered model locations.'
                         if in_use:reason='Unload models and finish active jobs or downloads before deleting.'
-                        stat=p.stat();relative=p.relative_to(root).as_posix();matched_key=next((k for k,m in self.models.items() if m.get('name')==name),None);matched=self.models.get(matched_key,{})
+                        stat=p.stat();relative=p.relative_to(root).as_posix();matched_key,matched=by_filename.get(name,(None,{}))
                         symlink = p.is_symlink()
                         arrival = p.lstat() if symlink else stat
                         added_at = getattr(arrival, 'st_birthtime', arrival.st_ctime if os.name == 'nt' else None)
@@ -53,7 +55,7 @@ class ResourceInventory:
                         if 'idol' in name.lower():workflows.append('Splat & Solid')
                         if 'hairdeck' in str(real).lower():workflows.append('HairDeck')
                         if name.startswith('birefnet'):workflows.extend(['Turnaround','3D-Guided','HairDeck','Splat & Solid'])
-                        items.append(dict(id=hashlib.sha256(key.encode()).hexdigest()[:24],name=name,relative_path=relative,location=location['label'],
+                        items.append(dict(id=hashlib.sha256(key.encode()).hexdigest()[:24],name=name,display_name=model_name(matched_key,matched,p),relative_path=relative,location=location['label'],
                             kind='lora' if 'lora' in str(p.parent).lower() else 'image_model' if any(x in str(p.parent).lower() for x in ('diffusion_models','checkpoints')) else 'component',workflows=sorted(set(workflows)),bytes=stat.st_size,
                             added_at=added_at,deletable=not reason,reason=reason,shared_links=stat.st_nlink,
                             symlink=symlink,download_known=bool(matched),path=str(p.absolute())))
@@ -74,7 +76,7 @@ class ResourceInventory:
                 rows.sort(key=lambda row: (row['name'].casefold(), row['location'].casefold(),
                                            row['relative_path'].casefold(), row['id']))
                 if field == 'name':
-                    rows.sort(key=lambda row: row['name'].casefold(), reverse=descending)
+                    rows.sort(key=lambda row: row['display_name'].casefold(), reverse=descending)
                 else:
                     direction = -1 if descending else 1
                     rows.sort(key=lambda row: (row[field] is None, direction * (row[field] or 0)))

@@ -1,4 +1,4 @@
-import {msg, setText, appendContent} from "../i18n.js";
+import {msg, setText, appendContent, number} from "../i18n.js";
 import {el,button,hint} from '../dom.js';
 import {mountMesh} from '../wizard/preview.js';
 import {fileURL} from './controller.js';
@@ -25,8 +25,11 @@ export function comparison(w){
     for(const [role,label] of available){
         const q=w.run.quality?.[role],art=w.run.artifacts[role+'_presentation']||w.run.artifacts[role];
         const target=el('div',{class:'splat-compare-canvas',tabIndex:0,'aria-label':msg("splat.rotatable_preview", {label: label})});
-        const counts=q?`${q.triangles.toLocaleString()} triangles · ${q.components.toLocaleString()} connected ${q.components===1?'shell':'shells'}`:'Geometry checks not recorded';
-        appendContent(grid, el('article',{},el('h3',{},label),hint(counts),target,
+        const counts = q ? [
+            msg("package.triangles"), ": ", number(q.triangles), " · ",
+            msg("package.components"), ": ", number(q.components),
+        ] : null;
+        appendContent(grid, el('article',{},el('h3',{},label),counts ? hint(counts) : null,target,
             el('span',{class:'badge'},q?.passed?msg("splat.closed_geometry_checks_passed"):msg("splat.geometry_checks_pending"))));
         views.push({target,art});
     }

@@ -27,21 +27,24 @@ class LocalAPI:
                 or parsed.username or parsed.password or parsed.path not in ('', '/') or parsed.query or parsed.fragment):
             raise ValueError('Connect to this computer’s Comfy HTTP address only.')
         self.base_url = base_url.rstrip('/') + '/asset-workshop/v2'
+        self.headers = {}
         self.input_roots = [Path(p).resolve(strict=True) for p in input_roots]
         self.input_files = {Path(p).resolve(strict=True) for p in input_files}
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
 
-    def request(self, path, body=None, method=None, content_type=None, *, binary=False, content_length=None):
+    def request(self, path, body=None, method=None, content_type=None, *, binary=False, content_length=None, timeout=120):
         if not path.startswith('/') or '\\' in path or '..' in path:
             raise ValueError('Use a supported local Mumblebox action.')
         data = body if isinstance(body, bytes) or hasattr(body, 'read') else json.dumps(body).encode() if body is not None else None
-        headers = {'Content-Type': content_type or 'application/json'} if data is not None else {}
+        headers = dict(self.headers)
+        if data is not None:
+            headers['Content-Type'] = content_type or 'application/json'
         if content_length is not None:
             headers['Content-Length'] = str(content_length)
         request = urllib.request.Request(self.base_url+path, data=data, headers=headers,
                                          method=method or ('POST' if body is not None else 'GET'))
         try:
-            with self.opener.open(request, timeout=120) as response:
+            with self.opener.open(request, timeout=timeout) as response:
                 content = response.read((4*1024**2 if binary else 1024**2)+1)
         except urllib.error.HTTPError as error:
             payload = error.read(32768)

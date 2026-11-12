@@ -62,8 +62,10 @@ export function creator(c){
         el('div',{class:'creator-pair','data-paired':String(c.paired())},...frames),
         c.run?.pair_review?hint(c.run.pair_review):null,
         el('div',{class:'creator-finish actions'},button(msg("images.save_create_another"),()=>c.act(()=>c.save('another')),{disabled:!ready||busy}),
-            (c.paired()||c.singleOrigin)?button(c.ccoreOrigin?msg("images.use_image_in_ccore"):c.singleOrigin?msg("images.use_image_in_single_image_workflow"):msg("images.save_create_a_3d_mesh"),()=>c.act(()=>c.save('3d')),{disabled:!ready||busy,class:'primary'}):null,
+            (c.paired()||c.singleOrigin)?button(c.orbitOrigin?msg("orbit.use_image"):c.ccoreOrigin?msg("images.use_image_in_ccore"):c.turntableOrigin?msg("virtual_turntable.use_image"):c.singleOrigin?msg("images.use_image_in_single_image_workflow"):msg("images.save_create_a_3d_mesh"),()=>c.act(()=>c.save('3d')),{disabled:!ready||busy,class:'primary'}):null,
             c.ccoreOrigin?button(msg("images.back_to_ccore_wizard"),()=>c.shell.openCcoreWizard({image:true}),{disabled:busy}):null,
+            c.orbitOrigin?button(msg("orbit.back_to_wizard"),()=>c.shell.openOrbitToMesh({resume:true}),{disabled:busy}):null,
+            c.turntableOrigin?button(msg("virtual_turntable.back_to_wizard"),()=>c.shell.openVirtualTurntable({resume:true}),{disabled:busy}):null,
             button(msg("images.save_view_gallery"),()=>c.act(()=>c.save('gallery')),{disabled:!ready||busy}),
             ready?el('a',{href:'/mumblebox-foundry/v1/images/'+c.id+'/package',download:''},msg("images.download_images")):null));
     const sections=[['subject',msg("images.describe_the_subject"),c.singleOrigin?msg("images.section_single"):msg("images.section_subject"),subject],['references',msg("images.add_references"),msg("images.section_refs"),el('fieldset',{disabled:busy},referenceControls(c))],

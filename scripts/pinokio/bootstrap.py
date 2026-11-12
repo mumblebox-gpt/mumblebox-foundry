@@ -161,14 +161,20 @@ def install(root,source=None,repair=False):
         spec=manifest[key]
         step(key+' source',spec,lambda s=spec,d=dest:checkout(s,d))
     host=manifest['comfyui'];worker=manifest['trellis_wrapper']
+    orbit_nodes=manifest.get('orbit_kjnodes')
+    if orbit_nodes:
+        step('Orbit KJNodes source', orbit_nodes,
+             lambda: checkout(orbit_nodes, layout.comfy/'custom_nodes'/'ComfyUI-KJNodes'))
     step('host Python',host['python'],lambda:venv(layout.host_python,host['python']))
     step('worker Python',worker['python'],lambda:venv(layout.worker_python,worker['python']))
     step('MCP Python',host['python'],lambda:venv(layout.mcp_python,host['python']))
     # Upstream core pins a different frontend. Select the inspected, tested frontend explicitly.
     requirements=layout.state/'host-requirements.txt'
     original=(layout.comfy/'requirements.txt').read_text()
+    # ComfyUI already supplies Pillow and the full OpenCV wheel for KJNodes.
+    orbit_packages=orbit_nodes['packages'] if orbit_nodes else []
     requirements.write_text('\n'.join(line for line in original.splitlines() if not line.startswith('comfyui-frontend-package'))+'\n'+
-        '\n'.join(host['packages'])+'\ncomfyui-frontend-package=='+host['frontend']+'\n',encoding='utf-8')
+        '\n'.join(host['packages']+orbit_packages)+'\ncomfyui-frontend-package=='+host['frontend']+'\n',encoding='utf-8')
     torch_index='https://download.pytorch.org/whl/cu130'
     step('host CUDA packages',[host['torch'],host['torchvision']],lambda:pip(layout.host_python,
          'torch=='+host['torch'],'torchvision=='+host['torchvision'],'--index-url',torch_index))
@@ -210,6 +216,13 @@ def install(root,source=None,repair=False):
                                'trellis_models':str(layout.data/'trellis-models')})
     run([layout.worker_python,layout.comfy/'custom_nodes'/'comfyui_asset_workshop'/
          'pipeline_workers'/'trellis_texture_worker.py',texture_probe,'--probe'])
+    if orbit_nodes:
+        run([layout.host_python, '-c',
+             'import importlib,sys; sys.path.insert(0,sys.argv[1]); '
+             'from comfy_extras.nodes_minimax_h3 import PH3ImageConditioning, MiniMaxH3ImageToVideo; '
+             'nodes=importlib.import_module("custom_nodes.ComfyUI-KJNodes").NODE_CLASS_MAPPINGS; '
+             'assert {"MiniMaxChunkFeedForward","MiniMaxLowVRAMAttention"} <= nodes.keys(); '
+             'print("Native H3 image, video and KJNodes memory controls OK")', layout.comfy])
     run([layout.mcp_python,'-c','from mcp.server import MCPServer; print("MCP imports OK")'])
     record={'schema':1,'version':manifest['version'],'blender':str(blender.relative_to(layout.root)),
             'models_downloaded_by_installer':False,'hi3d_workspace':str(layout.hi3d.relative_to(layout.root))}

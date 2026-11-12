@@ -4,6 +4,8 @@ The companion MCP uses the same local HTTP services as the wizard. It does not l
 
 ## Agent quick start
 
+In the Foundry header or Integrations, open **Connect your agent** and select any Blender skill repositories you want. Copy the setup prompt into your coding agent to register the local MCP and install the companion skill. After setup, ask your agent to use Foundry when you need it.
+
 Install the bundled [Mumblebox Assets skill](../comfyui_asset_workshop/skills/mumblebox-assets/SKILL.md) by copying its folder into your agent's skills directory. It explains when to run local asset generation and how to bring an export into Blender.
 
 1. Start Foundry and connect the MCP using the instructions below.
@@ -12,11 +14,11 @@ Install the bundled [Mumblebox Assets skill](../comfyui_asset_workshop/skills/mu
 4. Save or start the run using its documented action. For 3D-Guided, call `show` on the saved run first and check `bound`. You can inspect its graph without starting generation.
 5. Follow progress using the group's `status`. Use `show` to open the result in Foundry and the file or package actions to obtain local download URLs. For a saved PNG, JPEG or WebP, `foundry_read_image_preview` returns actual pixels for the agent to review.
 
-The groups are `mesh` (Single Image and Turnaround), `guided`, `splat`, `hair`, `ccore` (Text and Image + Text), `garment`, `images`, and `workspace`. Workspace includes the packaged graph, History, preferences, model management, integration and maintenance controls. Model and file removal use the same preview tokens as the GUI and require the user's authorization for the listed items.
+The groups are `mesh` (Single Image and Turnaround), `guided`, `virtual_turntable`, `orbit_to_mesh`, `splat`, `hair`, `ccore` (Text and Image + Text), `garment`, `images`, and `workspace`. Workspace includes the packaged graph, History, preferences, model management, integration and maintenance controls. Model and file removal use the same preview tokens as the GUI and require the user's authorization for the listed items.
 
 ## Keep the app and companion skill aligned
 
-At session start, read workspace.bootstrap for the app version, protocol and bundled skill revision. Read workspace.update_status for pending published releases. The skill's compatibility.json records its reviewed app version and protocol. A copied skill can lag behind an app update, so refresh both when appropriate.
+At connection time, read `workspace.agent_connection` for the app version, bundled skill path and revision, and update status. Foundry runs the check through its normal release checker and update preference. Older installs expose `workspace.bootstrap` and `workspace.update_status`. The skill's compatibility.json records its reviewed app version and protocol. A copied skill can lag behind an app update, so refresh both when appropriate.
 
 The agent should explain observed mismatches and available updates in the user's language, use live capabilities for current controls and avoid repeatedly interrupting an unchanged session. Interface language does not translate generation prompts.
 

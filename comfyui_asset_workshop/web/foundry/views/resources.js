@@ -1,9 +1,8 @@
 import {sourceMessage} from "../i18n.js";
-import {msg, setText} from "../i18n.js";
+import {currentLanguage, msg, setText} from "../i18n.js";
 import {el,button,hint} from '../dom.js';
 import {request} from '../services.js';
 const size=n=>n>=1024**3?(n/1024**3).toFixed(2)+' GB':(n/1024**2).toFixed(1)+' MB';
-const dateFormat = new Intl.DateTimeFormat(undefined, {dateStyle: 'medium'});
 const sortKey = 'mumblebox-foundry/model-sort';
 const sortOrders = {
     name_asc: msg("common.name_a_z"), name_desc: msg("common.name_z_a"),
@@ -37,11 +36,13 @@ export function resourceLists(shell){
             const query = new URLSearchParams({cursor, limit: 100, sort: sort.value});
             const data=await request('resources?' + query);if(disposed)return;
             setText(feedback, msg("common.model_files_found", {total: data.total, value2: data.truncated?' · inventory limit reached.':'.'}));
+            const dateFormat=new Intl.DateTimeFormat(currentLanguage(),{dateStyle:'medium'});
             for(const item of data.items){
                 const added = Number.isFinite(item.added_at)
-                    ? 'Added ' + dateFormat.format(item.added_at * 1000) : 'Date added unavailable';
-                const details=el('div',{},el('strong',{},item.name),
-                    el('small',{class:'muted'},size(item.bytes)+' · '+item.location+' · '+added),
+                    ? msg('common.model_added',{date:dateFormat.format(item.added_at * 1000)}) : msg('common.model_date_unknown');
+                const details=el('div',{},el('strong',{},item.display_name||item.name),
+                    el('div',{class:'filename'},msg('common.model_file',{name:item.name})),
+                    el('small',{class:'muted'},size(item.bytes)+' · '+item.location+' · ',added),
                     hint(item.workflows.length?msg("common.used_by", {value1: item.workflows.join(', ')}):msg("common.available_to_installed_workflows_origin_is_not_recorded")),item.reason?hint(item.reason):null);
                 const row=el('li',{},details);
                 const remove=button(msg("common.delete"),async()=>{

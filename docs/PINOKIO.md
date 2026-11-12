@@ -28,6 +28,10 @@ Software comes from its published repositories and package hosts. Model weights 
 
 Splat & Solid uses Idol by Sperid Labs through the pinned Comfy-Org native distribution. Its complete selected resources, including optional Hi3D dependencies, are prepared before generation. Settings → Installed models covers registered native and worker locations; deleting a supported model makes that workflow acquire it again before use. The export audit uses the existing finishing environment.
 
+## Orbit workflows
+
+Pinokio prepares the required ComfyUI and KJNodes software for **Orbit to Mesh** and **Virtual Turntable**. Both wizards show the H3 model credits and terms and check for the named weights. Orbit to Mesh also needs COLMAP. Virtual Turntable needs Meshroom or COLMAP with OpenMVS. Follow the [workflow setup guide](../INSTALL.md#orbit-to-mesh-and-virtual-turntable-dependencies) for supported tool versions, paths and model access.
+
 ## Stop, restart, update and repair
 
 - **Stop:** use Pinokio's stop control for the running startup script. It stops this installation's owned services. Cancel an active generation first if you want to retain a clean stage checkpoint.
@@ -60,7 +64,9 @@ Do not remove `.pinokio` as a troubleshooting step: it contains your work and mo
 
 ## Connect a coding agent
 
-After startup, `.pinokio/mcp.json` contains a ready configuration entry for the installed companion MCP. Copy that entry into the agent client's MCP settings; keep any unrelated servers. See [Agent setup](AGENT-SETUP.md) for the available tools, reference-file permissions and how to add the bundled companion skill. The MCP uses the same workflow services and gallery as the interface.
+After startup, use **Connect Your Agent** in the Foundry header or Integrations. The dialog provides a copyable setup prompt for the installed MCP and bundled Mumblebox Assets skill. It can include links to EL4CTEO’s Blender Skills and 1Pio’s Blender Workbench. These help your agent work on a locally generated asset after opening it in Blender.
+
+For manual setup, `.pinokio/mcp.json` contains a ready configuration entry for the installed companion MCP. Copy that entry into the agent client's MCP settings; keep any unrelated servers. See [Agent setup](AGENT-SETUP.md) for the available tools, reference-file permissions and how to add the bundled companion skill. The MCP uses the same workflow services and gallery as the interface.
 
 ## If something fails
 

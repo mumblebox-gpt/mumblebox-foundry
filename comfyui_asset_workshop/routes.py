@@ -178,6 +178,7 @@ async def status(request):
     from .civitai_routes import DOWNLOADS
     from .pipeline_workers.activity import model_snapshot
     from .foundry.cache import busy as maintenance_busy
+    from .foundry.agent_connection import PRESENCE
     residencies=model_snapshot(list(memory.current_loaded_models))
     workflow_activity=[]
     for name in ('image_to_3d','image_creation','hair_creation','splat_solid'):
@@ -193,6 +194,7 @@ async def status(request):
     return web.json_response({
         **meter_sample(),
         "model_residency":residencies,
+        "agent_presence": PRESENCE.snapshot(),
         "workflow_activity":workflow_activity,
         "maintenance_active":maintenance_busy(),
         "loaded_models": len(memory.current_loaded_models),

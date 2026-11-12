@@ -1,6 +1,13 @@
 # Foundry localization
 
-English is the authoritative interface and documentation source. Simplified Chinese uses natural contemporary wording, translating meaning rather than English sentence structure. Model/researcher names stay recognizable. Say GPU VRAM (显存) and system RAM (系统内存) distinctly; do not promise automatic CPU fallback for GPU-required models.
+English is the authoritative interface and documentation source. Write for people who are using Foundry today. Translate the meaning in natural, contemporary language and keep action labels short enough for the wizard.
+
+- Simplified Chinese (`zh-CN`) uses familiar UI language. Distinguish GPU memory (显存) from system memory (系统内存).
+- Latin American Spanish (`es-419`) uses regional terms such as *archivo*, *guardar* and *malla*.
+- French (`fr`) uses plain, direct wording and *vous* in instructions. Prefer *maillage*, *aperçu* and *mémoire vidéo* (VRAM).
+- Brazilian Portuguese (`pt-BR`) uses everyday Brazilian terms such as *arquivo*, *salvar*, *malha* and *prévia*, with *você* where direct address helps.
+
+Keep model and researcher names recognizable, distinguish VRAM from system RAM, and describe fallback behavior as implemented.
 
 ## One owner per responsibility
 
@@ -27,7 +34,7 @@ Keep all of these exact: user prompts and names, model instructions, model/file 
 1. Add its BCP 47 ID and native name to the manifest; create that language's JSON beside every English catalog.
 2. Keep keys and named placeholders identical. English fallback handles a missing translation; release review must check completeness.
 3. Review meaning, terminology, memory warnings, technical limitations and accessibility labels separately from authoring.
-4. Add a linked root README named README.<locale>.md. The release builder includes READMEs for all languages declared in the manifest.
+4. Add docs/README.<locale>.md and link it in the main and translated READMEs. The release builder includes READMEs for all languages declared in the manifest.
 5. Run the focused Python and JavaScript localization checks. Test the real language selector with a filled form, selected reference and loaded preview, including 200% text. Confirm no reinitialization and no horizontal overflow.
 
-The English, Simplified Chinese and Latin American Spanish READMEs describe the same product, benefits, limits and installation choices. English skill instructions remain the agent authority: check current app capabilities, app/skill compatibility and update availability, then explain relevant notices in the user's language. Do not translate model prompts merely because the interface language changed.
+Keep the main README and the localized READMEs aligned on workflows, benefits, limits, installation choices and the current Foundry version. English skill instructions remain the agent authority: check current app capabilities, app/skill compatibility and update availability, then explain relevant notices in the user's language. Do not translate model prompts merely because the interface language changed.

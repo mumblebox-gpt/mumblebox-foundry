@@ -1,12 +1,12 @@
 """Build the public archive from an explicit inventory, without local user state."""
-import argparse, hashlib, json, shutil, zipfile
+import argparse, hashlib, json, re, runpy, shutil, zipfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 PACK=ROOT/"comfyui_asset_workshop"
 TOP=("README.md","CHANGELOG.md","INSTALL.md","THIRD-PARTY.md","LICENSE","NOTICE","dependencies.json","requirements-worker-windows.txt",
      "pinokio.js","pinokio.json","install.js","start.js","update.js","repair.js","icon.png")
 DIRECTORIES=("agent","finishing","foundry","licenses","material_lab","pipeline_workers","skills","web","workflows")
-EXTENSIONS={".py",".json",".js",".css",".svg",".png",".webp",".md",".txt",".html"}
+EXTENSIONS={".py",".json",".js",".css",".svg",".png",".webp",".md",".txt",".html",".mg"}
 IGNORED={".venv","__pycache__","node_modules",".git"}
 TEXT_EXTENSIONS=EXTENSIONS-{".png",".webp"}
 CYBER_PAYLOAD=PACK/"finishing/vendor/cyber-cuda"
@@ -23,10 +23,30 @@ def validate_text_encoding(files):
         if any(sequence in text for sequence in corrupt_sequences):
             raise ValueError(f"Corrupted text encoding in release file: {path}")
 
+def localized_readmes():
+    manifest = json.loads((PACK / "web/foundry/locales/manifest.json").read_text(encoding="utf-8-sig"))
+    return [ROOT / "docs" / f"README.{language['id']}.md" for language in manifest["languages"] if language["id"] != "en"]
+
+
+def validate_documented_version():
+    version = runpy.run_path(str(PACK / "foundry/__init__.py"))["VERSION"]
+    installer = json.loads((ROOT / "dependencies.json").read_text(encoding="utf-8-sig"))
+    if installer["version"] != version:
+        raise ValueError(f"The installer dependency manifest must use Foundry version {version}.")
+    skill = PACK / "skills/mumblebox-assets"
+    documents = [ROOT / "README.md", *localized_readmes(), skill / "SKILL.md"]
+    for document in documents:
+        header = "\n".join(document.read_text(encoding="utf-8-sig").splitlines()[:12])
+        displayed = re.findall(r"\b(\d+\.\d+\.\d+(?:-[A-Za-z0-9.]+)?)\b", header)
+        if displayed != [version]:
+            raise ValueError(f"{document.relative_to(ROOT)} must display Foundry version {version}.")
+    compatibility = json.loads((skill / "compatibility.json").read_text(encoding="utf-8-sig"))
+    if compatibility["reviewed_foundry_version"] != version:
+        raise ValueError(f"Review the bundled skill for Foundry {version} and update its compatibility record.")
+
+
 def inventory():
-    files=[ROOT/name for name in TOP]
-    manifest=json.loads((PACK/"web/foundry/locales/manifest.json").read_text(encoding="utf-8-sig"))
-    files += [ROOT/"docs"/f"README.{language['id']}.md" for language in manifest["languages"] if language["id"] != "en"]
+    files = [ROOT / name for name in TOP] + localized_readmes()
     files+=list((ROOT/"licenses").glob("*.txt"))
     files.extend(CYBER_PAYLOAD/name for name in CYBER_BINARY_FILES)
     files+=[ROOT/"docs"/name for name in ("LOCALIZATION.md","LOCALIZATION-VALIDATION.md","AGENT-SETUP.md","RELEASE-VALIDATION.md","PINOKIO.md","HAIR-WORKFLOW.md","SPLAT-SOLID.md","LOCAL-UPDATE-VALIDATION.md","GROUNDING-VALIDATION.md")]
@@ -47,6 +67,7 @@ def build(destination):
     if destination.exists():raise FileExistsError("Choose an unused release staging directory")
     files=inventory()
     validate_text_encoding(files)
+    validate_documented_version()
     destination.mkdir(parents=True)
     hashes={}
     for source in files:

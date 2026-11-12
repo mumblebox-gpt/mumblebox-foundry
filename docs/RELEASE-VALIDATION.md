@@ -1,3 +1,29 @@
+# Foundry release checklist
+
+Use this checklist for the release commit and publication. Keep verification proportional to what changed and record the actual results in the release's validation entry.
+
+## Before the release commit
+
+- Match the app version, installer dependency manifest, main README, every translated README in the locale manifest, and the bundled Mumblebox Assets skill and its reviewed-version record. Run the release builder's version check. Preserve the minimum compatible app version according to the skill's actual fallback support.
+- Review the MCP against changed workflows, actions, settings, statuses, and artifacts. Update its capability descriptions, the bundled skill's guidance and revision, and the setup guide as needed. Exercise the changed behavior through a real MCP client before committing.
+- Update user-facing documentation and strings in English, Simplified Chinese, and Latin American Spanish, using Foundry's locale manifest. Check new controls and messages in the live GUI, including larger text sizes for changed layouts.
+- Update the changelog. Mark delivered roadmap items with evidence and describe any experimental behavior clearly.
+- Review workflow graphs, first-use downloads, model and software requirements, installer and updater changes, and credits and license notices. When exports change, verify the generated package contents and README against the selected outputs.
+- Exercise the affected workflows and real previews in ComfyUI. Verify installer and update paths affected by the release, preserve saved work, and record the scope of the checks.
+
+## Publish and verify
+
+- Build the release archive from the verified commit. Confirm the tag, release notes, archive integrity and checksum, and intended GitHub release assets.
+- Verify the public GitHub release and Pinokio listing for that release. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
+
+# Preview 0.1.0-preview.25 validation
+
+The existing Comfy Desktop Foundry displayed Preview 25, the five language choices, the agent setup dialog and both recommended Blender repositories. The dialog loaded its hero and enabled copying the setup prompt. The Roadmap showed Connect Your Agent as available. Two saved Orbit to Mesh previews rendered. The precheck graph and History view were restored.
+
+A real stdio MCP client exercised discovery, capabilities, saved run status, native graphs and downloadable ZIP links for Orbit to Mesh and Virtual Turntable. The earlier live workflow runs produced a textured Pixal3D asset and completed both photogrammetry engines. Those GPU stages were reused for the release check. [Localization validation](LOCALIZATION-VALIDATION.md#french-and-brazilian-portuguese--local-preview24) records the five-language checkpoint and in-place preview continuity.
+
+The pinned ComfyUI 0.45.2 and KJNodes revisions supplied the native H3 image/video nodes and both H3 memory controls. The release inventory includes the Meshroom graph template and all three new hero images. The focused Python checks (42), JavaScript checks (34), Pinokio checks (29), launcher checks (3), and release/installer fixture checks (7) passed. The updater checks used fixtures. The orbit workflows require the licensed weights and separate camera or photogrammetry tools listed in the setup guide.
+
 # Preview 0.1.0-preview.24 validation
 
 The current packaged Foundry graph completed Single Image or Text geometry and Hi3D refinement in the existing Comfy Desktop. The wizard displayed the initial and cleaned mesh. Separately, starting with an empty temporary model directory, the real first-use downloader fetched and verified the pinned 661,859,924-byte MoGe 2 FP16 file without credentials, and ComfyUI's model registry listed the exact filename requested by the graph.

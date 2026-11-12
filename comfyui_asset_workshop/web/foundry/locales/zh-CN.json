@@ -336,6 +336,7 @@
   "download_2": "下载 · {name}",
   "choose_a_version_and_file_the_app_installs_it_in_the_correct_folder_for_init": "选择版本和文件。应用会将其安装到正确的文件夹，用于生成初始图像。",
   "license_and_resource_page": "许可证与资源页面",
+  "preview_release": "预览版",
   "version": "版本",
   "author_permissions": "作者授权",
   "downloading": "正在下载{value1}",
@@ -573,5 +574,17 @@
   "description_action_invalid": "请选择增强描述或翻译。",
   "translation_gpu_required": "翻译需要 NVIDIA GPU 和支持 CUDA 的本地助手运行环境。原始描述未更改。",
   "translation_gpu_load_failed": "翻译模型无法完全加载到 GPU。请选择 Q4 或释放显存后重试。原始描述未更改。详细信息：{details}",
-  "quads_badge": "四边面"
+  "quads_badge": "四边面",
+  "model_added": "添加于 {date}",
+  "model_date_unknown": "添加日期未知",
+  "model_file": "文件：{name}",
+  "history_assets": "资产",
+  "history_videos": "视频",
+  "video_history_intro": "播放、下载或删除工作流保存的视频。",
+  "no_videos_in_history": "还没有保存的视频",
+  "play_video": "播放视频",
+  "download_video": "下载视频",
+  "delete_video": "删除视频",
+  "video_deleted": "视频已删除。",
+  "delete_video_explanation": "要从磁盘删除此视频吗？已完成的资产包和网格会保留。"
 }

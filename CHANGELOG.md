@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.0-preview.25 — Orbit to Mesh and Connect Your Agent
+
+- Add **Orbit to Mesh**. Start with an image, review a generated H3 orbit, choose aligned views for Pixal3D, then finish with Hi3D, TRELLIS.2 and selected exports. Four views is the starting preset. Two and six are available, and eight is experimental. Advanced settings and reset controls are available in the wizard.
+- Add **Virtual Turntable** with Meshroom/AliceVision and COLMAP + OpenMVS. Both paths can reuse the generated orbit, preview their meshes, and package outputs with the relevant model and engine notices. The engines are installed separately.
+- Show live H3 sampler previews in both orbit wizards and play the saved orbit during reconstruction. **History → Videos** can play, download or delete independently saved workflow videos.
+- Add **Connect Your Agent** in the header and Integrations. Copy the setup prompt for the Foundry MCP and bundled skill. Optionally include the Blender skill packs from EL4CTEO and 1Pio. The connection indicator reports current agent activity.
+- Extend the MCP and Mumblebox Assets skill to cover the new workflows, checkpoints and artifacts. Make it easier for an agent to generate a starting asset locally and continue the modeling work in Blender.
+- Add French and Brazilian Portuguese across the interface, CCORE examples, export documentation and project READMEs. Improve localized mesh statistics and history labels and show recognizable model names alongside exact files in Settings.
+- Update Pinokio to the tested ComfyUI revision and pin the KJNodes memory controls used by the orbit workflows. Include the Meshroom graph template in the release archive. The H3 workflows require compatible model weights and independently installed photogrammetry tools. See the [setup guide](INSTALL.md#orbit-to-mesh-and-virtual-turntable-dependencies).
+- The recipes and defaults are starting points. We’re looking for examples and settings from users to help tune them for different subjects. See the in-app Roadmap for planned work.
+
 ## 0.1.0-preview.24
 
 - Fix first-use model preparation for Single Image or Text. Foundry verifies and downloads the FP16 MoGe 2 checkpoint that the workflow requests. Export metadata records that checkpoint.

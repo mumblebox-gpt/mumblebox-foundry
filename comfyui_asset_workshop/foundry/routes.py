@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 from aiohttp import web
 from . import VERSION
 from .artifacts import owned_path, open_folder
+from .agent_connection import PRESENCE, SESSION_HEADER, bundled_skill, installation, local_request, SESSION_ID
 from .catalog import catalog
 from .library import Library
 from .preferences import Preferences
@@ -17,7 +18,7 @@ from .receipts import sync
 
 PREFIX = "/mumblebox-foundry/v1"
 
-def register(routes, library, preferences, wizard_factory=None, resources=None, updates=None, image_factory=None, image_notify=None, hair_factory=None, hair_notify=None, guided_factory=None, splat_factory=None, cache=None, ccore_factory=None, garment_factory=None):
+def register(routes, library, preferences, wizard_factory=None, resources=None, updates=None, image_factory=None, image_notify=None, hair_factory=None, hair_notify=None, guided_factory=None, splat_factory=None, cache=None, ccore_factory=None, garment_factory=None, turntable_factory=None, orbit_factory=None):
     def endpoint(function):
         async def wrapped(request):
             origin = request.headers.get("Origin")
@@ -26,6 +27,9 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
             try:
                 result = await function(request)
                 if isinstance(result, web.StreamResponse): return result
+                session = request.headers.get(SESSION_HEADER)
+                if session and request.method in ("POST", "PATCH") and request.path.startswith(PREFIX + "/") and local_request(request):
+                    PRESENCE.track(session, request.path, result)
                 return web.json_response(result, headers={"Cache-Control": "no-store"})
             except (ValueError, KeyError, TypeError, json.JSONDecodeError) as error:
                 return web.json_response({"error": str(error) if isinstance(error, ValueError) else "The request was incomplete.",
@@ -42,6 +46,16 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
     if ccore_factory:
         from .workflows.ccore_prop.routes import register as ccore_routes
         ccore_routes(routes, ccore_factory, endpoint)
+    if turntable_factory:
+        from .workflows.virtual_turntable.routes import register as turntable_routes
+        turntable_routes(routes,turntable_factory,endpoint)
+        if orbit_factory:
+            from .workflows.orbit_to_mesh.definition import capabilities as orbit_capabilities
+            from .workflows.orbit_to_mesh.graph import compile_stage, template, FINISHING
+            from .workflows.orbit_to_mesh.runs import STEPS
+            turntable_routes(routes, orbit_factory, endpoint, prefix="/mumblebox-foundry/v1/orbit-to-mesh",
+                             get_capabilities=orbit_capabilities, get_template=template, compile_prompt=compile_stage,
+                             stages=(*STEPS, *FINISHING), event="mumblebox-foundry-orbit")
     if splat_factory:
         from .workflows.splat_solid.routes import register as splat_routes
         splat_routes(routes,splat_factory,endpoint)
@@ -107,11 +121,45 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
     @endpoint
     async def bootstrap(request):
         data=catalog();data["workflow"]["wizard"]=bool(wizard_factory)
-        skill_path = Path(__file__).resolve().parents[1] / "skills" / "mumblebox-assets" / "compatibility.json"
-        skill = json.loads(skill_path.read_text(encoding="utf-8"))
+        skill = bundled_skill()
         return {"version": VERSION, "preferences": preferences.read(), "agent": {"protocol": 1, "bundled_skill": skill}, **data,
                 "wizard_available": bool(wizard_factory),
                 "import_candidates": [{"id": i, "name": p.name} for i, p in candidates().items()]}
+
+    @routes.get(PREFIX + "/agent/setup")
+    @endpoint
+    async def agent_setup(request):
+        if not local_request(request):
+            return web.json_response({"error": "Open Foundry on this computer to copy its agent setup."}, status=403)
+        import folder_paths
+        from ..runtime import configuration
+        port = request.transport.get_extra_info("sockname")[1]
+        blender = configuration().get("pipeline_runtime", {}).get("blender")
+        return installation(port, folder_paths.get_user_directory(), blender)
+
+    @routes.post(PREFIX + "/agent/session")
+    @endpoint
+    async def agent_session(request):
+        if not local_request(request):
+            return web.json_response({"error": "Connect to Foundry from this computer."}, status=403)
+        value = await body(request)
+        ident, calls = value.get("id"), value.get("calls")
+        used, closed = value.get("used"), value.get("closed")
+        if (not isinstance(ident, str) or not SESSION_ID.fullmatch(ident) or type(calls) is not int or not 0 <= calls <= 128
+                or type(used) is not bool or type(closed) is not bool):
+            raise ValueError("Invalid local agent session event.")
+        if closed:
+            PRESENCE.sessions.pop(ident, None)
+        elif PRESENCE.observe(ident, calls, used):
+            PRESENCE.check_on_connect(updates)
+        return {"recorded": True}
+
+    @routes.get(PREFIX + "/agent/connection")
+    @endpoint
+    async def agent_connection(request):
+        if not local_request(request):
+            return web.json_response({"error": "Connect to Foundry from this computer."}, status=403)
+        return PRESENCE.versions(updates)
 
     if updates is not None:
         @routes.get(PREFIX + "/updates/status")
@@ -159,7 +207,10 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
     @routes.post(PREFIX + "/library/sync")
     @endpoint
     async def synchronize(request):
-        await body(request)
+        data = await body(request)
+        if data.get("kind") == "video":
+            from .video_history import sync as sync_videos
+            return await asyncio.to_thread(sync_videos, library)
         return await asyncio.to_thread(sync, library)
 
     @routes.get(PREFIX + "/library")
@@ -199,7 +250,9 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
         path = library.file(request.match_info["id"], request.match_info["file_id"])
         image = path.suffix.lower() in (".png", ".jpg", ".jpeg", ".webp")
         headers = {"Cache-Control": "no-store", "X-Content-Type-Options": "nosniff"}
-        if not image:
+        from .video_history import video_file
+        play_video = request.query.get("play") == "1" and video_file(path)
+        if not image and not play_video:
             from urllib.parse import quote
             headers["Content-Disposition"] = "attachment; filename*=UTF-8''" + quote(path.name)
         return web.FileResponse(path, headers=headers)
@@ -350,7 +403,7 @@ def install():
             from ..finishing.package_catalog import VARIANTS,parse_selection
             runs.ACTIVE=runs.WizardRuns(state/"wizard-runs",folder_paths.get_input_directory(),
                 folder_paths.get_output_directory(),NativeQueue(PromptServer.instance.prompt_queue),
-                resources,lambda:cache.running or has_active_jobs() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy(),parse_selection,VARIANTS)
+                resources,lambda:cache.running or has_active_jobs() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy() or turntable_busy(),parse_selection,VARIANTS)
             runs.ACTIVE.library=library
             from .workflows.image_creation.lineage import resolve_handoff
             runs.ACTIVE.image_source_resolver=lambda source,refs:resolve_handoff(state/'image-creation',source,refs)
@@ -362,6 +415,7 @@ def install():
     from .workflows.splat_solid.runs import busy as splat_busy
     from .workflows.ccore_prop.runs import busy as ccore_busy
     from .workflows.garment_particles.runs import busy as garment_busy
+    from .workflows.virtual_turntable.runs import busy as turntable_busy
     def image_factory():
         from .workflows.image_creation import runs
         if runs.ACTIVE is None:
@@ -370,7 +424,7 @@ def install():
             from ..routes import resources
             runs.ACTIVE=runs.ImageRuns(ImageLibrary(state/'image-creation',folder_paths.get_output_directory()),
                 folder_paths.get_input_directory(),NativeQueue(PromptServer.instance.prompt_queue),
-                resources,lambda:cache.running or has_active_jobs() or busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy())
+                resources,lambda:cache.running or has_active_jobs() or busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy() or turntable_busy())
         return runs.ACTIVE
     def hair_factory():
         from .workflows.hair_creation import runs
@@ -379,7 +433,7 @@ def install():
             from ..routes import resources
             runs.ACTIVE=runs.HairRuns(state/'hair-runs',folder_paths.get_input_directory(),
                 folder_paths.get_output_directory(),NativeQueue(PromptServer.instance.prompt_queue),
-                resources,lambda:cache.running or has_active_jobs() or busy() or image_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy(),library)
+                resources,lambda:cache.running or has_active_jobs() or busy() or image_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy() or turntable_busy(),library)
         return runs.ACTIVE
     def guided_factory():
         from .workflows.guided_mesh import runs
@@ -389,7 +443,7 @@ def install():
             from ..finishing.package_catalog import VARIANTS,parse_selection
             runs.ACTIVE=runs.GuidedRuns(state/'guided',folder_paths.get_input_directory(),folder_paths.get_output_directory(),
                 NativeQueue(PromptServer.instance.prompt_queue),resources,
-                lambda:cache.running or has_active_jobs() or busy() or image_busy() or hair_busy() or splat_busy() or ccore_busy() or garment_busy(),parse_selection,VARIANTS)
+                lambda:cache.running or has_active_jobs() or busy() or image_busy() or hair_busy() or splat_busy() or ccore_busy() or garment_busy() or turntable_busy(),parse_selection,VARIANTS)
             runs.ACTIVE.finisher.library=library
         return runs.ACTIVE
     def splat_factory():
@@ -399,9 +453,9 @@ def install():
             from ..routes import resources
             runs.ACTIVE=runs.SplatRuns(state/'splat-runs',folder_paths.get_input_directory(),folder_paths.get_output_directory(),
                 NativeQueue(PromptServer.instance.prompt_queue),resources,
-                lambda:cache.running or has_active_jobs() or busy() or image_busy() or hair_busy() or guided_busy() or ccore_busy() or garment_busy(),library)
+                lambda:cache.running or has_active_jobs() or busy() or image_busy() or hair_busy() or guided_busy() or ccore_busy() or garment_busy() or turntable_busy(),library)
         return runs.ACTIVE
-    library.busy=lambda:PromptServer.instance.prompt_queue.get_tasks_remaining()>0 or busy() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy()
+    library.busy=lambda:PromptServer.instance.prompt_queue.get_tasks_remaining()>0 or busy() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy() or turntable_busy()
     from .resources import ResourceInventory
     from .. import models,description_helper
     import comfy.model_management as memory
@@ -425,7 +479,7 @@ def install():
     def cache_busy():
         from ..civitai_routes import DOWNLOADS
         return (has_active_jobs() or PromptServer.instance.prompt_queue.get_tasks_remaining()>0
-                or busy() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy()
+                or busy() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy() or turntable_busy()
                 or models.DOWNLOAD.get('status')=='running' or DOWNLOADS.status().get('status')=='running')
     cache=CacheManager(roots,cache_busy)
     from . import cache as cache_module
@@ -451,6 +505,35 @@ def install():
                                           library, lambda: cache.running or has_active_jobs() or library.busy())
         return runs.ACTIVE
 
+    def turntable_factory():
+        from .workflows.virtual_turntable import runs
+        if runs.ACTIVE is None:
+            from ..single_image_routes import NativeQueue
+            from ..routes import resources
+            from ..finishing.package_catalog import VARIANTS,parse_selection
+            runs.ACTIVE = runs.VirtualTurntableRuns(
+                state / "virtual-turntable", folder_paths.get_input_directory(), folder_paths.get_output_directory(),
+                NativeQueue(PromptServer.instance.prompt_queue), resources,
+                lambda: cache.running or has_active_jobs() or busy() or image_busy() or hair_busy() or
+                        guided_busy() or splat_busy() or ccore_busy() or garment_busy() or turntable_busy(), parse_selection, VARIANTS)
+            runs.ACTIVE.library = library
+        return runs.ACTIVE
+
+    def orbit_factory():
+        from .workflows.virtual_turntable import runs
+        if runs.ORBIT_ACTIVE is None:
+            from .workflows.orbit_to_mesh.runs import OrbitRuns
+            from ..single_image_routes import NativeQueue
+            from ..routes import resources
+            from ..finishing.package_catalog import VARIANTS, parse_selection
+
+            runs.ORBIT_ACTIVE = OrbitRuns(
+                state / "orbit-to-mesh", folder_paths.get_input_directory(), folder_paths.get_output_directory(),
+                NativeQueue(PromptServer.instance.prompt_queue), resources, lambda: library.busy(),
+                parse_selection, VARIANTS)
+            runs.ORBIT_ACTIVE.library = library
+        return runs.ORBIT_ACTIVE
+
     library.busy=lambda:cache.running or old_library_busy()
     from .model_locations import registered_locations,invalidate_model_lists
     resource_inventory=ResourceInventory(models.MODEL_ROOT,resources_in_use,registered_locations,models.MODELS,invalidate_model_lists)
@@ -459,4 +542,4 @@ def install():
     updates = ReleaseUpdates(state/"updates.json", preferences)
     register(PromptServer.instance.routes, library, preferences, wizard_factory, resource_inventory, updates,
              image_factory,lambda ident:PromptServer.instance.send_sync('mumblebox-foundry-image',{'id':ident}),
-             hair_factory,lambda ident:PromptServer.instance.send_sync('mumblebox-foundry-hair',{'id':ident}),guided_factory,splat_factory,cache,ccore_factory,garment_factory)
+             hair_factory,lambda ident:PromptServer.instance.send_sync('mumblebox-foundry-hair',{'id':ident}),guided_factory,splat_factory,cache,ccore_factory,garment_factory,turntable_factory,orbit_factory)

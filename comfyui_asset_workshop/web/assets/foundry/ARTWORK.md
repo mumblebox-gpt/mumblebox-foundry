@@ -22,3 +22,9 @@ Shared direction: square, professional sculptural 3D product render; charcoal st
 `logo-approved.png` is the active logo for both light and dark themes. The approved spaced composition was selected on 2026-11-01: silver MUMBLEBOX wordmark, 3D ASSET FOUNDRY subtitle, flat rainbow chaos star on a plain black rounded badge, and clear separation between badge and lettering. Generated and edited with the built-in image-generation tool using the supplied star as reference. Alpha transparency is retained. The application loads the same asset for both themes. Earlier PNG/SVG variants are retained for rollback and are not active UI assets.
 
 Final prompt direction: preserve the approved silver lettering; provide a deliberate badge-to-wordmark gap and subtitle spacing; align the badge against the whole text block; keep the star and black rounded square flat and effect-free. Exact text: MUMBLEBOX / 3D ASSET FOUNDRY.
+
+- \`method-virtual-turntable.webp\` shows a jade guardian on a turntable with a reference card and sage mesh overlay. Generated as workflow artwork.
+
+- `connect-agent.webp` shows a friendly ivory and sage helper robot connecting a brass plug to a small 3D workbench. Generated with the built-in image tool for the Connect your agent dialog.
+
+- \`method-orbit-to-mesh.webp\` shows a copper-red dragon with a camera on an orbit track. Generated for the Orbit to Mesh card.

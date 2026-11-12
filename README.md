@@ -1,6 +1,8 @@
 # Mumblebox 3D Asset Foundry
 
-[English](README.md) · [简体中文](docs/README.zh-CN.md) · [Español (Latinoamérica)](docs/README.es-419.md)
+**Foundry version 0.1.0-preview.25**
+
+[English](README.md) · [简体中文](docs/README.zh-CN.md) · [Español (Latinoamérica)](docs/README.es-419.md) · [Français](docs/README.fr.md) · [Português (Brasil)](docs/README.pt-BR.md)
 
 **Make images and 3D assets locally, on your own or alongside your coding agent.**
 
@@ -28,6 +30,8 @@ Our aim is to reduce repetitive modeling and save time and agent tokens. Actual 
 | **Turnaround** | Generate and review four views with supported Qwen or FLUX models, then reconstruct with Pixal3D and finish with Hi3D and TRELLIS.2. | Humanoids are a strong starting point. Vehicle, prop and creature recipes are still being improved. |
 | **3D-Guided** | A Pixal3D proxy, measured Blender views, MoGe 2 estimates and Qwen guidance before reconstruction and finishing. | Objects where choosing and checking camera views matters. More processing is involved. |
 | **Splat & Solid** | An Idol Gaussian splat from Sperid Labs, plus separate cleaned companion geometry and optional Hi3D refinement. | Rich appearance alongside lighter geometry, with orbit previews and mesh comparisons. |
+| **Orbit to Mesh** | Generate an H3 orbit, review aligned views, reconstruct with Pixal3D, then finish with Hi3D and TRELLIS.2. | When you want to inspect the angles and skip weak frames before building the mesh. |
+| **Virtual Turntable** | Generate an H3 orbit and reconstruct it with Meshroom or COLMAP + OpenMVS. | When you want to try photogrammetry on a consistent generated orbit. |
 | **CCORE Text** | A procedural stylized prop described in words, 12 editable examples, optional local Qwen description enhancement, a 3D preview and GLB export. | Tools, furniture and individual game props. |
 | **CCORE Image + Text** | One image and a description through CCORE's vision projector and generation path. Create a reference inside the wizard if needed. | Keep or change features from a photo, sketch or render. |
 | **HairDeck** | Hair cards, variations, processing sheets, fitting, materials, optional spring chains, motion preview and selected GLB/VRM exports. | Clear hairstyle references. Powered by HairDeck and FengLairh's ComfyUI integration. |
@@ -53,7 +57,7 @@ Available outputs depend on the workflow. Wizards expose supported choices such 
 
 Review topology for deformation, geometry for printing and collision, and materials in the target editor or engine. HairDeck's static GLB and spring-bone VRM are different outputs. Its head-turn preview demonstrates hair motion. Garment Particles remains experimental, especially character fitting and draping.
 
-Packages include selected files, a README, measurements, checksums, provenance and applicable notices. Ordinary packages exclude private source images, prompts and working files. History keeps saved results available for review and resuming supported operations.
+Packages include selected files, a README, measurements, checksums, provenance and applicable notices. Ordinary packages exclude private source images, prompts and working files. History keeps saved results available for review and resuming supported operations. In **History → Videos**, play, download or delete separately saved workflow videos.
 
 ## Language and accessibility
 

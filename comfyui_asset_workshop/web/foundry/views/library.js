@@ -18,7 +18,7 @@ function measurements(data) {
 }
 async function details(shell,item) {
     const data=await request("library/"+item.id);
-    const body=el("div",{},el("dl",{},el("dt",{},msg("common.workflow")),el("dd",{},data.workflow),
+    const body=el("div",{},el("dl",{},el("dt",{},msg("common.workflow")),el("dd",{},sourceMessage(data.workflow)),
         el("dt",{},msg("common.created")),el("dd",{},new Date(data.created).toLocaleString()),el("dt",{},msg("common.package")),el("dd",{},msg("common.cataloged_files", {value1: data.file_count, value2: formatSize(data.bytes)}))),
         ...data.variants.map(v=>el("section",{class:"settings-section"},el("h3",{},label(v.id)),hint(sourceMessage(v.description||v.intended_use||"")),
             ...measurements(v.measurements||{}),
@@ -28,70 +28,122 @@ async function details(shell,item) {
         ...data.warnings.map(text=>hint(text)));
     dialog(shell,data.name,body,[{label:msg("common.close"),run:close=>close()}]);
 }
-function confirmRemoval(shell,kind,ids) {
+async function reviewRemoval(shell,kind,ids,deleteFiles,onDone,close){
+    const review=await request("library/removal-preview",{kind,ids,delete_files:deleteFiles});
+    close?.();
+    const video=kind==="video";
+    const explanation=el("div",{},
+        video?hint(msg("common.delete_video_explanation")):
+            el("p",{},msg(review.count === 1 ? "common.entry_will_be_removed" : "common.entries_will_be_removed", {count: review.count})),
+        el("ul",{},...review.names.map(name=>el("li",{},name))),
+        review.delete_files?el("div",{},el("strong",{},msg("common.these_saved_files_will_also_be_permanently_deleted")),
+            el("div",{class:"file-list"},...review.files.map(path=>el("div",{},path)))):
+            hint(msg("common.saved_images_meshes_and_zip_files_will_remain_on_disk")));
+    dialog(shell,video?msg("common.delete_video"):msg(review.delete_files?"common.confirm_file_deletion":"common.confirm_entry_removal"),explanation,[
+        {label:msg("common.cancel"),run:cancel=>cancel()},
+        {label:video?msg("common.delete_video"):msg(review.delete_files?"common.delete_files_and_entries":"common.remove_entries"),
+            primary:true,run:async done=>{
+                const result=await request("library/remove",{token:review.token});
+                if(!result.ok)throw Error(result.error+" "+(result.failures||[]).join(", "));
+                done();shell.message(video?msg("common.video_deleted"):msg(result.removed_entries===1?"common.entry_removed":"common.entries_removed",
+                    {count:result.removed_entries,files:msg(review.delete_files?"common.selected_files_deleted":"common.saved_files_kept")}));
+                await onDone();
+            }}]);
+}
+function confirmRemoval(shell,kind,ids,onDone) {
+    if(kind==="video"){
+        return reviewRemoval(shell,kind,ids,true,onDone).catch(error=>shell.message(sourceMessage(error.message),true));
+    }
     const destructive=el("input",{type:"checkbox"});
-    const first=el("div",{},el("p",{},ids?msg("common.remove_this_entry_from", {value1: kind==="mesh"?"History":"Image Gallery"}):msg("common.purge_all_entries_currently_in", {value1: kind==="mesh"?"History":"Image Gallery"})),
+    const location=msg(kind==="mesh"?"common.history":"common.image_gallery_title");
+    const first=el("div",{},el("p",{},msg(ids?"common.remove_this_entry_from":"common.purge_all_entries_currently_in",{value1:location})),
         hint(msg("common.saved_files_are_kept_unless_you_explicitly_choose_to_delete_them")),
         el("label",{class:"check-row"},destructive,el("span",{},msg("common.also_delete_saved_files"))));
     dialog(shell,ids?msg("common.remove_entry"):msg("common.purge_history"),first,[
         {label:msg("common.cancel"),run:close=>close()},
-        {label:msg("common.review_removal"),primary:true,run:async close=>{
-            const review=await request("library/removal-preview",{kind,ids,delete_files:destructive.checked});
-            close();
-            const explanation=el("div",{},el("p",{},msg(review.count === 1 ? "common.entry_will_be_removed" : "common.entries_will_be_removed", {count: review.count})),
-                el("ul",{},...review.names.map(n=>el("li",{},n))),
-                review.delete_files?el("div",{},el("strong",{},msg("common.these_saved_files_will_also_be_permanently_deleted")),
-                    el("div",{class:"file-list"},...review.files.map(p=>el("div",{},p)))):
-                    hint(msg("common.saved_images_meshes_and_zip_files_will_remain_on_disk")));
-            dialog(shell,review.delete_files?msg("common.confirm_file_deletion"):msg("common.confirm_entry_removal"),explanation,[
-                {label:msg("common.cancel"),run:c=>c()},
-                {label:review.delete_files?msg("common.delete_files_and_entries"):msg("common.remove_entries"),primary:true,run:async c=>{
-                    const result=await request("library/remove",{token:review.token});
-                    if(!result.ok)throw Error(result.error+" "+(result.failures||[]).join(", "));
-                    c();shell.message(msg(result.removed_entries === 1 ? "common.entry_removed" : "common.entries_removed", {count: result.removed_entries, files: msg(review.delete_files ? "common.selected_files_deleted" : "common.saved_files_kept")}));
-                    if(kind==="mesh")await shell.open("History");
-                    else await shell.openImages("Gallery");
-                }}]);
-        }}]);
+        {label:msg("common.review_removal"),primary:true,
+            run:close=>reviewRemoval(shell,kind,ids,destructive.checked,onDone,close)}]);
 }
-export async function render(shell,kind) {
-    let disposed=false,cursor="",items=[];
-    const title=kind==="mesh"?msg("common.history_title"):msg("common.image_gallery_title");
-    const intro=kind==="mesh"?msg("common.mesh_history_intro"):msg("common.image_history_intro");
+
+function videoCard(shell,item,refresh){
+    const url=fileUrl(item.id,"video");
+    const media=el("div",{class:"history-video-player"});
+    const play=button(msg("common.play_video"),()=>{
+        const video=el("video",{src:url+"?play=1",controls:true,playsInline:true,"aria-label":item.name});
+        media.replaceChildren(video);
+        video.play().catch(()=>{});
+    });
+    return el("article",{class:"library-card"},el("div",{class:"thumbnail"},icon("video",42)),
+        el("div",{},el("h3",{},item.name),
+            el("p",{class:"muted"},new Date(item.created).toLocaleString()+" · ",sourceMessage(item.workflow)),
+            el("div",{class:"filename"},item.filename+" · "+formatSize(item.bytes)),
+            el("div",{class:"actions"},play,
+                el("a",{href:url,download:"",class:"download-link"},msg("common.download_video")),
+                button(msg("common.delete_video"),()=>confirmRemoval(shell,"video",[item.id],refresh),{class:"danger"})),
+            media));
+}
+
+export async function render(shell,initialKind) {
+    let disposed=false,sequence=0,cursor="",items=[];
+    let kind=initialKind;
+    const history=initialKind==="mesh";
     const root=el("div",{});
     const list=el("div",{class:"library-list"});
-    const purge=button(msg("common.purge_history_2"),()=>confirmRemoval(shell,kind,null),{class:"danger",disabled:true});
+    const purge=button(msg("common.purge_history_2"),()=>confirmRemoval(shell,kind,null,()=>load(false)),{class:"danger",disabled:true});
     const more=button(msg("common.load_more"),()=>load(true),{hidden:true});
     const refresh=button(msg("common.refresh"),()=>load(false));
-    appendContent(root, el("div",{class:"page-head"},el("div",{},el("span",{class:"eyebrow"},kind==="mesh"?msg("common.asset_library"):msg("common.image_library")),el("h2",{},title),hint(intro)),
-        el("div",{class:"actions"},refresh,purge)), list, more);
+    const intro=el("p",{class:"muted"});
+    const tabs={};
+    if(history){
+        for(const [key,label] of [["mesh","common.history_assets"],["video","common.history_videos"]]){
+            tabs[key]=button(msg(label),()=>{
+                if(kind===key)return;
+                kind=key;cursor="";items=[];list.replaceChildren();load(false);
+            });
+        }
+    }
+    appendContent(root,el("div",{class:"page-head"},el("div",{},
+        el("span",{class:"eyebrow"},msg(history?"common.asset_library":"common.image_library")),
+        el("h2",{},msg(history?"common.history_title":"common.image_gallery_title")),intro),
+        el("div",{class:"actions"},...Object.values(tabs),refresh,purge)),list,more);
     async function load(append) {
-        refresh.disabled=true;more.disabled=true;
+        const requestId=++sequence;
+        const current=()=>!disposed&&requestId===sequence;
+        const video=kind==="video";
+        const mesh=kind==="mesh";
+        for(const [key,tab] of Object.entries(tabs)){
+            tab.setAttribute("aria-pressed",String(kind===key));tab.classList.toggle("primary",kind===key);
+        }
+        replaceContent(intro,msg(video?"common.video_history_intro":mesh?"common.mesh_history_intro":"common.image_history_intro"));
+        purge.hidden=video;refresh.disabled=true;more.disabled=true;
         try{
             if(!append) {
-                const sync=await request("library/sync",{});
-                if(sync.failed)shell.message(msg("common.history_notification_s_need_attention_existing_files_are_unchanged", {failed: sync.failed}),true);
+                const sync=await request("library/sync",video?{kind:"video"}:{});
+                if(!current())return;
+                if(sync.failed)shell.message(msg("common.history_notification_s_need_attention_existing_files_are_unchanged",{failed:sync.failed}),true);
             }
             const page=await request("library?"+new URLSearchParams({kind,cursor:append?cursor:"",limit:24}));
-            if(disposed)return;
+            if(!current())return;
             items=append?[...items,...page.items]:page.items;cursor=page.next_cursor;
             purge.disabled=!items.length;more.hidden=!cursor;
-            replaceContent(list, ...items.map(item=>{
-                const thumb=el("div",{class:"thumbnail"},item.preview_id?el("img",{src:fileUrl(item.id,item.preview_id),alt:item.name}):icon(kind==="mesh"?"cube":"image",42));
+            replaceContent(list,...items.map(item=>{
+                if(video)return videoCard(shell,item,()=>load(false));
+                const thumb=el("div",{class:"thumbnail"},item.preview_id?el("img",{src:fileUrl(item.id,item.preview_id),alt:item.name}):icon(mesh?"cube":"image",42));
                 return el("article",{class:"library-card"},thumb,el("div",{},el("h3",{},item.name),
-                    hint(new Date(item.created).toLocaleString()+" · "+item.workflow),
+                    el("p",{class:"muted"},new Date(item.created).toLocaleString()+" · ",sourceMessage(item.workflow)),
                     el("div",{class:"formats"},...item.formats.filter(Boolean).map(f=>el("span",{class:"badge"},f.toUpperCase()))),
-                    hint(msg("common.files_3", {value1: item.file_count, value2: formatSize(item.bytes), value3: item.variants.map(v=>v.id.replaceAll("_"," ")).join(", ")})),
+                    hint(msg("common.files_3",{value1:item.file_count,value2:formatSize(item.bytes),value3:item.variants.map(v=>v.id.replaceAll("_"," ")).join(", ")})),
                     el("div",{class:"actions"},button(msg("common.view_details"),()=>details(shell,item).catch(e=>shell.message(sourceMessage(e.message),true))),
                         button(msg("common.open_output_folder"),async()=>{try{const result=await request("library/"+item.id+"/open-folder",{});shell.message(result.location);}catch(e){shell.message(sourceMessage(e.message),true);}}),
                         el("a",{href:fileUrl(item.id,"archive"),download:"",class:"download-link"},msg("common.download_zip")),
-                        button(msg("common.delete"),()=>confirmRemoval(shell,kind,[item.id]),{class:"danger"}))));
+                        button(msg("common.delete"),()=>confirmRemoval(shell,kind,[item.id],()=>load(false)),{class:"danger"}))));
             }));
-            if(!items.length)appendContent(list, el("div",{class:"empty"},icon(kind==="mesh"?"history":"image",42),
-                el("h3",{},kind==="mesh"?msg("common.no_mesh_packages_in_history_yet"):msg("common.no_image_creations_yet")),
-                hint(kind==="mesh"?msg("common.completed_exports_will_appear_here"):msg("common.this_gallery_will_collect_final_images_when_the_image_creation_workflow_is_a"))));
-        }catch(e){if(!disposed){shell.message(sourceMessage(e.message),true);if(!items.length)list.replaceChildren(el("p",{},sourceMessage(e.message)));}}
-        finally{refresh.disabled=false;more.disabled=false;}
+            if(!items.length)appendContent(list,el("div",{class:"empty"},icon(video?"video":mesh?"history":"image",42),
+                el("h3",{},msg(video?"common.no_videos_in_history":mesh?"common.no_mesh_packages_in_history_yet":"common.no_image_creations_yet")),
+                video?null:hint(msg(mesh?"common.completed_exports_will_appear_here":"common.this_gallery_will_collect_final_images_when_the_image_creation_workflow_is_a"))));
+        }catch(error){
+            if(current()){shell.message(sourceMessage(error.message),true);if(!items.length)replaceContent(list,el("p",{},sourceMessage(error.message)));}
+        }finally{if(current()){refresh.disabled=false;more.disabled=false;}}
     }
     await load(false);
     return {element:root,dispose:()=>{disposed=true;}};

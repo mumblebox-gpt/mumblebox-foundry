@@ -1,0 +1,727 @@
+{
+  "1": {
+    "inputs": {
+      "profile": "Author video size + 4K sheet",
+      "width": 768,
+      "height": 768,
+      "length": 73,
+      "feedforward_chunks": 4,
+      "attention_chunks": 8,
+      "decode_tile": 256,
+      "decode_frames": 32,
+      "sheet_panel_size": 1024
+    },
+    "class_type": "FoundryV360MemoryProfile"
+  },
+  "2": {
+    "inputs": {
+      "image": "none",
+      "required_reference": true
+    },
+    "class_type": "FoundryV360ReferenceImage"
+  },
+  "3": {
+    "inputs": {
+      "image": "none",
+      "required_reference": false
+    },
+    "class_type": "FoundryV360ReferenceImage"
+  },
+  "4": {
+    "inputs": {
+      "image": "none",
+      "required_reference": false
+    },
+    "class_type": "FoundryV360ReferenceImage"
+  },
+  "5": {
+    "inputs": {
+      "image": "none",
+      "required_reference": false
+    },
+    "class_type": "FoundryV360ReferenceImage"
+  },
+  "7": {
+    "inputs": {
+      "unet_name": "p-h3-image_w4a8.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader"
+  },
+  "8": {
+    "inputs": {
+      "shift_video": 1,
+      "shift_audio": 1,
+      "model": [
+        "7",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3SigmaShift"
+  },
+  "9": {
+    "inputs": {
+      "clip_name": "p-h3-image_text_encoder_w4a8.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader"
+  },
+  "10": {
+    "inputs": {
+      "vae_name": "p-h3-image_vae_int8_convrot.safetensors"
+    },
+    "class_type": "VAELoader"
+  },
+  "11": {
+    "inputs": {
+      "prompt": "Edit <Picture 1>. Create a clean four-view turnaround sheet of exactly the same subject. Any additional pictures show the same subject and clarify its details. Preserve its identity, shape, proportions, colors, materials, markings, costume and equipment.\n\nExactly four equal square panels in a single horizontal row. Left to right: FRONT view, SIDE profile view, THREE-QUARTER view, BACK view. The side profile and three-quarter view show the same side of the subject. Keep the same stationary pose and rigid construction in every panel. Rotate only the camera.\n\nUse consistent weak perspective, a fixed long lens and level camera, the same subject scale, camera distance, center position and ground line in every panel. Show the complete silhouette inside each panel with clear margins. Preserve asymmetric details on their correct side.\n\nPlain neutral gray studio background, soft even diffuse illumination, no cast shadow on the ground or backdrop, no harsh shadows or glare, identical rendering style throughout. The panel backgrounds are seamless and unmarked. The four subjects are separated with clear space, with no overlapping panels, labels or borders.",
+      "width": [
+        "1",
+        8
+      ],
+      "height": [
+        "1",
+        9
+      ],
+      "clip": [
+        "9",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ],
+      "images.image_1": [
+        "2",
+        0
+      ],
+      "images.image_2": [
+        "3",
+        0
+      ],
+      "images.image_3": [
+        "4",
+        0
+      ],
+      "images.image_4": [
+        "5",
+        0
+      ]
+    },
+    "class_type": "PH3ImageConditioning"
+  },
+  "12": {
+    "inputs": {
+      "model": [
+        "8",
+        0
+      ],
+      "conditioning": [
+        "11",
+        0
+      ]
+    },
+    "class_type": "BasicGuider"
+  },
+  "13": {
+    "inputs": {
+      "noise_seed": 42
+    },
+    "class_type": "RandomNoise"
+  },
+  "14": {
+    "inputs": {
+      "sampler_name": "euler"
+    },
+    "class_type": "KSamplerSelect"
+  },
+  "15": {
+    "inputs": {
+      "sigmas": "1.0, 0.984753, 0.967905, 0.951688, 0.925372, 0.881923, 0.810083, 0.528718, 0.0"
+    },
+    "class_type": "ManualSigmas"
+  },
+  "16": {
+    "inputs": {
+      "noise": [
+        "13",
+        0
+      ],
+      "guider": [
+        "12",
+        0
+      ],
+      "sampler": [
+        "14",
+        0
+      ],
+      "sigmas": [
+        "15",
+        0
+      ],
+      "latent_image": [
+        "11",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced"
+  },
+  "17": {
+    "inputs": {
+      "tile_size": 512,
+      "overlap": 64,
+      "temporal_size": 32,
+      "temporal_overlap": 8,
+      "samples": [
+        "16",
+        0
+      ],
+      "vae": [
+        "10",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeTiled"
+  },
+  "18": {
+    "inputs": {
+      "filename_prefix": "foundry/virtual-turntable",
+      "images": [
+        "17",
+        0
+      ]
+    },
+    "class_type": "SaveImage"
+  },
+  "19": {
+    "inputs": {
+      "crop_rectangles": "[[0,0,0.25,1],[0.25,0,0.25,1],[0.5,0,0.25,1],[0.75,0,0.25,1]]",
+      "sheet": [
+        "17",
+        0
+      ]
+    },
+    "class_type": "FoundryV360SplitTurnaround"
+  },
+  "20": {
+    "inputs": {
+      "bg_removal_name": "birefnet.safetensors"
+    },
+    "class_type": "LoadBackgroundRemovalModel"
+  },
+  "21": {
+    "inputs": {
+      "width": [
+        "1",
+        0
+      ],
+      "height": [
+        "1",
+        1
+      ],
+      "margin": 0.04,
+      "background": 0.5,
+      "release_previous_models": true,
+      "bg_model": [
+        "20",
+        0
+      ],
+      "front": [
+        "19",
+        0
+      ],
+      "side": [
+        "19",
+        1
+      ],
+      "three_quarter": [
+        "19",
+        2
+      ],
+      "back": [
+        "19",
+        3
+      ]
+    },
+    "class_type": "FoundryV360PrepareReferences"
+  },
+  "22": {
+    "inputs": {
+      "images": [
+        "21",
+        4
+      ]
+    },
+    "class_type": "PreviewImage"
+  },
+  "23": {
+    "inputs": {
+      "length": [
+        "1",
+        2
+      ],
+      "side_fraction": 0.25,
+      "three_quarter_fraction": 0.125,
+      "back_fraction": 0.5
+    },
+    "class_type": "FoundryV360GuideFrames"
+  },
+  "25": {
+    "inputs": {
+      "clip_name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+      "type": "minimax",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader"
+  },
+  "26": {
+    "inputs": {
+      "vae_name": "minimax_h3_video_vae_int8_convrot.safetensors"
+    },
+    "class_type": "VAELoader"
+  },
+  "27": {
+    "inputs": {
+      "orbit_prompt": "One frozen instant. Only the camera moves. In a continuous 360 orbit. Preserve every person and object in exactly the same world position, orientation, shape and pose throughout the shot. Airborne objects remain suspended at the captured height and angle: no wobbling, shaking, spinning, drifting, falling or continued action. Keep faces, hands, clothing, liquids and the background motionless while retaining their natural appearance. Camera parallax is the only source of apparent movement. No cuts, zoom, morphing or added objects.",
+      "subject_direction": "A rigid matte teal and orange portable field scanner, with a dark front display, cream dial, buttons, side vents, top carry handle and short feet. Retain every marking and asymmetric detail on its correct side. Use soft, even diffuse illumination and constant exposure throughout the orbit. The plain neutral gray background and ground have no cast shadow. No glare or moving lighting.\n\nThe object remains completely still and rigid. Only the camera moves through one smooth 360-degree orbit. Preserve exactly the same shape, proportions, dimensions, parts, markings and materials throughout. No bending, stretching, morphing, moving parts, or details appearing or disappearing.",
+      "subject_prompt": ""
+    },
+    "class_type": "FoundryV360VideoPrompt"
+  },
+  "28": {
+    "inputs": {
+      "prompt": [
+        "27",
+        0
+      ],
+      "width": [
+        "1",
+        0
+      ],
+      "height": [
+        "1",
+        1
+      ],
+      "length": [
+        "1",
+        2
+      ],
+      "clip": [
+        "25",
+        0
+      ],
+      "vae": [
+        "26",
+        0
+      ],
+      "first_frame": [
+        "21",
+        0
+      ],
+      "last_frame": [
+        "21",
+        0
+      ]
+    },
+    "class_type": "MiniMaxH3ImageToVideo"
+  },
+  "29": {
+    "inputs": {
+      "frame_idx": [
+        "23",
+        1
+      ],
+      "positive": [
+        "28",
+        0
+      ],
+      "latent": [
+        "28",
+        1
+      ],
+      "vae": [
+        "26",
+        0
+      ],
+      "image": [
+        "21",
+        2
+      ]
+    },
+    "class_type": "MiniMaxH3AddGuide"
+  },
+  "30": {
+    "inputs": {
+      "frame_idx": [
+        "23",
+        0
+      ],
+      "positive": [
+        "29",
+        0
+      ],
+      "latent": [
+        "28",
+        1
+      ],
+      "vae": [
+        "26",
+        0
+      ],
+      "image": [
+        "21",
+        1
+      ]
+    },
+    "class_type": "MiniMaxH3AddGuide"
+  },
+  "31": {
+    "inputs": {
+      "frame_idx": [
+        "23",
+        2
+      ],
+      "positive": [
+        "30",
+        0
+      ],
+      "latent": [
+        "28",
+        1
+      ],
+      "vae": [
+        "26",
+        0
+      ],
+      "image": [
+        "21",
+        3
+      ]
+    },
+    "class_type": "MiniMaxH3AddGuide"
+  },
+  "32": {
+    "inputs": {
+      "unet_name": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+      "weight_dtype": "default"
+    },
+    "class_type": "UNETLoader"
+  },
+  "33": {
+    "inputs": {
+      "lora_name": "minimax_h3_flf2v_lora_v1.safetensors",
+      "strength_model": 1,
+      "model": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "LoraLoaderModelOnly"
+  },
+  "34": {
+    "inputs": {
+      "chunks": [
+        "1",
+        3
+      ],
+      "seq_threshold": 4096,
+      "model": [
+        "33",
+        0
+      ]
+    },
+    "class_type": "MiniMaxChunkFeedForward"
+  },
+  "35": {
+    "inputs": {
+      "head_chunks": [
+        "1",
+        4
+      ],
+      "model": [
+        "34",
+        0
+      ]
+    },
+    "class_type": "MiniMaxLowVRAMAttention"
+  },
+  "36": {
+    "inputs": {
+      "model": [
+        "35",
+        0
+      ],
+      "conditioning": [
+        "31",
+        0
+      ]
+    },
+    "class_type": "BasicGuider"
+  },
+  "37": {
+    "inputs": {
+      "noise_seed": 42
+    },
+    "class_type": "RandomNoise"
+  },
+  "38": {
+    "inputs": {
+      "sampler_name": "res_multistep"
+    },
+    "class_type": "KSamplerSelect"
+  },
+  "39": {
+    "inputs": {
+      "scheduler": "simple",
+      "steps": 28,
+      "denoise": 1,
+      "model": [
+        "35",
+        0
+      ]
+    },
+    "class_type": "BasicScheduler"
+  },
+  "40": {
+    "inputs": {
+      "noise": [
+        "37",
+        0
+      ],
+      "guider": [
+        "36",
+        0
+      ],
+      "sampler": [
+        "38",
+        0
+      ],
+      "sigmas": [
+        "39",
+        0
+      ],
+      "latent_image": [
+        "28",
+        1
+      ]
+    },
+    "class_type": "SamplerCustomAdvanced"
+  },
+  "41": {
+    "inputs": {
+      "tile_size": [
+        "1",
+        5
+      ],
+      "overlap": 64,
+      "temporal_size": [
+        "1",
+        6
+      ],
+      "temporal_overlap": 8,
+      "samples": [
+        "40",
+        0
+      ],
+      "vae": [
+        "26",
+        0
+      ]
+    },
+    "class_type": "VAEDecodeTiled"
+  },
+  "43": {
+    "inputs": {
+      "fps": 24,
+      "bit_depth": "auto",
+      "color_space": "sRGB",
+      "chroma_subsampling": "auto",
+      "codec": "none",
+      "images": [
+        "41",
+        0
+      ]
+    },
+    "class_type": "CreateVideo"
+  },
+  "44": {
+    "inputs": {
+      "filename_prefix": "foundry/virtual-turntable",
+      "format": "auto",
+      "format.codec": "auto",
+      "codec": "auto",
+      "video": [
+        "43",
+        0
+      ]
+    },
+    "class_type": "SaveVideo"
+  },
+  "45": {
+    "inputs": {
+      "enabled": true,
+      "source": "Generated orbit",
+      "saved_video": "",
+      "max_frames": 72,
+      "max_edge": 768,
+      "drop_loop_endpoint": true,
+      "exclude_indices": "",
+      "generated_images": [
+        "41",
+        0
+      ]
+    },
+    "class_type": "FoundryV360VideoSource"
+  },
+  "46": {
+    "inputs": {
+      "bg_removal_name": "birefnet.safetensors"
+    },
+    "class_type": "LoadBackgroundRemovalModel"
+  },
+  "47": {
+    "inputs": {
+      "batch_size": 1,
+      "release_previous_models": true,
+      "bg_removal_model": [
+        "46",
+        0
+      ],
+      "image": [
+        "45",
+        0
+      ]
+    },
+    "class_type": "FoundryV360MaskFrames"
+  },
+  "48": {
+    "inputs": {
+      "asset_name": "virtual-turntable",
+      "mask_threshold": 0.5,
+      "erode_pixels": 0,
+      "release_gpu": true,
+      "images": [
+        "45",
+        0
+      ],
+      "masks": [
+        "47",
+        0
+      ],
+      "source_indices": [
+        "45",
+        1
+      ]
+    },
+    "class_type": "FoundryV360SaveFrames"
+  },
+  "49": {
+    "inputs": {
+      "images": [
+        "48",
+        1
+      ]
+    },
+    "class_type": "PreviewImage"
+  },
+  "52": {
+    "inputs": {
+      "depth_downscale": 1,
+      "depth_tile": 768,
+      "neighbor_cameras": 10,
+      "feature_density": "high",
+      "min_2d_motion": 3,
+      "initial_fov": 10.0,
+      "texture_size": 4096,
+      "max_input_points": 10000000,
+      "max_mesh_points": 1000000,
+      "cpu_threads": 8,
+      "timeout_minutes": 180,
+      "advanced_overrides": "{\"DepthMapFilter_1\":{\"minNumOfConsistentCams\":2,\"minNumOfConsistentCamsWithLowSimilarity\":3},\"MeshFiltering_1\":{\"keepLargestMeshOnly\":true,\"smoothingIterations\":2}}",
+      "frame_set": [
+        "48",
+        0
+      ],
+      "camera_calibration": "Keep chosen lens",
+      "minimum_checked_fov": 2.0,
+      "maximum_checked_fov": 120.0
+    },
+    "class_type": "FoundryV360Meshroom"
+  },
+  "53": {
+    "inputs": {
+      "viewport_state": {
+        "image": "",
+        "mask": "",
+        "normal": "",
+        "camera_info": {
+          "position": {
+            "x": 10,
+            "y": 10,
+            "z": 10.000000000000002
+          },
+          "target": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "zoom": 1,
+          "cameraType": "perspective",
+          "quaternion": {
+            "x": -0.2798481423331213,
+            "y": 0.3647051996310008,
+            "z": 0.11591689595929511,
+            "w": 0.8804762392171493
+          },
+          "fov": 35,
+          "aspect": 1,
+          "near": 0.01,
+          "far": 10000,
+          "frustum": {
+            "left": -5,
+            "right": 5,
+            "top": 5,
+            "bottom": -5
+          }
+        },
+        "recording": "",
+        "model_3d_info": []
+      },
+      "width": 1024,
+      "height": 1024,
+      "model_3d": [
+        "52",
+        0
+      ]
+    },
+    "class_type": "Preview3DAdvanced"
+  },
+  "54": {
+    "inputs": {
+      "camera_model": "PINHOLE",
+      "shared_camera": true,
+      "initial_focal_factor": 1.2,
+      "gpu_features": true,
+      "gpu_index": 0,
+      "max_features": 8192,
+      "depth_downscale": 0,
+      "max_resolution": 768,
+      "neighbor_views": 8,
+      "refine_mesh": true,
+      "refine_on_gpu": true,
+      "texture_size": 4096,
+      "cpu_threads": 8,
+      "timeout_minutes": 180,
+      "advanced_overrides": "{}",
+      "frame_set": [
+        "48",
+        0
+      ],
+      "initial_fov": 10.0,
+      "camera_calibration": "Keep chosen lens",
+      "refine_decimation": 1.0
+    },
+    "class_type": "FoundryV360COLMAPOpenMVS"
+  }
+}

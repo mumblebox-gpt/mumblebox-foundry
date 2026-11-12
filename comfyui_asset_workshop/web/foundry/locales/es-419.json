@@ -336,6 +336,7 @@
   "download_2": "Descargar · {name}",
   "choose_a_version_and_file_the_app_installs_it_in_the_correct_folder_for_init": "Elige una versión y archivo. La aplicación lo instala en la carpeta correcta para la creación inicial de imágenes.",
   "license_and_resource_page": "Página de licencia y recursos",
+  "preview_release": "Versión preliminar",
   "version": "Versión",
   "author_permissions": "Permisos del autor",
   "downloading": "Descargando {value1}",
@@ -573,5 +574,17 @@
   "description_action_invalid": "Elige mejora o traducción.",
   "translation_gpu_required": "La traducción requiere una GPU NVIDIA y un runtime local compatible con CUDA. Tu descripción permanece sin cambios.",
   "translation_gpu_load_failed": "El modelo de traducción no pudo cargarse completamente en la GPU. Elige Q4 o libera memoria de GPU, luego vuelve a intentarlo. Tu descripción permanece sin cambios. Detalles: {details}",
-  "quads_badge": "Cuadrángulos"
+  "quads_badge": "Cuadrángulos",
+  "model_added": "Agregado el {date}",
+  "model_date_unknown": "Fecha de incorporación desconocida",
+  "model_file": "Archivo: {name}",
+  "history_assets": "Recursos",
+  "history_videos": "Videos",
+  "video_history_intro": "Reproduce, descarga o elimina videos guardados de los flujos.",
+  "no_videos_in_history": "Todavía no hay videos guardados",
+  "play_video": "Reproducir video",
+  "download_video": "Descargar video",
+  "delete_video": "Eliminar video",
+  "video_deleted": "Video eliminado.",
+  "delete_video_explanation": "¿Eliminar este video del disco? Los paquetes de recursos y las mallas terminadas seguirán disponibles."
 }

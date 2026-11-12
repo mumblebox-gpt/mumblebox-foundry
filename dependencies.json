@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0-preview.18",
+  "version": "0.1.0-preview.25",
   "platform": "Windows NVIDIA",
   "reference_hardware": {
     "gpu": "RTX 4080 SUPER",
@@ -8,7 +8,7 @@
   },
   "comfyui": {
     "repository": "https://github.com/Comfy-Org/ComfyUI",
-    "revision": "483dae4326356b81de05d27aca3f433dd323cc25",
+    "revision": "6e8488ef986067631e9c86e2a14360644b105663",
     "frontend": "1.59.0.dev2",
     "python": "3.13.12",
     "torch": "2.12.1+cu130",
@@ -74,5 +74,14 @@
     "url": "https://mirror.blender.org/release/Blender5.2/blender-5.2.2-windows-x64.zip",
     "sha256": "3849d17a682cba006075aaa3f3597ecb5c9c30ec31035b2e092c53e40679b535",
     "checksum_source": "https://download.blender.org/release/Blender5.2/blender-5.2.2.sha256"
+  },
+  "orbit_kjnodes": {
+    "repository": "https://github.com/kijai/ComfyUI-KJNodes",
+    "revision": "35e5956193769d18a13136cdedb73a36a05c73e6",
+    "packages": [
+      "color-matcher==0.6.0",
+      "matplotlib==3.11.2",
+      "mss==10.2.0"
+    ]
   }
 }

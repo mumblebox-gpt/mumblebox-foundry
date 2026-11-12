@@ -5,11 +5,13 @@ description: Use Mumblebox 3D Asset Foundry and its local MCP to create or recov
 
 # Mumblebox Foundry assets
 
+**Foundry version 0.1.0-preview.25**
+
 Use Foundry for a new asset or reference when local generation can save modeling work. Use Blender directly for edits to existing scene objects, assembly, and precise modeling. Preserve the user's design, dimensions, intended use, and chosen reference. Start fresh unless asked to resume a saved result.
 
 ## Start with the running app and current guidance
 
-On the first connection in a session, and after the app is updated or reconnected, use the workflow catalog to read workspace.bootstrap. Compare the returned app version and agent protocol with this skill's [compatibility record](compatibility.json). The record identifies the skill revision, required protocol and app versions last reviewed. Also read workspace.update_status. For a fresh result, use check_updates subject to the user's update-check preference.
+On each new MCP connection, read `workspace.agent_connection` through `foundry_workflow_action`. Foundry checks for updates through its existing update preference. This action reports the app version, bundled skill revision and path, and the result. If `checking` is true, check back once. Compare the installed app and bundled skill with this skill's [compatibility record](compatibility.json). On older Foundry installs, use `workspace.bootstrap` and `workspace.update_status`.
 
 Explain an observed app/skill incompatibility, an app newer than this skill's reviewed version, or a pending update briefly in the user's language. State which version or revision you observed and where the user can refresh it. When version or update information is unavailable, describe that uncertainty. Use live capabilities for actual supported operations.
 
@@ -17,9 +19,11 @@ Remind users at a useful point that new app and skill releases can improve guida
 
 Use the user's conversation language for explanations and notices. Interface language, generation language and machine identifiers are separate. Preserve prompts, filenames, model names, tool names and parameter keys. Treat the language in workspace.bootstrap.preferences as a UI preference.
 
-Call `foundry_workflows` to discover groups and their actions. Read the selected group's capabilities before setting fields. Keep the Foundry graph open in the existing ComfyUI or Pinokio app. If the tools are unavailable, follow [Foundry MCP setup](../../../docs/AGENT-SETUP.md) in the distribution or [the published setup guide](https://github.com/mumblebox-gpt/mumblebox-foundry/blob/codex/initial-import/docs/AGENT-SETUP.md).
+Call `foundry_workflows` to discover groups and their actions. Read the selected group's capabilities before setting fields. Keep the Foundry graph open in the existing ComfyUI or Pinokio app. If the tools are unavailable, use Foundry’s **Connect your agent** button to copy its local setup prompt, or follow [Foundry MCP setup](../../../docs/AGENT-SETUP.md) in the distribution or [the published setup guide](https://github.com/mumblebox-gpt/mumblebox-foundry/blob/codex/initial-import/docs/AGENT-SETUP.md).
 
 - **Mesh:** Start with Single Image for a clear image, or create one in the image workflow. Use Turnaround when more views improve the starting material and 3D-Guided for a controlled set of object views. 3D-Guided needs its run attached with `show` before queueing.
+- **Virtual Turntable:** Use this when a consistent AI-generated orbit could provide useful views for photogrammetry. Read live capabilities and model terms, import one reference or use the image-creation handoff, and explicitly select an engine. Meshroom / AliceVision is the recommended starting point from the jade guardian test. Inspect the four-view sheet, video and original mesh for shape drift, missing surfaces and texture gaps before choosing optional Hi3D. Use Rocket when review stops are unnecessary. Retrieve the package and inspect its recorded resource terms before sharing.
+- **Orbit to Mesh:** Use a clear image of one subject when a generated orbit could reveal useful angles. Read `orbit_to_mesh.capabilities` for terms, defaults and local tools. Import a reference using target `mesh` or use the image handoff. Run `turnaround`, `orbit`, then `cameras`. Review the orbit for shape drift and check the masked frames. Four views are the default. Two or six are also available, and eight is experimental. Update `exclude_views` with source-frame IDs to omit weak views while keeping the front and at least one other. Run `reconstruct` to review Pixal3D geometry, then `finish` for Hi3D, TRELLIS.2 and selected exports. Use `rocket` when automated continuation is appropriate. Inspect the ZIP’s view metadata and resource notices.
 - **CCORE:** Use text for a described prop. Add an image with Image + Text when visual guidance matters. Call `foundry_import_reference` with target `ccore` for a local reference. Respect returned GPU budget limits and offer the reported fallback.
 - **Hair, garment and splat:** Use these groups for their specialized outputs. Review hair variations or garment drape before exporting. A splat stores appearance, and the companion mesh supplies separate geometry.
 

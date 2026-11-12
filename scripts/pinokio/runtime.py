@@ -152,6 +152,7 @@ def launch(root):
         env=os.environ.copy()
         for key in ('PYTHONHOME','PYTHONPATH'):env.pop(key,None)
         env.update({'PYTHONUNBUFFERED':'1','PYTHONIOENCODING':'utf-8',
+            'MUMBLEBOX_PINOKIO_ROOT':str(layout.root),
             'HF_HOME':str(layout.data/'huggingface'),'TORCH_HOME':str(layout.data/'torch')})
         commands=service_commands(layout,comfy_port,hi3d_port)
         logs=layout.root/'logs'/'pinokio';logs.mkdir(parents=True,exist_ok=True)

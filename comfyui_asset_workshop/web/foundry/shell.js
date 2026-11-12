@@ -6,6 +6,7 @@ import {el,button,icon,hint} from "./dom.js";
 import {activityState,loadedState} from "./activity-state.js";
 import {activity} from "./activity.js";
 import {UpdateChecks} from "./updates.js";
+import {AgentSetup} from "./agent-setup/controller.js";
 import {resourceMeter} from "./telemetry.js";
 import {request,pollResources} from "./services.js";
 import {dialog} from "./dialogs.js";
@@ -22,7 +23,7 @@ export class FoundryShell {
         this.statusListeners=new Set();this.node=node; this.host=host; this.tab="Choose a Workflow";
         this.shadow=host.shadowRoot||host.attachShadow({mode:"open"});
         this.shadow.replaceChildren();
-        for (const file of ["theme.css","layout.css","images.css","roadmap.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
+        for (const file of ["theme.css","layout.css","images.css","roadmap.css","agent-setup/style.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
         this.root=el("div",{class:"foundry","data-theme":matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"});
         this.shadow.append(this.root);
         this.root.lang=currentLanguage();
@@ -36,6 +37,7 @@ export class FoundryShell {
         // reach it; swallowing them leaves the viewer stuck in a drag.
         for(const event of ["pointerdown","click","dblclick","wheel","keydown","contextmenu"])
             this.root.addEventListener(event,e=>e.stopPropagation());
+        this.agentSetup=new AgentSetup(this);
         this.build();
         this.updates=new UpdateChecks(this);
         this.bootstrap();
@@ -62,6 +64,8 @@ export class FoundryShell {
         api.addEventListener('mumblebox-foundry-splat',this.agentSplatHandler);
         this.agentWorkflowHandlers = {
             'mumblebox-foundry-ccore': data => this.openCcoreWizard({runId:data.id,image:data.with_image}),
+            'mumblebox-foundry-turntable': data => this.openVirtualTurntable({runId:data.id}),
+            'mumblebox-foundry-orbit': data => this.openOrbitToMesh({runId:data.id}),
             'mumblebox-foundry-garment': data => this.openGarmentWizard({runId:data.id}),
             'mumblebox-foundry-guided': data => this.openGuidedWizard({runId:data.id,binding:data.request_id}),
             'mumblebox-foundry-workspace': data => this.openAgentSection(data.section),
@@ -85,6 +89,7 @@ export class FoundryShell {
     }
     build() {
         this.version=el("small",{},msg("common.interface_loading"));
+        this.previewRelease=el("strong",{class:"preview-release",hidden:true},msg("common.preview_release"));
         this.language=el("select", {class:"language", "aria-label":msg("common.language"),
             onchange:event=>this.setLanguage(event.target.value)},
             ...supportedLanguages.map(language=>el("option", {value:language.id}, language.label)));
@@ -95,8 +100,9 @@ export class FoundryShell {
         this.settingsButton=button([icon("gear",18),msg("common.settings")],()=>this.settings());
         const donate=button(msg("common.coffee"),()=>{}, {disabled:true,title:msg("common.coffee_link_coming_soon")});
         const identity=el("div",{class:"identity"},el("div",{class:"brand"},el("div",{class:"brand-lockup"},
-            el("h1",{},el("img",{class:"brand-logo",src:new URL("../assets/foundry/logo-approved.png",import.meta.url).href,alt:msg("common.mumblebox_3d_asset_foundry"),width:2172,height:724})),this.version)),
-            el("div",{class:"header-tools"},el("div",{class:"header-actions"},el("div",{class:"language-picker"},icon("globe",20),this.language),this.themeButton,this.fontControl.element,this.settingsButton,donate),this.updateSlot));
+            el("h1",{},el("img",{class:"brand-logo",src:new URL("../assets/foundry/logo-approved.png",import.meta.url).href,alt:msg("common.mumblebox_3d_asset_foundry"),width:2172,height:724})),
+            el("div",{class:"brand-version"},this.previewRelease,this.version))),
+            el("div",{class:"header-tools"},el("div",{class:"header-actions"},el("div",{class:"language-picker"},icon("globe",20),this.language),this.themeButton,this.agentSetup.header,this.fontControl.element,this.settingsButton,donate),this.updateSlot));
         this.vram=resourceMeter("VRAM");this.ram=resourceMeter("RAM");this.cpu=resourceMeter("CPU",{percent:true});
         this.loadedDot=el("span",{class:"loaded-dot","aria-hidden":"true"});
         this.loadedLabel=el("small",{"aria-live":"polite"},msg("common.model_state_unavailable"));
@@ -127,6 +133,7 @@ export class FoundryShell {
             if(!this.node.graph._nodes.some(n=>n.properties?.guidedOwner===this.node.id))
                 syncGuidedBranch(await request('guided/template'),this.node);
             setText(this.version, "v"+this.data.version);
+            this.previewRelease.hidden=!/-preview(?:\.|$)/i.test(this.data.version);
             await this.setFontSize(this.data.preferences.font_size||"default",false);
             this.root.dataset.motion=this.data.preferences.busy_motion||"system";
             if(this.data.preferences.theme) await this.setTheme(this.data.preferences.theme,false);
@@ -169,6 +176,7 @@ export class FoundryShell {
         if(reconnect&&this.content.querySelector('[data-connection-error="true"]'))this.retryView?.();
         const wasRunning=this.status?.running;
         this.status=data;
+        this.agentSetup.update(data?.agent_presence);
         this.vram.update(data?.vram_used,data?.vram_total);
         this.ram.update(data?.ram_used,data?.ram_total);
         this.cpu.update(data?.cpu_percent,100);
@@ -203,7 +211,7 @@ export class FoundryShell {
         await this.open("Images");
     }
     async open(name) {
-        if(name!=='Images'&&this.imageOrigin?.method==='ccore-image')delete this.imageOrigin;
+        if(name!=='Images'&&['ccore-image','virtual-turntable','orbit-to-mesh'].includes(this.imageOrigin?.method))delete this.imageOrigin;
         this.retryView=()=>this.open(name);
         this.viewDispose?.();this.viewDispose=null;
         this.tab=name;this.sequence=(this.sequence||0)+1;const sequence=this.sequence;
@@ -246,6 +254,10 @@ export class FoundryShell {
     }
 
     async chooseMesh(handoff,origin){
+        if(origin?.method==='orbit-to-mesh')return this.openOrbitToMesh({resume:true,handoff});
+        if(origin?.method==='virtual-turntable'){
+            return this.openVirtualTurntable({resume:true,handoff});
+        }
         if(origin?.method==='single-image'){
             await this.openWizard({resume:true,method:'single-image'});
             Object.assign(this.wizard.draft,{name:handoff.name,references:handoff.references.slice(0,1),image_creation:handoff.image_creation});
@@ -271,6 +283,12 @@ export class FoundryShell {
         if(method==='single'){await this.openWizard({method:'single-image',resume:!!this.meshOrigin});if(handoff){Object.assign(this.wizard.draft,{name:handoff.name,references:handoff.references.slice(0,1),image_creation:handoff.image_creation});this.wizard.go(1);}}
         else if(method==='splat'){
             if(await this.openSplatWizard({handoff})===false)return;
+        }
+        else if(method==='orbit-to-mesh'){
+            if(await this.openOrbitToMesh({handoff})===false)return;
+        }
+        else if(method==='virtual-turntable'){
+            if(await this.openVirtualTurntable({handoff})===false)return;
         }
         else if(method==='guided'){
             if(await this.openGuidedWizard({handoff})===false)return;
@@ -306,6 +324,43 @@ export class FoundryShell {
             [...this.nav.children].forEach((n,i)=>n.setAttribute('aria-selected',String(i===0)));
             return true;
         }catch(error){wizard?.dispose();this.content.replaceChildren(el('p',{role:'alert'},sourceMessage(error.message)));return false;}
+    }
+
+    openVirtualTurntable(options={}){
+        return this.openOrbitWizard(options,false);
+    }
+
+    openOrbitToMesh(options={}){
+        return this.openOrbitWizard(options,true);
+    }
+
+    async openOrbitWizard(options,orbit){
+        const key=orbit?'orbit-to-mesh':'virtual-turntable';
+        const title=orbit?'Orbit to Mesh':'Virtual Turntable';
+        if(this.imageOrigin?.method===key)delete this.imageOrigin;
+        this.viewDispose?.();
+        this.viewDispose=null;
+        const sequence=this.sequence=(this.sequence||0)+1;
+        this.tab='Choose a Workflow';
+        replaceContent(this.content,hint(orbit?msg('orbit.opening'):sourceMessage('Opening Virtual Turntable')));
+        let wizard;
+        try{
+            const Wizard=orbit?(await import('./orbit-to-mesh/controller.js')).OrbitToMeshWizard:
+                (await import('./virtual-turntable/controller.js')).VirtualTurntableWizard;
+            wizard=new Wizard(this,options);
+            const element=await wizard.init();
+            if(sequence!==this.sequence){wizard.dispose();return false;}
+            this.content.replaceChildren(element);
+            this.content.scrollTop=0;
+            this.viewDispose=()=>wizard.dispose();
+            bindAttribute(this.content,'aria-label',orbit?msg('orbit.wizard'):sourceMessage(title+' wizard'));
+            [...this.nav.children].forEach((node,index)=>node.setAttribute('aria-selected',String(index===0)));
+            return true;
+        }catch(error){
+            wizard?.dispose();
+            if(sequence===this.sequence)this.content.replaceChildren(el('p',{role:'alert'},sourceMessage(error.message)));
+            return false;
+        }
     }
 
     async openSplatWizard(options={}) {

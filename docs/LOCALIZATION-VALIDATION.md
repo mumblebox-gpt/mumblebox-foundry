@@ -59,4 +59,12 @@ The actual Foundry Comfy Desktop app opened the workflow chooser, Images, Histor
 
 The package fixture retains its original user name, mesh bytes, license summary, catalog metadata and valid archive checksums. The final source checks passed 168 Foundry Python and 34 JavaScript tests, plus the seven release/installer tests during the Spanish install pass. Live check evidence is in bench/localization-six-20261110/live-es-419.json. Opening Splat during the live checks temporarily removed one graph note. Reloading the serialized graph restored the note, all 461 nodes and the selected preview. The final installed files match canonical source and Foundry is open in Spanish.
 
-The live Spanish checkpoint used the local candidate before the release version bump. Preview.23 is the Spanish release of that candidate. The remaining five locales are paused.
+The live Spanish checkpoint used the local candidate before the release version bump. Preview.23 is the Spanish release of that candidate. The other locales were paused at that checkpoint.
+
+## French and Brazilian Portuguese — local preview.24
+
+French was installed and checked in the existing Comfy Desktop Foundry before Brazilian Portuguese drafting began. Both locales cover all 2,921 English keys across the same 12 catalog domains. Technical names, placeholders and numeric settings were checked against the source. CCORE’s twelve examples were reviewed against the original material, geometry and part-count instructions. The local project READMEs link to all five languages and match the app and companion skill version.
+
+The live Foundry window was checked in both languages across 20 screens at default and 200% text size. The header and Settings pickers switched the interface in place. Both CCORE wizards populated all twelve localized examples. An edited description and two loaded Orbit to Mesh previews survived the language switches. The prior Foundry graph, output state, font size, language and History → Videos view were restored.
+
+The focused Python localization and ZIP tests, JavaScript binding tests and release installer fixture tests passed. The ZIP fixtures retained mesh bytes, paths, license notices and checksums. The installed locale files match the canonical source. This is a local verification checkpoint.

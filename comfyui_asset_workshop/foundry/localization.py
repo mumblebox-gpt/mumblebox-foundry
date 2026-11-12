@@ -15,7 +15,7 @@ def locale_name(value):
     return value if value in SUPPORTED_LOCALES else "en"
 
 
-@lru_cache(maxsize=4)
+@lru_cache(maxsize=len(SUPPORTED_LOCALES))
 def catalog(locale="en"):
     locale = locale_name(locale)
     messages = {}

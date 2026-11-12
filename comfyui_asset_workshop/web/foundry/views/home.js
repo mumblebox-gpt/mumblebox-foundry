@@ -1,4 +1,4 @@
-import {msg, appendContent} from "../i18n.js";
+import {msg, sourceMessage, appendContent} from "../i18n.js";
 import {syncSingleGraph,showSingleWorkflow} from '../single/graph.js';
 import {el,button,hint} from "../dom.js";
 import {showWorkflow,showHairWorkflow,savedWizardState,savedSingleWizardState} from "../graph-adapter.js";
@@ -49,6 +49,36 @@ export function home(shell) {
         const card=methods.querySelector('[data-method="'+method+'"]');card.prepend(artwork('method-'+id,alt));
         card.querySelector('div').append(el('div',{class:'formats'},...(method==='splat'?['SPZ','GLB','MP4','ZIP']:method==='3d-guided'?['GLB','FBX','STL','ZIP']:['GLB','FBX',msg('common.quads_badge'),'STL','ZIP']).map(x=>el('span',{class:'badge'},x))));
     }
+    const vt = sourceMessage;
+    appendContent(methods,el('article',{class:'mesh-method','data-method':'virtual-turntable'},
+        artwork('method-virtual-turntable',vt('Jade guardian reconstructed from a virtual orbit')),
+        el('div',{},el('span',{class:'badge'},vt('AI-assisted photogrammetry')),el('h3',{},vt('Virtual Turntable')),
+            hint(vt('In a traditional scan, photos taken around an object give photogrammetry the views it needs. Virtual Turntable uses H3 to generate those views as a 360° video from one image, then reconstructs a mesh by matching details across its frames.')),
+            hint(vt('Choose Meshroom / AliceVision or COLMAP + OpenMVS. Review the result and optionally refine with Hi3D.')),
+            el('div',{class:'actions'},
+                button(vt('Open Virtual Turntable wizard'),()=>shell.openMeshMethod('virtual-turntable'),{class:'primary'}),
+                button(msg('common.view_workflow'),async()=>{
+                    const {syncTurntableGraph,showTurntableGraph}=await import('../virtual-turntable/graph.js');
+                    syncTurntableGraph(await request('virtual-turntable/template'),shell.node);
+                    showTurntableGraph(shell.node);
+                }),
+                shell.node.properties.foundryVirtualTurntable?.draft?.engine
+                    ?button(vt('Resume Virtual Turntable'),()=>shell.openVirtualTurntable({resume:true})):null),
+            el('div',{class:'formats'},...['GLB','FBX',msg('common.quads_badge'),'STL','ZIP'].map(format=>el('span',{class:'badge'},format))))));
+    appendContent(methods,el('article',{class:'mesh-method','data-method':'orbit-to-mesh'},
+        artwork('method-orbit-to-mesh',msg('orbit.artwork_alt')),
+        el('div',{},el('span',{class:'badge'},msg('orbit.card_badge')),el('h3',{},msg('orbit.title')),
+            hint(msg('orbit.card_description')),hint(msg('orbit.card_credits')),
+            el('div',{class:'actions'},
+                button(msg('orbit.open'),()=>shell.openMeshMethod('orbit-to-mesh'),{class:'primary'}),
+                button(msg('common.view_workflow'),async()=>{
+                    const {syncTurntableGraph,showTurntableGraph}=await import('../virtual-turntable/graph.js');
+                    syncTurntableGraph(await request('orbit-to-mesh/template'),shell.node,'orbit');
+                    showTurntableGraph(shell.node,'orbit');
+                }),
+                shell.node.properties.foundryOrbitToMesh?.draft
+                    ?button(msg('orbit.resume'),()=>shell.openOrbitToMesh({resume:true})):null),
+            el('div',{class:'formats'},...['GLB','FBX',msg('common.quads_badge'),'STL','ZIP'].map(format=>el('span',{class:'badge'},format))))));
     const card = el("details",{class:"mesh-category",open:true},
       el('summary',{class:'workflow-card'},
         el("div",{class:"art workflow-art"},artwork("image-to-3d",msg("common.reference_to_figure"))),

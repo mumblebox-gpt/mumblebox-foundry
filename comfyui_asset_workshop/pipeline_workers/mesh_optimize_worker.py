@@ -57,13 +57,21 @@ def rebake_maps(source, target, folder, resolution):
     ms.load_new_mesh(str(folder / 'transfer-source.obj'))
     ms.add_mesh(layer(target), 'target')
     material = source.visual.material
+    if material.baseColorTexture is None:
+        raise ValueError('Source must have a base-color texture')
     images = (material.baseColorTexture, material.metallicRoughnessTexture)
-    if any(image is None for image in images):
-        raise ValueError('Source must have both base-color and metallic/roughness textures')
     outputs = []
     for image, name in zip(images, ('base-color', 'metallic-roughness')):
-        source_path = folder / f'source-{name}.png'
         destination = folder / f'baked-{name}.png'
+        if image is None:
+            # glTF stores uniform roughness/metalness as factors when it has no map.
+            roughness = material.roughnessFactor if material.roughnessFactor is not None else 1.0
+            metallic = material.metallicFactor if material.metallicFactor is not None else 1.0
+            image = Image.new('RGB', (resolution, resolution), (0, round(255 * roughness), round(255 * metallic)))
+            image.save(destination)
+            outputs.append(image)
+            continue
+        source_path = folder / f'source-{name}.png'
         image.save(source_path)
         ms.set_current_mesh(0)
         ms.set_texture_per_mesh(textname=str(source_path))

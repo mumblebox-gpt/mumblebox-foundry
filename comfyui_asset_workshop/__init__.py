@@ -36,6 +36,10 @@ from .foundry.workflows.hair_creation.nodes import NODE_CLASS_MAPPINGS as HAIR_C
 NODE_CLASS_MAPPINGS.update(HAIR_CREATION_NODES)
 from .foundry.workflows.splat_solid.nodes import NODE_CLASS_MAPPINGS as SPLAT_SOLID_NODES
 NODE_CLASS_MAPPINGS.update(SPLAT_SOLID_NODES)
+from .foundry.workflows.virtual_turntable.nodes import NODE_CLASS_MAPPINGS as TURNTABLE_NODES
+NODE_CLASS_MAPPINGS.update(TURNTABLE_NODES)
+from .foundry.workflows.orbit_to_mesh.nodes import NODE_CLASS_MAPPINGS as ORBIT_NODES
+NODE_CLASS_MAPPINGS.update(ORBIT_NODES)
 from .foundry.workflows.ccore_prop.nodes import NODE_CLASS_MAPPINGS as CCORE_NODES
 NODE_CLASS_MAPPINGS.update(CCORE_NODES)
 from .foundry.workflows.garment_particles.nodes import NODE_CLASS_MAPPINGS as GARMENT_NODES

@@ -113,3 +113,37 @@ For an update rollback, stop ComfyUI and restore the changed files/config listed
 
 
 For the CCORE prop workflow, the Foundry installer installs the pinned Playwright package into the ComfyUI host environment and prepares its Chromium headless shell. If installing the custom node manually, run the extension’s host requirements and then run `python -m playwright install chromium --only-shell` with the same host interpreter. CCORE model weights are downloaded on first use.
+
+
+## Orbit to Mesh and Virtual Turntable dependencies
+
+Both workflows use the native ComfyUI P-H3 Image and MiniMax H3 nodes, BiRefNet,
+and the H3 attention and feed-forward memory controls from
+[ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes). The model-credit panel
+links to the original weights and to MiniMax’s license application. Install
+the matching licensed model files in the folders declared by their authors.
+The wizards report missing nodes and model files before generation. Pinokio installs the
+pinned ComfyUI and KJNodes software for these workflows. For a standalone install,
+use the ComfyUI and KJNodes revisions in `dependencies.json` and install the
+declared KJNodes packages into the ComfyUI host environment.
+
+Orbit to Mesh uses COLMAP for camera alignment. Virtual Turntable also needs the
+tools for its selected photogrammetry engine.
+
+Install the photogrammetry engine you want to use. The tested Windows builds are
+[Meshroom 2025.1.0](https://github.com/alicevision/Meshroom/releases/tag/v2025.1.0)
+with AliceVision 3.3.0, or
+[COLMAP 4.2.1](https://github.com/colmap/colmap/releases/tag/4.2.1) with
+[OpenMVS 2.4.0 CUDA](https://github.com/cdcseacave/openMVS/releases/tag/v2.4.0)
+and the separate CPU TextureMesh build from
+[OpenMVS revision 14ad2571](https://github.com/cdcseacave/openMVS/tree/14ad2571aac650bfabf54296d31aabed7a19fdde).
+That texture build contains the upstream fix for dark seams. Keep each
+executable next to the libraries shipped with its own build.
+
+Foundry checks versioned subdirectories under the system drive’s Tools directory.
+To use a different Tools folder, set MUMBLEBOX_PHOTOGRAMMETRY_TOOLS before
+launching ComfyUI. To use individual paths, set
+MUMBLEBOX_PHOTOGRAMMETRY_CONFIG to an absolute JSON file containing any of
+meshroom_batch, colmap, openmvs (the CUDA binaries’ directory), and
+openmvs_texture. Use absolute paths inside the JSON. The wizard lists missing
+executables on its engine-selection page.

@@ -1,4 +1,4 @@
-import {msg, setText} from "../i18n.js";
+import {msg, setText, sourceMessage} from "../i18n.js";
 import {el,button,hint,field} from '../dom.js';
 import {dialog} from '../dialogs.js';
 import {request} from '../services.js';
@@ -60,4 +60,26 @@ export function referenceControls(c){
     return el('div',{},input,el('div',{class:'creator-drop',ondragover:e=>e.preventDefault(),ondrop:e=>{e.preventDefault();c.act(()=>add(e.dataTransfer.files));}},
         el('div',{class:'actions'},button(msg("images.upload_references"),()=>input.click()),button(msg("images.take_a_photo_with_connected_camera"),()=>capturePhoto(c.shell,file=>c.act(()=>add([file]))),{disabled:!navigator.mediaDevices})),
         hint(msg("images.drop_images_here_references_describe_each_image_so_the_model_knows_its_purpo", {value1: c.draft.references.length, value2: c.referenceLimit()}))),...list);
+}
+
+export async function chooseSavedReference(shell,onChoose){
+    const list=el('div',{class:'hair-gallery'}),status=el('p',{role:'status',class:'muted'}),more=button(msg("mesh.load_more"),()=>load()),modal=dialog(shell,msg("mesh.choose_your_reference"),el('div',{},list,status,more));
+    let cursor='',loading=false;
+    async function load(){
+        if(loading)return;loading=true;more.disabled=true;setText(status, msg("mesh.loading_saved_images"));
+        try{
+            const data=await request('images?'+new URLSearchParams({limit:24,...(cursor?{cursor}:{})}));
+            for(const item of data.items||[])for(const [side,id] of Object.entries(item.accepted||{})){
+                const url='/mumblebox-foundry/v1/images/'+item.id+'/files/'+id;
+                list.append(button([el('img',{src:url,alt:item.name+' '+side,loading:'lazy'}),el('span',{},item.name+' · '+side)],async()=>{
+                    try{
+                        await onChoose(await galleryReference(item.id,side,id));modal.close();
+                    }catch(error){setText(status,sourceMessage(error.message));}
+                }));
+            }
+            cursor=data.next_cursor||'';more.hidden=!cursor;setText(status, list.children.length?'':msg("mesh.no_saved_images_yet_create_an_image_or_upload_one"));
+        }catch(error){setText(status, sourceMessage(error.message));more.hidden=false;setText(more, msg("mesh.retry"));}
+        finally{loading=false;more.disabled=false;}
+    }
+    await load();
 }

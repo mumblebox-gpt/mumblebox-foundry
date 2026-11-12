@@ -1,7 +1,7 @@
 module.exports = {
   version:"8.0.0",
   title:"Mumblebox 3D Asset Foundry",
-  description:"Make images and 3D assets locally for games, 3D printing, and creative projects. Foundry gives you guided workflows, automatic setup, and export options for each use. Use it on its own or connect your coding agent with the included MCP server and companion skill. Give your agent a head start with locally generated assets, so it can spend less time and fewer tokens building from scratch. Interface in English, Simplified Chinese, and Latin American Spanish. Windows/NVIDIA preview.",
+  description:"Make images and 3D assets locally for games, 3D printing, and creative projects. Foundry gives you guided workflows, automatic setup, and export options for each use. Use it on its own or connect your coding agent with the included MCP server and companion skill. Give your agent a head start with locally generated assets, so it can spend less time and fewer tokens building from scratch. Interface in English, Simplified Chinese, Latin American Spanish, French, and Brazilian Portuguese. Windows/NVIDIA preview.",
   icon:"icon.png",
   menu:async(kernel,info)=>{
     for(const [script,label] of [["install.js","Installing software"],["repair.js","Repairing software"],["update.js","Updating Foundry"]]){

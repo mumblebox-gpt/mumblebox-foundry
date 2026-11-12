@@ -20,7 +20,9 @@
     "source": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder/blob/8f32a199f8b22fe3157b9c5c8b42b052a0750dd3/mmproj-Qwen3.5-4B-BF16.gguf",
     "license": "Apache-2.0",
     "license_url": "https://huggingface.co/ccore/Qwen3.5-4B-GLB-3D-Coder/blob/8f32a199f8b22fe3157b9c5c8b42b052a0750dd3/LICENSE",
-    "notices": ["CCORE-LICENSE.txt"],
+    "notices": [
+      "CCORE-LICENSE.txt"
+    ],
     "license_summary": "Unmodified Qwen vision encoder and projector from the LM Studio community, distributed with CCORE."
   },
   "ccore_three": {
@@ -122,7 +124,9 @@
     "stage": "Four-step material sampling on the finished mesh",
     "version": "b56718082a05d18df01dc34c2b6e88189c5d5c74",
     "source": "https://huggingface.co/zjwfufu/SMD-TRELLIS.2",
-    "notices": ["Apache-2.0.txt"],
+    "notices": [
+      "Apache-2.0.txt"
+    ],
     "license": "MIT adapter; Apache-2.0 inference code",
     "license_url": "https://huggingface.co/zjwfufu/SMD-TRELLIS.2/tree/b56718082a05d18df01dc34c2b6e88189c5d5c74",
     "license_summary": "Uses the SMD authors' released texture adapter and student schedule. TRELLIS.2 base components retain their own terms."
@@ -174,7 +178,11 @@
     "name": "Instant Meshes via PyNanoInstantMeshes",
     "version": "0.0.3",
     "source": "https://igl.ethz.ch/projects/instant-meshes/",
-    "notices": ["Instant-Meshes-BSD.txt", "Instant-Meshes-TBB.txt", "Instant-Meshes-Eigen.txt"],
+    "notices": [
+      "Instant-Meshes-BSD.txt",
+      "Instant-Meshes-TBB.txt",
+      "Instant-Meshes-Eigen.txt"
+    ],
     "license": "BSD and linked library notices",
     "license_url": "https://github.com/wjakob/instant-meshes/blob/master/LICENSE.txt",
     "license_summary": "See the retained notices for the solver and its linked libraries."
@@ -185,7 +193,13 @@
     "name": "CyberRemesher",
     "version": "0.10.0 Foundry CUDA build",
     "source": "https://github.com/CyberdyneCorp/CyberRemesherAndUV",
-    "notices": ["CyberRemesher-MIT.txt", "CyberRemesher-THIRD-PARTY.md", "CyberRemesher-ufbx.txt", "CUDA-12.9-Runtime.txt", "CUDA-12.9-CCCL.txt"],
+    "notices": [
+      "CyberRemesher-MIT.txt",
+      "CyberRemesher-THIRD-PARTY.md",
+      "CyberRemesher-ufbx.txt",
+      "CUDA-12.9-Runtime.txt",
+      "CUDA-12.9-CCCL.txt"
+    ],
     "license": "MIT and third-party runtime terms",
     "license_url": "https://github.com/CyberdyneCorp/CyberRemesherAndUV/blob/f6eddeac7f31f32dde9561a14f4076f60093dee9/LICENSE",
     "license_summary": "See the retained engine and dependency notices, including the NVIDIA CUDA runtime terms."
@@ -556,7 +570,9 @@
     "stage": "Five-step single-image Gaussian splat generation",
     "version": "Sperid Labs revision 45cdd41f1f4d6d70496daa7d619f57ad79307a37",
     "source": "https://huggingface.co/speridlabs/idol-turbo",
-    "notices": ["Apache-2.0.txt"],
+    "notices": [
+      "Apache-2.0.txt"
+    ],
     "license": "Apache-2.0",
     "license_url": "https://huggingface.co/speridlabs/idol-turbo/blob/45cdd41f1f4d6d70496daa7d619f57ad79307a37/README.md",
     "license_summary": "Sperid Labs and contributors. Uses the released slow and fast phase adapters with the ComfyUI Idol base."
@@ -598,5 +614,151 @@
     "license": "MIT",
     "license_url": "https://github.com/TencentARC/Pixal3D/blob/main/LICENSE",
     "license_summary": "Retain the copyright and permission notice for licensed material; separately supplied dependencies retain their own terms."
+  },
+  "virtual_ph3": {
+    "id": "virtual_ph3",
+    "name": "P-H3 Image 4K + Edit by Pruna AI",
+    "stage": "Four-view turnaround",
+    "version": "W4A8 and INT8 Comfy recipe",
+    "source": "https://huggingface.co/PrunaAI/P-H3-Image-Comfy",
+    "license": "MiniMax H3 Community",
+    "license_url": "https://huggingface.co/PrunaAI/P-H3-Image-Comfy/blob/main/LICENSE",
+    "notices": [
+      "Pruna-P-H3-Image-LICENSE.txt"
+    ],
+    "license_summary": "The published terms restrict use and outputs in excluded territories. Separate authorization is available through MiniMax."
+  },
+  "virtual_h3": {
+    "id": "virtual_h3",
+    "name": "MiniMax H3 FL2VA",
+    "stage": "Orbit video",
+    "version": "Pruned INT8 ConvRot",
+    "source": "https://huggingface.co/MiniMaxAI/MiniMax-H3",
+    "license": "MiniMax H3 Community",
+    "license_url": "https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/LICENSE",
+    "notices": [
+      "MiniMax-H3-LICENSE.txt"
+    ],
+    "license_summary": "The published terms restrict use and outputs in excluded territories. Separate authorization is available through MiniMax."
+  },
+  "virtual_orbit_lora": {
+    "id": "virtual_orbit_lora",
+    "name": "360 Orbit LoRA by Pablo Dawson",
+    "stage": "Orbit motion",
+    "version": "minimax_h3_flf2v_lora_v1.safetensors",
+    "source": "https://huggingface.co/pablodawson/MiniMax-H3-360-Orbit-LoRA",
+    "license": "MiniMax H3 Community",
+    "license_url": "https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/LICENSE",
+    "notices": [
+      "MiniMax-H3-LICENSE.txt"
+    ],
+    "license_summary": "The published terms restrict use and outputs in excluded territories. Separate authorization is available through MiniMax."
+  },
+  "virtual_meshroom": {
+    "id": "virtual_meshroom",
+    "name": "Meshroom by AliceVision contributors",
+    "stage": "Object turntable workflow",
+    "version": "2025.1.0",
+    "source": "https://github.com/alicevision/Meshroom/releases/tag/v2025.1.0",
+    "license": "MPL-2.0",
+    "license_url": "https://github.com/alicevision/Meshroom/blob/v2025.1.0/LICENSE-MPL2.md",
+    "notices": [
+      "Meshroom-MPL-2.0.txt",
+      "Meshroom-COPYING.md"
+    ],
+    "license_summary": "The Meshroom turntable graph coordinates the native AliceVision tools."
+  },
+  "virtual_alicevision": {
+    "id": "virtual_alicevision",
+    "name": "AliceVision",
+    "stage": "Camera solving, reconstruction and photo texture projection",
+    "version": "3.3.0",
+    "source": "https://github.com/alicevision/AliceVision/tree/v3.3.0",
+    "license": "MPL-2.0",
+    "license_url": "https://github.com/alicevision/AliceVision/blob/v3.3.0/COPYING.md",
+    "notices": [
+      "AliceVision-COPYING.md",
+      "AliceVision-MPL-2.0.txt"
+    ],
+    "license_summary": "Native geometric reconstruction and photo projection."
+  },
+  "virtual_colmap": {
+    "id": "virtual_colmap",
+    "name": "COLMAP",
+    "stage": "Camera solving",
+    "version": "4.2.1",
+    "source": "https://github.com/colmap/colmap/tree/4.2.1",
+    "license": "BSD-3-Clause",
+    "license_url": "https://github.com/colmap/colmap/blob/4.2.1/COPYING.txt",
+    "notices": [
+      "COLMAP-BSD-3-Clause.txt"
+    ],
+    "license_summary": "Native feature matching and camera alignment."
+  },
+  "virtual_openmvs": {
+    "id": "virtual_openmvs",
+    "name": "OpenMVS CUDA",
+    "stage": "Dense depth and meshing",
+    "version": "2.4.0",
+    "source": "https://github.com/cdcseacave/openMVS/tree/v2.4.0",
+    "license": "AGPL-3.0",
+    "license_url": "https://github.com/cdcseacave/openMVS/blob/v2.4.0/LICENSE",
+    "notices": [
+      "OpenMVS-AGPL-3.0.txt"
+    ],
+    "license_summary": "Native dense reconstruction and optional photo-consistency refinement."
+  },
+  "virtual_openmvs_texture": {
+    "id": "virtual_openmvs_texture",
+    "name": "OpenMVS TextureMesh",
+    "stage": "Photo texture projection",
+    "version": "14ad2571aac650bfabf54296d31aabed7a19fdde",
+    "source": "https://github.com/cdcseacave/openMVS/tree/14ad2571aac650bfabf54296d31aabed7a19fdde",
+    "license": "AGPL-3.0",
+    "license_url": "https://github.com/cdcseacave/openMVS/blob/v2.4.0/LICENSE",
+    "notices": [
+      "OpenMVS-AGPL-3.0.txt"
+    ],
+    "license_summary": "Native CPU texture build with the upstream pixel-sampling fix."
+  },
+  "virtual_larry_turbo": {
+    "id": "virtual_larry_turbo",
+    "name": "Larry Turbo v4 (Comfy conversion by drbaph)",
+    "stage": "Optional faster orbit denoising",
+    "version": "bb2bc497cbaca89dadd0bcf1856eed4f8275be20",
+    "source": "https://huggingface.co/drbaph/MiniMax-H3-Turbo-Lora-ComfyUI/tree/bb2bc497cbaca89dadd0bcf1856eed4f8275be20",
+    "license": "Apache-2.0 for the adapter; MiniMax H3 terms for the base model",
+    "license_url": "https://huggingface.co/drbaph/MiniMax-H3-Turbo-Lora-ComfyUI/tree/bb2bc497cbaca89dadd0bcf1856eed4f8275be20",
+    "notices": [
+      "Larry-Turbo-APACHE-2.0.txt",
+      "MiniMax-H3-LICENSE.txt"
+    ],
+    "license_summary": "Optional turbo adapter for the H3 FL2VA orbit."
+  },
+  "virtual_kjnodes": {
+    "id": "virtual_kjnodes",
+    "name": "ComfyUI-KJNodes by kijai and contributors",
+    "stage": "H3 attention and feed-forward memory controls",
+    "version": "35e5956193769d18a13136cdedb73a36a05c73e6",
+    "source": "https://github.com/kijai/ComfyUI-KJNodes/tree/35e5956193769d18a13136cdedb73a36a05c73e6",
+    "license": "GPL-3.0",
+    "license_url": "https://github.com/kijai/ComfyUI-KJNodes/blob/35e5956193769d18a13136cdedb73a36a05c73e6/LICENSE",
+    "notices": [
+      "KJNodes-GPL-3.0.txt"
+    ],
+    "license_summary": "H3 memory controls used by the native orbit graph."
+  },
+  "virtual_cumesh": {
+    "id": "virtual_cumesh",
+    "stage": "UV unwrap for reduced Virtual Turntable meshes",
+    "name": "CuMesh by Jianfeng Xiang",
+    "version": "0.0.1",
+    "source": "https://github.com/JeffreyXiang/CuMesh",
+    "notices": [
+      "CuMesh-MIT.txt"
+    ],
+    "license": "MIT",
+    "license_url": "https://github.com/JeffreyXiang/CuMesh/blob/main/LICENSE",
+    "license_summary": "Keep the copyright and permission notice with redistribution of the licensed software."
   }
 }

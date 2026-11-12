@@ -1,4 +1,5 @@
 import importlib.util
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -60,10 +61,29 @@ class TextureTransferTests(unittest.TestCase):
         target = trimesh.Trimesh(vertices, np.array([[0,1,3],[1,2,3]]), process=False,
                                  visual=trimesh.visual.TextureVisuals(uv=low_uv))
         with tempfile.TemporaryDirectory() as folder:
-            base, mr = module.rebake_maps(source, target, Path(folder), 64)
+            cwd = Path.cwd()
+            try:
+                base, mr = module.rebake_maps(source, target, Path(folder), 64)
+            finally:
+                os.chdir(cwd)
             np.testing.assert_allclose(np.asarray(base)[16,16,:3], [0,255,0], atol=2)
             np.testing.assert_allclose(np.asarray(base)[48,16,:3], [255,255,0], atol=2)
             np.testing.assert_allclose(np.asarray(mr)[16,16,:3], [0,80,200], atol=2)
+
+        # Photogrammetry can export base color with scalar glTF material factors.
+        source.visual.material.metallicRoughnessTexture = None
+        source.visual.material.metallicFactor = 0.0
+        source.visual.material.roughnessFactor = 0.45
+        with tempfile.TemporaryDirectory() as folder:
+            cwd = Path.cwd()
+            try:
+                base, mr = module.rebake_maps(source, target, Path(folder), 64)
+            finally:
+                os.chdir(cwd)
+            np.testing.assert_allclose(np.asarray(base)[16,16,:3], [0,255,0], atol=2)
+            self.assertEqual(mr.size, (64, 64))
+            self.assertEqual(mr.getpixel((16,16)), (0,115,0))
+            self.assertTrue((Path(folder) / 'baked-metallic-roughness.png').is_file())
 
 
 if __name__ == '__main__':

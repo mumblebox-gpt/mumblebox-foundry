@@ -1,33 +1,9 @@
 import {sourceMessage} from "../i18n.js";
-import {msg, setText} from "../i18n.js";
+import {msg} from "../i18n.js";
 import {el,button,hint,field} from '../dom.js';
-import {capturePhoto,galleryReference,uploadReference,inputURL} from '../images/references.js';
-import {dialog} from '../dialogs.js';
-import {request} from '../services.js';
+import {capturePhoto,chooseSavedReference,uploadReference,inputURL} from '../images/references.js';
 import {optionsPage} from '../wizard/pages.js';
 async function replace(w,file){if(!file)return;w.draft.references=[{...await uploadReference(file),role:'primary'}];delete w.draft.image_creation;w.remember();}
-async function gallery(w){
-    const list=el('div',{class:'hair-gallery'}),status=el('p',{role:'status',class:'muted'}),more=button(msg("mesh.load_more"),()=>load()),modal=dialog(w.shell,msg("mesh.choose_your_reference"),el('div',{},list,status,more));
-    let cursor='',loading=false;
-    async function load(){
-        if(loading)return;loading=true;more.disabled=true;setText(status, msg("mesh.loading_saved_images"));
-        try{
-            const data=await request('images?'+new URLSearchParams({limit:24,...(cursor?{cursor}:{})}));
-            for(const item of data.items||[])for(const [side,id] of Object.entries(item.accepted||{})){
-                const url='/mumblebox-foundry/v1/images/'+item.id+'/files/'+id;
-                list.append(button([el('img',{src:url,alt:item.name+' '+side,loading:'lazy'}),el('span',{},item.name+' · '+side)],()=>w.act(async()=>{
-                    const handoff=await galleryReference(item.id,side,id);
-                    w.draft.references=handoff.references;
-                    w.draft.image_creation=handoff.image_creation;
-                    w.remember();modal.close();
-                })));
-            }
-            cursor=data.next_cursor||'';more.hidden=!cursor;setText(status, list.children.length?'':msg("mesh.no_saved_images_yet_create_an_image_or_upload_one"));
-        }catch(error){setText(status, sourceMessage(error.message));more.hidden=false;setText(more, msg("mesh.retry"));}
-        finally{loading=false;more.disabled=false;}
-    }
-    await load();
-}
 export function singleInputPage(w){
     const file=el('input',{type:'file',accept:'image/png,image/jpeg,image/webp',hidden:true,'aria-label':msg("mesh.upload_single_reference"),onchange:e=>w.act(()=>replace(w,e.target.files[0]))});
     const ref=w.draft.references[0];
@@ -39,7 +15,9 @@ export function singleInputPage(w){
             ref?w.image(inputURL(ref.filename),msg("mesh.starting_reference")):hint(msg("mesh.png_jpeg_or_webp_up_to_20_mb")),
             el('div',{class:'actions'},button(ref?msg("mesh.replace_image"):msg("mesh.upload_image"),()=>file.click()),
                 button(msg("mesh.take_a_photo"),()=>capturePhoto(w.shell,f=>w.act(()=>replace(w,f))),{disabled:!navigator.mediaDevices}),
-                button(msg("mesh.choose_from_gallery"),()=>gallery(w)),
+                button(msg("mesh.choose_from_gallery"),()=>chooseSavedReference(w.shell,handoff=>w.act(async()=>{
+                    w.draft.references=handoff.references;w.draft.image_creation=handoff.image_creation;w.remember();
+                }))),
                 button(msg("mesh.create_image"),()=>{w.remember();w.shell.imageOrigin={method:'single-image',sessionId:w.sessionId};w.shell.openImages('Create Images');},{class:'primary'}))),
         hint(msg("mesh.no_image_create_one_from_a_description_then_choose_use_in_3d_to_return_here")),
         el('details',{},el('summary',{},msg("mesh.how_this_method_works")),hint(msg("mesh.pixal3d_by_tencent_arc_builds_geometry_from_one_view_using_the_official_comf"))),

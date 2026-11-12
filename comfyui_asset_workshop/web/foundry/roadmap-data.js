@@ -59,7 +59,7 @@ export const roadmap = [
             {title: msg("common.mcp_and_export_documentation_parity"), description: msg("common.expose_new_workflow_choices_to_agents_and_keep_package_readme_contents_file")},
             {title: msg("common.foundry_mcp_workflow_access"), status: "Available", description: msg("common.discover_workflow_controls_run_stages_inspect_comfyui_graphs_and_retrieve_as")},
             {title: msg("common.foundry_skill_for_claude_and_codex"), status: "Available", description: msg("common.use_the_bundled_companion_skill_to_choose_a_workflow_let_foundry_work_locall")},
-            {title: msg("common.connect_your_agent"), status: "Planned", description: msg("common.add_a_button_in_integrations_to_choose_a_coding_agent_copy_its_foundry_mcp_s")},
+            {title: msg("common.connect_your_agent"), status: "Available", description: msg("agent_setup.how_to")},
             {title: msg("common.tripo_and_meshy_integrations"), status: "Planned", description: msg("common.evaluate_optional_asset_creation_and_handoffs_with_tripo_and_meshy")},
             {title: msg("common.expanded_hi3d_integration"), status: "Planned", description: msg("common.explore_more_ways_to_use_hi3d_alongside_the_existing_refinement_stages")},
             {title: msg("common.portable_updates_and_first_use_preparation"), description: msg("common.trace_dependencies_for_every_runtime_when_adding_features_check_access_and_p")},

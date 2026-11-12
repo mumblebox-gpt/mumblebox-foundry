@@ -80,6 +80,10 @@ class HairRuns:
 
     def public(self,record):
         result=copy.deepcopy({k:v for k,v in record.items() if k not in ('pending','cancel')})
+        from ...video_history import available_entries
+        reviews=[review for item in result['variants'] for review in item.get('reviews',{}).values()]
+        for item in [*result['variants'],*reviews,*(result.get(role,{}) for role in ('preview','avatar_preview','motion_preview','export'))]:
+            if 'files' in item:item['files']=available_entries(self.output_root,item['files'])
         result['active']=record['id'] in self.tasks
         if record.get('pending'):result['pending']={k:record['pending'][k] for k in ('id','graph')}
         return result
