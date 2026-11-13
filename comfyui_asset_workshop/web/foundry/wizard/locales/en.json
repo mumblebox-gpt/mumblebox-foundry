@@ -310,5 +310,7 @@
   "format_count": "{count} format selection",
   "format_count_plural": "{count} format selections",
   "output_selection_summary": "{versions} · {formats}",
-  "starting_image": "Starting image"
+  "starting_image": "Starting image",
+  "editable_quad_mesh": "Editable quad mesh",
+  "export_format_label": "{version} · {format}"
 }

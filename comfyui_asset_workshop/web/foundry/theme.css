@@ -22,7 +22,10 @@ button.primary:hover:not(:disabled) {filter:brightness(1.08);background:var(--ac
 button.danger {color:var(--danger);} a {color:var(--accent);text-decoration:underline;text-underline-offset:3px;}
 :focus-visible {outline:3px solid var(--accent);outline-offset:3px;}
 input,select {background:var(--panel);border:1px solid var(--border);border-radius:7px;padding:10px 12px;min-height:44px;width:100%;}
-input[type="checkbox"] {width:20px;height:20px;min-height:20px;accent-color:var(--accent);}
+input:is([type="checkbox"],[type="radio"]) {
+    width:20px;height:20px;min-height:20px;padding:0;flex:none;accent-color:var(--accent);
+}
+input[type="radio"] {margin:2px 0 0;}
 .muted {color:var(--muted);font-size:calc(14px * var(--font-scale));} .eyebrow {text-transform:uppercase;letter-spacing:.12em;font-size:calc(12px * var(--font-scale));font-weight:700;color:var(--muted);}
 .badge {display:inline-flex;padding:4px 9px;border:1px solid var(--border);border-radius:5px;font-size:calc(12px * var(--font-scale));letter-spacing:.03em;align-items:center;gap:6px;}
 code,.filename {font:calc(13px * var(--font-scale))/1.5 Consolas,monospace;overflow-wrap:anywhere;}

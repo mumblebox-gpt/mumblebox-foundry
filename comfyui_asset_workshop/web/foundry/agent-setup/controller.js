@@ -117,7 +117,7 @@ export class AgentSetup {
                 el("img",{src:hero,alt:"",width:768,height:512}),
                 el("div",{},el("h3",{},message("head_start")),el("p",{},message("intro")),hint(message("skill_intro")))),
             status.line,
-            el("p",{},message("how_to")),
+            el("p",{class:"agent-next-step"},message("how_to")),
             el("section",{class:"agent-repositories"},el("h3",{},message("recommended")),hint(message("thanks")),...cards,
                 el("p",{class:"muted agent-blender"},message("blender_needed")," ",link(message("get_blender"),blenderDownload))),
             disclosure,feedback);

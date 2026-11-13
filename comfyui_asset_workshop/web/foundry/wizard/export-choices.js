@@ -1,7 +1,11 @@
-import {msg, replaceContent} from "../i18n.js";
+import {msg, replaceContent, sourceMessage} from "../i18n.js";
 import {el,button,field,hint} from "../dom.js";
 
 const title=id=>id.replaceAll("_"," ").replace(/\b\w/g,c=>c.toUpperCase());
+const variantLabels={detailed:'detailed_master',game_balanced:'balanced_game_mesh',
+    game_compact:'compact_game_mesh',quad_light:'editable_quad_mesh',quad_detail:'editable_quad_mesh',print:'print_mesh_stl'};
+const variantLabel=id=>variantLabels[id]?msg('mesh.'+variantLabels[id]):title(id);
+const formatLabel=format=>format.replaceAll("_"," ").toUpperCase();
 export function validateExports(selection, quad) {
     const variants=Object.values(selection.variants||{});
     if(!variants.length)throw Error(msg("mesh.choose_at_least_one_output_version"));
@@ -59,10 +63,10 @@ export function exportChoices(capabilities,selection,onChange=()=>{},quad=null) 
         const versions=Object.keys(selected).length, formats=Object.values(selected).reduce((sum,v)=>sum+v.formats.length,0);
         const cards=capabilities.map(variant=>{
             const enabled=!!selected[variant.id];
-            const toggle=el("input",{type:"checkbox",checked:enabled,"aria-label":msg("mesh.include", {value1: title(variant.id)}),onchange:e=>{
+            const toggle=el("input",{type:"checkbox",checked:enabled,"aria-label":msg("mesh.include", {value1: variantLabel(variant.id)}),onchange:e=>{
                 if(e.target.checked)selected[variant.id]={formats:[variant.formats[0]]};else delete selected[variant.id];changed();
             }});
-            return el("section",{class:"export-option"},el("label",{class:"export-title"},toggle,title(variant.id)),hint(variant.description),
+            return el("section",{class:"export-option"},el("label",{class:"export-title"},toggle,variantLabel(variant.id)),hint(sourceMessage(variant.description)),
                 variant.id==="quad_light"&&enabled&&quad?el("fieldset",{class:"quad-solver-choices"},
                     el("legend",{},msg("mesh.quad_solver")),
                     ...quad.methods.map(method=>el("div",{},
@@ -75,10 +79,10 @@ export function exportChoices(capabilities,selection,onChange=()=>{},quad=null) 
                     advancedQuadControls(quad,advancedOpen)):null,
                 el("div",{class:"format-options"},...variant.formats.map(format=>el("label",{class:"format-check"},
                     el("input",{type:"checkbox",checked:selected[variant.id]?.formats.includes(format)||false,disabled:!enabled,
-                        "aria-label":title(variant.id)+" "+format.toUpperCase(),onchange:e=>{
+                        "aria-label":msg("mesh.export_format_label",{version:variantLabel(variant.id),format:formatLabel(format)}),onchange:e=>{
                             const formats=selected[variant.id].formats;
                             selected[variant.id].formats=e.target.checked?[...new Set([...formats,format])]:formats.filter(f=>f!==format);changed();
-                        }}),format.replaceAll("_"," ").toUpperCase()))));
+                        }}),formatLabel(format)))));
         });
         const focused=root.getRootNode().activeElement?.getAttribute?.("aria-label");
         replaceContent(root, el("h3",{},msg("mesh.output_versions_formats")), hint(msg("mesh.only_selected_versions_are_generated_the_zip_includes_measurements_a_readme")), el("div",{class:"export-summary",role:"status"},msg("mesh.output_selection_summary", {versions: msg(versions === 1 ? "mesh.version_count" : "mesh.version_count_plural", {count: versions}), formats: msg(formats === 1 ? "mesh.format_count" : "mesh.format_count_plural", {count: formats})})), el("div",{class:"actions"},button(msg("mesh.select_all"),()=>{selection.variants=Object.fromEntries(capabilities.map(v=>[v.id,{formats:[...v.formats]}]));changed();}),

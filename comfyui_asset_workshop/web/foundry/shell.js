@@ -23,7 +23,7 @@ export class FoundryShell {
         this.statusListeners=new Set();this.node=node; this.host=host; this.tab="Choose a Workflow";
         this.shadow=host.shadowRoot||host.attachShadow({mode:"open"});
         this.shadow.replaceChildren();
-        for (const file of ["theme.css","layout.css","images.css","roadmap.css","agent-setup/style.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
+        for (const file of ["theme.css","layout.css","images.css","roadmap.css","agent-setup/style.css","virtual-turntable/style.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
         this.root=el("div",{class:"foundry","data-theme":matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"});
         this.shadow.append(this.root);
         this.root.lang=currentLanguage();

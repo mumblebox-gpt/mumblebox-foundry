@@ -6,7 +6,7 @@ Use this checklist for the release commit and publication. Keep verification pro
 
 - Match the app version, installer dependency manifest, main README, every translated README in the locale manifest, and the bundled Mumblebox Assets skill and its reviewed-version record. Run the release builder's version check. Preserve the minimum compatible app version according to the skill's actual fallback support.
 - Review the MCP against changed workflows, actions, settings, statuses, and artifacts. Update its capability descriptions, the bundled skill's guidance and revision, and the setup guide as needed. Exercise the changed behavior through a real MCP client before committing.
-- Update user-facing documentation and strings in English, Simplified Chinese, and Latin American Spanish, using Foundry's locale manifest. Check new controls and messages in the live GUI, including larger text sizes for changed layouts.
+- Update user-facing documentation and strings in every supported language, using Foundry's locale manifest. Check new controls and messages in the live GUI, including larger text sizes for changed layouts.
 - Update the changelog. Mark delivered roadmap items with evidence and describe any experimental behavior clearly.
 - Review workflow graphs, first-use downloads, model and software requirements, installer and updater changes, and credits and license notices. When exports change, verify the generated package contents and README against the selected outputs.
 - Exercise the affected workflows and real previews in ComfyUI. Verify installer and update paths affected by the release, preserve saved work, and record the scope of the checks.
@@ -15,6 +15,16 @@ Use this checklist for the release commit and publication. Keep verification pro
 
 - Build the release archive from the verified commit. Confirm the tag, release notes, archive integrity and checksum, and intended GitHub release assets.
 - Verify the public GitHub release and Pinokio listing for that release. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
+
+# Preview 0.1.0-preview.26 validation
+
+Both orbit wizards were walked through all five pages in the existing Comfy Desktop Foundry in English, Simplified Chinese, Latin American Spanish, French and Brazilian Portuguese at default and 200% text size. Checks covered translated presets and help, named export choices, layout fit, the top-row Orbit to Mesh card, Connect Your Agent, the Preview release label, History’s video deletion confirmation and Settings’ model names. Keyboard Tab reached the next control with a visible focus ring. The original graph and History view were restored.
+
+The live Orbit to Mesh wizard applied size, duration, playback and sampling presets, reset both prompts independently, blocked a run with incompatible guide timing, preserved that draft across Resume and returned to defaults. Lower VRAM applied 512 × 512 at 73 frames. Rocket Mode displayed the steps and selected formats before launch. Both wizards rendered saved meshes and orbit videos. History played a saved clip and the deletion confirmation was dismissed.
+
+A separate export recovery run started from a copied saved reconstruction after a simulated package failure. The retry reused the verified Hi3D result, ran texturing and the selected derivative, then returned a readable ZIP from the wizard. Saved source-run files and settings were preserved.
+
+The real stdio MCP served both orbit preset catalogs, export limits and saved results. The focused Python checks (22), Foundry JavaScript checks (34) and release fixtures (7) passed. Generation and photogrammetry behavior was verified with saved checkpoints and the targeted export retry. This pass did not rerun H3 or either native photogrammetry engine.
 
 # Preview 0.1.0-preview.25 validation
 

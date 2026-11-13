@@ -2,6 +2,7 @@ import {el,button,field,hint,link} from '../dom.js';
 import {msg,sourceMessage} from '../i18n.js';
 import {chooseSavedReference} from '../images/references.js';
 import {VirtualTurntableWizard} from '../virtual-turntable/controller.js';
+import {orbitSettings,ux,viewCount} from '../virtual-turntable/settings.js';
 
 const t=(key,values)=>msg('orbit.'+key,values);
 const stagePages={preparing:2,turnaround:2,orbit:2,cameras:3,views:3,geometry:4,
@@ -20,7 +21,6 @@ export class OrbitToMeshWizard extends VirtualTurntableWizard{
     handoffPage(){return 1;}
     savedPage(){return this.complete('geometry')?4:this.complete('cameras')?3:this.complete('turnaround')?2:1;}
     get showRocket(){return true;}
-    get ready(){return super.ready&&!this.cap.missing.length;}
     get viewsChanged(){return JSON.stringify(this.run?.controls?.views)!==JSON.stringify(this.draft.controls.views);}
     body(){return [this.setup,this.reviewOrbit,this.reviewViews,this.reviewMesh,this.finish][this.page-1].call(this);}
     setup(){
@@ -29,28 +29,19 @@ export class OrbitToMeshWizard extends VirtualTurntableWizard{
             this.draft.name||=handoff.name;
             this.draft.image_creation=handoff.image_creation;
         }));
-        const presets=Object.entries(this.cap.orbit_presets);
-        const orbit=this.draft.controls.orbit;
-        const matches=preset=>Object.entries(preset).every(([key,value])=>orbit[key]===value);
         return el('div',{},hint(sourceMessage(this.cap.description)),hint(sourceMessage(this.cap.tip)),
-            this.cap.missing.length?el('div',{class:'warning',role:'alert'},
-                hint(t('missing_tools',{files:this.cap.missing.join(', ')})),
+            this.missing.length?el('div',{class:'turntable-recovery',role:'alert'},
+                hint(t('missing_tools',{files:this.missing.join(', ')})),
                 link(t('get_colmap'),this.cap.setup_source)):null,
-            this.image([button(msg('mesh.choose_from_gallery'),useSaved,{disabled:this.busy})]),
-            el('fieldset',{class:'turntable-control-section'},
-                el('legend',{},t('orbit_preset')),
-                ...presets.map(([id,values])=>el('label',{class:'check-row'},
-                    el('input',{type:'radio',name:'orbit-video-preset',checked:matches(values),disabled:this.busy,
-                        onchange:()=>{Object.assign(orbit,values);this.remember();this.render();}}),
-                    el('span',{},t('preset_'+id),hint(t('preset_'+id+'_help')))))),
+            el('div',{class:'turntable-setup-grid'},
+                this.image([button(msg('mesh.choose_from_gallery'),useSaved,{disabled:this.busy})]),
+                orbitSettings(this)),
             this.section('turnaround','H3 four-view turnaround'),
-            this.section('orbit','360° orbit settings',{visible:['subject_direction']}),
-            el('details',{},el('summary',{},t('rocket_outputs')),
-                this.input('views','preset'),this.input('texture','texture_size'),this.exportSettings(false)),
             el('details',{},el('summary',{},sourceMessage('Model credits and terms')),
                 hint(sourceMessage(this.cap.license_note)),
                 ...Object.entries(this.cap.license_links).map(([label,url])=>el('p',{},link(label,url)))));
     }
+    rocketFields(update){return viewCount(this,update);}
     reviewOrbit(){
         return el('div',{},super.reviewOrbit(),
             this.complete('orbit')?hint(t('orbit_review_help')):null);
@@ -61,11 +52,18 @@ export class OrbitToMeshWizard extends VirtualTurntableWizard{
         const selected=frames.filter(frame=>!exclusions.includes(frame.source_frame)).length;
         return el('div',{},this.orbit(this.run?.active),
             hint(t('frame_review_help')),
-            this.section('views','Pixal3D views',{visible:['preset']}),
+            this.section('views','Pixal3D views',{visible:['preset'],extra:viewCount(this,()=>{
+                this.refreshActions();
+                const notice=this.host.querySelector('.orbit-stale-views');
+                if(notice)notice.hidden=!this.viewsChanged;
+                const grid=this.host.querySelector('.orbit-matched-views');
+                if(grid)grid.hidden=this.viewsChanged;
+            })}),
             el('details',{},el('summary',{},t('advanced_camera')),
                 this.section('frames','Reconstruction frames',{advanced:false}),
                 this.section('camera','Camera alignment',{advanced:false})),
-            frames.length&&!this.viewsChanged?el('section',{},el('h3',{},t('selected_views',{count:selected,total:frames.length})),
+            frames.length?el('p',{class:'muted orbit-stale-views',role:'status',hidden:!this.viewsChanged},ux('refresh_views_help')):null,
+            frames.length?el('section',{class:'orbit-matched-views',hidden:this.viewsChanged},el('h3',{},t('selected_views',{count:selected,total:frames.length})),
                 el('div',{class:'orbit-view-grid'},...frames.map((frame,index)=>{
                     const checked=!exclusions.includes(frame.source_frame);
                     const name=index?t('frame_angle',{frame:frame.source_frame,angle:Math.round(frame.solved_degrees)}):t('front_frame');
@@ -73,13 +71,13 @@ export class OrbitToMeshWizard extends VirtualTurntableWizard{
                         el('img',{src:frame.image,alt:name,loading:'lazy'}),
                         el('span',{class:'format-check'},
                             el('input',{type:'checkbox',checked,disabled:this.busy||index===0||checked&&selected<=2,
-                                'aria-label':name,onchange:event=>{
+                                id:this.key+'-frame-'+frame.source_frame,'aria-label':name,onchange:event=>{
                                     this.draft.exclude_views=event.target.checked?exclusions.filter(id=>id!==frame.source_frame)
                                         :[...exclusions,frame.source_frame];
-                                    this.remember();this.render();
+                                    this.remember();this.renderAt(this.key+'-frame-'+frame.source_frame);
                                 }}),name));
                 }))):null,
-            this.section('pixal','Pixal3D reconstruction'));
+            this.section('pixal','Pixal3D reconstruction',{visible:['shape_resolution']}));
     }
     reviewMesh(){
         return el('div',{},this.orbit(this.run?.active),this.preview('raw','Original reconstruction'),
@@ -99,24 +97,34 @@ export class OrbitToMeshWizard extends VirtualTurntableWizard{
             }),{disabled:this.busy})));
     }
     next(){
-        let operation,label,disabled=this.busy;
+        const changed=this.dirtyStage;
         if(this.page===1){
-            operation='turnaround';label=sourceMessage('Generate turnaround');disabled||=!this.ready;
-        }else if(this.page===2){
-            operation=this.complete('orbit')?'cameras':this.complete('turnaround')?'orbit':'turnaround';
-            label=operation==='cameras'?t('align_cameras'):sourceMessage(operation==='orbit'?'Generate orbit':'Generate turnaround');
-        }else if(this.page===3){
-            const cameraChanged=['camera','frames'].some(key=>JSON.stringify(this.run?.controls?.[key])!==JSON.stringify(this.draft.controls[key]));
-            operation=!this.complete('cameras')||cameraChanged?'cameras':!this.complete('views')||this.viewsChanged?'views':'reconstruct';
-            label=operation==='cameras'?t('align_cameras'):operation==='views'?t('refresh_views'):sourceMessage('Reconstruct mesh');
-        }else if(this.page===4&&this.complete('geometry')){
-            return button(sourceMessage('Finish and export'),()=>this.go(5),{class:'primary',disabled});
-        }else{
-            operation=this.page===4?'reconstruct':'finish';
-            label=sourceMessage(operation==='finish'?'Prepare asset package':'Reconstruct mesh');
-            disabled||=operation==='finish'&&!this.complete('geometry');
+            return this.complete('turnaround')&&changed!=='turnaround'
+                ?this.runButton('Review the orbit','orbit',()=>this.go(2))
+                :this.runButton('Generate turnaround','turnaround');
         }
-        return button(label,()=>this.act(()=>this.start(operation)),{class:'primary',disabled});
+        if(this.page===2){
+            if(!this.complete('turnaround')||changed==='turnaround')return this.runButton('Generate turnaround','turnaround');
+            if(!this.complete('orbit')||changed==='orbit')return this.runButton('Generate orbit','orbit');
+            if(!this.complete('cameras')||changed==='cameras')return this.runButton(t('align_cameras'),'cameras');
+            return this.runButton('Choose mesh views','views',()=>this.go(3));
+        }
+        if(this.page===3){
+            if(changed==='turnaround'||changed==='orbit')return this.runButton(ux('review_earlier_step'),'orbit',()=>this.go(2));
+            if(!this.complete('cameras')||changed==='cameras')return this.runButton(t('align_cameras'),'cameras');
+            if(!this.complete('views')||this.viewsChanged)return this.runButton(t('refresh_views'),'views');
+            if(this.complete('geometry')&&changed!=='reconstruct')
+                return this.runButton('Review the mesh','reconstruct',()=>this.go(4));
+            return this.runButton('Reconstruct mesh','reconstruct');
+        }
+        if(this.page===4){
+            if(['turnaround','orbit','cameras','views'].includes(changed))
+                return this.runButton(ux('review_earlier_step'),'reconstruct',()=>this.go(changed==='turnaround'||changed==='orbit'?2:3));
+            return this.complete('geometry')&&changed!=='reconstruct'
+                ?this.runButton('Finish and export','finish',()=>this.go(5))
+                :this.runButton('Reconstruct mesh','reconstruct');
+        }
+        return this.finishButton();
     }
     async start(operation){
         if(operation==='views'||operation==='cameras')this.draft.exclude_views=[];

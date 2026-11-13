@@ -69,11 +69,13 @@ function videoCard(shell,item,refresh){
     const url=fileUrl(item.id,"video");
     const media=el("div",{class:"history-video-player"});
     const play=button(msg("common.play_video"),()=>{
-        const video=el("video",{src:url+"?play=1",controls:true,playsInline:true,"aria-label":item.name});
+        const video=el("video",{src:url+"?play=1",controls:true,playsInline:true,"aria-label":item.name,tabIndex:0});
         media.replaceChildren(video);
+        play.hidden=true;
+        video.focus({preventScroll:true});
         video.play().catch(()=>{});
     });
-    return el("article",{class:"library-card"},el("div",{class:"thumbnail"},icon("video",42)),
+    return el("article",{class:"library-card library-video-card"},el("div",{class:"thumbnail"},icon("video",42)),
         el("div",{},el("h3",{},item.name),
             el("p",{class:"muted"},new Date(item.created).toLocaleString()+" · ",sourceMessage(item.workflow)),
             el("div",{class:"filename"},item.filename+" · "+formatSize(item.bytes)),

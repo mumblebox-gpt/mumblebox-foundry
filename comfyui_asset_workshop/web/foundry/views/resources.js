@@ -40,8 +40,8 @@ export function resourceLists(shell){
             for(const item of data.items){
                 const added = Number.isFinite(item.added_at)
                     ? msg('common.model_added',{date:dateFormat.format(item.added_at * 1000)}) : msg('common.model_date_unknown');
-                const details=el('div',{},el('strong',{},item.display_name||item.name),
-                    el('div',{class:'filename'},msg('common.model_file',{name:item.name})),
+                const details=el('div',{class:'installed-model-details'},el('strong',{},item.display_name||item.name),
+                    item.display_name&&item.display_name!==item.name?el('div',{class:'filename'},msg('common.model_file',{name:item.name})):null,
                     el('small',{class:'muted'},size(item.bytes)+' · '+item.location+' · ',added),
                     hint(item.workflows.length?msg("common.used_by", {value1: item.workflows.join(', ')}):msg("common.available_to_installed_workflows_origin_is_not_recorded")),item.reason?hint(item.reason):null);
                 const row=el('li',{},details);

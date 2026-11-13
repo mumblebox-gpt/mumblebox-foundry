@@ -1,8 +1,8 @@
 {
-  "skill_revision": "2026-11-12-agent-setup",
+  "skill_revision": "2026-11-12-wizard-presets",
   "agent_protocol": 1,
   "minimum_foundry_version": "0.1.0-preview.21",
-  "reviewed_foundry_version": "0.1.0-preview.25",
+  "reviewed_foundry_version": "0.1.0-preview.26",
   "languages": "Explain guidance and update notices in the user's language.",
   "capabilities": "Use the running app's workflow capabilities for available settings and exports."
 }

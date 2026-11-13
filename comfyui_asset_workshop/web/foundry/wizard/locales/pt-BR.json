@@ -310,5 +310,7 @@
   "format_count": "Seleção de {count} formato",
   "format_count_plural": "Seleções de {count} formatos",
   "output_selection_summary": "{versions} · {formats}",
-  "starting_image": "Imagem inicial"
+  "starting_image": "Imagem inicial",
+  "editable_quad_mesh": "Malha editável em quadriláteros",
+  "export_format_label": "{version} · {format}"
 }

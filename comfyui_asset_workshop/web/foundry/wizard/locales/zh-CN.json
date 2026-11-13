@@ -310,5 +310,7 @@
   "format_count": "{count} 项格式选择",
   "format_count_plural": "{count} 项格式选择",
   "output_selection_summary": "{versions} · {formats}",
-  "starting_image": "起始图像"
+  "starting_image": "起始图像",
+  "editable_quad_mesh": "可编辑四边面网格",
+  "export_format_label": "{version} · {format}"
 }

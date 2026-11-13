@@ -151,5 +151,14 @@
   "ground_place": "Colocar en el piso",
   "ground_original": "Orientación original",
   "texture_triangles": "Límite de triángulos para texturizar",
-  "help_texture_triangles": "Limita los triángulos que se envían al texturizado y al desplegado UV. La malla maestra limpia se conserva. Cero usa la malla completa."
+  "help_texture_triangles": "Limita los triángulos que se envían al texturizado y al desplegado UV. La malla maestra limpia se conserva. Cero usa la malla completa.",
+  "reference_views": "Vistas de referencia para la malla",
+  "view_count_2": "2 vistas · Rápido",
+  "view_count_4": "4 vistas · Opción predeterminada",
+  "view_count_6": "6 vistas · Mayor cobertura",
+  "view_count_8": "8 vistas · Experimental",
+  "view_help_2": "Usa dos ángulos alineados para una prueba rápida. Pixal3D tendrá menos información sobre las partes ocultas en ambas vistas.",
+  "view_help_4": "Empieza aquí para cubrir distintos ángulos del objeto con un uso moderado de memoria.",
+  "view_help_6": "Agrega ángulos intermedios que pueden mostrar más del objeto. Requiere más tiempo de procesamiento y memoria de la GPU.",
+  "view_help_8": "Pruébalo con una órbita consistente y memoria libre en la GPU. Más vistas pueden introducir detalles contradictorios."
 }

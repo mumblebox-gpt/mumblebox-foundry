@@ -151,5 +151,14 @@
   "ground_place": "place",
   "ground_original": "original",
   "texture_triangles": "Texturing triangle limit",
-  "help_texture_triangles": "Limit triangles sent to texturing and UV unwrapping. The clean master is preserved. Zero uses the full mesh."
+  "help_texture_triangles": "Limit triangles sent to texturing and UV unwrapping. The clean master is preserved. Zero uses the full mesh.",
+  "reference_views": "Mesh reference views",
+  "view_count_2": "2 views · Quick",
+  "view_count_4": "4 views · Recommended default",
+  "view_count_6": "6 views · More coverage",
+  "view_count_8": "8 views · Experimental",
+  "view_help_2": "Use two matched angles for a quick test. Pixal3D has less evidence for parts hidden in both views.",
+  "view_help_4": "Start here for views spread around the subject with a moderate memory cost.",
+  "view_help_6": "Adds intermediate angles that can show more of the subject. Allow more processing time and GPU memory.",
+  "view_help_8": "Try this only with a consistent orbit and spare GPU memory. More views can bring in more conflicting details."
 }

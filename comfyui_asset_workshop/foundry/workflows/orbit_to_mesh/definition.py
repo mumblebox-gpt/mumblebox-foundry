@@ -144,7 +144,7 @@ def capabilities():
     return {
         "id": METHOD, "description": DESCRIPTION, "tip": TIP, "controls": deepcopy(SCHEMA),
         "defaults": defaults(), "orbit_presets": ORBIT_PRESETS, "view_presets": VIEW_PRESETS,
-        "selection": SELECTION, "finishing_defaults": settings(defaults(), {}), "viewer": viewer_module(),
+        "selection": SELECTION, "finishing_defaults": settings(defaults(), {}), "finishing_ranges": RANGES, "viewer": viewer_module(),
         "exports": [{"id": key, "directory": value[0], "formats": value[1], "description": value[2]}
                     for key, value in VARIANTS.items() if key != "quad_detail"],
         "license_note": LICENSE_MESSAGE, "license_links": {

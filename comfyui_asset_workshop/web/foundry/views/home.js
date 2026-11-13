@@ -79,6 +79,8 @@ export function home(shell) {
                 shell.node.properties.foundryOrbitToMesh?.draft
                     ?button(msg('orbit.resume'),()=>shell.openOrbitToMesh({resume:true})):null),
             el('div',{class:'formats'},...['GLB','FBX',msg('common.quads_badge'),'STL','ZIP'].map(format=>el('span',{class:'badge'},format))))));
+    // Keep the fastest starting point first and Orbit to Mesh beside it.
+    methods.querySelector('[data-method="single"]').after(methods.querySelector('[data-method="orbit-to-mesh"]'));
     const card = el("details",{class:"mesh-category",open:true},
       el('summary',{class:'workflow-card'},
         el("div",{class:"art workflow-art"},artwork("image-to-3d",msg("common.reference_to_figure"))),

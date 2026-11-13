@@ -69,7 +69,7 @@ GROUPS = {
         "open_package_folder": write("/guided/runs/{run_id}/open-package-folder", "Reveal the finished package folder in the desktop.", params=RUN),
     },
     "virtual_turntable": {
-        "capabilities": read("/virtual-turntable/capabilities", "Virtual Turntable engines, controls, defaults, licenses and export choices."),
+        "capabilities": read("/virtual-turntable/capabilities", "Virtual Turntable engines, orbit video presets, controls, defaults, licenses and export choices."),
         "template": read("/virtual-turntable/template", "Read the editable Virtual Turntable graph."),
         "create": write("/virtual-turntable/runs", "Save one image and an explicitly selected reconstruction engine.",
                         "name, image (imported filename), engine, controls, selection, overrides, image_creation"),

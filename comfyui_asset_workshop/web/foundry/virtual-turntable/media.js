@@ -29,5 +29,5 @@ export function orbitMedia(run,samplerId,playing=false){
         muted:true,defaultMuted:true,'aria-label':sourceMessage('Generated 360-degree orbit')});
     video.autoplay=playing;
     if(playing)queueMicrotask(()=>{if(video.isConnected)video.play().catch(()=>{});});
-    return {element:video};
+    return {element:video,release:()=>video.pause()};
 }

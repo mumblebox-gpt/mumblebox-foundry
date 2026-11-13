@@ -10,7 +10,7 @@
   "card_credits": "Impulsionado pelo MiniMax H3, Pruna P-H3 Image, LoRA de órbita de Pablo Dawson e Pixal3D do Tencent ARC Lab, Universidade Tsinghua e Victoria University of Wellington.",
   "tip": "Use uma referência clara de um único assunto. Verifique a órbita por alterações de forma e detalhes antes de construir a malha.",
   "orbit_preset": "Predefinição de vídeo de órbita",
-  "preset_standard": "Padrão · 10 segundos",
+  "preset_standard": "Equilibrada · 10 segundos",
   "preset_standard_help": "768 × 768 com Turbo. A órbita mais longa dá mais quadros para o alinhamento da câmera trabalhar.",
   "preset_low_vram": "Menor VRAM · 3 segundos",
   "preset_low_vram_help": "512 × 512 com Turbo. Use isso quando a memória da GPU estiver apertada.",
@@ -151,5 +151,14 @@
   "ground_place": "colocar",
   "ground_original": "original",
   "texture_triangles": "Limite de triângulos de texturização",
-  "help_texture_triangles": "Limite de triângulos enviados para texturização e desdobramento UV. A malha mestre limpa é preservada. Zero usa a malha completa."
+  "help_texture_triangles": "Limite de triângulos enviados para texturização e desdobramento UV. A malha mestre limpa é preservada. Zero usa a malha completa.",
+  "reference_views": "Vistas de referência da malha",
+  "view_count_2": "2 vistas · Rápido",
+  "view_count_4": "4 vistas · Padrão recomendado",
+  "view_count_6": "6 vistas · Maior cobertura",
+  "view_count_8": "8 vistas · Experimental",
+  "view_help_2": "Use dois ângulos alinhados para um teste rápido. O Pixal3D terá menos informações sobre partes ocultas nas duas vistas.",
+  "view_help_4": "Comece aqui para distribuir as vistas ao redor do objeto com uso moderado de memória.",
+  "view_help_6": "Adiciona ângulos intermediários que podem revelar mais do objeto. Reserve mais tempo de processamento e memória da GPU.",
+  "view_help_8": "Experimente com uma órbita consistente e memória livre na GPU. Mais vistas podem trazer detalhes conflitantes."
 }

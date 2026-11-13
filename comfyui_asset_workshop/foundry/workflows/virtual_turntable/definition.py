@@ -161,6 +161,16 @@ SCHEMA = {
 }
 
 
+_ORBIT_RECIPE_FIELDS = ("width", "height", "length", "steps", "turbo", "sampler", "scheduler")
+_STANDARD_ORBIT = {name: SCHEMA["orbit"][name]["default"] for name in _ORBIT_RECIPE_FIELDS}
+ORBIT_PRESETS = {
+    "standard": _STANDARD_ORBIT,
+    "low_vram": {**_STANDARD_ORBIT, "width": 512, "height": 512},
+    "long": {**_STANDARD_ORBIT, "length": 243, "steps": 8, "turbo": True,
+             "sampler": "euler", "scheduler": "beta"},
+}
+
+
 def defaults(schema=SCHEMA):
     return {group: {name: spec["default"] for name, spec in options.items()} for group, options in schema.items()}
 
@@ -203,7 +213,7 @@ def validated_settings(overrides, schema=SCHEMA):
 
 def capabilities():
     from .runtime import missing, SOURCES
-    from ..image_to_3d.definition import DEFAULT_SELECTION, DEFAULTS
+    from ..image_to_3d.definition import DEFAULT_SELECTION, DEFAULTS, RANGES
     from ..image_to_3d.readiness import viewer_module
     from ....finishing.package_catalog import VARIANTS
 
@@ -211,7 +221,8 @@ def capabilities():
         "id": METHOD, "description": DESCRIPTION, "tip": TIP,
         "engines": {key: dict(info, missing=missing(key), source=SOURCES[key]) for key, info in ENGINES.items()},
         "controls": deepcopy(SCHEMA), "defaults": defaults(), "selection": DEFAULT_SELECTION,
-        "finishing_defaults": DEFAULTS, "viewer": viewer_module(),
+        "orbit_presets": deepcopy(ORBIT_PRESETS),
+        "finishing_defaults": DEFAULTS, "finishing_ranges": RANGES, "viewer": viewer_module(),
         "exports": [{"id": key, "directory": value[0], "formats": value[1], "description": value[2]}
                     for key, value in VARIANTS.items() if key != "quad_detail"],
         "license_note": LICENSE_MESSAGE, "license_links": LICENSE_LINKS,

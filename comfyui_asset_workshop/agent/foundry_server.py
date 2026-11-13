@@ -26,7 +26,7 @@ def create_server(client):
         "On each connection, read workspace.agent_connection for its local path and revision, the installed app version, and update status. "
         "If checking is true, check back once. Report available updates and refresh an older copied skill from the bundled version. "
         "List workflow groups with foundry_workflows and request one group's actions and capabilities before use. "
-        "The catalog exposes Guided, Virtual Turntable, both CCORE modes, Garment, graph reads and shared workspace controls. "
+        "The catalog exposes Guided, Virtual Turntable, Orbit to Mesh, both CCORE modes, Garment, graph reads and shared workspace controls. "
         "Use current capability defaults unless the user specifies otherwise. "
         "Use the existing ComfyUI Foundry workflow. Read capabilities first. Upload only authorized references, "
         "label the first primary and describe each additional reference's purpose. Select the model, category, "

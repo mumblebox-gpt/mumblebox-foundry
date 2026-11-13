@@ -151,5 +151,14 @@
   "ground_place": "Placer",
   "ground_original": "Original",
   "texture_triangles": "Limite des triangles de texturage",
-  "help_texture_triangles": "Limite le nombre de triangles envoyés à la texturisation et au dépliement UV. Le maillage maître propre est conservé. Zéro utilise le maillage complet."
+  "help_texture_triangles": "Limite le nombre de triangles envoyés à la texturisation et au dépliement UV. Le maillage maître propre est conservé. Zéro utilise le maillage complet.",
+  "reference_views": "Vues de référence du maillage",
+  "view_count_2": "2 vues · Rapide",
+  "view_count_4": "4 vues · Par défaut, recommandé",
+  "view_count_6": "6 vues · Plus de couverture",
+  "view_count_8": "8 vues · Expérimental",
+  "view_help_2": "Utilisez deux angles alignés pour un essai rapide. Pixal3D dispose de moins d’informations sur les parties cachées dans les deux vues.",
+  "view_help_4": "Commencez ici pour répartir les vues autour du sujet avec un coût mémoire modéré.",
+  "view_help_6": "Ajoute des angles intermédiaires qui peuvent montrer davantage du sujet. Prévoyez plus de temps de calcul et de mémoire vidéo.",
+  "view_help_8": "À essayer avec une orbite cohérente et de la mémoire vidéo disponible. Des vues supplémentaires peuvent introduire des détails contradictoires."
 }

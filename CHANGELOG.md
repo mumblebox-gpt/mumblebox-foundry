@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-preview.26 — Clearer orbit wizards
+
+- Move **Orbit to Mesh** into the top row beside **Single Image or Text**. Align workflow cards, setup controls and engine choices.
+- Add named video presets and **Custom** to Orbit to Mesh and Virtual Turntable. Choose video size, duration, playback speed and sampling from dropdowns. The setup shows the expected clip length, warns about heavier settings and offers a Lower VRAM preset.
+- Group advanced controls by purpose and explain what they change. Reset the subject direction, the motion prompt or a settings group independently.
+- Explain the Orbit to Mesh view counts in both manual and Rocket Mode. Review which steps Rocket Mode will run and which formats will go into the ZIP before starting.
+- Keep draft edits when resuming, show the earliest affected step and let export retry from a saved reconstruction. Show invalid settings and missing engine requirements before starting.
+- Improve the Connect Your Agent instructions, History video playback and installed-model name layout. Update the interface and export labels in all five supported languages.
+
 ## 0.1.0-preview.25 — Orbit to Mesh and Connect Your Agent
 
 - Add **Orbit to Mesh**. Start with an image, review a generated H3 orbit, choose aligned views for Pixal3D, then finish with Hi3D, TRELLIS.2 and selected exports. Four views is the starting preset. Two and six are available, and eight is experimental. Advanced settings and reset controls are available in the wizard.

@@ -42,3 +42,6 @@
 .foundry[data-font-size="extra-large"] .agent-hero img,
 .foundry[data-font-size="175"] .agent-hero img,
 .foundry[data-font-size="200"] .agent-hero img {max-height:165px;object-position:center 43%}
+
+.agent-next-step{border-inline-start:3px solid var(--accent);background:var(--canvas);padding:9px 12px;border-radius:6px}
+.agent-status-line{min-height:1.5em}
