@@ -34,7 +34,7 @@ export function orbitSettings(wizard) {
     const mainChoice = dropdown({
         id:key+'-orbit-recipe',label:ux('orbit_recipe'),disabled:busy,
         choices:[...Object.keys(recipes).map(id => ({
-            id,label:id==='standard'?ux('default_choice',{label:recipesFor[id][0]}):recipesFor[id][0],
+            id,label:same(defaults,recipes[id])?ux('default_choice',{label:recipesFor[id][0]}):recipesFor[id][0],
         })),{id:'custom',label:ux('custom')}],
         selected:recipeMatch(), help:id=>recipesFor[id]?.[1]||ux('custom_orbit_help'),
         change:id=>{

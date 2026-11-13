@@ -67,6 +67,8 @@
   "current_workflow_improvements": "Current workflow improvements",
   "build_on_the_image_creation_and_image_to_3d_workflows_already_in_use": "Build on the image creation and image-to-3D workflows already in use.",
   "better_vehicle_prop_and_creature_turnarounds": "Better vehicle, prop and creature turnarounds",
+  "test_h3_ref2va_turnaround": "Try MiniMax H3 Ref2VA for orbit video",
+  "test_h3_ref2va_turnaround_description": "Give Ref2VA all four turnaround views as untimed references and check whether it produces a smoother full orbit.",
   "revisit_the_original_turnaround_recipe_and_published_guidance_for_each_categ": "Revisit the original turnaround recipe and published guidance for each category. Evaluate a single three-quarter starting image where a head-on front/back pair hides important shape. Preserve the successful character approach.",
   "category_specific_view_sets": "Category-specific view sets",
   "determine_how_many_views_each_category_needs_and_which_angles_help_investiga": "Determine how many views each category needs and which angles help. Investigate a fifth, top-down vehicle view, including extraction, view order, camera information and Pixal3D/TRELLIS input support before adopting it.",

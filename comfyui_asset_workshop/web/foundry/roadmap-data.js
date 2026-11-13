@@ -20,6 +20,7 @@ export const roadmap = [
         id: "workflow", title: msg("common.current_workflow_improvements"), summary: msg("common.build_on_the_image_creation_and_image_to_3d_workflows_already_in_use"),
         items: [
             {title: msg("common.better_vehicle_prop_and_creature_turnarounds"), status: "Evaluate", description: msg("common.revisit_the_original_turnaround_recipe_and_published_guidance_for_each_categ")},
+            {title: msg("common.test_h3_ref2va_turnaround"), status: "Evaluate", description: msg("common.test_h3_ref2va_turnaround_description")},
             {title: msg("common.category_specific_view_sets"), status: "Evaluate", description: msg("common.determine_how_many_views_each_category_needs_and_which_angles_help_investiga")},
             {title: msg("common.better_ccore_memory_management"), status: "Planned", description: msg("common.evaluate_tighter_gpu_memory_estimates_and_memory_profile_defaults_for_longer")},
             {title: msg("common.ccore_prop_animation_controls"), status: "Evaluate", description: msg("common.qualify_ccore_s_author_supported_animation_on_representative_props_and_expos")},

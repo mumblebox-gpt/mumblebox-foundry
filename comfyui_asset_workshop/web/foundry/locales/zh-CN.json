@@ -67,6 +67,8 @@
   "current_workflow_improvements": "现有工作流改进",
   "build_on_the_image_creation_and_image_to_3d_workflows_already_in_use": "改进目前使用的图像生成和图像转 3D 工作流。",
   "better_vehicle_prop_and_creature_turnarounds": "改进载具、道具和生物的多视图",
+  "test_h3_ref2va_turnaround": "试用 MiniMax H3 Ref2VA 生成环绕视频",
+  "test_h3_ref2va_turnaround_description": "将四张多视图作为参考图，不指定它们在视频中的时间点，看看 Ref2VA 能否生成更流畅的完整一圈。",
   "revisit_the_original_turnaround_recipe_and_published_guidance_for_each_categ": "重新检查各类别最初采用的多视图方案及已发布的指导。如果正面和背面图像会遮挡重要形体，则评估以一张四分之三视角图像作为起点，同时保留已验证成功的角色方案。",
   "category_specific_view_sets": "按类别设计视图组合",
   "determine_how_many_views_each_category_needs_and_which_angles_help_investiga": "确定各类别需要多少视图，以及哪些角度最有帮助。在采用载具的第五张俯视图前，先研究视图提取、视图顺序、相机信息，以及 Pixal3D/TRELLIS 的输入支持。",

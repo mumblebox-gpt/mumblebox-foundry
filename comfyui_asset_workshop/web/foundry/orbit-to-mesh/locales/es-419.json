@@ -15,7 +15,7 @@
   "preset_low_vram": "Menos VRAM · 3 segundos",
   "preset_low_vram_help": "512 × 512 con Turbo. Elige este preajuste cuando tengas poca memoria de GPU disponible.",
   "preset_full_steps": "Pasos completos · 3 segundos",
-  "preset_full_steps_help": "768 × 768, 28 pasos y Turbo desactivado. Pruébalo para una órbita corta con el muestreador estándar.",
+  "preset_full_steps_help": "768 × 768, 28 pasos y Turbo desactivado. Empieza aquí para rodear un objeto inmóvil a un ritmo parejo.",
   "rocket_outputs": "Elegir salidas del modo Cohete",
   "missing_tools": "Para alinear las cámaras se necesita {files}. Instala COLMAP para continuar.",
   "get_colmap": "Obtener COLMAP",

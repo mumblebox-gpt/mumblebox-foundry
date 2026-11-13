@@ -13,17 +13,29 @@ OFFSET = 790000
 DESCRIPTION = "Turn one image into an AI-generated orbit. Review matched views before Pixal3D builds a mesh. Hi3D and TRELLIS.2 finish the asset."
 TIP = "Use a clear reference of one subject. Check the orbit for changes in shape and details before building the mesh."
 
+ORBIT_PROMPT = (
+    "[Shot 1] The camera begins in motion, facing the front of a stationary subject. "
+    "It makes one complete 360-degree circle around the subject, passing continuously through the "
+    "three-quarter, side and rear views and back to the opening front view as the clip ends. "
+    "It covers an equal angle between every pair of consecutive frames and holds the same speed "
+    "at the opening, at every view it passes and at the end. "
+    "It keeps the same height, distance and lens and the subject stays centered. "
+    "The subject and its parts remain rigid and fixed in place. "
+    "Preserve their shape, scale, proportions, pose, markings and materials. "
+    "The background and lighting stay fixed throughout the single uninterrupted shot."
+)
+
 ORBIT_PRESETS = {
+    "full_steps": {"width": 768, "height": 768, "length": 73, "steps": 28, "turbo": False, "sampler": "res_multistep", "scheduler": "simple"},
     "standard": {"width": 768, "height": 768, "length": 243, "steps": 8, "turbo": True, "sampler": "euler", "scheduler": "beta"},
     "low_vram": {"width": 512, "height": 512, "length": 73, "steps": 8, "turbo": True, "sampler": "euler", "scheduler": "beta"},
-    "full_steps": {"width": 768, "height": 768, "length": 73, "steps": 28, "turbo": False, "sampler": "res_multistep", "scheduler": "simple"},
 }
 VIEW_PRESETS = {"2": 2, "4": 4, "6": 6, "8 (experimental)": 8}
 SELECTION = {"schema": "mumblebox.export-selection/1", "variants": {
     "detailed": {"formats": ["glb"]}, "game_balanced": {"formats": ["glb"]}}}
 
 SCHEMA = {key: deepcopy(ORBIT_SOURCE[key]) for key in ("turnaround", "orbit", "frames")}
-for key, value in ORBIT_PRESETS["standard"].items():
+for key, value in ORBIT_PRESETS["full_steps"].items():
     SCHEMA["orbit"][key]["default"] = value
 SCHEMA["turnaround"].update({
     "sampler": field("euler", "Sampler for the four-view image sheet.", choices=("euler", "res_multistep")),
@@ -32,6 +44,7 @@ SCHEMA["turnaround"].update({
     "decode_tile": field(512, "Decode the sheet in tiles. Smaller tiles reduce peak VRAM.", limits=(128, 1024), step=32),
 })
 SCHEMA["orbit"].update({
+    "prompt": {**SCHEMA["orbit"]["prompt"], "default": ORBIT_PROMPT},
     "denoise": field(1., "Fraction of the noise schedule used for the orbit.", limits=(.1, 1.), step=.05),
     "chunk_threshold": field(4096, "Minimum sequence size for splitting feed-forward work.", limits=(0, 65536), step=256),
     "decode_overlap": field(64, "Pixels shared between video decoder tiles. More overlap can reduce seams.", limits=(0, 128), step=8),

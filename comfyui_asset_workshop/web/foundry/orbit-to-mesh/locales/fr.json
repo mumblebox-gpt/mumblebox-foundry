@@ -15,7 +15,7 @@
   "preset_low_vram": "Moins de VRAM · 3 secondes",
   "preset_low_vram_help": "512 × 512 avec Turbo. Utilisez ceci lorsque la mémoire GPU est limitée.",
   "preset_full_steps": "Étapes complètes · 3 secondes",
-  "preset_full_steps_help": "768 × 768, 28 étapes, Turbo désactivé. Essayez ceci pour un court orbit avec le sampler standard.",
+  "preset_full_steps_help": "768 × 768, 28 étapes, sans Turbo. Commencez ici pour un tour régulier autour d’un sujet immobile.",
   "rocket_outputs": "Choisir les sorties du mode Rocket",
   "missing_tools": "L'alignement de caméra nécessite {files}. Installez COLMAP pour continuer.",
   "get_colmap": "Obtenir COLMAP",

@@ -17,6 +17,14 @@ Use this checklist for the release commit and publication. Keep verification pro
 - Update the GitHub repository description for every release. Verify the public About text reflects the current workflows, integrations and supported languages.
 - Verify the public GitHub release, then refresh Recent commits on the public Pinokio listing and verify the release commit appears. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
 
+# Preview 0.1.0-preview.28 validation
+
+In the existing Comfy Desktop Foundry, the agate tiger's four-view sheet fed the same FL2VA model and three intermediate guides at their existing relative positions. The revised prompt still produced uneven motion in the 10-second Turbo test. The three-second, 28-step test completed one turn. COLMAP registered all 72 reconstruction frames. The camera estimates show a slight slowdown near the side view, with forward motion throughout. The short preset became the Orbit to Mesh default.
+
+The live wizard showed the cleaned clay and textured tiger previews and the asset ZIP link. The ZIP passed CRC and SHA-256 checks. Detailed (499,844 triangles) and Balanced (250,000 triangles) GLBs both embed 4096 × 4096 textures. The package contains the applicable model notices. This run qualifies the tested tiger and settings.
+
+After restarting the existing Comfy Desktop instance, a fresh Preview 28 wizard showed the short preset selected and marked Default. The installed stdio MCP returned the exact revised prompt, 73 frames, 28 steps and Turbo off. The Ref2VA roadmap entry appeared in all five languages at 200% text size. Resume restored the tiger's export page. Orbit, localization and release packaging tests passed.
+
 # Preview 0.1.0-preview.27 validation
 
 In the existing Comfy Desktop Foundry, all 11 workflow cards and both orbit wizard footers were checked in English, Simplified Chinese, Latin American Spanish, French and Brazilian Portuguese at default and 200% text size. The graph-view controls are absent. Orbit to Mesh remains second, its wizard opens from the card, and Virtual Turntable still shows the saved ZIP link. The original Foundry view was restored.

@@ -67,6 +67,8 @@
   "current_workflow_improvements": "Améliorations du flux de travail actuel",
   "build_on_the_image_creation_and_image_to_3d_workflows_already_in_use": "Construire sur les flux de travail de création d'images et d'images vers 3D déjà utilisés.",
   "better_vehicle_prop_and_creature_turnarounds": "Vues multiples améliorées pour véhicules, accessoires et créatures",
+  "test_h3_ref2va_turnaround": "Tester MiniMax H3 Ref2VA pour la vidéo d’orbite",
+  "test_h3_ref2va_turnaround_description": "Donner à Ref2VA les quatre vues de référence sans les placer à des moments précis de la vidéo et vérifier si le tour complet est plus fluide.",
   "revisit_the_original_turnaround_recipe_and_published_guidance_for_each_categ": "Revoir la recette originale de vues multiples et les consignes publiées pour chaque catégorie. Évaluer une image de départ en trois-quarts où une paire face/arrière cache des formes importantes. Préserver l'approche réussie pour les personnages.",
   "category_specific_view_sets": "Ensembles de vues spécifiques à la catégorie",
   "determine_how_many_views_each_category_needs_and_which_angles_help_investiga": "Déterminer le nombre de vues nécessaires par catégorie et les angles utiles. Examiner une vue supplémentaire en plongée pour les véhicules, incluant l'extraction, l'ordre des vues, les informations de caméra et le support d'entrée Pixal3D/TRELLIS avant adoption.",

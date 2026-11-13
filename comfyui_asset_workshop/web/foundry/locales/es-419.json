@@ -67,6 +67,8 @@
   "current_workflow_improvements": "Mejoras del flujo de trabajo actual",
   "build_on_the_image_creation_and_image_to_3d_workflows_already_in_use": "Construir sobre los flujos de trabajo de creación de imágenes y conversión a 3D ya en uso.",
   "better_vehicle_prop_and_creature_turnarounds": "Mejores vistas múltiples para vehículos, objetos y criaturas",
+  "test_h3_ref2va_turnaround": "Probar MiniMax H3 Ref2VA para el video de órbita",
+  "test_h3_ref2va_turnaround_description": "Usar las cuatro vistas de referencia sin fijarlas a momentos del video y comprobar si Ref2VA logra una vuelta completa más fluida.",
   "revisit_the_original_turnaround_recipe_and_published_guidance_for_each_categ": "Revisar el método original de vistas múltiples y las recomendaciones publicadas para cada categoría. Evaluar una sola imagen de tres cuartos cuando el par de frente y reverso oculte detalles importantes de la forma. Conservar el método que funciona para personajes.",
   "category_specific_view_sets": "Conjuntos de vistas específicos por categoría",
   "determine_how_many_views_each_category_needs_and_which_angles_help_investiga": "Determinar cuántas vistas necesita cada categoría y qué ángulos ayudan. Investigar una quinta vista de vehículos desde arriba, incluyendo extracción, orden de vistas, información de cámara y soporte para entrada de Pixal3D/TRELLIS antes de adoptarla.",

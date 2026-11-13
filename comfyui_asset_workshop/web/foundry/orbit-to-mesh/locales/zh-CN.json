@@ -15,7 +15,7 @@
   "preset_low_vram": "低显存 · 3 秒",
   "preset_low_vram_help": "512 × 512，启用 Turbo。显存紧张时可以选这个。",
   "preset_full_steps": "完整步数 · 3 秒",
-  "preset_full_steps_help": "768 × 768，28 步，关闭 Turbo。适合用标准采样器尝试短环绕视频。",
+  "preset_full_steps_help": "768 × 768，28 步，关闭 Turbo。建议先用这个预设，让镜头以稳定速度绕静止物体转一圈。",
   "rocket_outputs": "选择火箭模式的导出内容",
   "missing_tools": "相机对齐需要 {files}。安装 COLMAP 后继续。",
   "get_colmap": "下载 COLMAP",

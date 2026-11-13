@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-preview.28 — Steadier Orbit to Mesh
+
+- Ask H3 to make one complete orbit at a steady speed, with the subject stationary and the camera at a fixed height and distance.
+- Start Orbit to Mesh with the three-second, 28-step preset. It keeps all four turnaround views and their guide positions. The longer Turbo preset remains available.
+- Add a roadmap item to evaluate MiniMax H3 Ref2VA with untimed turnaround references.
+
 ## 0.1.0-preview.27 — Workflow navigation
 
 - Remove graph-view buttons from Foundry’s workflow cards and wizard footers. Open and Resume remain the workflow actions.
