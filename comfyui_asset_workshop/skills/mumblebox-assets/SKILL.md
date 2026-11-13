@@ -5,7 +5,7 @@ description: Use Mumblebox 3D Asset Foundry and its local MCP to create or recov
 
 # Mumblebox Foundry assets
 
-**Foundry version 0.1.0-preview.28**
+**Foundry version 0.1.0-preview.29**
 
 Use Foundry for a new asset or reference when local generation can save modeling work. Use Blender directly for edits to existing scene objects, assembly, and precise modeling. Preserve the user's design, dimensions, intended use, and chosen reference. Start fresh unless asked to resume a saved result.
 

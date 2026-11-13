@@ -104,6 +104,37 @@ class InstallationTests(unittest.TestCase):
             with self.assertRaises(ValueError):bootstrap.extract_checked(archive,root/'destination')
             self.assertFalse((root/'escape').exists())
 
+    def test_orbit_probe_initializes_server_and_rejects_missing_nodes(self):
+        import subprocess
+        import sys
+        with tempfile.TemporaryDirectory() as directory:
+            layout = bootstrap.Layout(Path(directory))
+            sources = {
+                "folder_paths.py": "def set_user_directory(path): pass\n",
+                "comfy/cli_args.py": "from types import SimpleNamespace\nargs = SimpleNamespace()\n",
+                "app/assets/manager.py": "class NoAssets:\n    def __init__(self, args): pass\n",
+                "server.py": "class PromptServer:\n    def __init__(self, loop, assets):\n        PromptServer.instance = self\n",
+                "comfy_extras/nodes_minimax_h3.py": "PH3ImageConditioning = MiniMaxH3ImageToVideo = object()\n",
+            }
+            for name, content in sources.items():
+                path = layout.comfy / name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(content, encoding="utf-8")
+            package = layout.comfy / "custom_nodes/ComfyUI-KJNodes/__init__.py"
+            package.parent.mkdir(parents=True)
+            body = "from server import PromptServer\nserver = PromptServer.instance\n"
+            package.write_text(body + "NODE_CLASS_MAPPINGS = dict(MiniMaxChunkFeedForward=1, MiniMaxLowVRAMAttention=2)\n", encoding="utf-8")
+            layout.host_python = sys.executable
+            with patch.object(bootstrap, "run", side_effect=lambda args: subprocess.run(
+                [str(arg) for arg in args], check=True, capture_output=True, text=True
+            )) as run:
+                bootstrap.probe_orbit_nodes(layout)
+                run.assert_called_once()
+                package.write_text(body + "NODE_CLASS_MAPPINGS = dict(MiniMaxChunkFeedForward=1)\n", encoding="utf-8")
+                with self.assertRaises(subprocess.CalledProcessError) as failure:
+                    bootstrap.probe_orbit_nodes(layout)
+                self.assertIn("MiniMaxLowVRAMAttention", failure.exception.stderr)
+
     def test_release_software_install_does_not_enable_model_downloads(self):
         root=Path(__file__).resolve().parents[2]
         manifest=json.loads((root/'dependencies.json').read_text())

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-preview.29 — Windows installer fix
+
+- Initialize ComfyUI before checking the video nodes during Install, Update and Repair. This prevents Pinokio from stopping setup on the KJNodes startup warning.
+- Thank [Obbz (@obbz)](https://pinokio.co/posts/01m7ap9neb694thy3gyr1608kk) for reporting the installer failure and sharing the terminal log that led to the fix.
+
 ## 0.1.0-preview.28 — Steadier Orbit to Mesh
 
 - Ask H3 to make one complete orbit at a steady speed, with the subject stationary and the camera at a fixed height and distance.

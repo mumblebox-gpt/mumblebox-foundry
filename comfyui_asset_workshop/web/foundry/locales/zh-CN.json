@@ -218,6 +218,7 @@
   "models_and_workflow_tools": "模型与工作流工具",
   "installed_workflow": "已安装的工作流：{version}",
   "official_project": "官方项目",
+  "contributor_obbz_install_report": "谢谢你特地贴出终端日志！你的反馈让我们找到了 Windows 安装中断的位置，顺利修好了安装程序。",
   "contributor_knomadaero_moge_report": "感谢你贴出完整的 ComfyUI 错误日志！你的反馈帮我们修复了「单图或文本」向导的模型下载问题，首次使用时就能准备好正确的模型。",
   "original_bug_report": "原始问题反馈",
   "thank_you": "感谢",

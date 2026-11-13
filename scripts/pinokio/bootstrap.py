@@ -142,6 +142,36 @@ def install_extension(layout,blender,source,port=8378):
          '--hi3d-models',layout.hi3d/'models'])
 
 
+def probe_orbit_nodes(layout):
+    # KJNodes registers preview handlers at import time, after ComfyUI creates
+    # its PromptServer. Match that order without listening on a port.
+    run([layout.host_python, "-B", "-c", """
+import asyncio
+from importlib import import_module
+import sys
+
+sys.path.insert(0, sys.argv[1])
+import folder_paths
+from app.assets.manager import NoAssets
+from comfy.cli_args import args
+from comfy_extras.nodes_minimax_h3 import PH3ImageConditioning, MiniMaxH3ImageToVideo
+from server import PromptServer
+
+folder_paths.set_user_directory(sys.argv[2])
+args.front_end_root = sys.argv[1]
+
+async def probe():
+    PromptServer(asyncio.get_running_loop(), NoAssets(args))
+    nodes = import_module("custom_nodes.ComfyUI-KJNodes").NODE_CLASS_MAPPINGS
+    missing = {"MiniMaxChunkFeedForward", "MiniMaxLowVRAMAttention"} - nodes.keys()
+    if missing:
+        raise RuntimeError("Required KJNodes missing: " + ", ".join(sorted(missing)))
+
+asyncio.run(probe())
+print("Native H3 image, video and KJNodes memory controls OK")
+""", layout.comfy, layout.data / "user"])
+
+
 def install(root,source=None,repair=False):
     if sys.platform!='win32':raise ValueError('This beta installer currently supports Windows with NVIDIA GPUs.')
     layout=Layout(root);source=Path(source or root).resolve()
@@ -217,12 +247,7 @@ def install(root,source=None,repair=False):
     run([layout.worker_python,layout.comfy/'custom_nodes'/'comfyui_asset_workshop'/
          'pipeline_workers'/'trellis_texture_worker.py',texture_probe,'--probe'])
     if orbit_nodes:
-        run([layout.host_python, '-c',
-             'import importlib,sys; sys.path.insert(0,sys.argv[1]); '
-             'from comfy_extras.nodes_minimax_h3 import PH3ImageConditioning, MiniMaxH3ImageToVideo; '
-             'nodes=importlib.import_module("custom_nodes.ComfyUI-KJNodes").NODE_CLASS_MAPPINGS; '
-             'assert {"MiniMaxChunkFeedForward","MiniMaxLowVRAMAttention"} <= nodes.keys(); '
-             'print("Native H3 image, video and KJNodes memory controls OK")', layout.comfy])
+        probe_orbit_nodes(layout)
     run([layout.mcp_python,'-c','from mcp.server import MCPServer; print("MCP imports OK")'])
     record={'schema':1,'version':manifest['version'],'blender':str(blender.relative_to(layout.root)),
             'models_downloaded_by_installer':False,'hi3d_workspace':str(layout.hi3d.relative_to(layout.root))}

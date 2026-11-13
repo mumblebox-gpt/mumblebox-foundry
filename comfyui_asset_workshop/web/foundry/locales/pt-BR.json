@@ -218,6 +218,7 @@
   "models_and_workflow_tools": "Modelos e ferramentas de fluxo de trabalho",
   "installed_workflow": "Fluxo de trabalho instalado: {version}",
   "official_project": "Projeto oficial",
+  "contributor_obbz_install_report": "Valeu por dedicar um tempo para compartilhar o log do terminal. Seu relato mostrou onde a instalação travava no Windows e ajudou a gente a corrigir o instalador.",
   "contributor_knomadaero_moge_report": "Obrigado por compartilhar o log completo de erro do ComfyUI. Seu relatório nos ajudou a corrigir o assistente Imagem única ou texto para que ele carregue o modelo correto na primeira execução.",
   "original_bug_report": "Relatório original de bug",
   "thank_you": "Obrigado",

@@ -14,6 +14,10 @@ const contributors=[{
     name:"knomadaero",handle:"knomadaero",profile:"https://pinokio.co/u/knomadaero",
     contribution:msg("common.contributor_knomadaero_moge_report"),
     changes:[[msg("common.original_bug_report"),"https://pinokio.co/posts/01m758vg5evsbnrfs6sncad4yj"]]
+},{
+    name:"Obbz",handle:"obbz",profile:"https://pinokio.co/u/obbz",
+    contribution:msg("common.contributor_obbz_install_report"),
+    changes:[[msg("common.original_bug_report"),"https://pinokio.co/posts/01m7ap9neb694thy3gyr1608kk"]]
 }];
 
 export async function render(shell) {

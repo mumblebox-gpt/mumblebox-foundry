@@ -17,6 +17,12 @@ Use this checklist for the release commit and publication. Keep verification pro
 - Update the GitHub repository description for every release. Verify the public About text reflects the current workflows, integrations and supported languages.
 - Verify the public GitHub release, then refresh Recent commits on the public Pinokio listing and verify the release commit appears. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
 
+# Preview 0.1.0-preview.29 validation
+
+On Windows with the pinned ComfyUI and KJNodes revisions, the old probe reproduced the reported missing `PromptServer.instance` warning and exited zero after importing the two required H3 controls. Pinokio's shell had matched the warning's error text and terminated the installer before it wrote its completion record.
+
+The corrected probe and a fresh software installation succeeded in a separate Windows test directory. Repair restored the deliberately removed installation record and preserved a pre-existing input file. Starting the repaired installation reported Preview 29, served the Foundry wizard, and registered both required H3 memory controls. The original Pinokio installation was separate from this test. Installer and maintenance tests (30), launcher checks (3), and release inventory tests (7) passed.
+
 # Preview 0.1.0-preview.28 validation
 
 In the existing Comfy Desktop Foundry, the agate tiger's four-view sheet fed the same FL2VA model and three intermediate guides at their existing relative positions. The revised prompt still produced uneven motion in the 10-second Turbo test. The three-second, 28-step test completed one turn. COLMAP registered all 72 reconstruction frames. The camera estimates show a slight slowdown near the side view, with forward motion throughout. The short preset became the Orbit to Mesh default.

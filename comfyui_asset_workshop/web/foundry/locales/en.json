@@ -218,6 +218,7 @@
   "models_and_workflow_tools": "Models and workflow tools",
   "installed_workflow": "Installed workflow: {version}",
   "official_project": "Official project",
+  "contributor_obbz_install_report": "Thanks for taking the time to share the terminal log. Your report showed where Windows setup stopped and helped us fix the installer.",
   "contributor_knomadaero_moge_report": "Thank you for sharing the full ComfyUI error log. Your report helped us fix the Single Image or Text wizard so it prepares the right model on first use.",
   "original_bug_report": "Original bug report",
   "thank_you": "Thank You",
