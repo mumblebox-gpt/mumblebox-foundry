@@ -14,11 +14,14 @@ Use this checklist for the release commit and publication. Keep verification pro
 ## Publish and verify
 
 - Build the release archive from the verified commit. Confirm the tag, release notes, archive integrity and checksum, and intended GitHub release assets.
-- Verify the public GitHub release and Pinokio listing for that release. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
+- Update the GitHub repository description for every release. Verify the public About text reflects the current workflows, integrations and supported languages.
+- Verify the public GitHub release, then refresh Recent commits on the public Pinokio listing and verify the release commit appears. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
 
 # Preview 0.1.0-preview.27 validation
 
 In the existing Comfy Desktop Foundry, all 11 workflow cards and both orbit wizard footers were checked in English, Simplified Chinese, Latin American Spanish, French and Brazilian Portuguese at default and 200% text size. The graph-view controls are absent. Orbit to Mesh remains second, its wizard opens from the card, and Virtual Turntable still shows the saved ZIP link. The original Foundry view was restored.
+
+GitHub published Preview 27 at `a8ac903`. Pinokio initially showed Preview 24 and returned GitHub's older repository `updated_at` timestamp when refreshed. Updating the GitHub About description to list all five languages advanced `updated_at` while `pushed_at` stayed the same. The next Pinokio refresh displayed `a8ac903` at the top of Recent commits.
 
 # Preview 0.1.0-preview.26 validation
 
