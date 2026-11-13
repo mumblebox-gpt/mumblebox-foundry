@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-preview.27 — Workflow navigation
+
+- Remove graph-view buttons from Foundry’s workflow cards and wizard footers. Open and Resume remain the workflow actions.
+
 ## 0.1.0-preview.26 — Clearer orbit wizards
 
 - Move **Orbit to Mesh** into the top row beside **Single Image or Text**. Align workflow cards, setup controls and engine choices.

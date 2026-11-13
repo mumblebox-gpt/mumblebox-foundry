@@ -56,4 +56,3 @@ export function syncSingleOutputs(outputs,owner){
         const data=structuredClone(value);app.nodeOutputs[String(n.id)]=data;n.onExecuted?.(data);
     }app.graph.setDirtyCanvas(true,true);
 }
-export function showSingleWorkflow(){const n=app.graph._nodes.find(n=>n.properties?.singleOwner);if(n)app.canvas.animateToBounds([n.pos[0]-50,n.pos[1]-70,1900,1100],{duration:180,zoom:.8});}

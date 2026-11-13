@@ -16,6 +16,10 @@ Use this checklist for the release commit and publication. Keep verification pro
 - Build the release archive from the verified commit. Confirm the tag, release notes, archive integrity and checksum, and intended GitHub release assets.
 - Verify the public GitHub release and Pinokio listing for that release. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
 
+# Preview 0.1.0-preview.27 validation
+
+In the existing Comfy Desktop Foundry, all 11 workflow cards and both orbit wizard footers were checked in English, Simplified Chinese, Latin American Spanish, French and Brazilian Portuguese at default and 200% text size. The graph-view controls are absent. Orbit to Mesh remains second, its wizard opens from the card, and Virtual Turntable still shows the saved ZIP link. The original Foundry view was restored.
+
 # Preview 0.1.0-preview.26 validation
 
 Both orbit wizards were walked through all five pages in the existing Comfy Desktop Foundry in English, Simplified Chinese, Latin American Spanish, French and Brazilian Portuguese at default and 200% text size. Checks covered translated presets and help, named export choices, layout fit, the top-row Orbit to Mesh card, Connect Your Agent, the Preview release label, History’s video deletion confirmation and Settings’ model names. Keyboard Tab reached the next control with a visible focus ring. The original graph and History view were restored.

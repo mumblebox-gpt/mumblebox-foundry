@@ -11,7 +11,7 @@ import {uploadReference,capturePhoto,inputURL} from '../images/references.js';
 import {exportChoices,validateExports} from '../wizard/export-choices.js';
 import {mountMesh} from '../wizard/preview.js';
 import {orbitMedia} from './media.js';
-import {showTurntableGraph,syncTurntableGraph,syncTurntableOutputs} from './graph.js';
+import {syncTurntableGraph,syncTurntableOutputs} from './graph.js';
 
 const KEY='virtual-turntable';
 const TITLES=['Choose an engine','Set up your reference','Review the orbit','Review the mesh','Finish and export'];
@@ -543,7 +543,6 @@ export class VirtualTurntableWizard{
                     this.page>1?button(translated('Back'),()=>this.go(this.page-1),{disabled:this.busy}):null,
                     next,rocket,
                     active?button(translated('Stop current run'),()=>this.act(async()=>{this.run=await request(this.path('/cancel'),{});})):null,
-                    button(translated('View graph'),()=>this.act(async()=>{await this.bindGraph();showTurntableGraph(this.node,this.layout);}),{disabled:this.busy}),
                     button(translated('Choose a Workflow'),()=>this.shell.open('Choose a Workflow'))))));
     }
     dispose(){

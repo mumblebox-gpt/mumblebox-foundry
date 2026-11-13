@@ -11,7 +11,6 @@ import {resourceMeter} from "./telemetry.js";
 import {request,pollResources} from "./services.js";
 import {dialog} from "./dialogs.js";
 import {home} from "./views/home.js";
-import {showWorkflow} from "./graph-adapter.js";
 import {api} from "/scripts/api.js";
 import {app} from "/scripts/app.js";
 import {launchMessage} from "./app-mode.js";

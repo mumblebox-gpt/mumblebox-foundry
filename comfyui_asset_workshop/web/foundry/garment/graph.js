@@ -1,7 +1,6 @@
 import {sourceText} from "../i18n.js";
 import {msg} from "../i18n.js";
 import {app} from '/scripts/app.js';
-import {appMode, presentation} from '../app-mode.js';
 
 const types = ['FoundryGarmentParticles', 'FoundryGarmentSewMesh', 'FoundryGarmentDrape', 'FoundryGarmentFit'];
 const titles = [msg("garment.generate_or_edit_a_pattern"), msg("garment.sew_and_uv_map_panels"), msg("garment.drape_on_character"), msg("garment.skin_approved_drape")];
@@ -63,11 +62,3 @@ function applySettings(nodes, config, budget) {
         }
     }
 }
-
-export function showGarmentGraph(owner) {
-    const saved = owner.properties.foundryGarment || {};
-    const node = syncGarmentGraph(owner, saved.draft, saved.budget);
-    if (appMode) presentation.graph();
-    app.canvas.animateToBounds([node.pos[0] - 35, node.pos[1] - 65, 1745, 510], {duration: 180, zoom: .7});
-}
-

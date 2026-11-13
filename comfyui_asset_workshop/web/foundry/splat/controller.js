@@ -9,7 +9,7 @@ import {dialog} from '../dialogs.js';
 import {activity,elapsedTime} from '../activity.js';
 import {uploadReference,capturePhoto,galleryReference,inputURL} from '../images/references.js';
 import {mountMesh} from '../wizard/preview.js';
-import {syncSplatGraph,syncSplatOutputs,showSplatWorkflow} from './graph.js';
+import {syncSplatGraph,syncSplatOutputs} from './graph.js';
 import {page,titles,blurbs} from './pages.js';
 const clone=v=>JSON.parse(JSON.stringify(v));
 export const fileURL=(id,path,download=false)=>'/mumblebox-foundry/v1/splat/runs/'+id+'/file?'+new URLSearchParams({path,...download?{download:'1'}:{}});

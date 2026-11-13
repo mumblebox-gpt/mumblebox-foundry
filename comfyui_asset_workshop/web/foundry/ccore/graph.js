@@ -1,7 +1,6 @@
 import {sourceText} from "../i18n.js";
 import {msg} from "../i18n.js";
 import {app} from '/scripts/app.js';
-import {appMode, presentation} from '../app-mode.js';
 
 export const ccoreDraftKey = image => image ? 'foundryCcoreImage' : 'foundryCcore';
 export const ccoreTitle = image => image ? 'Create a Prop from Image + Text' : 'Create a Prop from Text';
@@ -44,10 +43,4 @@ export function syncPropGraph(owner, options = {}, image = false) {
     } finally {
         graph.afterChange();
     }
-}
-
-export function showPropGraph(owner, image = false) {
-    const node = syncPropGraph(owner, owner.properties[ccoreDraftKey(image)]?.draft, image);
-    if (appMode) presentation.graph();
-    app.canvas.animateToBounds([node.pos[0] - 35, node.pos[1] - 65, 500, 410], {duration: 180, zoom: .8});
 }

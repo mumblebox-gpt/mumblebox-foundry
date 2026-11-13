@@ -7,7 +7,7 @@ const manifestUrl = new URL("./locales/manifest.json", import.meta.url);
 await Promise.all(manifest.languages.flatMap(language =>
     Object.entries(manifest.domains).map(async ([domain, directory]) => {
         const url = new URL(directory + "/" + language.id + ".json", manifestUrl);
-        url.searchParams.set("catalog", "2");
+        url.searchParams.set("catalog", "3");
         const {default: messages} = await import(url.href, {with: {type: "json"}});
         for (const [key, value] of Object.entries(messages)) catalogs[language.id][domain + "." + key] = value;
     })

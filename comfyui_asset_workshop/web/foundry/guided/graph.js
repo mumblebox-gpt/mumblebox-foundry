@@ -72,8 +72,3 @@ export function setGuidedQuadAvailability(owner,enabled){
     }
     owner.graph.change?.();owner.graph.setDirtyCanvas(true,true);
 }
-
-export function showGuidedWorkflow(){
-    const n=app.graph._nodes.find(n=>n.properties?.guidedOffset===100000);
-    if(n)app.canvas.animateToBounds([n.pos[0]-50,n.pos[1]-70,1900,1100],{duration:180,zoom:.8});
-}

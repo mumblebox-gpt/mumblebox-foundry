@@ -1,11 +1,6 @@
 import {msg, sourceMessage, appendContent} from "../i18n.js";
-import {syncSingleGraph,showSingleWorkflow} from '../single/graph.js';
 import {el,button,hint} from "../dom.js";
-import {showWorkflow,showHairWorkflow,savedWizardState,savedSingleWizardState} from "../graph-adapter.js";
-import {showGuidedWorkflow} from '../guided/graph.js';
-import {showSplatWorkflow} from '../splat/graph.js';
-import {syncSplatGraph} from '../splat/graph.js';
-import {request} from '../services.js';
+import {savedWizardState,savedSingleWizardState} from "../graph-adapter.js";
 
 const planned=[
 ["repair",msg("common.refine_and_repair_an_existing_mesh"),msg("common.supply_an_existing_mesh_and_a_matching_image_for_refinement_and_new_output_v")],
@@ -27,23 +22,21 @@ export function home(shell) {
             el('h3',{},msg("common.single_image_or_text")),hint(msg("common.start_with_one_image_or_create_one_from_text_pixal3d_builds_the_mesh_hi3d_re")),
             hint(msg("common.best_for_a_direct_start_fewer_stages_and_models_try_a_three_quarter_view")),
             el('div',{class:'actions'},button(msg("common.open_single_image_wizard"),()=>shell.openMeshMethod('single'),{class:'primary'}),
-                button(msg("common.view_workflow"),async()=>{syncSingleGraph(await request('wizard/single-template'),shell.node);showSingleWorkflow();}),
                 (savedSingleWizardState(shell.node)?.runId||savedSingleWizardState(shell.node)?.draft?.references?.length)?button(msg("common.resume_single_image"),()=>shell.openWizard({method:'single-image',resume:true})):null))),
         el('article',{class:'mesh-method','data-method':'turnaround'},el('div',{},el('span',{class:'badge'},msg("common.turnaround")),
             el('h3',{},msg("common.turnaround")),hint(msg("common.generate_consistent_views_with_qwen_or_flux_build_with_pixal3d_then_refine_w")),
             hint(msg("common.best_for_humanoids_review_four_views_before_building_vehicle_prop_and_creatu")),
             el('div',{class:'actions'},button(msg("common.open_turnaround_wizard"),()=>shell.openMeshMethod('turnaround'),{class:'primary'}),
-                button(msg("common.view_turnaround_workflow"),()=>showWorkflow(shell.node)),saved?button(msg("common.resume_turnaround"),()=>shell.openWizard({resume:true})):null))),
+                saved?button(msg("common.resume_turnaround"),()=>shell.openWizard({resume:true})):null))),
         el('article',{class:'mesh-method','data-method':'3d-guided'},el('div',{},el('span',{class:'badge'},msg("common.3d_guided_objects")),
             el('h3',{},msg("common.3d_guided")),hint(msg("common.use_a_pixal3d_proxy_and_measured_camera_views_with_moge_2_and_qwen_depth_gui")),
             hint(msg("common.best_for_controlled_object_views_choose_the_angles_before_reconstruction_mor")),
             el('div',{class:'actions'},button(msg("common.open_3d_guided_wizard"),()=>shell.openMeshMethod('guided'),{class:'primary'}),
-                button(msg("common.view_3d_guided_workflow"),()=>showGuidedWorkflow()),shell.node.properties.foundryGuided?.id?button(msg("common.resume_3d_guided"),()=>shell.openGuidedWizard({resume:true})):null))));
+                shell.node.properties.foundryGuided?.id?button(msg("common.resume_3d_guided"),()=>shell.openGuidedWizard({resume:true})):null))));
     appendContent(methods, el('article',{class:'mesh-method','data-method':'splat'},el('div',{},el('span',{class:'badge'},msg("common.idol_splat_solid")),
         el('h3',{},msg("common.splat_solid")),hint(msg("common.create_an_idol_gaussian_splat_by_sperid_labs_with_separate_cleaned_companion")),
         hint(msg("common.best_for_detailed_appearance_plus_lightweight_geometry_orbit_previews_mesh_c")),
         el('div',{class:'actions'},button(msg("common.open_splat_solid_wizard"),()=>shell.openMeshMethod('splat'),{class:'primary'}),
-            button(msg("common.view_splat_solid_workflow"),async()=>{syncSplatGraph(await request('splat/template'),shell.node);showSplatWorkflow();}),
             shell.node.properties.foundrySplat?.runId?button(msg("common.resume_splat_solid"),()=>shell.openSplatWizard({resume:true})):null))));
     for(const [method,id,alt] of [['single','single',msg("common.one_reference_becoming_a_refined_robot_mesh")],['turnaround','turnaround',msg("common.consistent_character_views_beside_a_finished_mesh")],['3d-guided','guided',msg("common.measured_cameras_around_a_cargo_rover")],['splat','splat',msg("common.detailed_splat_and_simple_companion_geometry")]]){
         const card=methods.querySelector('[data-method="'+method+'"]');card.prepend(artwork('method-'+id,alt));
@@ -57,11 +50,6 @@ export function home(shell) {
             hint(vt('Choose Meshroom / AliceVision or COLMAP + OpenMVS. Review the result and optionally refine with Hi3D.')),
             el('div',{class:'actions'},
                 button(vt('Open Virtual Turntable wizard'),()=>shell.openMeshMethod('virtual-turntable'),{class:'primary'}),
-                button(msg('common.view_workflow'),async()=>{
-                    const {syncTurntableGraph,showTurntableGraph}=await import('../virtual-turntable/graph.js');
-                    syncTurntableGraph(await request('virtual-turntable/template'),shell.node);
-                    showTurntableGraph(shell.node);
-                }),
                 shell.node.properties.foundryVirtualTurntable?.draft?.engine
                     ?button(vt('Resume Virtual Turntable'),()=>shell.openVirtualTurntable({resume:true})):null),
             el('div',{class:'formats'},...['GLB','FBX',msg('common.quads_badge'),'STL','ZIP'].map(format=>el('span',{class:'badge'},format))))));
@@ -71,11 +59,6 @@ export function home(shell) {
             hint(msg('orbit.card_description')),hint(msg('orbit.card_credits')),
             el('div',{class:'actions'},
                 button(msg('orbit.open'),()=>shell.openMeshMethod('orbit-to-mesh'),{class:'primary'}),
-                button(msg('common.view_workflow'),async()=>{
-                    const {syncTurntableGraph,showTurntableGraph}=await import('../virtual-turntable/graph.js');
-                    syncTurntableGraph(await request('orbit-to-mesh/template'),shell.node,'orbit');
-                    showTurntableGraph(shell.node,'orbit');
-                }),
                 shell.node.properties.foundryOrbitToMesh?.draft
                     ?button(msg('orbit.resume'),()=>shell.openOrbitToMesh({resume:true})):null),
             el('div',{class:'formats'},...['GLB','FBX',msg('common.quads_badge'),'STL','ZIP'].map(format=>el('span',{class:'badge'},format))))));
@@ -99,7 +82,6 @@ export function home(shell) {
     const hairCard=el('article',{class:'planned-workflow'},artwork("hair",msg("common.hair_cards_and_bones")),el('div',{},
         el('div',{class:'workflow-card-heading'},el('span',{class:'badge'},msg("common.hairdeck")),
             el('div',{class:'workflow-card-controls'},button(msg("common.open_hair_wizard"),()=>shell.openHairWizard(),{class:'primary'}),
-                button(msg("common.view_graph"),()=>showHairWorkflow(),{title:msg("common.view_hair_workflow")}),
                 shell.node.properties.foundryHair?.runId?button(msg("common.resume"),()=>shell.openHairWizard({resume:true}),{title:msg("common.resume_hair_asset")}):null)),
         el('h3',{},msg("common.create_rigged_hair_with_hairdeck")),
         hint(msg("common.powered_by_hairdeck_from_hyz317_and_its_researchers_with_fenglairh_s_comfyui"))));
@@ -110,10 +92,6 @@ export function home(shell) {
             el('div',{class:'workflow-card-heading'},el('span',{class:'badge'},image?msg("common.ccore_image_text"):msg("common.ccore_text_to_prop")),
                 el('div',{class:'workflow-card-controls'},
                     button(image?msg("common.open_image_text_wizard"):msg("common.open_prop_wizard"),()=>shell.openCcoreWizard({image}),{class:'primary'}),
-                    button(msg("common.view_graph"),async()=>{
-                        const {showPropGraph}=await import('../ccore/graph.js');
-                        showPropGraph(shell.node,image);
-                    },{title:msg("common.view_ccore_workflow")}),
                     shell.node.properties[image?'foundryCcoreImage':'foundryCcore']?.id?button(msg("common.resume"),()=>shell.openCcoreWizard({image,resume:true}),{title:image?msg("common.resume_image_text_prop"):msg("common.resume_ccore_prop")}):null)),
             el('h3',{},image?msg("common.create_a_prop_from_image_text"):msg("common.create_a_prop_from_text")),
             hint(image?msg("common.give_ccore_glb_3d_coder_one_reference_and_describe_what_to_keep_or_change_re"):msg("common.describe_a_stylized_game_prop_such_as_a_crate_lantern_or_control_panel_power"))));
@@ -123,10 +101,6 @@ export function home(shell) {
         el('div', {}, el('div', {class:'workflow-card-heading'}, el('span', {class:'badge'}, msg("common.garment_particles_experimental")),
             el('div', {class:'workflow-card-controls'},
                 button(msg("common.open_garment_wizard"), () => shell.openGarmentWizard(), {class:'primary'}),
-                button(msg("common.view_graph"), async () => {
-                    const {showGarmentGraph} = await import('../garment/graph.js');
-                    showGarmentGraph(shell.node);
-                }, {title:msg("common.view_garment_particles_workflow")}),
                 shell.node.properties.foundryGarment?.id
                     ? button(msg("common.resume"), () => shell.openGarmentWizard({resume:true}), {title:msg("common.resume_garment")}) : null)),
         el('h3', {}, msg("common.create_clothing_with_garment_particles")),

@@ -24,20 +24,6 @@ function frame(bounds) {
     app.canvas.setDirty(true,true);
 }
 export function showInterface(node) { if(appMode&&presentation.show(node)){launchMessage("ready");return;} frame([node.pos[0],node.pos[1]-30,node.size[0],node.size[1]+40]); }
-export function showWorkflow(node) {
-    if(appMode)presentation.graph();
-    const input = referenceNode();
-    if (input) frame([input.pos[0]-60,input.pos[1]-80,1900,1150]);
-    else {
-        const other = app.graph._nodes.find(n => n.id !== node.id);
-        if (other) frame([other.pos[0],other.pos[1],1600,1100]);
-    }
-}
-export function showHairWorkflow() {
-    if(appMode)presentation.graph();
-    const node=app.graph.getNodeById(70000);
-    if(node)frame([node.pos[0]-60,node.pos[1]-90,2500,1200]);
-}
 export function installReturnControl(node) {
     returnControl?.remove();
     const control = document.createElement("button");

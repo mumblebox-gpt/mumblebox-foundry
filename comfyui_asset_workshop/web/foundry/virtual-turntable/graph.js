@@ -1,5 +1,4 @@
 import {app} from '/scripts/app.js';
-import {appMode,presentation} from '../app-mode.js';
 
 const layouts={
     turntable:{offset:780000,title:'Virtual Turntable',property:'virtualTurntable',origin:[24000,3000]},
@@ -85,10 +84,4 @@ export function syncTurntableOutputs(outputs,owner,key='turntable') {
         if(JSON.stringify(app.nodeOutputs[id])===JSON.stringify(value))continue;
         const copied=structuredClone(value);app.nodeOutputs[id]=copied;node.onExecuted?.(copied);
     }
-}
-
-export function showTurntableGraph(owner,key='turntable') {
-    if(appMode)presentation.graph();
-    const group=owner.graph._groups.find(item=>item.title===layouts[key].title+' / Reference and four views');
-    if(group)app.canvas.animateToBounds([...group.pos,1980,1100],{duration:180,zoom:.8});
 }

@@ -1,7 +1,6 @@
 import {sourceText} from "../i18n.js";
 import {msg} from "../i18n.js";
 import {app} from '/scripts/app.js';
-import {appMode,presentation} from '../app-mode.js';
 
 export function syncSplatGraph(recipe,owner){
     if(owner.graph!==app.graph)throw Error(msg("splat.open_the_foundry_graph_before_continuing"));
@@ -62,9 +61,4 @@ export function syncSplatOutputs(outputs,owner){
         if(JSON.stringify(app.nodeOutputs[id])===JSON.stringify(value))continue;
         const copy=JSON.parse(JSON.stringify(value));app.nodeOutputs[id]=copy;n.onExecuted?.(copy);
     }
-}
-export function showSplatWorkflow(){
-    if(appMode)presentation.graph();
-    const n=app.graph._nodes.find(n=>n.properties?.splatOwner);
-    if(n)app.canvas.animateToBounds([n.pos[0]-50,n.pos[1]-70,1950,1150],{duration:180,zoom:.8});
 }
