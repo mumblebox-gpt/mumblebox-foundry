@@ -43,4 +43,4 @@ The orbit workflows use [Pruna P-H3 Image](https://huggingface.co/PrunaAI/P-H3-I
 
 ## Orbit with Splats
 
-[Brush 0.3.0](https://github.com/ArthurBrussee/brush/releases/tag/v0.3.0) by Arthur Brussee and contributors trains the Gaussian splat. Brush is released under Apache-2.0 and is installed separately. Foundry verifies the selected Windows executable before use. Hybrid MP4 export uses the FFmpeg executable supplied by [imageio-ffmpeg](https://github.com/imageio/imageio-ffmpeg). The aligned ZIP credits the reconstruction and training tools and links to their applicable terms.
+[Brush 0.3.0](https://github.com/ArthurBrussee/brush/releases/tag/v0.3.0) by Arthur Brussee and contributors trains the Gaussian splat. Brush is released under Apache-2.0 and is downloaded from its upstream release on first use. Foundry verifies the pinned archive and executable and retains the Brush license. Hybrid MP4 export uses the FFmpeg executable supplied by [imageio-ffmpeg](https://github.com/imageio/imageio-ffmpeg). The aligned ZIP credits the reconstruction and training tools and links to their applicable terms.

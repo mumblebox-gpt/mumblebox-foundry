@@ -1,4 +1,8 @@
 {
+  "brush_auto_setup": "पहली बार स्प्लैट ट्रेन करने पर Foundry खुद Brush डाउनलोड करके उसकी जाँच करता है।",
+  "brush_preparing": "Brush तैयार हो रहा है",
+  "brush_unavailable": "Foundry Brush तैयार नहीं कर सका। इंटरनेट कनेक्शन और डिस्क की खाली जगह जाँचें, फिर कोशिश करें।",
+  "brush_invalid_override": "चुना गया Brush नहीं मिला या वह जाँचे गए बिल्ड से मेल नहीं खाता। MUMBLEBOX_BRUSH की जाँच करें या ऑटोमैटिक सेटअप के लिए उसे हटा दें।",
   "title": "ऑर्बिट के साथ स्प्लैट",
   "card": "एक इमेज से AI की मदद से चारों ओर घूमता वीडियो बनाएँ। उसी वीडियो से टेक्सचर वाला मेश और Gaussian splat बनाएँ।",
   "credits": "मेश को Pixal3D और TRELLIS.2 से पूरा करें। Gaussian splat को ट्रेन करने के लिए Arthur Brussee का Brush इस्तेमाल होता है।",

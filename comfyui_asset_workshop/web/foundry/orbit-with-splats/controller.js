@@ -18,7 +18,9 @@ export class OrbitWithSplatsWizard extends OrbitToMeshWizard {
     artifact(role){return '/mumblebox-foundry/v1/'+this.path('/artifacts/'+role);}
     setup(){
         const root=super.setup();
-        if(this.missing.includes('brush_app.exe'))
+        if(this.cap.brush?.automatic && !this.cap.brush.present)
+            root.prepend(hint(label('brush_auto_setup')));
+        else if(this.missing.includes('brush_app.exe'))
             root.prepend(el('section',{class:'turntable-recovery',role:'alert'},hint(label('brush_setup')),
                 hint(label('setup_target',{folder:this.cap.brush_folder})),link(label('brush_download'),this.cap.brush_release)));
         return root;

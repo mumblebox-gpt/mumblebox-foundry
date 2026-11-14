@@ -1,4 +1,8 @@
 {
+  "brush_auto_setup": "Foundry télécharge et vérifie Brush lors de votre premier entraînement de splat.",
+  "brush_preparing": "Préparation de Brush",
+  "brush_unavailable": "Foundry n’a pas pu préparer Brush. Vérifiez votre connexion Internet et l’espace disponible, puis réessayez.",
+  "brush_invalid_override": "Le fichier Brush indiqué est introuvable ou ne correspond pas à la version vérifiée. Vérifiez MUMBLEBOX_BRUSH ou supprimez ce réglage pour activer l’installation automatique.",
   "title": "Orbite et splats gaussiens",
   "card": "Créez un maillage texturé et des splats gaussiens à partir d’une même orbite générée par IA depuis une image.",
   "credits": "Pixal3D et TRELLIS.2 produisent le maillage. Brush, d’Arthur Brussee, entraîne les splats gaussiens.",

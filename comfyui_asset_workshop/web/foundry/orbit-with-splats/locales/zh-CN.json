@@ -1,4 +1,8 @@
 {
+  "brush_auto_setup": "首次训练泼溅时，Foundry 会自动下载并验证 Brush。",
+  "brush_preparing": "正在准备 Brush",
+  "brush_unavailable": "Foundry 无法准备 Brush。请检查网络连接和可用磁盘空间，然后重试。",
+  "brush_invalid_override": "指定的 Brush 不存在，或与已验证的版本不符。请检查 MUMBLEBOX_BRUSH，或清除该设置以使用自动安装。",
   "title": "环绕重建：网格与高斯泼溅",
   "card": "用一张图片生成环绕视频，再从同一段视频重建带纹理的网格和高斯泼溅。",
   "credits": "Pixal3D 和 TRELLIS.2 完成网格处理。高斯泼溅由 Arthur Brussee 的 Brush 训练。",

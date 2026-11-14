@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-preview.31 — Automatic Brush setup
+
+- Orbit with Splats downloads and verifies Brush on first use in the wizard, Rocket Mode, and MCP. A failed download can be retried from the saved run.
+- Update the GitHub and Pinokio descriptions with supported languages and how Foundry works with Codex and Claude Code.
+
 ## 0.1.0-preview.30 — Foundry in nine languages and Orbit with Splats
 
 - Add German, Japanese, Korean and Hindi across the interface, CCORE examples, package documentation and project READMEs. English, Simplified Chinese, Latin American Spanish, French and Brazilian Portuguese remain available.

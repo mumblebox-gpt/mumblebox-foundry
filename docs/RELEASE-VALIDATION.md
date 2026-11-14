@@ -17,6 +17,13 @@ Use this checklist for the release commit and publication. Keep verification pro
 - Update the GitHub repository description for every release. Verify the public About text reflects the current workflows, integrations and supported languages.
 - Verify the public GitHub release, then refresh Recent commits on the public Pinokio listing and verify the release commit appears. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
 
+# Preview 0.1.0-preview.31 validation
+
+On Windows x64, Foundry downloaded Brush 0.3.0 anonymously from its official GitHub release into an empty tools directory, checked both SHA-256 digests and retained the upstream license. A repeat call reused the verified file. Automated checks cover a corrupt managed copy, a corrupt download and cancellation.
+
+The live Comfy Desktop wizard accepted Finish with Brush absent, reused the saved Fluorite Buddha mesh and camera checkpoints, trained the 80,000-Gaussian Quick preset, and displayed both previews and the paired GLB/PLY ZIP. A separate run started through the real stdio MCP Rocket Mode with Brush absent. It downloaded Brush, reused the saved upstream checkpoints, and produced another 80,000-Gaussian pair. The MCP reported preparation and retrieved the verified paired archive. The original wizard and playable hybrid preview were restored. The installer fixture suite passed. The pinned startup probe initialized the ComfyUI server before importing KJNodes and registered both H3 memory controls, retaining the fix for Obbz's report.
+
+
 # Preview 0.1.0-preview.30 validation
 
 The existing Comfy Desktop Foundry loaded 13 English catalog files at startup. Using its language picker loaded only the 13 files for each selected language. Returning to English made no translation requests. Selecting French again requested French again. All nine languages switched at 200% text with the open Orbit with Splats fields and playable hybrid preview intact. The Settings picker stayed in sync with the header. Gallery labels and thumbnail descriptions were checked in all nine languages. The original 620-node graph, saved hybrid run, English selection and default text size were restored.

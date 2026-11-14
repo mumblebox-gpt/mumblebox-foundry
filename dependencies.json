@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0-preview.30",
+  "version": "0.1.0-preview.31",
   "platform": "Windows NVIDIA",
   "reference_hardware": {
     "gpu": "RTX 4080 SUPER",

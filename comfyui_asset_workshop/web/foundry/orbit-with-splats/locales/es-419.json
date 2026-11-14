@@ -1,4 +1,8 @@
 {
+  "brush_auto_setup": "Foundry descarga y verifica Brush la primera vez que entrenas un splat.",
+  "brush_preparing": "Preparando Brush",
+  "brush_unavailable": "Foundry no pudo preparar Brush. Revisa tu conexión a internet y el espacio libre en disco, y vuelve a intentarlo.",
+  "brush_invalid_override": "No se encontró el Brush configurado o no coincide con la versión verificada. Revisa MUMBLEBOX_BRUSH o quítalo para usar la instalación automática.",
   "title": "Órbita con gaussianas",
   "card": "Convierte una imagen en una malla con textura y una nube de gaussianas a partir de la misma órbita generada con IA.",
   "credits": "Pixal3D y TRELLIS.2 preparan la malla. Brush, de Arthur Brussee, entrena las gaussianas.",

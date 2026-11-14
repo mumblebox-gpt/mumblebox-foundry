@@ -1,4 +1,8 @@
 {
+  "brush_auto_setup": "O Foundry baixa e verifica o Brush na primeira vez que você treina um splat.",
+  "brush_preparing": "Preparando o Brush",
+  "brush_unavailable": "O Foundry não conseguiu preparar o Brush. Confira a conexão com a internet e o espaço livre em disco e tente de novo.",
+  "brush_invalid_override": "O Brush configurado não foi encontrado ou não corresponde à versão verificada. Confira MUMBLEBOX_BRUSH ou remova essa configuração para usar a instalação automática.",
   "title": "Órbita com splats gaussianos",
   "card": "Crie uma malha texturizada e splats gaussianos a partir da mesma órbita gerada por IA com uma imagem.",
   "credits": "Pixal3D e TRELLIS.2 finalizam a malha. O Brush, de Arthur Brussee, treina os splats gaussianos.",

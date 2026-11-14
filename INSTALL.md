@@ -128,11 +128,11 @@ use the ComfyUI and KJNodes revisions in `dependencies.json` and install the
 declared KJNodes packages into the ComfyUI host environment.
 
 Orbit to Mesh and Orbit with Splats use COLMAP for camera alignment. Orbit with
-Splats also needs the Windows executable from [Brush 0.3.0](https://github.com/ArthurBrussee/brush/releases/tag/v0.3.0).
-Foundry shows the exact folder to use. Place the executable there as
-`brush_app.exe`. An administrator can instead set `MUMBLEBOX_BRUSH` to the full
-path to that executable before launching ComfyUI. The workflow verifies the
-executable's checksum before training. For the hybrid MP4 export, install the
+Splats downloads the pinned [Brush 0.3.0 Windows archive](https://github.com/ArthurBrussee/brush/releases/tag/v0.3.0)
+automatically when you first train a splat. Foundry verifies the archive and its executable
+before installing it in the Foundry tools folder. If the download stops, retry the workflow
+from its saved stages. An administrator can set `MUMBLEBOX_BRUSH` to an existing verified
+build before launching ComfyUI. For the hybrid MP4 export, install the
 host requirements, including `imageio-ffmpeg`, in your ComfyUI Python environment.
 Pinokio installs the host requirements automatically.
 

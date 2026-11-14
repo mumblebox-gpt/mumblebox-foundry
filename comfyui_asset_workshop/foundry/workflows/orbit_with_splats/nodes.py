@@ -5,11 +5,12 @@ from pathlib import Path
 import uuid
 
 from ....finishing.grounding import ground_glb, validate_frame
-from ...artifacts import digest, owned_path
+from ...artifacts import owned_path
 from ..orbit_to_mesh import nodes as camera_ops
 from ..virtual_turntable.processes import release_models, run_process
 from .dataset import prepare_dataset
-from .definition import BRUSH_RELEASE, BRUSH_SHA256, BRUSH_VERSION, PRESETS, brush_path
+from .brush import BRUSH_RELEASE, BRUSH_VERSION, prepare_brush
+from .definition import PRESETS
 
 class TrainPair:
     CATEGORY = "Foundry/Orbit with Splats"
@@ -35,11 +36,11 @@ class TrainPair:
         from comfy import model_management
         import folder_paths
 
-        exe = brush_path()
-        if not exe.is_file():
-            raise ValueError("Install Brush to train the Gaussian splat.")
-        if digest(exe) != BRUSH_SHA256:
-            raise ValueError("Install the verified Windows build of Brush 0.3.0.")
+        def cancelled():
+            model_management.throw_exception_if_processing_interrupted()
+            return False
+
+        exe = prepare_brush(cancelled)
         output = Path(folder_paths.get_output_directory()).resolve()
         camera_dir = owned_path(output, cameras["camera_text"])
         for key in ("images", "masks"):

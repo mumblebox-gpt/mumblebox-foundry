@@ -1,4 +1,8 @@
 {
+  "brush_auto_setup": "Foundry downloads and verifies Brush the first time you train a splat.",
+  "brush_preparing": "Preparing Brush",
+  "brush_unavailable": "Foundry could not prepare Brush. Check your internet connection and free disk space, then retry.",
+  "brush_invalid_override": "The Brush override is missing or does not match the verified build. Check MUMBLEBOX_BRUSH or remove it to use automatic setup.",
   "title": "Orbit with Splats",
   "card": "Turn one image into a textured mesh and Gaussian splat from the same AI-generated orbit.",
   "credits": "Pixal3D and TRELLIS.2 finish the mesh. Arthur Brussee’s Brush trains the Gaussian splat.",

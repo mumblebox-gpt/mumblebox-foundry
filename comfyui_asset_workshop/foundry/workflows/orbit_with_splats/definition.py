@@ -1,18 +1,14 @@
 """Settings shared by the native graph, wizard and agent."""
 from copy import deepcopy
-import os
-from pathlib import Path
 
 from ..orbit_to_mesh import definition as orbit
 from ..virtual_turntable.definition import defaults, field
+from .brush import BRUSH_RELEASE, BRUSH_VERSION, brush_path, can_install
 
 METHOD = "orbit-with-splats"
 TITLE = "Orbit with Splats"
 OFFSET = 810000
-BRUSH_VERSION = "0.3.0"
 LICENSE_MESSAGE = orbit.LICENSE_MESSAGE
-BRUSH_RELEASE = "https://github.com/ArthurBrussee/brush/releases/tag/v0.3.0"
-BRUSH_SHA256 = "37e46cbf808b9983dd15a5f9a25328dbe43e7e06d53c4f59fbeaeb10e3a5b34a"
 PRESETS = {
     "quick": dict(views=24, edge=512, steps=1500, max_splats=80000, sh_degree=1),
     "balanced": dict(views=48, edge=768, steps=6000, max_splats=200000, sh_degree=2),
@@ -32,13 +28,8 @@ CREDITS = {
     "Reference ComfyUI workflow — Enndee": "https://github.com/Enndee/Enndees_Nodepack",
 }
 
-def brush_path():
-    import folder_paths
-    env = os.environ.get("MUMBLEBOX_BRUSH")
-    return Path(env) if env else Path(folder_paths.get_user_directory()) / "mumblebox-foundry" / "tools" / f"brush-v{BRUSH_VERSION}" / "brush_app.exe"
-
 def missing_tools():
-    return orbit.missing_tools() + ([] if brush_path().is_file() else ["brush_app.exe"])
+    return orbit.missing_tools() + ([] if can_install() or brush_path().is_file() else ["brush_app.exe"])
 
 def validate(controls):
     if not isinstance(controls, dict):
@@ -58,7 +49,9 @@ def validate(controls):
 def capabilities():
     cap = orbit.capabilities()
     cap.update(id=METHOD, missing=missing_tools(), brush_release=BRUSH_RELEASE,
-               splat_presets=deepcopy(PRESETS), brush_folder=str(brush_path().parent), description="Create an aligned textured mesh and Gaussian splat from one orbit.",
+               splat_presets=deepcopy(PRESETS), brush_folder=str(brush_path().parent),
+               brush={"version": BRUSH_VERSION, "automatic": can_install(), "present": brush_path().is_file()},
+               description="Create an aligned textured mesh and Gaussian splat from one orbit.",
                license_links=CREDITS)
     cap["controls"]["splat"] = deepcopy(SCHEMA)
     cap["defaults"] = validate({})

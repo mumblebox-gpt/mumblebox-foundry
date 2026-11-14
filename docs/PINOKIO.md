@@ -20,7 +20,7 @@ The reference system is Windows with an NVIDIA RTX 4080 SUPER, 16 GB VRAM and 64
 
 ## Models and access
 
-Installation and startup do not download generation models. When a workflow is first run, Foundry prepares the missing model files needed for its selected stages before generation begins. Completed downloads are reused. Changing later choices checks any newly required dependencies before proceeding. This preparation downloads files to disk; models load into GPU/system memory only as their stages need them.
+Installation and startup do not download generation models. When a workflow is first run, Foundry prepares the missing model files needed for its selected stages before generation begins. Completed downloads are reused. Orbit with Splats also downloads and verifies the pinned Brush software the first time you train a splat. The wizard and the MCP use the same setup. Changing later choices checks any newly required dependencies before proceeding. This preparation downloads files to disk; models load into GPU/system memory only as their stages need them.
 
 The texture worker obtains DINOv3 from the public distribution used by its upstream TRELLIS node, with an immutable revision and verified SHA-256 checksums. That path does not require Meta's Hugging Face repository approval. DINOv3's model license still applies. Other selectable models may require accepted access terms or a Hugging Face token in **Settings**; access errors include a direct model link. Model licenses remain separate from Foundry's Apache-2.0 code license.
 

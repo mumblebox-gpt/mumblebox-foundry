@@ -1,4 +1,8 @@
 {
+  "brush_auto_setup": "Beim ersten Splat-Training lädt Foundry Brush herunter und prüft die Dateien.",
+  "brush_preparing": "Brush wird vorbereitet",
+  "brush_unavailable": "Foundry konnte Brush nicht vorbereiten. Prüfe die Internetverbindung und den freien Speicherplatz und versuch es erneut.",
+  "brush_invalid_override": "Die angegebene Brush-Datei fehlt oder entspricht nicht der geprüften Version. Prüfe MUMBLEBOX_BRUSH oder entferne die Einstellung für die automatische Installation.",
   "title": "Orbit mit Splats",
   "card": "Erstelle aus einem Bild ein KI-generiertes Rundumvideo. Daraus entstehen ein texturiertes Mesh und ein darauf ausgerichteter Gaussian Splat.",
   "credits": "Pixal3D und TRELLIS.2 fertigen das Mesh. Arthurs Brussee’s Brush trainiert den Gauß-Splat.",

@@ -5,6 +5,7 @@ from pathlib import Path
 
 from ..image_to_3d.runs import signature
 from ..orbit_to_mesh import runs as orbit
+from .brush import PREPARING, prepare_brush
 from .definition import METHOD, OFFSET, TITLE, missing_tools, validate
 from .graph import TRAIN, compile_stage
 from .package import build_pair
@@ -21,6 +22,18 @@ class OrbitSplatRuns(orbit.OrbitRuns):
 
     def required_tools(self, run):
         return missing_tools()
+
+    async def prepare_stage(self, run, stage):
+        if stage != "splat":
+            await super().prepare_stage(run, stage)
+            return
+
+        run["dependency"] = {"name": "Brush", "phase": "preparing"}
+        self.event(run, PREPARING)
+        try:
+            await asyncio.to_thread(prepare_brush, lambda: run["cancel"])
+        finally:
+            run.pop("dependency", None)
 
     def needs_stage(self, run, stage):
         return True
@@ -66,6 +79,8 @@ class OrbitSplatRuns(orbit.OrbitRuns):
 
     def public(self, run):
         result = super().public(run)
+        if run.get("dependency", {}).get("name") == "Brush":
+            result["stage_label"] = PREPARING
         pair = run["checkpoints"].get("pair")
         if pair and Path(pair).is_file():
             result["pair"] = json.loads(Path(pair).read_text(encoding="utf-8"))

@@ -7,7 +7,7 @@ const manifestUrl = new URL("./locales/manifest.json", import.meta.url);
 async function loadCatalog(language, read) {
     const domains = await Promise.all(Object.entries(manifest.domains).map(async ([domain, directory]) => {
         const url = new URL(directory + "/" + language + ".json", manifestUrl);
-        url.searchParams.set("catalog", "4");
+        url.searchParams.set("catalog", "5");
         const messages = await read(url);
         return Object.entries(messages).map(([key, value]) => [domain + "." + key, value]);
     }));

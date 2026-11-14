@@ -1,4 +1,8 @@
 {
+  "brush_auto_setup": "처음 스플랫을 학습할 때 Foundry가 Brush를 다운로드하고 검증해요.",
+  "brush_preparing": "Brush 준비 중",
+  "brush_unavailable": "Brush를 준비하지 못했어요. 인터넷 연결과 디스크 여유 공간을 확인한 뒤 다시 시도해 주세요.",
+  "brush_invalid_override": "지정한 Brush가 없거나 검증된 빌드와 일치하지 않아요. MUMBLEBOX_BRUSH를 확인하거나 설정을 지워 자동 설치를 사용해 주세요.",
   "title": "회전 영상과 스플랫",
   "card": "이미지 한 장에서 AI 회전 영상을 만들고, 같은 영상으로 텍스처가 적용된 메시와 가우시안 스플랫을 생성합니다.",
   "credits": "메시는 Pixal3D와 TRELLIS.2로 완성합니다. 가우시안 스플랫 학습에는 Arthur Brussee의 Brush를 사용합니다.",

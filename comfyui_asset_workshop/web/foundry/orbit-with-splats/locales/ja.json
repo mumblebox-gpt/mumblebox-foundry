@@ -1,4 +1,8 @@
 {
+  "brush_auto_setup": "初めてスプラットを学習するときに、Foundry が Brush をダウンロードして確認します。",
+  "brush_preparing": "Brush を準備中",
+  "brush_unavailable": "Brush を準備できませんでした。ネット接続とディスクの空き容量を確認して、もう一度お試しください。",
+  "brush_invalid_override": "指定した Brush が見つからないか、検証済みのビルドと一致しません。MUMBLEBOX_BRUSH を確認するか、設定を解除して自動インストールを使ってください。",
   "title": "オービットとスプラット",
   "card": "画像 1 枚から AI で周回動画を作り、同じ動画からテクスチャ付きメッシュとガウシアンスプラットを生成します。",
   "credits": "メッシュの仕上げには Pixal3D と TRELLIS.2、ガウシアンスプラットの学習には Arthur Brussee の Brush を使います。",

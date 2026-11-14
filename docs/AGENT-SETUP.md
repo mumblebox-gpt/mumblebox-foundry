@@ -14,6 +14,8 @@ Install the bundled [Mumblebox Assets skill](../comfyui_asset_workshop/skills/mu
 4. Save or start the run using its documented action. For 3D-Guided, call `show` on the saved run first and check `bound`. You can inspect its graph without starting generation.
 5. Follow progress using the group's `status`. Use `show` to open the result in Foundry and the file or package actions to obtain local download URLs. For a saved PNG, JPEG or WebP, `foundry_read_image_preview` returns actual pixels for the agent to review.
 
+For Orbit with Splats, inspect `orbit_with_splats.capabilities` for Brush readiness. Start the workflow normally. On Windows, Foundry downloads and verifies Brush before the first splat training stage. Poll the run for preparation status and retry the same run if setup fails.
+
 The groups are `mesh` (Single Image and Turnaround), `guided`, `virtual_turntable`, `orbit_to_mesh`, `orbit_with_splats`, `splat`, `hair`, `ccore` (Text and Image + Text), `garment`, `images`, and `workspace`. Workspace includes the packaged graph, History, preferences, model management, integration and maintenance controls. Model and file removal use the same preview tokens as the GUI and require the user's authorization for the listed items.
 
 ## Keep the app and companion skill aligned
