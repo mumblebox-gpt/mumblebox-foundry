@@ -9,11 +9,12 @@ const stagePages={preparing:2,turnaround:2,orbit:2,cameras:3,views:3,geometry:4,
     refinement:5,texture:5,balanced:5,compact:5,quads:5,print:5,package:5};
 
 export class OrbitToMeshWizard extends VirtualTurntableWizard{
-    constructor(shell,options){
+    constructor(shell,options,config={}){
         super(shell,options,{
             key:'orbit-to-mesh',stateKey:'foundryOrbitToMesh',title:'Orbit to Mesh',offset:790000,layout:'orbit',
             titles:['Set up your reference','Review the orbit','Choose mesh views','Review the mesh','Finish and export'],
             stagePages,operationPages:{turnaround:2,orbit:2,cameras:3,views:3,reconstruct:4,finish:5,rocket:2},
+            ...config,
         });
     }
     initialDraft(){return {...super.initialDraft(),engine:'pixal3d',exclude_views:[]};}
@@ -92,7 +93,7 @@ export class OrbitToMeshWizard extends VirtualTurntableWizard{
             this.run?.package?.download?el('a',{href:this.run.package.download,download:''},sourceMessage('Download asset ZIP')):null,
             el('div',{class:'actions'},button(t('copy_recipe'),()=>this.act(async()=>{
                 const {controls,overrides,selection,exclude_views}=this.draft;
-                await navigator.clipboard.writeText(JSON.stringify({workflow:'orbit-to-mesh',controls,overrides,selection,exclude_views},null,2));
+                await navigator.clipboard.writeText(JSON.stringify({workflow:this.key,controls,overrides,selection,exclude_views},null,2));
                 this.shell.message(t('recipe_copied'));
             }),{disabled:this.busy})));
     }

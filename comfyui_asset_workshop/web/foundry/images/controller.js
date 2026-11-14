@@ -9,7 +9,7 @@ import {showImageStage} from './graph.js';
 
 export function creatorOrigin(shell){
     const method=shell.imageOrigin?.method;
-    return !shell.openImageId&&['single-image','ccore-image','virtual-turntable','orbit-to-mesh'].includes(method)?method:'';
+    return !shell.openImageId&&['single-image','ccore-image','virtual-turntable','orbit-to-mesh','orbit-with-splats'].includes(method)?method:'';
 }
 
 export class ImageCreator{
@@ -20,9 +20,10 @@ export class ImageCreator{
         this.ccoreOrigin=this.origin==='ccore-image';
         this.turntableOrigin=this.origin==='virtual-turntable';
         this.orbitOrigin=this.origin==='orbit-to-mesh';
-        this.stateProperty=this.orbitOrigin?'foundryImageCreatorOrbit':this.turntableOrigin?'foundryImageCreatorTurntable':this.ccoreOrigin?'foundryImageCreatorCcore':this.singleOrigin?'foundryImageCreatorSingle':'foundryImageCreator';
+        const splats=this.origin==='orbit-with-splats';
+        this.stateProperty=splats?'foundryImageCreatorOrbitSplats':this.orbitOrigin?'foundryImageCreatorOrbit':this.turntableOrigin?'foundryImageCreatorTurntable':this.ccoreOrigin?'foundryImageCreatorCcore':this.singleOrigin?'foundryImageCreatorSingle':'foundryImageCreator';
         this.storageKey='foundry-image-creator:'+app.extensionManager.workflow.activeWorkflow.path+':'+this.node.id+
-            (this.orbitOrigin?':orbit-to-mesh':this.turntableOrigin?':virtual-turntable':this.ccoreOrigin?':ccore':this.singleOrigin?':single':'');
+            (splats?':orbit-with-splats':this.orbitOrigin?':orbit-to-mesh':this.turntableOrigin?':virtual-turntable':this.ccoreOrigin?':ccore':this.singleOrigin?':single':'');
         let saved=this.node.properties[this.stateProperty]||{};
         try{const local=JSON.parse(localStorage.getItem(this.storageKey)||'null');if(local?.updated>(saved.updated||0))saved=local;}catch{}
         // Restored Comfy node properties may be reactive proxies, not cloneable objects.

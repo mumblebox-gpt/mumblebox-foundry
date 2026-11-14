@@ -21,7 +21,7 @@ export function orbitSettings(wizard) {
     const values = wizard.draft.controls.orbit;
     const defaults = cap.defaults.orbit;
     const recipes = cap.orbit_presets;
-    const recipesFor = key === 'orbit-to-mesh' ? {
+    const recipesFor = ['orbit-to-mesh','orbit-with-splats'].includes(key) ? {
         standard:[orbitText('preset_standard'),orbitText('preset_standard_help')],
         low_vram:[orbitText('preset_low_vram'),orbitText('preset_low_vram_help')],
         full_steps:[orbitText('preset_full_steps'),orbitText('preset_full_steps_help')],

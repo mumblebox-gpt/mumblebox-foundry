@@ -375,5 +375,12 @@
   "ux_export_print_height_mm": "Altura física del modelo de impresión en milímetros. Predeterminado: {value}.",
   "ux_camera_range": "Configura un campo de visión mínimo menor que el máximo.",
   "ux_invalid_json": "Ingresa un objeto JSON o restablece los ajustes predeterminados de esta sección.",
-  "ux_invalid_sigmas": "Ingresa valores descendentes entre 1 y 0, separados por comas y terminados en 0."
+  "ux_invalid_sigmas": "Ingresa valores descendentes entre 1 y 0, separados por comas y terminados en 0.",
+  "ux_frame_review_title": "Revisa los fotogramas para la reconstrucción",
+  "ux_frame_review_description": "Prepara los fotogramas que se superponen y las máscaras del objeto. Comprueba que el objeto se vea completo durante todo el giro. Puedes ajustar los fotogramas y conservar el video.",
+  "ux_prepare_frames": "Preparar fotogramas con máscara",
+  "ux_prepared_frames": "Se prepararon {count} fotogramas de {width} × {height} px. Revisa los bordes de las máscaras antes de crear la malla.",
+  "ux_camera_coverage": "Se alinearon {count} de {total} fotogramas. La mayor separación entre los ángulos estimados de la cámara es de {angle}°.",
+  "text_preparing_masked_orbit_frames": "Preparando fotogramas del giro con máscaras",
+  "ux_frame_review_video": "Video de origen: {count} fotogramas a {fps} fps."
 }

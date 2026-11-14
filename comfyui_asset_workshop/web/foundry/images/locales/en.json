@@ -256,5 +256,14 @@
   "section_review": "Edit, save or continue to 3D",
   "prompt_placeholder": "The subject, appearance, colors and style you want.",
   "front_placeholder": "Details visible on the front.",
-  "back_placeholder": "Backpack, rear markings or details we cannot see from the front."
+  "back_placeholder": "Backpack, rear markings or details we cannot see from the front.",
+  "gallery_front": "Front",
+  "gallery_back": "Back",
+  "gallery_single": "Single image",
+  "gallery_pair": "Front and back pair",
+  "gallery_card_summary": "{kind} · {category}",
+  "gallery_reference_alt": "{name} · {view}",
+  "gallery_creation_count_one": "Showing {count} creation.",
+  "gallery_creation_count_other": "Showing {count} creations.",
+  "gallery_revision_summary": "{view} · {date}"
 }

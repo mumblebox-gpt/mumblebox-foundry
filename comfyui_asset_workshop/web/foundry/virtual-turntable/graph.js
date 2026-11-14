@@ -3,6 +3,7 @@ import {app} from '/scripts/app.js';
 const layouts={
     turntable:{offset:780000,title:'Virtual Turntable',property:'virtualTurntable',origin:[24000,3000]},
     orbit:{offset:790000,title:'Orbit to Mesh',property:'orbitToMesh',origin:[26800,3000]},
+    orbitSplats:{offset:810000,title:'Orbit with Splats',property:'orbitWithSplats',origin:[29600,3000]},
 };
 const belongs=(node,owner,layout)=>node?.properties?.virtualTurntableOwner===owner.id&&
     (node.properties.orbitLayout||'turntable')===layout;
@@ -54,7 +55,7 @@ export function syncTurntableGraph(recipe,owner,key='turntable') {
         };
         for(const node of graph._nodes.filter(n=>belongs(n,owner,key))){
             const id=node.id-config.offset;
-            const section=id<22||id===56?'Reference and four views':id<=44?'H3 orbit':(id<=55||key==='orbit'&&(id<=64||id===340||id===381||id===382||id>=1000&&id<2000))?'Frame masks and reconstruction':'Refinement and export';
+            const section=id<22||id===56?'Reference and four views':id<=44?'H3 orbit':(id<=55||key!=='turntable'&&(id<=64||id===340||id===381||id===382||id>=1000&&id<2000))?'Frame masks and reconstruction':'Refinement and export';
             groups[section].push(node);
         }
         for(const group of [...graph._groups])if(group.title.startsWith(prefix))graph.remove(group);

@@ -20,28 +20,33 @@ from .model_preflight import check_models
 
 ACTIVE = None
 ORBIT_ACTIVE = None
+ORBIT_SPLAT_ACTIVE = None
 STEPS = {
     "turnaround": "Generating the four-view turnaround sheet",
     "orbit": "Generating the 360° orbit",
+    "frames": "Preparing masked orbit frames",
     "geometry": "Reconstructing the mesh from orbit frames",
     "texture": "Finishing the mesh and projecting orbit colors",
 }
 OPERATIONS = {
     "turnaround": ("turnaround",),
     "orbit": ("orbit",),
-    "reconstruct": ("geometry",),
+    "frames": ("frames",),
+    "reconstruct": ("frames", "geometry"),
     "finish": ("texture",),
     "rocket": tuple(STEPS),
 }
 OUTPUTS = {
     "turnaround": ("sheet",), "orbit": ("orbit",),
-    "geometry": ("project", "raw", "frames"), "texture": ("clean", "refined", "texture", "front"),
+    "frames": ("frame_set", "frames"),
+    "geometry": ("project", "raw"), "texture": ("clean", "refined", "texture", "front"),
 }
 DERIVATIVES = (("game_balanced", "balanced"), ("game_compact", "compact"), ("quad_light", "quads"), ("print", "print"))
 
 
 def busy():
-    return any(service and service.tasks for service in (ACTIVE, ORBIT_ACTIVE))
+    from ..orbit_with_splats.hybrid import ENCODERS
+    return bool(ENCODERS) or any(service and service.tasks for service in (ACTIVE, ORBIT_ACTIVE, ORBIT_SPLAT_ACTIVE))
 
 
 class VirtualTurntableRuns(WizardRuns):
@@ -111,7 +116,15 @@ class VirtualTurntableRuns(WizardRuns):
         run = self.get(ident)
         if ident in self.tasks:
             raise ValueError("Wait for this " + self.title + " run to finish before editing its settings.")
-        run.update(self.config(data))
+        config = self.config(data)
+        if self.method == METHOD:
+            # Browser JSON represents whole numbers as integers. Preserve the
+            # recorded representation of unchanged values in older sessions.
+            for group, fields in run["controls"].items():
+                for key, value in fields.items():
+                    if key in config["controls"][group] and config["controls"][group][key] == value:
+                        config["controls"][group][key] = value
+        run.update(config)
         self.invalidate(run)
         self.save(run)
         return self.public(run)
@@ -125,6 +138,8 @@ class VirtualTurntableRuns(WizardRuns):
             for key in self.outputs.get(stage, (stage, "quad_manifest") if stage == "quads" else (stage,)):
                 run["checkpoints"].pop(key, None)
                 run["previews"].pop(key, None)
+            if stage == "frames":
+                run.pop("frame_review", None)
             if stage == "quads":
                 run.pop("quad_report", None)
             if stage == "refinement":
@@ -136,6 +151,9 @@ class VirtualTurntableRuns(WizardRuns):
             run.pop("metadata", None)
         if "geometry" in stale or "views" in stale:
             run.pop("reconstruction", None)
+            if self.method == METHOD and "frames" not in run["stages"]:
+                run["checkpoints"].pop("frames", None)
+                run["previews"].pop("frames", None)
         return stale
 
     def retained_orbit_lineage(self, run):
@@ -149,7 +167,11 @@ class VirtualTurntableRuns(WizardRuns):
                 and self.fresh(run, derived_stage))
 
     def stale_descendants(self, run, stale):
-        return stale
+        if "frames" not in stale:
+            return stale
+        after_frames = set(STEPS) - {"turnaround", "orbit"}
+        return [stage for stage in run["stages"]
+                if stage in stale or stage in after_frames or stage in FINISHING or stage == "refinement"]
 
     def public(self, run):
         result = super().public(run)
@@ -160,6 +182,7 @@ class VirtualTurntableRuns(WizardRuns):
             result["completed"] = [stage for stage in result["completed"] if stage != "orbit"]
         result.update(engine=run["engine"], controls=self.controls(run["controls"]),
                       reconstruction=deepcopy(run.get("reconstruction")),
+                      frame_review=deepcopy(run.get("frame_review")),
                       stage_label=self.steps.get(run["stage"], run["stage"].replace("_", " ").capitalize()))
         if result.get("package"):
             result["package"]["download"] = f"/mumblebox-foundry/v1/{self.method}/runs/{run['id']}/package"
@@ -167,12 +190,23 @@ class VirtualTurntableRuns(WizardRuns):
 
     def fingerprint(self, run, stage):
         controls = run["controls"]
+        def old_compatible(group, added_fields):
+            base = defaults()[group]
+            return {key: value for key, value in controls[group].items()
+                    if key not in added_fields or value != base[key]}
+
         if stage == "turnaround":
             source = owned_path(self.input_root, self.input_root / run["references"][0]["filename"])
-            return signature([run["version"], stage, digest(source), controls["turnaround"]])
+            return signature([run["version"], stage, digest(source),
+                              old_compatible("turnaround", {"sampler", "sigmas", "video_shift", "decode_tile"})
+                              if self.method == METHOD else controls["turnaround"]])
         if stage == "orbit":
-            return signature([self.fingerprint(run, "turnaround"), stage, controls["orbit"]])
+            return signature([self.fingerprint(run, "turnaround"), stage, old_compatible("orbit",
+                {"denoise", "chunk_threshold", "decode_overlap", "temporal_overlap"})])
+        if stage == "frames":
+            return signature([self.fingerprint(run, "orbit"), stage, controls["frames"]])
         if stage == "geometry":
+            # Keep the established fingerprint for sessions created before frame review existed.
             return signature([self.fingerprint(run, "orbit"), stage, run["engine"], controls["frames"], controls[run["engine"]]])
         if stage in ("texture", "refinement"):
             group = "meshroom_finish" if run["engine"] == "meshroom" else "openmvs_finish"
@@ -309,6 +343,17 @@ class VirtualTurntableRuns(WizardRuns):
             if not entries:
                 raise ValueError("Comfy did not return a saved orbit video.")
             artifact("orbit", self.file_entry(entries[0]))
+        elif stage == "frames":
+            root = owned_path(self.output_root, outputs["49"]["text"][0])
+            manifest = record(root / "frames.json")
+            frames = json.loads(manifest.read_text(encoding="utf-8"))
+            for index in range(frames["count"]):
+                for folder in ("frames", "masks"):
+                    record(root / folder / f"frame_{index:05d}.png")
+            run["checkpoints"]["frame_set"] = str(root)
+            run["frame_review"] = {key: frames[key] for key in ("count", "width", "height", "source_indices", "source_video")
+                                   if key in frames}
+            native("frames", "49", "images")
         elif self.capture_stage(run, stage, outputs, native, artifact, record):
             pass
         elif stage == "geometry":
@@ -317,11 +362,14 @@ class VirtualTurntableRuns(WizardRuns):
             record(project / "result.json")
             run["checkpoints"]["project"] = str(project)
             artifact("raw", report["preview"])
-            native("frames", "49", "images")
+            if "49" in outputs:
+                native("frames", "49", "images")
             cameras = report.get("camera_validation", {})
             run["reconstruction"] = {key: report[key] for key in ("faces", "registered_cameras", "frames", "watertight") if key in report}
             if cameras:
                 run["reconstruction"]["camera_validation"] = cameras
+            if report.get("orbit_coverage"):
+                run["reconstruction"]["orbit_coverage"] = report["orbit_coverage"]
         elif stage == "texture":
             native("clean", "2017", "3d")
             native("texture", "2024", "3d")
@@ -390,6 +438,8 @@ class VirtualTurntableRuns(WizardRuns):
                        for key, value in run["stages"].items() if key != "package"},
             "source_artifacts": {**{key: digest(run["checkpoints"][key]) for key in ("raw", "clean", "texture")},
                                  "orbit": run["stages"]["orbit"]["files"][run["checkpoints"]["orbit"]]},
+            "orbit_settings": run["controls"]["orbit"],
+            "frame_review": run.get("frame_review"),
             "reconstruction": run.get("reconstruction"),
         }}
         if run.get("image_creation"):

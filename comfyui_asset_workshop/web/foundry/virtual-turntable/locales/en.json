@@ -375,5 +375,12 @@
   "ux_export_print_height_mm": "Physical height of the print model in millimeters. Default: {value}.",
   "ux_camera_range": "Set the minimum field of view below the maximum.",
   "ux_invalid_json": "Enter a JSON object, or restore the default settings for this section.",
-  "ux_invalid_sigmas": "Enter descending values between 1 and 0, separated by commas, ending in 0."
+  "ux_invalid_sigmas": "Enter descending values between 1 and 0, separated by commas, ending in 0.",
+  "ux_frame_review_title": "Review the frames for reconstruction",
+  "ux_frame_review_description": "Prepare the overlapping frames and their foreground masks. Check that the whole subject stays visible through the turn. You can change the frame settings and keep this orbit.",
+  "ux_prepare_frames": "Prepare masked frames",
+  "ux_prepared_frames": "Prepared {count} frames at {width} × {height} px. Check the mask edges before building the mesh.",
+  "ux_camera_coverage": "{count} of {total} frames aligned. Largest gap between estimated camera angles: {angle}°.",
+  "text_preparing_masked_orbit_frames": "Preparing masked orbit frames",
+  "ux_frame_review_video": "Source clip: {count} frames at {fps} fps."
 }

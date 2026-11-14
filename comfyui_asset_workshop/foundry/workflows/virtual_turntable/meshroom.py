@@ -13,7 +13,7 @@ from .references import CATEGORY
 
 ROOT=Path(__file__).resolve().parent
 from .processes import run_process, release_models
-from .camera_validation import inspect_cameras
+from .camera_validation import alicevision_centers, inspect_cameras, orbit_coverage
 
 def runtime_environment(executable, cpu_threads):
     """Mirror Meshroom's Windows init script before launch, avoiding os.execv detachment."""
@@ -136,7 +136,8 @@ class Reconstruct:
         camera_files = list((job/"MeshroomCache/StructureFromMotion").glob("*/cameras.sfm"))
         if len(camera_files) != 1:
             raise RuntimeError(f"Expected one native camera solution, found {len(camera_files)}. Inspect {log}.")
-        camera_check = inspect_cameras(json.loads(camera_files[0].read_text(encoding="utf-8-sig")),
+        camera_data = json.loads(camera_files[0].read_text(encoding="utf-8-sig"))
+        camera_check = inspect_cameras(camera_data,
                                        minimum_checked_fov, maximum_checked_fov)
         camera_check["native_camera_file"] = str(camera_files[0].relative_to(job))
         (job/"camera-validation.json").write_text(json.dumps(camera_check, indent=2), encoding="utf-8")
@@ -161,6 +162,7 @@ class Reconstruct:
         faces=sum(len(g.faces) for g in scene.geometry.values())
         receipt={"elapsed_seconds":round(time.monotonic()-started,2),"faces":faces,"topology":"triangles",
                  "metric_scale":"unknown","watertight":"not guaranteed","camera_validation":camera_check,
+                 "orbit_coverage":orbit_coverage(frame_set, alicevision_centers(camera_data)),
                  "original":str(obj),"preview":str(glb),"native_project":str(project),
                  "settings":params,"runtime":runtime,"template":"ObjectTurntable / BiRefNet mask substitution"}
         (job/"result.json").write_text(json.dumps(receipt,indent=2),encoding="utf-8")

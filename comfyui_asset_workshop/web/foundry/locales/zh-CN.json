@@ -581,5 +581,9 @@
   "download_video": "下载视频",
   "delete_video": "删除视频",
   "video_deleted": "视频已删除。",
-  "delete_video_explanation": "要从磁盘删除此视频吗？已完成的资产包和网格会保留。"
+  "delete_video_explanation": "要从磁盘删除此视频吗？已完成的资产包和网格会保留。",
+  "language_catalog_unavailable": "无法加载所选语言。请稍后重试。",
+  "model_file_count_one": "找到 {count} 个模型文件。",
+  "model_file_count_other": "找到 {count} 个模型文件。",
+  "model_inventory_limited": "{count} 已达到清单上限。"
 }

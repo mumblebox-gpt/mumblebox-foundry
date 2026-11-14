@@ -581,5 +581,9 @@
   "download_video": "Download video",
   "delete_video": "Delete video",
   "video_deleted": "Video deleted.",
-  "delete_video_explanation": "Delete this video from disk? Finished asset packages and meshes will stay available."
+  "delete_video_explanation": "Delete this video from disk? Finished asset packages and meshes will stay available.",
+  "language_catalog_unavailable": "The language could not be loaded. Try again in a moment.",
+  "model_file_count_one": "{count} model file found.",
+  "model_file_count_other": "{count} model files found.",
+  "model_inventory_limited": "{count} The inventory limit was reached."
 }

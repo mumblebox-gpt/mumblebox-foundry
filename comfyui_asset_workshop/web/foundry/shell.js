@@ -22,7 +22,7 @@ export class FoundryShell {
         this.statusListeners=new Set();this.node=node; this.host=host; this.tab="Choose a Workflow";
         this.shadow=host.shadowRoot||host.attachShadow({mode:"open"});
         this.shadow.replaceChildren();
-        for (const file of ["theme.css","layout.css","images.css","roadmap.css","agent-setup/style.css","virtual-turntable/style.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
+        for (const file of ["theme.css","layout.css","images.css","roadmap.css","agent-setup/style.css","virtual-turntable/style.css","orbit-with-splats/style.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
         this.root=el("div",{class:"foundry","data-theme":matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"});
         this.shadow.append(this.root);
         this.root.lang=currentLanguage();
@@ -65,6 +65,7 @@ export class FoundryShell {
             'mumblebox-foundry-ccore': data => this.openCcoreWizard({runId:data.id,image:data.with_image}),
             'mumblebox-foundry-turntable': data => this.openVirtualTurntable({runId:data.id}),
             'mumblebox-foundry-orbit': data => this.openOrbitToMesh({runId:data.id}),
+            'mumblebox-foundry-orbit-splats': data => this.openOrbitWithSplats({runId:data.id}),
             'mumblebox-foundry-garment': data => this.openGarmentWizard({runId:data.id}),
             'mumblebox-foundry-guided': data => this.openGuidedWizard({runId:data.id,binding:data.request_id}),
             'mumblebox-foundry-workspace': data => this.openAgentSection(data.section),
@@ -126,9 +127,11 @@ export class FoundryShell {
         this.resources(null);this.open(this.tab);
     }
     async bootstrap() {
+        this.language.disabled = true;
         try {
             this.data=await request("bootstrap");
-            activateLanguage(this.data.preferences.language);
+            try { await activateLanguage(this.data.preferences.language); }
+            catch (error) { this.message(sourceMessage(error.message, error.i18n), true); }
             if(!this.node.graph._nodes.some(n=>n.properties?.guidedOwner===this.node.id))
                 syncGuidedBranch(await request('guided/template'),this.node);
             setText(this.version, "v"+this.data.version);
@@ -137,22 +140,29 @@ export class FoundryShell {
             this.root.dataset.motion=this.data.preferences.busy_motion||"system";
             if(this.data.preferences.theme) await this.setTheme(this.data.preferences.theme,false);
             else await this.setTheme(this.root.dataset.theme,false);
-            this.message(msg("common.local_workspace_image_to_3d_workflow"));
+            if (this.notice.dataset.error !== "true") this.message(msg("common.local_workspace_image_to_3d_workflow"));
             this.open(this.tab);
             this.updates.startup();
-        } catch(error) {this.message(sourceMessage(error.message),true);}
+        } catch(error) {this.message(sourceMessage(error.message, error.i18n),true);}
+        finally { this.language.disabled = false; }
     }
-    async setLanguage(locale) {
-        const previous=currentLanguage();
-        this.language.disabled=true;
+    async setLanguage(locale, picker = this.language) {
+        if (this.language.disabled) {
+            picker.value = currentLanguage();
+            return;
+        }
+        this.language.disabled = true;
+        picker.disabled = true;
         try {
-            this.data.preferences=await request("preferences",{language:locale},{method:"PATCH"});
-            activateLanguage(this.data.preferences.language);
-        } catch(error) {
-            this.language.value=previous;
-            this.message(sourceMessage(error.message),true);
+            await activateLanguage(locale, async language => {
+                this.data.preferences = await request("preferences", {language}, {method: "PATCH"});
+            });
+        } catch (error) {
+            this.message(sourceMessage(error.message, error.i18n), true);
         } finally {
-            this.language.disabled=false;
+            picker.value = currentLanguage();
+            this.language.disabled = false;
+            picker.disabled = false;
         }
     }
     async setTheme(theme,save=true) {
@@ -210,7 +220,7 @@ export class FoundryShell {
         await this.open("Images");
     }
     async open(name) {
-        if(name!=='Images'&&['ccore-image','virtual-turntable','orbit-to-mesh'].includes(this.imageOrigin?.method))delete this.imageOrigin;
+        if(name!=='Images'&&['ccore-image','virtual-turntable','orbit-to-mesh','orbit-with-splats'].includes(this.imageOrigin?.method))delete this.imageOrigin;
         this.retryView=()=>this.open(name);
         this.viewDispose?.();this.viewDispose=null;
         this.tab=name;this.sequence=(this.sequence||0)+1;const sequence=this.sequence;
@@ -253,6 +263,7 @@ export class FoundryShell {
     }
 
     async chooseMesh(handoff,origin){
+        if(origin?.method==='orbit-with-splats')return this.openOrbitWithSplats({resume:true,handoff});
         if(origin?.method==='orbit-to-mesh')return this.openOrbitToMesh({resume:true,handoff});
         if(origin?.method==='virtual-turntable'){
             return this.openVirtualTurntable({resume:true,handoff});
@@ -282,6 +293,9 @@ export class FoundryShell {
         if(method==='single'){await this.openWizard({method:'single-image',resume:!!this.meshOrigin});if(handoff){Object.assign(this.wizard.draft,{name:handoff.name,references:handoff.references.slice(0,1),image_creation:handoff.image_creation});this.wizard.go(1);}}
         else if(method==='splat'){
             if(await this.openSplatWizard({handoff})===false)return;
+        }
+        else if(method==='orbit-with-splats'){
+            if(await this.openOrbitWithSplats({handoff})===false)return;
         }
         else if(method==='orbit-to-mesh'){
             if(await this.openOrbitToMesh({handoff})===false)return;
@@ -326,25 +340,30 @@ export class FoundryShell {
     }
 
     openVirtualTurntable(options={}){
-        return this.openOrbitWizard(options,false);
+        return this.openOrbitWizard(options,'virtual-turntable');
     }
 
     openOrbitToMesh(options={}){
-        return this.openOrbitWizard(options,true);
+        return this.openOrbitWizard(options,'orbit-to-mesh');
     }
 
-    async openOrbitWizard(options,orbit){
-        const key=orbit?'orbit-to-mesh':'virtual-turntable';
-        const title=orbit?'Orbit to Mesh':'Virtual Turntable';
+    openOrbitWithSplats(options={}){
+        return this.openOrbitWizard(options,'orbit-with-splats');
+    }
+
+    async openOrbitWizard(options,key){
+        const orbit=key==='orbit-to-mesh';
+        const splats=key==='orbit-with-splats';
         if(this.imageOrigin?.method===key)delete this.imageOrigin;
         this.viewDispose?.();
         this.viewDispose=null;
         const sequence=this.sequence=(this.sequence||0)+1;
         this.tab='Choose a Workflow';
-        replaceContent(this.content,hint(orbit?msg('orbit.opening'):sourceMessage('Opening Virtual Turntable')));
+        replaceContent(this.content,hint(splats?msg('orbit_splats.opening'):orbit?msg('orbit.opening'):sourceMessage('Opening Virtual Turntable')));
         let wizard;
         try{
-            const Wizard=orbit?(await import('./orbit-to-mesh/controller.js')).OrbitToMeshWizard:
+            const Wizard=splats?(await import('./orbit-with-splats/controller.js')).OrbitWithSplatsWizard:
+                orbit?(await import('./orbit-to-mesh/controller.js')).OrbitToMeshWizard:
                 (await import('./virtual-turntable/controller.js')).VirtualTurntableWizard;
             wizard=new Wizard(this,options);
             const element=await wizard.init();
@@ -352,7 +371,7 @@ export class FoundryShell {
             this.content.replaceChildren(element);
             this.content.scrollTop=0;
             this.viewDispose=()=>wizard.dispose();
-            bindAttribute(this.content,'aria-label',orbit?msg('orbit.wizard'):sourceMessage(title+' wizard'));
+            bindAttribute(this.content,'aria-label',splats?msg('orbit_splats.wizard'):orbit?msg('orbit.wizard'):sourceMessage('Virtual Turntable wizard'));
             [...this.nav.children].forEach((node,index)=>node.setAttribute('aria-selected',String(index===0)));
             return true;
         }catch(error){

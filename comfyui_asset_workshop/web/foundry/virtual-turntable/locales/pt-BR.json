@@ -375,5 +375,12 @@
   "ux_export_print_height_mm": "Altura física do modelo de impressão em milímetros. Padrão: {value}.",
   "ux_camera_range": "Defina um campo de visão mínimo menor que o máximo.",
   "ux_invalid_json": "Insira um objeto JSON ou restaure as configurações padrão desta seção.",
-  "ux_invalid_sigmas": "Insira valores decrescentes entre 1 e 0, separados por vírgulas e terminados em 0."
+  "ux_invalid_sigmas": "Insira valores decrescentes entre 1 e 0, separados por vírgulas e terminados em 0.",
+  "ux_frame_review_title": "Confira os quadros para a reconstrução",
+  "ux_frame_review_description": "Prepare os quadros com sobreposição e as máscaras do objeto. Confira se o objeto inteiro aparece durante toda a volta. Você pode ajustar os quadros e manter o mesmo vídeo.",
+  "ux_prepare_frames": "Preparar quadros com máscaras",
+  "ux_prepared_frames": "{count} quadros preparados em {width} × {height} px. Confira as bordas das máscaras antes de gerar a malha.",
+  "ux_camera_coverage": "{count} de {total} quadros alinhados. Maior intervalo entre os ângulos estimados da câmera: {angle}°.",
+  "text_preparing_masked_orbit_frames": "Preparando os quadros da órbita com máscaras",
+  "ux_frame_review_video": "Vídeo de origem: {count} quadros a {fps} fps."
 }

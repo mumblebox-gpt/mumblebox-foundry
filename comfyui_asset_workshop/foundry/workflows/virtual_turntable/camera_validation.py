@@ -46,3 +46,44 @@ def inspect_cameras(data, minimum_fov=2.0, maximum_fov=120.0):
             'calibrated_views': calibrated, 'input_views': len(views),
             'fov_check_range_degrees': [minimum_fov, maximum_fov],
             'limitation': 'Passing these numerical checks does not prove camera accuracy, rigid views or usable mesh quality.'}
+
+def orbit_coverage(frame_set, camera_centers):
+    """Measure the gap around the fitted camera plane, in solver coordinates."""
+    import numpy as np
+
+    matched = [(index, camera_centers[f"frame_{index:05d}.png"])
+               for index in range(frame_set["count"]) if f"frame_{index:05d}.png" in camera_centers]
+    result = {"input_frames": frame_set["count"], "registered_frames": len(matched)}
+    if len(matched) < 3:
+        return result
+    centers = np.array([center for _, center in matched], dtype=float)
+    if centers.shape != (len(matched), 3) or not np.isfinite(centers).all():
+        return result
+    centered = centers - centers.mean(axis=0)
+    _, scales, axes = np.linalg.svd(centered, full_matrices=False)
+    if scales[0] <= 1e-12 or scales[1] <= scales[0] * .02:
+        return result
+    xy = centered @ axes[:2].T
+    # Fit the circle center. The sample mean can sit off-center if some
+    # sectors are missing or the clip slows down near one angle.
+    fitted, _, rank, _ = np.linalg.lstsq(
+        np.column_stack((2 * xy, np.ones(len(xy)))), (xy ** 2).sum(axis=1), rcond=None)
+    if rank < 3:
+        return result
+    directions = xy - fitted[:2]
+    angles = np.sort(np.arctan2(directions[:, 1], directions[:, 0]))
+    gap = np.degrees(np.diff(np.r_[angles, angles[0] + 2 * np.pi]).max())
+    timing = frame_set.get("source_video", {}).get("timestamps_seconds")
+    result.update(
+        largest_gap_degrees=round(float(gap), 1),
+        registered_source_frames=[frame_set["source_indices"][i] for i, _ in matched],
+    )
+    if timing:
+        result["registered_timestamps_seconds"] = [timing[i] for i, _ in matched]
+    return result
+
+
+def alicevision_centers(data):
+    poses = {str(pose["poseId"]): pose["pose"]["transform"]["center"] for pose in data["poses"]}
+    return {view["path"].replace("\\", "/").rsplit("/", 1)[-1]: poses[str(view["poseId"])]
+            for view in data["views"] if str(view["poseId"]) in poses}

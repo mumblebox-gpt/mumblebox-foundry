@@ -1,8 +1,8 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry 版本 0.1.0-preview.29**
+**Foundry 版本 0.1.0-preview.30**
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md)
+[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
 **在自己的电脑上制作图片和 3D 资产，也可以让编程智能体一起帮忙。**
 
@@ -11,6 +11,12 @@ Foundry 把实用的 AI 工作流整理成一步步的向导，提供合适的�
 用它探索游戏道具、角色部件、头发、高斯泼溅，以及创意项目或 3D 打印所需的资产。生成后仍应按实际用途检查，部分结果还需要修改、重拓扑、适配或打印准备。
 
 [通过 Pinokio 安装](PINOKIO.md) · [已发布版本](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [MCP 与技能设置](AGENT-SETUP.md) · [更新记录](../CHANGELOG.md)
+
+## 原始项目与 Pinokio 创作者社区
+
+由 **mumblebox-gpt** 维护的原始项目是 [GitHub 上的 Mumblebox Foundry](https://github.com/mumblebox-gpt/mumblebox-foundry)。请关注该仓库以了解开发进展，并查看[已发布版本](https://github.com/mumblebox-gpt/mumblebox-foundry/releases)，获取版本说明和可用下载。如果你正在阅读分支仓库（fork）或本 README 的副本，请通过这些链接回到原始项目；分支仓库可能包含不同的修改，也可能仍是较旧的版本。
+
+我们很高兴能与 [Pinokio](https://pinokio.co/) 创作者社区一同创作。Pinokio 让本地工具更容易安装和分享。我们珍视这样一个社区：创作者可以发现彼此的项目、交流有用的反馈并共同学习。感谢 cocktail peanut 以及所有为这个创意生态做出贡献的人。[在 Pinokio 上查看 Foundry](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)。
 
 ## 给编程智能体一个好起点
 
@@ -31,6 +37,7 @@ Foundry 把实用的 AI 工作流整理成一步步的向导，提供合适的�
 | **3D 引导（3D-Guided）** | Pixal3D 代理网格结合 Blender 的测量视角、MoGe 2 估计和 Qwen 引导，完成重建和后续处理。 | 适合需要选择并检查视角的独立物件，处理步骤更多。 |
 | **Splat & Solid** | Sperid Labs 的 Idol 生成细致的高斯泼溅，Foundry 另行提供清理后的配套网格，并可选用 Hi3D 细化。 | 兼顾丰富外观和轻量几何，可查看环绕预览和网格对比。 |
 | **环绕视频转网格** | 先生成 H3 环绕视频，检查对齐后的视图，再用 Pixal3D 重建，最后由 Hi3D 和 TRELLIS.2 完成资产。 | 适合在建模前检查不同角度，排除模糊或变形的画面。 |
+| **环绕重建：网格与高斯泼溅** | 用同一段环绕视频生成带纹理的网格和对齐的高斯泼溅。使用联动视角预览，导出配对文件或混合 MP4。 | 适合需要可编辑网格，同时希望保留随视角变化的细节。 |
 | **虚拟转台** | 用 H3 生成环绕视频，再用 Meshroom 或 COLMAP + OpenMVS 重建。 | 适合用稳定的生成视频尝试摄影测量。 |
 | **CCORE 文字生成道具** | 通过文字描述生成程序化的风格化道具，提供 12 个可编辑示例、可选的本地 Qwen 描述增强、3D 预览和 GLB 导出。 | 工具、家具等单个游戏道具。 |
 | **CCORE 图片 + 文字** | 一张图片和文字描述交给 CCORE 的视觉投影器与生成流程。也能在向导里创建参考图。 | 保留或修改照片、草图、渲染图中的特征。 |

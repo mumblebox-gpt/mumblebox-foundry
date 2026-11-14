@@ -3,7 +3,7 @@ from copy import deepcopy
 from pathlib import Path
 
 from ..image_to_3d.definition import CHOICES, DEFAULTS, RANGES, resolve_settings
-from ..virtual_turntable.definition import LICENSE_LINKS, LICENSE_MESSAGE, SCHEMA as ORBIT_SOURCE, TEMPLATE as H3_TEMPLATE
+from ..virtual_turntable.definition import LICENSE_LINKS, LICENSE_MESSAGE, SCHEMA as ORBIT_SOURCE
 from ..virtual_turntable.definition import defaults as schema_defaults, field, validated_settings
 from ..virtual_turntable.runtime import runtime_settings
 
@@ -12,18 +12,6 @@ TITLE = "Orbit to Mesh"
 OFFSET = 790000
 DESCRIPTION = "Turn one image into an AI-generated orbit. Review matched views before Pixal3D builds a mesh. Hi3D and TRELLIS.2 finish the asset."
 TIP = "Use a clear reference of one subject. Check the orbit for changes in shape and details before building the mesh."
-
-ORBIT_PROMPT = (
-    "[Shot 1] The camera begins in motion, facing the front of a stationary subject. "
-    "It makes one complete 360-degree circle around the subject, passing continuously through the "
-    "three-quarter, side and rear views and back to the opening front view as the clip ends. "
-    "It covers an equal angle between every pair of consecutive frames and holds the same speed "
-    "at the opening, at every view it passes and at the end. "
-    "It keeps the same height, distance and lens and the subject stays centered. "
-    "The subject and its parts remain rigid and fixed in place. "
-    "Preserve their shape, scale, proportions, pose, markings and materials. "
-    "The background and lighting stay fixed throughout the single uninterrupted shot."
-)
 
 ORBIT_PRESETS = {
     "full_steps": {"width": 768, "height": 768, "length": 73, "steps": 28, "turbo": False, "sampler": "res_multistep", "scheduler": "simple"},
@@ -37,19 +25,6 @@ SELECTION = {"schema": "mumblebox.export-selection/1", "variants": {
 SCHEMA = {key: deepcopy(ORBIT_SOURCE[key]) for key in ("turnaround", "orbit", "frames")}
 for key, value in ORBIT_PRESETS["full_steps"].items():
     SCHEMA["orbit"][key]["default"] = value
-SCHEMA["turnaround"].update({
-    "sampler": field("euler", "Sampler for the four-view image sheet.", choices=("euler", "res_multistep")),
-    "sigmas": field(H3_TEMPLATE["15"]["inputs"]["sigmas"], "The sheet's noise schedule as descending comma-separated values from 1 to 0."),
-    "video_shift": field(1., "Shift the image model's noise schedule.", limits=(.1, 8.), step=.1),
-    "decode_tile": field(512, "Decode the sheet in tiles. Smaller tiles reduce peak VRAM.", limits=(128, 1024), step=32),
-})
-SCHEMA["orbit"].update({
-    "prompt": {**SCHEMA["orbit"]["prompt"], "default": ORBIT_PROMPT},
-    "denoise": field(1., "Fraction of the noise schedule used for the orbit.", limits=(.1, 1.), step=.05),
-    "chunk_threshold": field(4096, "Minimum sequence size for splitting feed-forward work.", limits=(0, 65536), step=256),
-    "decode_overlap": field(64, "Pixels shared between video decoder tiles. More overlap can reduce seams.", limits=(0, 128), step=8),
-    "temporal_overlap": field(8, "Frames shared between decoder batches. More overlap can reduce changes between batches.", limits=(0, 32), step=4),
-})
 SCHEMA["camera"] = {
     "camera_calibration": field("Auto fit lens", "Fit one shared focal length, or hold it at the chosen field of view.",
                                 choices=("Auto fit lens", "Keep chosen lens")),
@@ -124,16 +99,6 @@ def validate(controls):
         for key, spec in fields.items():
             if type(spec["default"]) is float:
                 values[group][key] = float(values[group][key])
-    try:
-        sigmas = [float(value) for value in values["turnaround"]["sigmas"].split(",")]
-    except ValueError:
-        sigmas = []
-    if not 2 <= len(sigmas) <= 101 or not 0 < sigmas[0] <= 1 or sigmas[-1] != 0 or any(
-            not 0 <= after < before for before, after in zip(sigmas, sigmas[1:])):
-        raise ValueError("Use descending sheet sigmas between 1 and 0, ending at 0.")
-    orbit = values["orbit"]
-    if 2*orbit["decode_overlap"] > orbit["decode_tile"] or 2*orbit["temporal_overlap"] > orbit["decode_frames"]:
-        raise ValueError("Decoder overlap must be at most half the tile or batch size.")
     return values
 
 

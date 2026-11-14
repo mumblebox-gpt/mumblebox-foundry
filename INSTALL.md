@@ -115,9 +115,9 @@ For an update rollback, stop ComfyUI and restore the changed files/config listed
 For the CCORE prop workflow, the Foundry installer installs the pinned Playwright package into the ComfyUI host environment and prepares its Chromium headless shell. If installing the custom node manually, run the extension’s host requirements and then run `python -m playwright install chromium --only-shell` with the same host interpreter. CCORE model weights are downloaded on first use.
 
 
-## Orbit to Mesh and Virtual Turntable dependencies
+## Orbit to Mesh, Orbit with Splats and Virtual Turntable dependencies
 
-Both workflows use the native ComfyUI P-H3 Image and MiniMax H3 nodes, BiRefNet,
+These workflows use the native ComfyUI P-H3 Image and MiniMax H3 nodes, BiRefNet,
 and the H3 attention and feed-forward memory controls from
 [ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes). The model-credit panel
 links to the original weights and to MiniMax’s license application. Install
@@ -127,7 +127,16 @@ pinned ComfyUI and KJNodes software for these workflows. For a standalone instal
 use the ComfyUI and KJNodes revisions in `dependencies.json` and install the
 declared KJNodes packages into the ComfyUI host environment.
 
-Orbit to Mesh uses COLMAP for camera alignment. Virtual Turntable also needs the
+Orbit to Mesh and Orbit with Splats use COLMAP for camera alignment. Orbit with
+Splats also needs the Windows executable from [Brush 0.3.0](https://github.com/ArthurBrussee/brush/releases/tag/v0.3.0).
+Foundry shows the exact folder to use. Place the executable there as
+`brush_app.exe`. An administrator can instead set `MUMBLEBOX_BRUSH` to the full
+path to that executable before launching ComfyUI. The workflow verifies the
+executable's checksum before training. For the hybrid MP4 export, install the
+host requirements, including `imageio-ffmpeg`, in your ComfyUI Python environment.
+Pinokio installs the host requirements automatically.
+
+ Virtual Turntable also needs the
 tools for its selected photogrammetry engine.
 
 Install the photogrammetry engine you want to use. The tested Windows builds are

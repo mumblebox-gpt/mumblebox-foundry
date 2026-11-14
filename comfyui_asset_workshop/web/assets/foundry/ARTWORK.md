@@ -28,3 +28,5 @@ Final prompt direction: preserve the approved silver lettering; provide a delibe
 - `connect-agent.webp` shows a friendly ivory and sage helper robot connecting a brass plug to a small 3D workbench. Generated with the built-in image tool for the Connect your agent dialog.
 
 - \`method-orbit-to-mesh.webp\` shows a copper-red dragon with a camera on an orbit track. Generated for the Orbit to Mesh card.
+
+- `method-orbit-with-splats.webp` shows a red Amanita on a studio turntable, with Gaussian points on the cap and wire mesh on the gills. Generated as the Orbit with Splats hero.

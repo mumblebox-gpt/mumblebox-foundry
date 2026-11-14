@@ -16,15 +16,7 @@ ENDS = {"turnaround": ["18"], "orbit": ["44"], "cameras": ["60"], "views": ["62"
 def main_graph(run):
     graph = raw_graph(run, photogrammetry=False)
     controls, saved = run["controls"], run["checkpoints"]
-    prefix = f"foundry/{METHOD}/{run['id']}"
-    sheet, orbit = controls["turnaround"], controls["orbit"]
-    graph["8"]["inputs"]["shift_video"] = sheet["video_shift"]
-    graph["14"]["inputs"]["sampler_name"] = sheet["sampler"]
-    graph["15"]["inputs"]["sigmas"] = sheet["sigmas"]
-    graph["17"]["inputs"]["tile_size"] = sheet["decode_tile"]
-    graph["34"]["inputs"]["seq_threshold"] = orbit["chunk_threshold"]
-    graph["39"]["inputs"]["denoise"] = orbit["denoise"]
-    graph["41"]["inputs"].update(overlap=orbit["decode_overlap"], temporal_overlap=orbit["temporal_overlap"])
+    prefix = f"foundry/{run.get('method', METHOD)}/{run['id']}"
     graph["60"] = node("FoundryOrbitSolveCameras", frame_set=link(48), **controls["camera"])
     if saved.get("cameras"):
         graph["61"] = node("FoundryOrbitLoadCameras", manifest=saved["cameras"])
@@ -74,19 +66,19 @@ def tune_finishing(graph, controls):
         graph["3011"]["inputs"]["mode"] = controls["bake"]["grounding"]
 
 
-def compile_stage(stage, run, output_root=None):
+def compile_stage(stage, run, output_root=None, *, offset=OFFSET):
     run = {**run, "controls": validate(run["controls"])}
     if stage in FINISHING:
         graph = finish_stage(stage, run)
         tune_finishing(graph, run["controls"])
     else:
         graph = ancestor_prompt(main_graph(run), ENDS[stage])
-    return remap(graph, stage, OFFSET)
+    return remap(graph, stage, offset)
 
 
-def template(run=None):
+def template(run=None, *, offset=OFFSET, method=METHOD, title=TITLE):
     controls = defaults()
-    run = run or {"id": "preview", "method": METHOD, "controls": controls, "settings": settings(controls, {}),
+    run = run or {"id": "preview", "method": method, "controls": controls, "settings": settings(controls, {}),
                   "references": [], "checkpoints": {}, "selection": SELECTION}
     # The canvas shows the entire independent recipe. The wizard queues only
     # the ancestors needed by the stage, using its verified saved checkpoints.
@@ -110,10 +102,10 @@ def template(run=None):
     graph["312"]["inputs"]["images"] = link(2)
     graph["2020"]["inputs"]["bg_removal_model"] = link(46)
     graph["2002"]["inputs"]["mesh"] = link(1092)
-    graph["3010"]["inputs"].update(asset_name=run.get("name", TITLE), selection_json=json.dumps(run["selection"]))
+    graph["3010"]["inputs"].update(asset_name=run.get("name", title), selection_json=json.dumps(run["selection"]))
     graph["3011"] = node("Hi3DGroundingFrame", mesh=link(2015), mode="level")
     graph["3010"]["inputs"]["grounding_json"] = link(3011)
     tune_finishing(graph, run["controls"])
     ends = ["18", "44", "60", "62", "63", "340", "382"]
     ends += [key for stage in FINISHING for key in STAGE_OUTPUTS[stage]]
-    return remap(ancestor_prompt(graph, ends), "setup", OFFSET)
+    return remap(ancestor_prompt(graph, ends), "setup", offset)

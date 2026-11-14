@@ -581,5 +581,9 @@
   "download_video": "Télécharger la vidéo",
   "delete_video": "Supprimer la vidéo",
   "video_deleted": "Vidéo supprimée.",
-  "delete_video_explanation": "Supprimer cette vidéo du disque ? Les archives d’export et les maillages déjà enregistrés restent disponibles."
+  "delete_video_explanation": "Supprimer cette vidéo du disque ? Les archives d’export et les maillages déjà enregistrés restent disponibles.",
+  "language_catalog_unavailable": "Impossible de charger la langue. Réessayez dans un instant.",
+  "model_file_count_one": "{count} fichier de modèle trouvé.",
+  "model_file_count_other": "{count} fichiers de modèle trouvés.",
+  "model_inventory_limited": "{count} La limite de l’inventaire est atteinte."
 }

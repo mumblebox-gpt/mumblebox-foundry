@@ -1,8 +1,8 @@
 {
-  "skill_revision": "2026-11-12-steady-orbit",
+  "skill_revision": "preview-30-orbit-with-splats",
   "agent_protocol": 1,
   "minimum_foundry_version": "0.1.0-preview.21",
-  "reviewed_foundry_version": "0.1.0-preview.29",
+  "reviewed_foundry_version": "0.1.0-preview.30",
   "languages": "Explain guidance and update notices in the user's language.",
   "capabilities": "Use the running app's workflow capabilities for available settings and exports."
 }

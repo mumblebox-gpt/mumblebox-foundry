@@ -68,6 +68,7 @@ def unit(v):
 def records(solved):
     folder = Path(solved["camera_text"])
     source_indices = solved["frame_set"]["source_indices"]
+    timestamps = solved["frame_set"].get("source_video", {}).get("timestamps_seconds")
     views = []
     for record in sorted(image_records(folder), key=lambda row: row[9]):
         name = record[9]
@@ -85,8 +86,10 @@ def records(solved):
         left, top, right, bottom = box
         direction = unit(pose.T @ np.array([((left + right) / 2 - cx) / fx,
                                             ((top + bottom) / 2 - cy) / fy, 1.0]))
-        source_frame = source_indices[int(Path(name).stem.split("_")[-1])]
+        index = int(Path(name).stem.split("_")[-1])
+        source_frame = source_indices[index]
         views.append({"file": name, "source_frame": source_frame, "rgb": rgb, "mask": mask,
+                      "timestamp_seconds": timestamps[index] if timestamps else None,
                       "rotation": pose, "center": -pose.T @ translation, "ray": direction,
                       "width": width, "height": height, "lens": lens, "bbox": box})
     return sorted(views, key=lambda view: view["source_frame"])
@@ -244,6 +247,7 @@ class PixalViews:
             pose = view["transform_matrix"].tolist()
             frames.append({"file_path": view["file"], "source_frame": view["source_frame"],
                            "target_degrees": target, "solved_degrees": view["angle"],
+                           "timestamp_seconds": view["timestamp_seconds"],
                            "target_error_degrees": error, "camera_angle_x": fov, "transform_matrix": pose})
             x, y = (index % 4)*256, (index // 4)*274
             tile = image.resize((256, 248))

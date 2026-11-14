@@ -256,5 +256,14 @@
   "section_review": "编辑、保存或继续制作 3D",
   "prompt_placeholder": "描述你想要的主体、外观、颜色和风格。",
   "front_placeholder": "正面可见的细节。",
-  "back_placeholder": "背包、背面图案，或正面看不到的其他细节。"
+  "back_placeholder": "背包、背面图案，或正面看不到的其他细节。",
+  "gallery_front": "正面",
+  "gallery_back": "背面",
+  "gallery_single": "单张图像",
+  "gallery_pair": "正背面图像组",
+  "gallery_card_summary": "{kind} · {category}",
+  "gallery_reference_alt": "{name} · {view}",
+  "gallery_creation_count_one": "已显示 {count} 个作品。",
+  "gallery_creation_count_other": "已显示 {count} 个作品。",
+  "gallery_revision_summary": "{view} · {date}"
 }

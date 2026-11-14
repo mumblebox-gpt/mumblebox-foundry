@@ -1,5 +1,5 @@
 import {sourceMessage} from "../i18n.js";
-import {msg, setText, replaceContent} from "../i18n.js";
+import {dateTime, msg, pluralMessage, setText, replaceContent} from "../i18n.js";
 import {el,button,hint,field} from '../dom.js';
 import {request} from '../services.js';
 import {dialog} from '../dialogs.js';
@@ -8,6 +8,10 @@ export async function gallery(shell){
     const state=shell.imageGalleryState??={search:'',category:'',kind:'all',sort:'newest',cursor:''};
     let disposed=false,sequence=0;const selected=new Set(),body=el('div',{}),more=el('div',{}),message=hint('');
     const cap=await request('images/capabilities');
+    const categoryLabel = id => cap.categories.find(category => category.id === id)?.name ?? id;
+    const revisionLabel = (view, timestamp) => msg("images.gallery_revision_summary", {
+        view: msg("images.gallery_" + view), date: dateTime(timestamp * 1000, {timeStyle: "short"}),
+    });
     const open=id=>{shell.openImageId=id;return shell.openImages('Create Images');};
     async function remove(ids){
         const files=el('input',{type:'checkbox'}),detail=hint(msg("images.saved_files_stay_on_disk_unless_you_select_the_separate_file_deletion_option"));
@@ -26,13 +30,17 @@ export async function gallery(shell){
     async function detail(id){
         const record=await request('images/'+id),sides=record.config.paired?['front','back']:['single'];
         const choices=sides.map(side=>{const revision=record.revisions.find(r=>r.id===record.accepted[side]);
-            return el('figure',{class:'creator-frame'},el('figcaption',{},side),el('img',{src:revision.url,alt:record.config.name+' '+side}),
+            return el('figure',{class:'creator-frame'},el('figcaption',{},msg("images.gallery_" + side)),
+                el('img',{src:revision.url,alt:msg("images.gallery_reference_alt", {
+                    name: record.config.name, view: msg("images.gallery_" + side),
+                })}),
                 el('small',{},msg("images.px", {value1: revision.size.join(' × ')})));
         });
         dialog(shell,record.config.name,el('div',{},el('div',{class:'creator-pair','data-paired':String(record.config.paired)},...choices),
-            hint(record.config.category+' · '+new Date(record.created*1000).toLocaleString()),
+            hint(msg("images.gallery_revision_summary", {view: categoryLabel(record.config.category),
+                date: dateTime(record.created * 1000, {timeStyle: "short"})})),
             el('details',{},el('summary',{},msg("images.revisions_and_generation_details")),...record.revisions.map(revision=>el('div',{class:'gallery-actions'},
-                el('a',{href:revision.url,target:'_blank',rel:'noopener noreferrer'},revision.side+' · '+new Date(revision.created*1000).toLocaleString()),
+                el('a',{href:revision.url,target:'_blank',rel:'noopener noreferrer'},revisionLabel(revision.side, revision.created)),
                 el('span',{class:'badge'},record.accepted[revision.side]===revision.id?msg("images.current"):msg("images.retained_revision")),
                 record.accepted[revision.side]!==revision.id?button(msg("images.restore_revision"),async()=>{await request('images/'+id+'/accept',{revision_id:revision.id,expected:record.accepted[revision.side]});await detail(id);}):null)),
                 el('pre',{},JSON.stringify({model:record.config.model,settings:record.config.settings,loras:record.config.loras},null,2)))),[
@@ -41,10 +49,13 @@ export async function gallery(shell){
             {label:msg("images.close"),run:close=>close()}]);
     }
     function card(item){
-        const thumbs=Object.entries(item.accepted).map(([side,id])=>el('img',{src:'/mumblebox-foundry/v1/images/'+item.id+'/files/'+id,alt:item.name+' '+side,loading:'lazy'}));
+        const thumbs=Object.entries(item.accepted).map(([side,id])=>el('img',{src:'/mumblebox-foundry/v1/images/'+item.id+'/files/'+id,alt:msg("images.gallery_reference_alt", {name: item.name, view: msg("images.gallery_" + side)}),loading:'lazy'}));
         return el('article',{class:'image-gallery-card'},el('div',{class:'pair-thumbnails'},...thumbs),el('div',{class:'card-copy'},
             el('div',{class:'gallery-actions'},el('input',{type:'checkbox','aria-label':msg("images.select", {name: item.name}),checked:selected.has(item.id),onchange:e=>e.target.checked?selected.add(item.id):selected.delete(item.id)}),el('h3',{},item.name)),
-            hint((item.paired?'Front / Back pair':'Single image')+' · '+item.category),
+            hint(msg("images.gallery_card_summary", {
+                kind: msg(item.paired ? "images.gallery_pair" : "images.gallery_single"),
+                category: categoryLabel(item.category),
+            })),
             el('div',{class:'actions'},button(msg("images.view_edit"),()=>detail(item.id).catch(e=>shell.message(sourceMessage(e.message),true))),
                 el('a',{href:'/mumblebox-foundry/v1/images/'+item.id+'/package',download:''},msg("images.download_images")),
                 button(msg("images.delete"),()=>remove([item.id]).catch(e=>shell.message(sourceMessage(e.message),true)),{class:'danger'}))));
@@ -54,7 +65,7 @@ export async function gallery(shell){
         try{
             const result=await request('images?'+new URLSearchParams({...state,limit:24}));if(disposed||current!==sequence)return;
             if(!append)body.replaceChildren();body.append(...result.items.map(card));
-            setText(message, body.childElementCount?msg("images.creations_shown", {childElementCount: body.childElementCount}):msg("images.no_saved_creations_match_these_filters"));
+            setText(message, body.childElementCount?pluralMessage("images.gallery_creation_count", body.childElementCount):msg("images.no_saved_creations_match_these_filters"));
             replaceContent(more, result.next_cursor?button(msg("images.load_more"),()=>{state.cursor=result.next_cursor;load(true);}):'');
         }catch(error){setText(message, sourceMessage(error.message));}
     }

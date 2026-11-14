@@ -3,11 +3,12 @@ import json
 from pathlib import Path
 import sys
 import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from foundry.agent_connection import AgentPresence, installation
+from foundry.agent_connection import AgentPresence, installation, job_active
 
 
 class AgentConnectionTests(unittest.TestCase):
@@ -31,6 +32,17 @@ class AgentConnectionTests(unittest.TestCase):
             self.assertEqual(setup["configuration"], expected)
             self.assertEqual(setup["install_directory"], folder)
             self.assertIsNone(setup["install_python"])
+
+    def test_independent_orbit_wizards_use_their_own_running_jobs(self):
+        owners = SimpleNamespace(
+            ACTIVE=None,
+            ORBIT_ACTIVE=SimpleNamespace(tasks={"mesh": object()}),
+            ORBIT_SPLAT_ACTIVE=SimpleNamespace(tasks={"splats": object()}),
+        )
+        with patch("foundry.agent_connection.import_module", return_value=owners):
+            self.assertTrue(job_active("orbit-to-mesh", "mesh"))
+            self.assertTrue(job_active("orbit-with-splats", "splats"))
+            self.assertFalse(job_active("orbit-with-splats", "mesh"))
 
     def test_presence_expires_connections_without_losing_running_agent_jobs(self):
         now = 0

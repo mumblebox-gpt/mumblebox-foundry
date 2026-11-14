@@ -18,8 +18,10 @@ SKILL = PACKAGE / "skills" / "mumblebox-assets"
 WORKFLOWS = {
     "wizard": "image_to_3d", "guided": "guided_mesh", "splat": "splat_solid",
     "hair": "hair_creation", "ccore": "ccore_prop", "garment": "garment_particles",
-    "images": "image_creation", "virtual-turntable": "virtual_turntable", "orbit-to-mesh": "orbit_to_mesh",
+    "images": "image_creation", "virtual-turntable": "virtual_turntable",
+    "orbit-to-mesh": "virtual_turntable", "orbit-with-splats": "virtual_turntable",
 }
+RUN_OWNERS = {"orbit-to-mesh": "ORBIT_ACTIVE", "orbit-with-splats": "ORBIT_SPLAT_ACTIVE"}
 
 
 def local_request(request):
@@ -64,7 +66,8 @@ def installation(port, user_directory, blender):
 
 
 def job_active(group, ident):
-    owner = import_module(f"{__package__}.workflows.{WORKFLOWS[group]}.runs").ACTIVE
+    runs = import_module(f"{__package__}.workflows.{WORKFLOWS[group]}.runs")
+    owner = getattr(runs, RUN_OWNERS.get(group, "ACTIVE"))
     if owner is None:
         return False
     if ident in owner.tasks:

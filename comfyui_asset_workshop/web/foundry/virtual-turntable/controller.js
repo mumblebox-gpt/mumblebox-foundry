@@ -15,7 +15,7 @@ import {syncTurntableGraph,syncTurntableOutputs} from './graph.js';
 
 const KEY='virtual-turntable';
 const TITLES=['Choose an engine','Set up your reference','Review the orbit','Review the mesh','Finish and export'];
-const STAGE_PAGES={preparing:3,turnaround:3,orbit:3,geometry:4,texture:5,balanced:5,compact:5,quads:5,print:5,package:5};
+const STAGE_PAGES={preparing:3,turnaround:3,orbit:3,frames:3,geometry:4,texture:5,balanced:5,compact:5,quads:5,print:5,package:5};
 const LABELS={
     width:'Video width',height:'Video height',length:'Video frames',fps:'Frames per second',prompt:'Prompt',
     side_fraction:'Side guide timing',three_quarter_fraction:'Three-quarter guide timing',back_fraction:'Back guide timing',
@@ -58,7 +58,7 @@ export class VirtualTurntableWizard{
         this.title=config.title||'Virtual Turntable';
         this.titles=config.titles||TITLES;
         this.stagePages=config.stagePages||STAGE_PAGES;
-        this.operationPages=config.operationPages||{turnaround:3,orbit:3,reconstruct:4,finish:5,rocket:3};
+        this.operationPages=config.operationPages||{turnaround:3,orbit:3,frames:3,reconstruct:4,finish:5,rocket:3};
         this.layout=config.layout||'turntable';
         this.offset=config.offset||780000;
         this.shell=shell;
@@ -153,7 +153,7 @@ export class VirtualTurntableWizard{
         if(!this.canStart)return;
         if(operation==='finish'||operation==='rocket')validateExports(this.draft.selection,this.quadChoice());
         await this.save();
-        const prerequisite={orbit:'turnaround',cameras:'orbit',views:'cameras',reconstruct:this.cap.view_presets?'views':'orbit',finish:'geometry'}[operation];
+        const prerequisite={orbit:'turnaround',cameras:'orbit',views:'cameras',frames:'orbit',reconstruct:this.cap.view_presets?'views':'orbit',finish:'geometry'}[operation];
         if(prerequisite&&!this.complete(prerequisite)){
             this.page=this.savedPage();
             this.error=String(ux('resume_from_saved'));
@@ -171,8 +171,8 @@ export class VirtualTurntableWizard{
         const names={detailed:'output_detailed',game_balanced:'output_balanced',game_compact:'output_compact',
             quad_light:'output_quads',print:'output_print',quad_detail:'output_quads'};
         const variants=Object.entries(selection).filter(([,value])=>value.formats?.length);
-        const stageList=['turnaround','orbit',...(this.cap.view_presets?['cameras','views']:[]),'reconstruct','finish'];
-        const completed={turnaround:'turnaround',orbit:'orbit',cameras:'cameras',views:'views',reconstruct:'geometry',finish:'package'};
+        const stageList=['turnaround','orbit',...(this.cap.view_presets?['cameras','views']:this.cap.frame_review?['frames']:[]),'reconstruct','finish'];
+        const completed={turnaround:'turnaround',orbit:'orbit',cameras:'cameras',views:'views',frames:'frames',reconstruct:'geometry',finish:'package'};
         const first=stageList.indexOf(this.dirtyStage);
         const stages=stageList.filter((stage,index)=>stage==='finish'||!this.complete(completed[stage])||(first>=0&&index>=first));
         let error;
@@ -419,13 +419,31 @@ export class VirtualTurntableWizard{
         return el('div',{},el('div',{class:'turntable-review-media'},this.run?.previews?.sheet?el('img',{class:'turntable-sheet',src:this.run.previews.sheet,
             alt:translated('Four-view turnaround: front, side, three-quarter and back')}):null,this.orbit()),
             hint(translated('Check that the object keeps its shape and details throughout the orbit.')),
+            this.frameReview(),
             this.run?.previews?.orbit?el('a',{href:this.run.previews.orbit,download:''},translated('Download orbit video')):null);
+    }
+    frameReview(){
+        if(!this.cap.frame_review||!this.complete('orbit')||['turnaround','orbit'].includes(this.dirtyStage))return null;
+        const review=this.run?.frame_review;
+        const stale=this.dirtyStage==='frames';
+        const video=review?.source_video;
+        const summary=review&&!stale?ux('prepared_frames',{count:review.count,width:review.width,height:review.height}):ux('frame_review_description');
+        return el('section',{class:'turntable-frame-review'},
+            el('h3',{},ux('frame_review_title')),hint(summary),
+            video&&!stale&&video.fps!=null?hint(ux('frame_review_video',
+                {count:video.frame_count,fps:new Intl.NumberFormat(currentLanguage(),{maximumFractionDigits:2}).format(video.fps)})):null,
+            review&&!stale&&this.run.previews.frames?
+                el('img',{class:'turntable-sheet',src:this.run.previews.frames,alt:translated('Selected masked orbit frames')}):null);
     }
     reviewMesh(){
         const report=this.run?.reconstruction;
         const registered=report?.registered_cameras??report?.camera_validation?.calibrated_views;
+        const coverage=report?.orbit_coverage;
         return el('div',{},this.orbit(this.run?.active&&this.run.stage==='geometry'),
-            registered!=null?hint(msg('virtual_turntable.text_count_camera_views_aligned',{count:registered})):null,
+            coverage?.largest_gap_degrees!=null
+                ?hint(ux('camera_coverage',{count:coverage.registered_frames,total:coverage.input_frames,
+                    angle:new Intl.NumberFormat(currentLanguage(),{maximumFractionDigits:1}).format(coverage.largest_gap_degrees)}))
+                :registered!=null?hint(msg('virtual_turntable.text_count_camera_views_aligned',{count:registered})):null,
             this.run?.previews?.frames?el('details',{},el('summary',{},translated('Review the masked reconstruction frames')),
                 el('img',{class:'turntable-sheet',src:this.run.previews.frames,alt:translated('Selected masked orbit frames')})):null,
             this.preview('raw','Original reconstruction'));
@@ -478,16 +496,18 @@ export class VirtualTurntableWizard{
         if(this.page===3){
             if(this.dirtyStage==='turnaround')return this.runButton('Generate turnaround','turnaround');
             if(this.complete('orbit')&&this.dirtyStage!=='orbit'){
-                if(this.complete('geometry')&&this.dirtyStage!=='reconstruct')
+                if(this.complete('geometry')&&!['frames','reconstruct'].includes(this.dirtyStage))
                     return this.runButton('Review the mesh','reconstruct',()=>this.go(4));
+                if(this.cap.frame_review&&(!this.complete('frames')||this.dirtyStage==='frames'))
+                    return this.runButton(ux('prepare_frames'),'frames');
                 return this.runButton('Reconstruct mesh','reconstruct');
             }
             return this.complete('turnaround')?this.runButton('Generate orbit','orbit'):this.runButton('Generate turnaround','turnaround');
         }
         if(this.page===4){
-            if(this.complete('geometry')&&!['turnaround','orbit','reconstruct'].includes(this.dirtyStage))
+            if(this.complete('geometry')&&!['turnaround','orbit','frames','reconstruct'].includes(this.dirtyStage))
                 return this.runButton('Finish and export','finish',()=>this.go(5));
-            if(this.dirtyStage==='turnaround'||this.dirtyStage==='orbit')return this.runButton('Back','reconstruct',()=>this.go(3));
+            if(['turnaround','orbit','frames'].includes(this.dirtyStage))return this.runButton('Back','reconstruct',()=>this.go(3));
             return this.runButton('Reconstruct mesh','reconstruct');
         }
         return this.finishButton();
@@ -500,7 +520,7 @@ export class VirtualTurntableWizard{
         const changed=this.dirtyStage;
         if(changed&&changed!=='finish')return this.runButton(ux('review_earlier_step'),'finish',
             ()=>this.go(changed==='turnaround'?this.cap.view_presets?1:2:changed==='orbit'?this.cap.view_presets?2:3:
-                this.cap.view_presets?3:4));
+                this.cap.view_presets||changed==='frames'?3:4));
         const retry=this.canRetry&&(this.run.operation==='finish'||this.run.operation==='rocket');
         return button(retry?ux('retry_export'):translated('Prepare asset package'),()=>this.act(()=>this.start('finish')),
             {class:'primary',disabled:this.busy||!this.canStart||!this.complete('geometry'),'data-main-action':'true'});

@@ -6,6 +6,10 @@ English is the authoritative interface and documentation source. Write for peopl
 - Latin American Spanish (`es-419`) uses regional terms such as *archivo*, *guardar* and *malla*.
 - French (`fr`) uses plain, direct wording and *vous* in instructions. Prefer *maillage*, *aperçu* and *mémoire vidéo* (VRAM).
 - Brazilian Portuguese (`pt-BR`) uses everyday Brazilian terms such as *arquivo*, *salvar*, *malha* and *prévia*, with *você* where direct address helps.
+- German (`de`) uses plain, direct copy and informal *du* when speaking to the user. Prefer *Datei*, *Mesh*, *Vorschau* and *Grafikspeicher* (VRAM).
+- Japanese (`ja`) uses short action labels and approachable です・ます phrasing in explanations. Keep workflow titles consistent and use familiar terms such as メッシュ, テクスチャ, プレビュー and GPU メモリ.
+- Korean (`ko`) uses clear, polite everyday language and familiar terms such as 메시, 텍스처, 미리 보기 and GPU 메모리.
+- Hindi (`hi`) uses everyday Devanagari and polite आप when directly addressing the user. Prefer familiar terms such as फ़ाइल, मेश, टेक्सचर, प्रीव्यू and वर्कफ़्लो. Keep GPU, VRAM, RAM and file formats recognizable.
 
 Keep model and researcher names recognizable, distinguish VRAM from system RAM, and describe fallback behavior as implemented.
 
@@ -17,9 +21,13 @@ Keep model and researcher names recognizable, distinguish VRAM from system RAM, 
 - foundry/localization.py reads the same manifest and JSON for server message metadata and the shared package README renderer. There is no second set of Python translations.
 - finishing/package_readme.py owns human package documentation. The archive publisher selects the saved interface language at publication. Existing packages, machine catalogs, checksums and retained licenses are unchanged.
 
+## Loading and switching
+
+Foundry loads English at startup and then loads the saved language if it differs. It fetches other catalogs when the user selects them. A failed fetch keeps the previous language and preference. After a successful switch, Foundry releases its reference to the previous non-English catalog so the browser can reclaim the parsed messages. The browser’s HTTP cache can still retain the files for a later switch.
+
 ## Message contract
 
-Use msg("domain.stable_id", {namedValue}) at a presentation site. Pass the descriptor to el, button, field, hint, setText or bindAttribute. Use a complete sentence with named parameters. Do not join English word endings or assume translated word order. Supply complete singular/plural alternatives when needed.
+Use msg("domain.stable_id", {namedValue}) at a presentation site. Pass the descriptor to el, button, field, hint, setText or bindAttribute. Use a complete sentence with named parameters. Do not join English word endings or assume translated word order. For counts, use `pluralMessage` with complete `_one` and `_other` messages and a `{count}` placeholder. The browser selects a form with `Intl.PluralRules` and formats the number in the active language.
 
 A language change only changes bound text and attributes. It does not recreate the wizard, viewer, selected files or form controls, reload models or reload the page. The Foundry root gets its own lang attribute; the surrounding ComfyUI interface is independent. Chinese fonts use local system fallbacks with no download.
 

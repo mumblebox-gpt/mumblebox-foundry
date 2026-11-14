@@ -581,5 +581,9 @@
   "download_video": "Descargar video",
   "delete_video": "Eliminar video",
   "video_deleted": "Video eliminado.",
-  "delete_video_explanation": "¿Eliminar este video del disco? Los paquetes de recursos y las mallas terminadas seguirán disponibles."
+  "delete_video_explanation": "¿Eliminar este video del disco? Los paquetes de recursos y las mallas terminadas seguirán disponibles.",
+  "language_catalog_unavailable": "No se pudo cargar el idioma. Intenta de nuevo en un momento.",
+  "model_file_count_one": "Se encontró {count} archivo de modelo.",
+  "model_file_count_other": "Se encontraron {count} archivos de modelo.",
+  "model_inventory_limited": "{count} Se alcanzó el límite del inventario."
 }

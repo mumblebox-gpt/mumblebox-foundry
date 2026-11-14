@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-preview.30 — Foundry in nine languages and Orbit with Splats
+
+- Add German, Japanese, Korean and Hindi across the interface, CCORE examples, package documentation and project READMEs. English, Simplified Chinese, Latin American Spanish, French and Brazilian Portuguese remain available.
+- Keep English resident as the fallback and load the selected language on demand. After switching, release the previous non-English catalog from Foundry's memory. The browser can reuse the catalog files from its HTTP cache.
+- Switch languages in an open wizard while keeping its fields, previews and current step. If the new language cannot load, keep the active language and show a retry message.
+- Add Orbit with Splats with Arthur Brussee’s Brush, aligned textured GLB and Gaussian PLY exports, linked previews, Rocket Mode and optional hybrid MP4. Install Brush 0.3.0 separately.
+- Carry the orbit controls and frame timing into Virtual Turntable, with masked-frame review before photogrammetry.
+- Localize Gallery view labels and use locale-aware counts in the Gallery and installed-model list.
+
 ## 0.1.0-preview.29 — Windows installer fix
 
 - Initialize ComfyUI before checking the video nodes during Install, Update and Repair. This prevents Pinokio from stopping setup on the KJNodes startup warning.

@@ -36,7 +36,8 @@ def raw_graph(run, *, photogrammetry=True):
     prefix = f"foundry/{run['method'] if 'method' in run else 'virtual-turntable'}/{run['id']}"
     graph = deepcopy(TEMPLATE)
     del graph["27"]["inputs"]["subject_prompt"]
-    sheet, orbit, frames = (config[key] for key in ("turnaround", "orbit", "frames"))
+    base = defaults()
+    sheet, orbit, frames = ({**base[key], **config[key]} for key in ("turnaround", "orbit", "frames"))
 
     def update(key, **options):
         graph[str(key)]["inputs"].update(options)
@@ -46,13 +47,18 @@ def raw_graph(run, *, photogrammetry=True):
                                          "attention_chunks", "decode_tile", "decode_frames")})
     update(2, image=run["references"][0]["filename"] if run["references"] else "none")
     update(11, prompt=sheet["prompt"])
+    update(8, shift_video=sheet["video_shift"])
     update(13, noise_seed=sheet["seed"])
+    update(14, sampler_name=sheet["sampler"])
+    update(15, sigmas=sheet["sigmas"])
+    update(17, tile_size=sheet["decode_tile"])
     update(18, filename_prefix=prefix + "/sheet")
     update(19, crop_rectangles=sheet["crops"])
     update(21, **{key: orbit[key] for key in ("margin", "background", "release_previous_models")})
     update(23, **{key: orbit[key] for key in ("side_fraction", "three_quarter_fraction", "back_fraction")})
     update(27, orbit_prompt=orbit["prompt"], subject_direction=orbit["subject_direction"])
     update(33, strength_model=orbit["lora_strength"])
+    update(34, seq_threshold=orbit["chunk_threshold"])
     update(37, noise_seed=orbit["seed"])
     if orbit["turbo"]:
         graph["57"] = node("LoraLoaderModelOnly", model=link(33),
@@ -60,15 +66,18 @@ def raw_graph(run, *, photogrammetry=True):
                            strength_model=orbit["turbo_strength"])
         update(34, model=link(57))
     update(38, sampler_name=orbit["sampler"])
-    update(39, steps=orbit["steps"], scheduler=orbit["scheduler"])
+    update(39, steps=orbit["steps"], scheduler=orbit["scheduler"], denoise=orbit["denoise"])
+    update(41, overlap=orbit["decode_overlap"], temporal_overlap=orbit["temporal_overlap"])
     update(43, fps=orbit["fps"])
     update(44, filename_prefix=prefix + "/orbit")
     update(45, **{key: frames[key] for key in ("max_frames", "max_edge", "drop_loop_endpoint", "exclude_indices")})
     update(47, **{key: frames[key] for key in ("batch_size", "release_previous_models")})
     update(48, asset_name="vt-" + run["id"][:16], **{key: frames[key] for key in
                                                       ("mask_threshold", "erode_pixels", "release_gpu")})
+    update(48, source_timing=link(45, 2))
     if photogrammetry:
-        graph["49"] = node("FoundryV360FrameReview", images=link(48, 1), filename_prefix=prefix + "/frame-review")
+        graph["49"] = node("FoundryV360FrameReview", images=link(48, 1),
+                           frame_set=link(48), filename_prefix=prefix + "/frame-review")
         update(52, **config["meshroom"])
         update(54, **config["colmap-openmvs"])
         engine = run.get("engine")
@@ -199,7 +208,13 @@ def compile_stage(stage, run, output_root=None):
     if stage == "texture":
         return remap(prepared_graph(run, output_root), stage)
     graph = raw_graph(run)
-    ends = {"turnaround": ["18"], "orbit": ["44"], "geometry": ["49", "53", "55"]}
+    ends = {"turnaround": ["18"], "orbit": ["44"], "frames": ["49"], "geometry": ["53", "55"]}
+    if stage == "geometry" and run["checkpoints"].get("frame_set"):
+        graph["58"] = node("FoundryV360ResumeFrames", saved_folder=run["checkpoints"]["frame_set"])
+        for key in ("52", "54"):
+            graph[key]["inputs"]["frame_set"] = link(58)
+    elif stage == "geometry":
+        ends["geometry"].append("49")
     return remap(ancestor_prompt(graph, ends[stage]), stage)
 
 

@@ -1,5 +1,5 @@
 import {sourceMessage} from "../i18n.js";
-import {languages, currentLanguage} from "../i18n.js";
+import {languages, currentLanguage, onLanguageChange} from "../i18n.js";
 import {msg, setText, appendContent} from "../i18n.js";
 import {cacheControls} from '../cache-controls.js';
 import {el,button,hint,field} from "../dom.js";
@@ -55,13 +55,15 @@ export function render(shell,{service}={}) {
         }catch(error){shell.message(sourceMessage(error.message),true);}
     }},...[["system",msg("common.follow_system_motion_preference")],["full",msg("common.spin_spin_spin_rest")],["paused",msg("common.pause_animation")]].map(([value,label])=>
         el("option",{value,selected:value===(shell.data.preferences.busy_motion||"system")},label)));
+    const languagePicker = el("select", {onchange: event => shell.setLanguage(event.target.value, event.target),
+        "aria-label": msg("common.language")},
+        ...languages.map(language => el("option", {value: language.id}, language.label)));
+    languagePicker.value = currentLanguage();
+    const stopLanguage = onLanguageChange(language => { languagePicker.value = language; });
     const appearance=el("section",{class:"settings-section"},el("h3",{},msg("common.appearance_and_language")),
         el("div",{class:"actions"},button(msg("common.light_theme"),()=>shell.setTheme("light")),button(msg("common.dark_theme"),()=>shell.setTheme("dark"))),
         field(msg("common.busy_animations"),motion,msg("common.applies_to_progress_indicators_pause_keeps_them_still_system_follows_your_mo")),
-        field(msg("common.language"),
-            el("select", {onchange:event=>shell.setLanguage(event.target.value), "aria-label":msg("common.language")},
-                ...languages.map(language=>el("option", {value:language.id, selected:language.id===currentLanguage()}, language.label))),
-            msg("common.language_switch_help")));
+        field(msg("common.language"), languagePicker, msg("common.language_switch_help")));
     const profile=el("select",{"aria-label":msg("common.memory_profile"),onchange:async e=>{
         try{shell.data.preferences=await request("preferences",{profile:e.target.value},{method:"PATCH"});}
         catch(error){shell.message(sourceMessage(error.message),true);}
@@ -79,7 +81,7 @@ export function render(shell,{service}={}) {
     const content=el("div",{},cache.element,appearance,profiles,updates.element,hf.element,civitai.element,
         resources.element);
     const modal=dialog(shell,msg("common.settings"),content);
-    modal.surface.addEventListener("foundry-close",()=>{hf.clear();civitai.clear();resources.dispose();updates.dispose();cache.dispose();});
+    modal.surface.addEventListener("foundry-close",()=>{stopLanguage();hf.clear();civitai.clear();resources.dispose();updates.dispose();cache.dispose();});
     const target=service==="civitai"?civitai.element:service==="hugging-face"?hf.element:null;
     if(target)requestAnimationFrame(()=>{
         if(!modal.surface.isConnected)return;

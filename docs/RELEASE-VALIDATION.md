@@ -17,6 +17,14 @@ Use this checklist for the release commit and publication. Keep verification pro
 - Update the GitHub repository description for every release. Verify the public About text reflects the current workflows, integrations and supported languages.
 - Verify the public GitHub release, then refresh Recent commits on the public Pinokio listing and verify the release commit appears. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
 
+# Preview 0.1.0-preview.30 validation
+
+The existing Comfy Desktop Foundry loaded 13 English catalog files at startup. Using its language picker loaded only the 13 files for each selected language. Returning to English made no translation requests. Selecting French again requested French again. All nine languages switched at 200% text with the open Orbit with Splats fields and playable hybrid preview intact. The Settings picker stayed in sync with the header. Gallery labels and thumbnail descriptions were checked in all nine languages. The original 620-node graph, saved hybrid run, English selection and default text size were restored.
+
+The Orbit with Splats GPU smoke reused previously verified upstream checkpoints. It trained an 80,000-Gaussian Quick preset in Brush, exported the aligned GLB/PLY ZIP and rendered the 20-second hybrid MP4 from the live wizard. The release candidate's MCP accessed the independent graph, reported its saved result and resolved the paired ZIP. The archive passed CRC checks and contains the textured mesh, PLY, alignment data, and credits. Balanced and High settings are available for further testing.
+
+The separate Windows Pinokio test installation ran all software probes and launched Preview 30. The pinned KJNodes probe initialized ComfyUI before import and found both H3 memory nodes, preserving the fix for Obbz's report. The pinned hybrid encoder started, and the launch registered the new Brush node and three presets. The test install reported the expected Brush setup requirement. The live GPU test and the installer test used separate installations.
+
 # Preview 0.1.0-preview.29 validation
 
 On Windows with the pinned ComfyUI and KJNodes revisions, the old probe reproduced the reported missing `PromptServer.instance` warning and exited zero after importing the two required H3 controls. Pinokio's shell had matched the warning's error text and terminated the installer before it wrote its completion record.

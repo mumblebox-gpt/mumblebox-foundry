@@ -18,7 +18,7 @@ from .receipts import sync
 
 PREFIX = "/mumblebox-foundry/v1"
 
-def register(routes, library, preferences, wizard_factory=None, resources=None, updates=None, image_factory=None, image_notify=None, hair_factory=None, hair_notify=None, guided_factory=None, splat_factory=None, cache=None, ccore_factory=None, garment_factory=None, turntable_factory=None, orbit_factory=None):
+def register(routes, library, preferences, wizard_factory=None, resources=None, updates=None, image_factory=None, image_notify=None, hair_factory=None, hair_notify=None, guided_factory=None, splat_factory=None, cache=None, ccore_factory=None, garment_factory=None, turntable_factory=None, orbit_factory=None, orbit_splat_factory=None):
     def endpoint(function):
         async def wrapped(request):
             origin = request.headers.get("Origin")
@@ -56,6 +56,17 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
             turntable_routes(routes, orbit_factory, endpoint, prefix="/mumblebox-foundry/v1/orbit-to-mesh",
                              get_capabilities=orbit_capabilities, get_template=template, compile_prompt=compile_stage,
                              stages=(*STEPS, *FINISHING), event="mumblebox-foundry-orbit")
+        if orbit_splat_factory:
+            from .workflows.orbit_with_splats.definition import capabilities as splat_orbit_cap
+            from .workflows.orbit_with_splats.graph import compile_stage as splat_compile, template as splat_template
+            from .workflows.orbit_with_splats.runs import STEPS as SPLAT_STEPS
+            from .workflows.orbit_with_splats.routes import register_hybrid
+            splat_prefix = PREFIX + "/orbit-with-splats"
+            turntable_routes(routes, orbit_splat_factory, endpoint, prefix=splat_prefix,
+                             get_capabilities=splat_orbit_cap, get_template=splat_template, compile_prompt=splat_compile,
+                             stages=(*SPLAT_STEPS, *FINISHING), event="mumblebox-foundry-orbit-splats",
+                             extra_artifacts=("paired_mesh", "gaussian", "pair_zip", "training_views", "hybrid"))
+            register_hybrid(routes, orbit_splat_factory, endpoint, splat_prefix)
     if splat_factory:
         from .workflows.splat_solid.routes import register as splat_routes
         splat_routes(routes,splat_factory,endpoint)
@@ -534,6 +545,21 @@ def install():
             runs.ORBIT_ACTIVE.library = library
         return runs.ORBIT_ACTIVE
 
+    def orbit_splat_factory():
+        from .workflows.virtual_turntable import runs
+        if runs.ORBIT_SPLAT_ACTIVE is None:
+            from .workflows.orbit_with_splats.runs import OrbitSplatRuns
+            from ..single_image_routes import NativeQueue
+            from ..routes import resources
+            from ..finishing.package_catalog import VARIANTS, parse_selection
+
+            runs.ORBIT_SPLAT_ACTIVE = OrbitSplatRuns(
+                state / "orbit-with-splats", folder_paths.get_input_directory(), folder_paths.get_output_directory(),
+                NativeQueue(PromptServer.instance.prompt_queue), resources, lambda: library.busy(),
+                parse_selection, VARIANTS)
+            runs.ORBIT_SPLAT_ACTIVE.library = library
+        return runs.ORBIT_SPLAT_ACTIVE
+
     library.busy=lambda:cache.running or old_library_busy()
     from .model_locations import registered_locations,invalidate_model_lists
     resource_inventory=ResourceInventory(models.MODEL_ROOT,resources_in_use,registered_locations,models.MODELS,invalidate_model_lists)
@@ -542,4 +568,4 @@ def install():
     updates = ReleaseUpdates(state/"updates.json", preferences)
     register(PromptServer.instance.routes, library, preferences, wizard_factory, resource_inventory, updates,
              image_factory,lambda ident:PromptServer.instance.send_sync('mumblebox-foundry-image',{'id':ident}),
-             hair_factory,lambda ident:PromptServer.instance.send_sync('mumblebox-foundry-hair',{'id':ident}),guided_factory,splat_factory,cache,ccore_factory,garment_factory,turntable_factory,orbit_factory)
+             hair_factory,lambda ident:PromptServer.instance.send_sync('mumblebox-foundry-hair',{'id':ident}),guided_factory,splat_factory,cache,ccore_factory,garment_factory,turntable_factory,orbit_factory,orbit_splat_factory)

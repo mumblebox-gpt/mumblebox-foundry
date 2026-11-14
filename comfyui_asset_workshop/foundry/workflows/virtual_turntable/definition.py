@@ -39,15 +39,32 @@ def field(default, help_text, *, limits=None, choices=None, step=None):
 
 
 TEMPLATE = json.loads(Path(__file__).with_name("template.json").read_text(encoding="utf-8"))
+ORBIT_PROMPT = (
+    "[Shot 1] The camera begins in motion, facing the front of a stationary subject. "
+    "The camera makes one complete 360-degree circle in the same direction throughout, passing the three-quarter view, the first side and then the rear. "
+    "After the rear view, it continues past the opposite side and returns to the opening front view as the clip ends. No pauses or reversals. "
+    "It covers an equal angle between every pair of consecutive frames and holds the same speed "
+    "at the opening, at every view it passes and at the end. "
+    "It keeps the same height, distance and lens and the subject stays centered. "
+    "The subject and its parts remain rigid and fixed in place. "
+    "Preserve their shape, scale, proportions, pose, markings and materials. "
+    "The background and lighting stay fixed throughout the single uninterrupted shot."
+)
+
+
 SCHEMA = {
     "turnaround": {
         "prompt": field(TEMPLATE["11"]["inputs"]["prompt"], "Describe how H3 should preserve the subject across all four views."),
         "panel_size": field(1024, "Pixels per square panel. More pixels cost VRAM.", limits=(512, 1536), step=64),
         "seed": field(42, "Change the seed to generate a different sheet.", limits=(0, 2**53-1)),
         "crops": field(TEMPLATE["19"]["inputs"]["crop_rectangles"], "Four normalized crop rectangles in front, side, three-quarter and back order."),
+        "sampler": field("euler", "Sampler for the four-view image sheet.", choices=("euler", "res_multistep")),
+        "sigmas": field(TEMPLATE["15"]["inputs"]["sigmas"], "The sheet's noise schedule as descending comma-separated values from 1 to 0."),
+        "video_shift": field(1., "Shift the image model's noise schedule.", limits=(.1, 8.), step=.1),
+        "decode_tile": field(512, "Decode the sheet in tiles. Smaller tiles reduce peak VRAM.", limits=(128, 1024), step=32),
     },
     "orbit": {
-        "prompt": field(TEMPLATE["27"]["inputs"]["orbit_prompt"], "Motion instruction for H3. Ask for one smooth turn around a stationary subject."),
+        "prompt": field(ORBIT_PROMPT, "Motion instruction for H3. Ask for one smooth turn around a stationary subject."),
         "subject_direction": field("Keep the subject rigid and its dimensions, details and materials consistent. Use even light and make one smooth full orbit.",
                                    "Add subject-specific direction such as keeping a carving or asymmetric part in place."),
         "width": field(768, "Video width in pixels. Higher resolution uses more memory.", limits=(384, 1536), step=32),
@@ -71,9 +88,13 @@ SCHEMA = {
         "decode_tile": field(256, "Spatial video decoder tile size. Smaller tiles use less VRAM.", limits=(128, 1024), step=32),
         "decode_frames": field(16, "Temporal decoder tile length. Smaller groups use less VRAM.", limits=(16, 128), step=4),
         "release_previous_models": field(True, "Release the preceding image stage’s model allocations before guide masking."),
+        "denoise": field(1., "Fraction of the noise schedule used for the orbit.", limits=(.1, 1.), step=.05),
+        "chunk_threshold": field(4096, "Minimum sequence size for splitting feed-forward work.", limits=(0, 65536), step=256),
+        "decode_overlap": field(64, "Pixels shared between video decoder tiles. More overlap can reduce seams.", limits=(0, 128), step=8),
+        "temporal_overlap": field(8, "Frames shared between decoder batches. More overlap can reduce changes between batches.", limits=(0, 32), step=4),
     },
     "frames": {
-        "max_frames": field(72, "Maximum number of evenly spaced usable frames. More frames cost reconstruction time.", limits=(6, 256)),
+        "max_frames": field(72, "Maximum number of evenly spaced usable frames. More frames cost reconstruction time.", limits=(12, 200)),
         "max_edge": field(768, "Maximum frame side in pixels. Lower it to reduce reconstruction cost.", limits=(256, 2048), step=32),
         "drop_loop_endpoint": field(True, "Discard the final frame when it repeats the opening view."),
         "exclude_indices": field("", "Comma-separated frame indices or ranges to skip, starting at zero. Remove pauses, warped views or duplicates."),
@@ -200,7 +221,16 @@ def validated_settings(overrides, schema=SCHEMA):
                 if not isinstance(json.loads(value), dict):
                     raise ValueError("Native overrides must be a JSON object.")
             values[group][name] = value
+    try:
+        sigmas = [float(value) for value in values["turnaround"]["sigmas"].split(",")]
+    except ValueError:
+        sigmas = []
+    if not 2 <= len(sigmas) <= 101 or not 0 < sigmas[0] <= 1 or sigmas[-1] != 0 or any(
+            not 0 <= after < before for before, after in zip(sigmas, sigmas[1:])):
+        raise ValueError("Use descending sheet sigmas between 1 and 0, ending at 0.")
     orbit = values["orbit"]
+    if 2*orbit["decode_overlap"] > orbit["decode_tile"] or 2*orbit["temporal_overlap"] > orbit["decode_frames"]:
+        raise ValueError("Decoder overlap must be at most half the tile or batch size.")
     if (orbit["length"] - 5) % 17 or orbit["width"] % 32 or orbit["height"] % 32:
         raise ValueError("Choose an H3 frame count of 5 + 17n (for example 73 or 243), and video dimensions divisible by 32.")
     if not orbit["three_quarter_fraction"] < orbit["side_fraction"] < orbit["back_fraction"]:
@@ -221,7 +251,7 @@ def capabilities():
         "id": METHOD, "description": DESCRIPTION, "tip": TIP,
         "engines": {key: dict(info, missing=missing(key), source=SOURCES[key]) for key, info in ENGINES.items()},
         "controls": deepcopy(SCHEMA), "defaults": defaults(), "selection": DEFAULT_SELECTION,
-        "orbit_presets": deepcopy(ORBIT_PRESETS),
+        "orbit_presets": deepcopy(ORBIT_PRESETS), "frame_review": True,
         "finishing_defaults": DEFAULTS, "finishing_ranges": RANGES, "viewer": viewer_module(),
         "exports": [{"id": key, "directory": value[0], "formats": value[1], "description": value[2]}
                     for key, value in VARIANTS.items() if key != "quad_detail"],

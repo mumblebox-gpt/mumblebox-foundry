@@ -22,8 +22,8 @@ async def body(request):
 
 def register(routes, factory, endpoint, *, prefix=PREFIX, get_capabilities=capabilities,
              get_template=template, compile_prompt=compile_stage, stages=(*STEPS, *FINISHING),
-             event="mumblebox-foundry-turntable"):
-    artifacts = ("orbit", "raw", "frames", "clean", "texture", "refined", "balanced", "compact", "print", "quads")
+             event="mumblebox-foundry-turntable", extra_artifacts=()):
+    artifacts = ("orbit", "raw", "frames", "clean", "texture", "refined", "balanced", "compact", "print", "quads", *extra_artifacts)
     @routes.get(prefix + "/capabilities")
     @endpoint
     async def cap(request):

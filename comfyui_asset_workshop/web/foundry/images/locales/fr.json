@@ -256,5 +256,14 @@
   "section_review": "Modifier, enregistrer ou passer à la 3D",
   "prompt_placeholder": "Le sujet, l'apparence, les couleurs et le style que vous souhaitez.",
   "front_placeholder": "Détails visibles sur l'avant.",
-  "back_placeholder": "Sac à dos, marquages arrière ou détails invisibles depuis l'avant."
+  "back_placeholder": "Sac à dos, marquages arrière ou détails invisibles depuis l'avant.",
+  "gallery_front": "Vue de face",
+  "gallery_back": "Vue de dos",
+  "gallery_single": "Image seule",
+  "gallery_pair": "Paire face et dos",
+  "gallery_card_summary": "{kind} · {category}",
+  "gallery_reference_alt": "{name} · {view}",
+  "gallery_creation_count_one": "{count} création affichée.",
+  "gallery_creation_count_other": "{count} créations affichées.",
+  "gallery_revision_summary": "{view} · {date}"
 }

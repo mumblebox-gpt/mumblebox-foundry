@@ -2,16 +2,28 @@
 let locale = "en";
 import manifest from "./locales/manifest.json" with {type: "json"};
 
-let catalogs = Object.fromEntries(manifest.languages.map(item => [item.id, {}]));
 const manifestUrl = new URL("./locales/manifest.json", import.meta.url);
-await Promise.all(manifest.languages.flatMap(language =>
-    Object.entries(manifest.domains).map(async ([domain, directory]) => {
-        const url = new URL(directory + "/" + language.id + ".json", manifestUrl);
-        url.searchParams.set("catalog", "3");
-        const {default: messages} = await import(url.href, {with: {type: "json"}});
-        for (const [key, value] of Object.entries(messages)) catalogs[language.id][domain + "." + key] = value;
-    })
-));
+
+async function loadCatalog(language, read) {
+    const domains = await Promise.all(Object.entries(manifest.domains).map(async ([domain, directory]) => {
+        const url = new URL(directory + "/" + language + ".json", manifestUrl);
+        url.searchParams.set("catalog", "4");
+        const messages = await read(url);
+        return Object.entries(messages).map(([key, value]) => [domain + "." + key, value]);
+    }));
+    return Object.fromEntries(domains.flat());
+}
+
+const english = await loadCatalog("en", async url => (await import(url.href, {with: {type: "json"}})).default);
+let activeCatalog = english;
+let pluralRules = new Intl.PluralRules("en");
+
+async function readTranslation(url) {
+    // Fetch allows Foundry to release the parsed catalog when the language changes.
+    const response = await fetch(url);
+    if (!response.ok) throw Error("Translation catalog returned HTTP " + response.status);
+    return response.json();
+}
 const bindings = new Set();
 const textBindings = new WeakMap();
 const attributeBindings = new WeakMap();
@@ -21,21 +33,19 @@ const parameters = /\{([A-Za-z][A-Za-z0-9_]*)\}/g;
 
 export const languages = manifest.languages;
 
-export function configureCatalogs(data) {
-    catalogs = data;
-    sourceIndex = undefined;
-}
-
 export function currentLanguage() {
     return locale;
 }
 
 export function t(key, values = {}) {
-    const source = catalogs[locale]?.[key] ?? catalogs.en?.[key] ?? key;
-    return source.replace(parameters, (whole, name) => {
-        if (!Object.hasOwn(values, name)) throw Error("Missing translation parameter " + name + " for " + key);
+    return formatMessage(activeCatalog[key] ?? english[key] ?? key, key, values);
+}
+
+function formatMessage(source, key, values, useEnglish = false) {
+    return source.replace(parameters, (_, name) => {
+        if (!useEnglish && !Object.hasOwn(values, name)) throw Error("Missing translation parameter " + name + " for " + key);
         const value = values[name];
-        return String(isMessage(value) ? value : value ?? "");
+        return String(useEnglish && isMessage(value) ? value.toJSON() : value ?? "");
     });
 }
 
@@ -43,7 +53,24 @@ export function msg(key, values = {}) {
     return {
         [marker]: true, key, values,
         toString() { return t(key, values); },
-        toJSON() { return catalogs.en?.[key]?.replace(parameters, (_, name) => String(isMessage(values[name]) ? values[name].toJSON() : values[name] ?? "")) ?? key; },
+        toJSON() { return formatMessage(english[key] ?? key, key, values, true); },
+    };
+}
+
+export function pluralMessage(key, count) {
+    return {
+        [marker]: true,
+        toString() {
+            const variant = key + "_" + pluralRules.select(count);
+            const source = activeCatalog[variant] ?? activeCatalog[key + "_other"];
+            return source === undefined
+                ? this.toJSON()
+                : formatMessage(source, key, {count: number(count)});
+        },
+        toJSON() {
+            const variant = key + (count === 1 ? "_one" : "_other");
+            return formatMessage(english[variant] ?? key, key, {count: new Intl.NumberFormat("en").format(count)}, true);
+        },
     };
 }
 
@@ -131,9 +158,24 @@ export function onLanguageChange(listener) {
     return () => listeners.delete(listener);
 }
 
-export function setLanguage(value) {
+export async function setLanguage(value, save) {
     if (!languages.some(item => item.id === value)) throw Error("Unsupported Foundry language");
+    if (locale === value) return;
+
+    let catalog;
+    try {
+        catalog = value === "en" ? english : await loadCatalog(value, readTranslation);
+    } catch (cause) {
+        const key = "common.language_catalog_unavailable";
+        const error = new Error(t(key), {cause});
+        error.i18n = {key, values: {}};
+        throw error;
+    }
+    await save?.(value);
+
     locale = value;
+    activeCatalog = catalog;
+    pluralRules = new Intl.PluralRules(value);
     for (const binding of bindings) update(binding);
     for (const listener of listeners) listener(locale);
 }
@@ -152,16 +194,16 @@ function sourceMessages() {
     if (sourceIndex) return sourceIndex;
     const exact = new Map();
     const templates = [];
-    for (const [key, english] of Object.entries(catalogs.en)) {
+    for (const [key, source] of Object.entries(english)) {
         if (key.startsWith("ccore.preset_")) continue;
-        const names = [...english.matchAll(parameters)].map(match => match[1]);
+        const names = [...source.matchAll(parameters)].map(match => match[1]);
         if (!names.length) {
-            if (!exact.has(english)) exact.set(english, key);
+            if (!exact.has(source)) exact.set(source, key);
             continue;
         }
         // Parameter-only compositions are valid explicit messages, not legacy matchers.
-        if (!/[A-Za-z]/.test(english.replace(parameters, ""))) continue;
-        const parts = english.split(parameters);
+        if (!/[A-Za-z]/.test(source.replace(parameters, ""))) continue;
+        const parts = source.split(parameters);
         let pattern = "";
         for (let index = 0; index < parts.length; index++) {
             const escaped = parts[index].replace(/[.*+?^{}()|[\]\\]/g, "\\$&").replaceAll("$", "\\$");

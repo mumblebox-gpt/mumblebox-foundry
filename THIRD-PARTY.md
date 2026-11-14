@@ -40,3 +40,7 @@ The 3D-Guided method uses the same Qwen Image 2.1 resources as the existing meth
 The orbit workflows use [Pruna P-H3 Image](https://huggingface.co/PrunaAI/P-H3-Image-Comfy), [MiniMax H3](https://huggingface.co/MiniMaxAI/MiniMax-H3) and [Pablo Dawson’s orbit LoRA](https://huggingface.co/pablodawson/MiniMax-H3-360-Orbit-LoRA). Their source terms and applicable territorial requirements are linked in the wizards. The software archive includes the notices and workflow recipes. Model weights come from their original publishers.
 
 [KJNodes](https://github.com/kijai/ComfyUI-KJNodes/tree/35e5956193769d18a13136cdedb73a36a05c73e6) provides the H3 memory controls under GPL-3.0. Virtual Turntable includes an adapted Meshroom object-turntable graph. The Meshroom and AliceVision notices are retained under MPL-2.0, and the supported COLMAP and OpenMVS tools retain their respective BSD-3-Clause and AGPL-3.0 terms. See the [workflow setup guide](INSTALL.md#orbit-to-mesh-and-virtual-turntable-dependencies).
+
+## Orbit with Splats
+
+[Brush 0.3.0](https://github.com/ArthurBrussee/brush/releases/tag/v0.3.0) by Arthur Brussee and contributors trains the Gaussian splat. Brush is released under Apache-2.0 and is installed separately. Foundry verifies the selected Windows executable before use. Hybrid MP4 export uses the FFmpeg executable supplied by [imageio-ffmpeg](https://github.com/imageio/imageio-ffmpeg). The aligned ZIP credits the reconstruction and training tools and links to their applicable terms.

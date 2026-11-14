@@ -581,5 +581,9 @@
   "download_video": "Baixar vídeo",
   "delete_video": "Excluir vídeo",
   "video_deleted": "Vídeo excluído.",
-  "delete_video_explanation": "Excluir este vídeo do disco? Os pacotes e as malhas já salvos continuam disponíveis."
+  "delete_video_explanation": "Excluir este vídeo do disco? Os pacotes e as malhas já salvos continuam disponíveis.",
+  "language_catalog_unavailable": "Não foi possível carregar o idioma. Tente novamente em instantes.",
+  "model_file_count_one": "{count} arquivo de modelo encontrado.",
+  "model_file_count_other": "{count} arquivos de modelo encontrados.",
+  "model_inventory_limited": "{count} O limite do inventário foi atingido."
 }

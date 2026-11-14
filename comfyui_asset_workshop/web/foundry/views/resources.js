@@ -1,5 +1,5 @@
 import {sourceMessage} from "../i18n.js";
-import {currentLanguage, msg, setText} from "../i18n.js";
+import {currentLanguage, msg, pluralMessage, setText} from "../i18n.js";
 import {el,button,hint} from '../dom.js';
 import {request} from '../services.js';
 const size=n=>n>=1024**3?(n/1024**3).toFixed(2)+' GB':(n/1024**2).toFixed(1)+' MB';
@@ -35,7 +35,8 @@ export function resourceLists(shell){
         try{
             const query = new URLSearchParams({cursor, limit: 100, sort: sort.value});
             const data=await request('resources?' + query);if(disposed)return;
-            setText(feedback, msg("common.model_files_found", {total: data.total, value2: data.truncated?' · inventory limit reached.':'.'}));
+            const count = pluralMessage("common.model_file_count", data.total);
+            setText(feedback, data.truncated ? msg("common.model_inventory_limited", {count}) : count);
             const dateFormat=new Intl.DateTimeFormat(currentLanguage(),{dateStyle:'medium'});
             for(const item of data.items){
                 const added = Number.isFinite(item.added_at)

@@ -1,8 +1,8 @@
 # Mumblebox 3D Asset Foundry
 
-**Version de Foundry 0.1.0-preview.29**
+**Version de Foundry 0.1.0-preview.30**
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md)
+[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
 **Créez des images et des ressources 3D sur votre PC, en solo ou avec votre agent de codage.**
 
@@ -11,6 +11,12 @@ Foundry réunit des flux de travail d’IA dans des assistants guidés, avec des
 Créez des accessoires de jeu, des éléments de personnage, des coiffures, des splats ou des objets pour l’impression 3D. Prenez le temps de vérifier le résultat selon l’usage prévu. Un maillage généré peut demander des retouches, une rétopologie, un ajustement ou une préparation à l’impression.
 
 [Installer avec Pinokio](PINOKIO.md) · [Versions à télécharger](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [Connecter un agent](AGENT-SETUP.md) · [Historique des versions](../CHANGELOG.md)
+
+## Projet original et communauté Pinokio
+
+Le projet original, maintenu par **mumblebox-gpt**, est [Mumblebox Foundry sur GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry). Suivez ce dépôt pour le développement en cours et consultez ses [versions publiées](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) pour les notes de version et les téléchargements disponibles. Si vous lisez un fork ou une copie de ce README, ces liens vous ramènent au projet original ; un fork peut contenir des modifications différentes ou une version plus ancienne.
+
+Nous sommes fiers de créer aux côtés de la communauté de créateurs de [Pinokio](https://pinokio.co/). Pinokio facilite l'installation et le partage d'outils locaux. Nous apprécions cette communauté où les créateurs peuvent découvrir leurs projets respectifs, échanger des retours utiles et apprendre ensemble. Merci à cocktail peanut et à toutes les personnes qui contribuent à cet écosystème créatif. [Retrouvez Foundry sur Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
 
 ## Donnez une longueur d’avance à votre agent de codage
 
@@ -31,6 +37,7 @@ Le but est de gagner du temps, d’économiser des tokens et d’éviter de refa
 | **Guidage 3D** | Combinez une géométrie provisoire Pixal3D, des vues mesurées dans Blender, des estimations MoGe 2 et le guidage Qwen avant la reconstruction. | Pour les objets dont vous voulez choisir et vérifier les angles de prise de vue. Prévoyez davantage de calcul. |
 | **Splat et solide** | Obtenez un splat gaussien avec Idol de Sperid Labs et un maillage compagnon nettoyé. Vous pouvez affiner le maillage avec Hi3D. | Pour conserver une apparence détaillée tout en gardant une géométrie plus légère. L’assistant propose une vidéo orbitale et une comparaison des maillages. |
 | **De l’orbite au maillage** | Créez une vidéo orbitale H3 à partir d’une image, choisissez des vues alignées, puis reconstruisez avec Pixal3D. Hi3D et TRELLIS.2 assurent la finition. | Pour vérifier les angles et écarter une vue floue ou déformée avant la reconstruction. |
+| **Orbite et splats gaussiens** | Créez un maillage texturé et un splat gaussien aligné à partir d’une même vidéo. Comparez-les avec des caméras liées et exportez la paire ou un MP4 hybride. | Pour garder un maillage modifiable et des détails qui varient selon le point de vue. |
 | **Plateau tournant virtuel** | Produisez une vidéo orbitale avec H3, puis reconstruisez le sujet par photogrammétrie avec Meshroom ou COLMAP + OpenMVS. | Pour essayer une reconstruction par photogrammétrie à partir d’une orbite cohérente. |
 | **CCORE Texte** | Décrivez un accessoire stylisé. L’assistant propose 12 exemples modifiables, une amélioration facultative du texte avec Qwen, un aperçu 3D et un export GLB. | Pour des outils, du mobilier ou des accessoires de jeu individuels. |
 | **CCORE Image + texte** | Donnez une image et une description. CCORE utilise son projecteur visuel pour interpréter l’image. Vous pouvez créer la référence dans l’assistant. | Pour reprendre ou modifier des éléments d’une photo, d’un croquis ou d’un rendu. |

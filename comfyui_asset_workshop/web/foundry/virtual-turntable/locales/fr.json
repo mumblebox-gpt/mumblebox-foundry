@@ -375,5 +375,12 @@
   "ux_export_print_height_mm": "Hauteur physique du modèle d’impression en millimètres. Par défaut : {value}.",
   "ux_camera_range": "Réglez le champ de vision minimum en dessous du maximum.",
   "ux_invalid_json": "Saisissez un objet JSON ou rétablissez les réglages par défaut de cette section.",
-  "ux_invalid_sigmas": "Saisissez des valeurs décroissantes entre 1 et 0, séparées par des virgules et se terminant par 0."
+  "ux_invalid_sigmas": "Saisissez des valeurs décroissantes entre 1 et 0, séparées par des virgules et se terminant par 0.",
+  "ux_frame_review_title": "Vérifier les images de reconstruction",
+  "ux_frame_review_description": "Préparez les images qui se recouvrent et les masques du sujet. Vérifiez que le sujet reste entièrement visible pendant le tour. Vous pouvez modifier le choix des images et conserver la vidéo.",
+  "ux_prepare_frames": "Préparer les images et leurs masques",
+  "ux_prepared_frames": "{count} images préparées en {width} × {height} px. Vérifiez les contours des masques avant de créer le maillage.",
+  "ux_camera_coverage": "{count} images alignées sur {total}. Plus grand écart entre les angles de caméra estimés : {angle}°.",
+  "text_preparing_masked_orbit_frames": "Préparation des images du tour et des masques",
+  "ux_frame_review_video": "Vidéo source : {count} images à {fps} i/s."
 }

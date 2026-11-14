@@ -9,6 +9,8 @@ from .artifacts import owned_path
 VIDEO_SUFFIXES = frozenset({".mp4", ".webm", ".mov", ".mkv"})
 RUN_ID = re.compile(r"[a-f0-9]{32}")
 SOURCES = (
+    ("orbit-with-splats", "foundry/orbit-with-splats", "orbit_*", "Orbit with Splats"),
+    ("orbit-with-splats", "foundry/orbit-with-splats", "hybrid-*.mp4", "Orbit with Splats"),
     ("orbit-to-mesh", "foundry/orbit-to-mesh", "orbit_*", "Orbit to Mesh"),
     ("virtual-turntable", "foundry/virtual-turntable", "orbit_*", "Virtual Turntable"),
     ("splat-runs", "foundry-splat", "orbit/asset_*", "Splat & Solid"),

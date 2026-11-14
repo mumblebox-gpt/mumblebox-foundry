@@ -1,0 +1,12 @@
+/* Keep native previews aligned at common desktop and large-text widths. */
+.orbit-pair,.orbit-hybrid{display:grid;gap:.6em;margin-block:1em}
+.orbit-pair-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75em}
+.orbit-pair-grid[data-view=mesh],.orbit-pair-grid[data-view=splat]{grid-template-columns:minmax(0,1fr)}
+.orbit-pair-grid[data-view=mesh] [data-role=splat],.orbit-pair-grid[data-view=splat] [data-role=mesh]{display:none}
+.orbit-pair [aria-pressed=true]{outline:2px solid var(--accent);outline-offset:-2px}
+.orbit-pair-grid .turntable-mesh-preview{height:clamp(210px,35vh,490px);min-width:0}
+.orbit-hybrid-settings{display:grid;gap:.6em;grid-template-columns:repeat(auto-fit,minmax(min(100%,11em),1fr))}
+.orbit-hybrid canvas,.orbit-hybrid-video{width:min(100%,52em);aspect-ratio:16/9;border-radius:.5em}
+.orbit-hybrid progress{width:min(100%,32em)}
+.orbit-splat-preset{margin-block:.75em}
+@media(max-width:670px){.orbit-pair-grid{grid-template-columns:minmax(0,1fr)}}

@@ -40,6 +40,8 @@ from .foundry.workflows.virtual_turntable.nodes import NODE_CLASS_MAPPINGS as TU
 NODE_CLASS_MAPPINGS.update(TURNTABLE_NODES)
 from .foundry.workflows.orbit_to_mesh.nodes import NODE_CLASS_MAPPINGS as ORBIT_NODES
 NODE_CLASS_MAPPINGS.update(ORBIT_NODES)
+from .foundry.workflows.orbit_with_splats.nodes import NODE_CLASS_MAPPINGS as ORBIT_SPLAT_NODES
+NODE_CLASS_MAPPINGS.update(ORBIT_SPLAT_NODES)
 from .foundry.workflows.ccore_prop.nodes import NODE_CLASS_MAPPINGS as CCORE_NODES
 NODE_CLASS_MAPPINGS.update(CCORE_NODES)
 from .foundry.workflows.garment_particles.nodes import NODE_CLASS_MAPPINGS as GARMENT_NODES

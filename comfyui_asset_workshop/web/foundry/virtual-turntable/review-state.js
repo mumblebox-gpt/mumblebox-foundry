@@ -43,7 +43,7 @@ export function firstChangedStage(draft, run) {
     if (run.references?.[0]?.filename !== draft.image || !equal(before.turnaround, now.turnaround))
         return 'turnaround';
     if (!equal(before.orbit, now.orbit)) return 'orbit';
-    if (!equal(before.frames, now.frames)) return now.camera ? 'cameras' : 'reconstruct';
+    if (!equal(before.frames, now.frames)) return now.camera ? 'cameras' : 'frames';
     if (now.camera) {
         if (!equal(before.camera, now.camera)) return 'cameras';
         if (!equal(before.views, now.views)) return 'views';
@@ -59,5 +59,5 @@ export function firstChangedStage(draft, run) {
 
 export const operations = {
     turnaround:'turnaround_stage',orbit:'orbit_stage',cameras:'camera_stage',views:'views_stage',
-    reconstruct:'mesh_stage',finish:'finish_stage',
+    frames:'prepare_frames',reconstruct:'mesh_stage',finish:'finish_stage',
 };

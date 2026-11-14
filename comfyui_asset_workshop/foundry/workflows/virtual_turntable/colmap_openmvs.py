@@ -14,6 +14,7 @@ import time
 import math
 from pathlib import Path
 import numpy as np
+from scipy.spatial.transform import Rotation
 from PIL import Image
 from comfy_api.latest import Types
 from comfy.utils import ProgressBar
@@ -21,6 +22,7 @@ from .runtime import runtime_settings
 from .references import CATEGORY
 from .processes import release_models, run_process
 from .openmvs_texture import texture_runtime, texture_options
+from .camera_validation import orbit_coverage
 from .colmap_geometry import image_records, prepare, read_camera
 from .colmap_export import export_asset
 
@@ -246,11 +248,17 @@ class Reconstruct:
                   if line.strip() and not line.startswith('#')]
         camera_report = {'reference': reference, 'reference_horizontal_fov': math.degrees(2 * math.atan(width / (2 * intrinsics[0]))),
                          'sparse_points': len(errors), 'mean_sparse_track_error_px': float(np.mean(errors)) if errors else None}
+        centers = {}
+        for row in image_records(camera_text):
+            quaternion = np.array(row[1:5], dtype=float)
+            rotation = Rotation.from_quat(quaternion[[1, 2, 3, 0]]).as_matrix()
+            centers[row[9]] = -rotation.T @ np.array(row[5:8], dtype=float)
         receipt={'runtime':runtime,'settings':settings,'frames':frame_set['count'],'registered_cameras':registered,
             'elapsed_seconds':round(time.monotonic()-started,2),'faces':sum(len(g.faces) for g in result.geometry.values()),
             'frame_root':str(source),'best_model':str(best),'dense_model':str(dense/'sparse'),
             'topology':'triangles','metric_scale':'unknown','watertight':'not guaranteed','original':str(obj),'preview':str(glb),
             'rough_mesh':str(mesh),'selected_native_mesh':str(selected),'camera_report':camera_report,
+            'orbit_coverage':orbit_coverage(frame_set, centers),
             'author_recipe':'OpenMVS v2.4 MvgMvsPipeline COLMAP steps 12-14 and 16-20; optional texture projection; no GPS'}
         (job/'result.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8')
         (job/(output_mode.lower().replace(' ', '-')+'.json')).write_text(json.dumps(receipt,indent=2),encoding='utf-8')

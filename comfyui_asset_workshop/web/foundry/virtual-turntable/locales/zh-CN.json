@@ -375,5 +375,12 @@
   "ux_export_print_height_mm": "打印模型的实际高度，单位为毫米。默认：{value}。",
   "ux_camera_range": "最小视场角须小于最大视场角。",
   "ux_invalid_json": "请输入 JSON 对象，或恢复此部分的默认设置。",
-  "ux_invalid_sigmas": "请输入从 1 到 0 递减的数值，以逗号分隔，最后为 0。"
+  "ux_invalid_sigmas": "请输入从 1 到 0 递减的数值，以逗号分隔，最后为 0。",
+  "ux_frame_review_title": "检查用于重建的画面",
+  "ux_frame_review_description": "先准备视角相互重叠的画面和主体蒙版。检查整个环绕过程中主体是否始终完整可见。你可以调整取帧设置，继续使用这段视频。",
+  "ux_prepare_frames": "准备带蒙版的画面",
+  "ux_prepared_frames": "已准备 {count} 帧，尺寸为 {width} × {height} 像素。生成网格前请检查蒙版边缘。",
+  "ux_camera_coverage": "已对齐 {count} 帧，共 {total} 帧。估算的相邻相机角度最大间隔为 {angle}°。",
+  "text_preparing_masked_orbit_frames": "正在准备环绕画面和蒙版",
+  "ux_frame_review_video": "原视频共 {count} 帧，帧率为 {fps} fps。"
 }

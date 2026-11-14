@@ -1,8 +1,8 @@
 # Mumblebox 3D Asset Foundry
 
-**Versión de Foundry 0.1.0-preview.29**
+**Versión de Foundry 0.1.0-preview.30**
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md)
+[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
 **Crea imágenes y recursos 3D en tu equipo, por tu cuenta o con tu agente de programación.**
 
@@ -11,6 +11,12 @@ Foundry reúne flujos de trabajo de IA en asistentes que ofrecen ajustes útiles
 Explora objetos para videojuegos, partes de personajes, cabello, splats gaussianos y recursos para proyectos creativos o impresión 3D. Revisa cada resultado según el uso que le darás. La geometría generada puede requerir edición, retopología, ajustes o preparación para imprimir.
 
 [Instalar con Pinokio](PINOKIO.md) · [Versiones disponibles](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [Configurar un agente](AGENT-SETUP.md) · [Historial de cambios](../CHANGELOG.md)
+
+## Proyecto original y comunidad de Pinokio
+
+El proyecto original, mantenido por **mumblebox-gpt**, es [Mumblebox Foundry en GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry). Sigue ese repositorio para conocer el desarrollo y consulta sus [versiones publicadas](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) para ver las novedades y descargas disponibles. Si estás leyendo un fork o una copia de este README, estos enlaces te llevan al proyecto original; un fork puede incluir otros cambios o una versión anterior.
+
+Nos enorgullece crear junto a la comunidad de creadores de [Pinokio](https://pinokio.co/). Pinokio facilita la instalación y el intercambio de herramientas locales, y valoramos una comunidad donde podemos descubrir los proyectos de otros creadores, compartir comentarios útiles y aprender juntos. Gracias a cocktail peanut y a todas las personas que contribuyen a este ecosistema creativo. [Encuentra Foundry en Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
 
 ## Empieza más rápido con tu agente de programación
 
@@ -31,6 +37,7 @@ El objetivo es reducir el modelado repetitivo y ahorrar tiempo y tokens del agen
 | **Guiado en 3D** | Usa una malla auxiliar de Pixal3D, vistas medidas en Blender, estimaciones de MoGe 2 y guía de Qwen antes de reconstruir y dar el acabado. | Para objetos que requieren elegir y verificar las vistas de cámara. Necesita más procesamiento. |
 | **Splat y sólido** | Un splat gaussiano de Idol, de Sperid Labs, junto con geometría complementaria limpia y refinamiento opcional con Hi3D. | Para combinar una apariencia detallada con geometría más ligera, con vistas orbitales y comparaciones de mallas. |
 | **De órbita a malla** | Genera una órbita con H3, revisa las vistas alineadas, reconstruye con Pixal3D y termina con Hi3D y TRELLIS.2. | Para comprobar los ángulos y descartar fotogramas borrosos o deformados antes de generar la malla. |
+| **Órbita con gaussianas** | Crea una malla con textura y un splat gaussiano alineado a partir del mismo video. Revisa ambos con cámaras vinculadas y exporta el par o un MP4 híbrido. | Para usar una malla editable y conservar detalle que cambia con la vista. |
 | **Plato giratorio virtual** | Genera una órbita con H3 y reconstruye con Meshroom o COLMAP + OpenMVS. | Para probar fotogrametría a partir de una órbita generada y coherente. |
 | **CCORE Texto** | Crea un objeto estilizado con un método procedural a partir de palabras. Incluye 12 ejemplos editables, mejora opcional de la descripción con Qwen local, vista 3D y exportación GLB. | Para herramientas, muebles y objetos individuales de videojuegos. |
 | **CCORE Imagen + texto** | Usa una imagen y una descripción con el proyector visual y el flujo de generación de CCORE. Puedes crear una referencia dentro del asistente. | Para conservar o cambiar detalles de una foto, un boceto o un render. |

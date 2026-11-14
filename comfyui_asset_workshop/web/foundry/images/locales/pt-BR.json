@@ -256,5 +256,14 @@
   "section_review": "Edite, salve ou continue para 3D",
   "prompt_placeholder": "O sujeito, aparência, cores e estilo que você deseja.",
   "front_placeholder": "Detalhes visíveis na frente.",
-  "back_placeholder": "Mochila, marcações traseiras ou detalhes que não vemos da frente."
+  "back_placeholder": "Mochila, marcações traseiras ou detalhes que não vemos da frente.",
+  "gallery_front": "Vista frontal",
+  "gallery_back": "Vista traseira",
+  "gallery_single": "Imagem única",
+  "gallery_pair": "Par de vistas frontal e traseira",
+  "gallery_card_summary": "{kind} · {category}",
+  "gallery_reference_alt": "{name} · {view}",
+  "gallery_creation_count_one": "Exibindo {count} criação.",
+  "gallery_creation_count_other": "Exibindo {count} criações.",
+  "gallery_revision_summary": "{view} · {date}"
 }

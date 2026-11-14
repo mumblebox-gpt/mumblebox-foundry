@@ -1,8 +1,8 @@
 # Mumblebox 3D Asset Foundry
 
-**Versão do Foundry 0.1.0-preview.29**
+**Versão do Foundry 0.1.0-preview.30**
 
-[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md)
+[English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
 **Crie imagens e assets 3D no seu PC, por conta própria ou junto com seu agente de programação.**
 
@@ -11,6 +11,12 @@ O Foundry reúne fluxos de IA em assistentes passo a passo, com configurações 
 Experimente criar acessórios de jogo, partes de personagens, cabelos, splats e peças para projetos criativos ou impressão 3D. Confira cada resultado de acordo com o uso que você tem em mente. A geometria gerada pode precisar de edição, retopologia, ajuste ou preparação para impressão.
 
 [Instalar com o Pinokio](PINOKIO.md) · [Versões para baixar](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [Conectar um agente](AGENT-SETUP.md) · [Histórico de versões](../CHANGELOG.md)
+
+## Projeto original e comunidade Pinokio
+
+O projeto original, mantido por **mumblebox-gpt**, é o [Mumblebox Foundry no GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry). Acompanhe esse repositório para seguir o desenvolvimento e consulte as [versões publicadas](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) para ver as novidades e os downloads disponíveis. Se você estiver lendo um fork ou uma cópia deste README, esses links levam ao projeto original; um fork pode ter alterações diferentes ou uma versão mais antiga.
+
+Temos orgulho de criar ao lado da comunidade de criadores do [Pinokio](https://pinokio.co/). O Pinokio facilita a instalação e o compartilhamento de ferramentas locais. Valorizamos uma comunidade onde criadores podem descobrir os projetos uns dos outros, trocar feedback útil e aprender juntos. Obrigado ao cocktail peanut e a todos que contribuem para esse ecossistema criativo. [Encontre o Foundry no Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
 
 ## Dê um ponto de partida para seu agente de programação
 
@@ -31,6 +37,7 @@ A ideia é poupar tempo e tokens, deixando para você e o agente as decisões de
 | **Guiado em 3D** | Combina uma malha inicial do Pixal3D, vistas com câmeras calibradas no Blender, estimativas do MoGe 2 e orientação do Qwen antes da reconstrução. | Para objetos cujos ângulos você quer escolher e conferir. Reserve mais tempo de processamento. |
 | **Splat e sólido** | Crie um splat gaussiano com o Idol da Sperid Labs e uma malha de apoio já limpa. Você pode refinar essa malha com o Hi3D. | Para combinar aparência detalhada com geometria mais leve. Inclui vídeo de órbita e comparação das malhas. |
 | **Da órbita à malha** | Gere um vídeo de órbita com H3, escolha as vistas alinhadas e reconstrua com Pixal3D. O Hi3D e o TRELLIS.2 fazem o acabamento. | Para conferir os ângulos e tirar vistas borradas ou deformadas antes de reconstruir. |
+| **Órbita com splats gaussianos** | Crie uma malha com textura e um splat gaussiano alinhado a partir do mesmo vídeo. Compare os dois com câmeras sincronizadas e exporte o par ou um MP4 híbrido. | Para ter uma malha editável e preservar detalhes que mudam conforme o ângulo. |
 | **Mesa giratória virtual** | Gere um vídeo de órbita com H3 e reconstrua o objeto por fotogrametria com Meshroom ou COLMAP + OpenMVS. | Para experimentar fotogrametria com as imagens de uma órbita gerada. |
 | **CCORE Texto** | Descreva um acessório estilizado. O assistente inclui 12 exemplos editáveis, melhoria opcional da descrição com Qwen, prévia 3D e exportação GLB. | Para criar ferramentas, móveis ou outros acessórios individuais de jogo. |
 | **CCORE Imagem + texto** | Use uma imagem e uma descrição. O CCORE interpreta a referência com o projetor visual. Você também pode criar a imagem pelo assistente. | Para aproveitar ou modificar elementos de uma foto, um esboço ou uma imagem renderizada. |

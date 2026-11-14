@@ -53,14 +53,15 @@ class FrameReview:
 
     @classmethod
     def INPUT_TYPES(cls):
-        return {"required": {"images": ("IMAGE",), "filename_prefix": ("STRING",)}}
+        return {"required": {"images": ("IMAGE",), "filename_prefix": ("STRING",)},
+                "optional": {"frame_set": ("V360_FRAMESET",)}}
 
     RETURN_TYPES = ()
     FUNCTION = "save"
     OUTPUT_NODE = True
     CATEGORY = "Foundry/Virtual Turntable"
 
-    def save(self, images, filename_prefix):
+    def save(self, images, filename_prefix, frame_set=None):
         import torch
         import torch.nn.functional as functional
         from nodes import SaveImage
@@ -75,7 +76,10 @@ class FrameReview:
             row = list(thumbs[index:index + cols])
             row += [torch.zeros_like(row[0])] * (cols - len(row))
             rows.append(torch.cat(row, dim=1))
-        return SaveImage().save_images(torch.cat(rows, dim=0).unsqueeze(0), filename_prefix)
+        output = SaveImage().save_images(torch.cat(rows, dim=0).unsqueeze(0), filename_prefix)
+        if frame_set:
+            output["ui"]["text"] = [frame_set["root"]]
+        return output
 
 
 class ReconstructionResult:
