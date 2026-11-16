@@ -1,14 +1,78 @@
 import hashlib
+from contextlib import redirect_stdout
+from io import StringIO
 import json
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
+from zipfile import ZipFile
 import maintenance
 from bootstrap import Layout
 
 
 class MaintenanceTests(unittest.TestCase):
+    def test_current_version_reports_success_without_stopping_foundry(self):
+        with tempfile.TemporaryDirectory() as directory:
+            layout=Layout(directory)
+            layout.state.mkdir()
+            (layout.state/'installed.json').write_text('{"version":"0.1.0-preview.35"}')
+            output=StringIO()
+            with maintenance.InstallationLock(layout.state/'operation.lock'), \
+                 patch.object(maintenance,'require_clean_checkout',return_value='old'), \
+                 patch.object(maintenance,'select_download',return_value=None), \
+                 patch.object(maintenance,'stop_owned_runtime') as stop, redirect_stdout(output):
+                self.assertFalse(maintenance.maintain(layout.root,'update'))
+            stop.assert_not_called()
+            self.assertIn('Foundry is already up to date.',output.getvalue())
+
+    def test_failed_archive_download_leaves_the_running_installation_alone(self):
+        with tempfile.TemporaryDirectory() as directory:
+            layout=Layout(directory)
+            layout.state.mkdir()
+            (layout.state/'installed.json').write_text('{"version":"0.1.0-preview.35"}')
+            release={'tag':'v0.1.0-preview.36','url':'https://example.invalid/archive.zip','sha256':'0'*64}
+            with maintenance.InstallationLock(layout.state/'operation.lock'), \
+                 patch.object(maintenance,'require_clean_checkout',return_value='old'), \
+                 patch.object(maintenance,'select_download',return_value=release), \
+                 patch.object(maintenance,'download',side_effect=OSError('broken download')), \
+                 patch.object(maintenance,'stop_owned_runtime') as stop:
+                with self.assertRaisesRegex(OSError,'broken download'):
+                    maintenance.maintain(layout.root,'update')
+            stop.assert_not_called()
+
+    def test_update_verifies_staged_files_before_stopping_the_runtime(self):
+        with tempfile.TemporaryDirectory() as directory:
+            layout=Layout(directory)
+            layout.state.mkdir()
+            (layout.state/'installed.json').write_text('{"version":"0.1.0-preview.35"}')
+            release={'tag':'v0.1.0-preview.36','url':'https://example.invalid/archive.zip','sha256':'0'*64}
+            payload=b'new release'
+            manifest={'README.md':hashlib.sha256(payload).hexdigest()}
+            events=[]
+            def download(url,archive,digest):
+                archive.parent.mkdir(parents=True)
+                with ZipFile(archive,'w') as output:
+                    output.writestr('README.md',payload)
+                    output.writestr('SHA256SUMS.json',json.dumps(manifest))
+            def verify_tag(root,tag,hashes,archive):
+                self.assertEqual(hashes,manifest)
+                events.append('verified')
+            def install(layout,source,tag,previous):
+                self.assertEqual((source/'README.md').read_bytes(),payload)
+                with self.assertRaisesRegex(RuntimeError,'already running'):
+                    with maintenance.InstallationLock(layout.state/'operation.lock'):
+                        self.fail('Installation did not hold the operation lock')
+                events.append('installed')
+            with patch.object(maintenance,'require_clean_checkout',return_value='old'), \
+                 patch.object(maintenance,'select_download',return_value=release), \
+                 patch.object(maintenance,'download',side_effect=download), \
+                 patch.object(maintenance,'verify_tag_files',side_effect=verify_tag), \
+                 patch.object(maintenance,'stop_owned_runtime',side_effect=lambda _:events.append('stopped')), \
+                 patch.object(maintenance,'apply_staged',side_effect=install):
+                self.assertTrue(maintenance.maintain(layout.root,'update'))
+            self.assertEqual(events,['verified','stopped','installed'])
+
     def test_stop_owned_runtime_rejects_an_unrelated_process(self):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);(root/'.pinokio').mkdir()

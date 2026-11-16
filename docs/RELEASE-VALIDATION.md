@@ -17,6 +17,12 @@ Use this checklist for the release commit and publication. Keep verification pro
 - Update the GitHub repository description for every release. Verify the public About text reflects the current workflows, integrations and supported languages.
 - Verify the public GitHub release, then refresh Recent commits on the public Pinokio listing and verify the release commit appears. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
 
+# Preview 0.1.0-preview.35 validation
+
+The updater checks GitHub and verifies the release package while the existing service can still run. A current installation reports its status and exits. The launcher requests a restart only when the installer reports a completed upgrade. Start leaves the Pinokio project open and waits for the completion marker after the workspace URL so terminal chunks cannot truncate a version.
+
+Regression coverage includes a current install and a failed archive download while the running process holds the installation lock, the launcher's current and installed branches, and a truncated workspace address. The live Pinokio Desktop result is separate from those source tests.
+
 # Preview 0.1.0-preview.34 validation
 
 The Preview 33 menu made the running Update script the default item, even after the replacement server was ready. Reopening the project from Start could then select Update again. The shipped menu now shows a status while Update runs and selects the ready workspace when Start provides it. The Update action returns after maintenance finishes.

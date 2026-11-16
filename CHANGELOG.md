@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-preview.35 — Check for updates before restarting
+
+- Show **Foundry is already up to date** when there is no newer release. Keep Foundry running during the release check and package verification. Restart only after a newer release is installed.
+- Keep startup inside the existing Pinokio project and wait for the complete versioned workspace address before offering **Open Foundry**.
+
 ## 0.1.0-preview.34 — Stop the Pinokio Update loop
 
 - Keep Update available as an explicit action. During a running update, show progress and route to the ready Foundry workspace without starting another update.

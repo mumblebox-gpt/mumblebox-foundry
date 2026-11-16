@@ -190,33 +190,47 @@ def apply_staged(layout,staged,tag,old_commit,installer=None):
     print(f'Updated to {tag}. Previous application/config: {backup}',flush=True)
 
 
+def update(layout,tag=None):
+    # The runtime holds operation.lock for its lifetime. Validate and stage the
+    # package under a separate lock, then take operation.lock once it has exited.
+    with InstallationLock(layout.state/'update.lock'):
+        previous=require_clean_checkout(layout.root)
+        current=json.loads((layout.state/'installed.json').read_text())['version']
+        release=select_download(layout.root,current,tag)
+        if not release:
+            print('Foundry is already up to date.',flush=True)
+            return False
+        if not re.fullmatch(r'v?[0-9][A-Za-z0-9.+-]*',release['tag']):raise ValueError('Invalid release tag.')
+        require_idle(layout.root)
+        stage=layout.state/'releases'/(release['tag']+'-'+uuid.uuid4().hex[:8])
+        archive=stage/'release.zip'
+        download(release['url'],archive,release['sha256'])
+        with zipfile.ZipFile(archive) as bundle:
+            if sum(i.file_size for i in bundle.infolist())>1024**3:raise ValueError('Application archive exceeds the size limit.')
+        extracted=stage/'source';extract_checked(archive,extracted)
+        hashes=verify_bundle(extracted)
+        verify_tag_files(layout.root,release['tag'],hashes,stage/'git-source.zip')
+        if require_clean_checkout(layout.root)!=previous:
+            raise ValueError('Foundry source changed during the download. Retry Update.')
+        stop_owned_runtime(layout.root)
+        with InstallationLock(layout.state/'operation.lock'):
+            apply_staged(layout,extracted,release['tag'],previous)
+    print('Foundry maintenance completed.',flush=True)
+    return True
+
+
 def maintain(root,action,tag=None):
     if action=='check-idle':
         require_idle(root);return
     if action=='stop-owned':
         stop_owned_runtime(root);return
     layout=Layout(root)
+    if action=='update':return update(layout,tag)
     with InstallationLock(layout.state/'operation.lock'):
-        if action=='repair':
-            print(f'Repairing deployment software under {layout.software} and {layout.state / "envs"}. Saved assets, settings and model weights are preserved.',flush=True)
-            install(layout.root,repair=True)
-            (layout.state/'repair-required.json').unlink(missing_ok=True)
-        else:
-            previous=require_clean_checkout(layout.root)
-            current=json.loads((layout.state/'installed.json').read_text())['version']
-            release=select_download(layout.root,current,tag)
-            if not release:print('Foundry is already on the newest eligible release.',flush=True);return
-            if not re.fullmatch(r'v?[0-9][A-Za-z0-9.+-]*',release['tag']):raise ValueError('Invalid release tag.')
-            stage=layout.state/'releases'/(release['tag']+'-'+uuid.uuid4().hex[:8])
-            archive=stage/'release.zip'
-            download(release['url'],archive,release['sha256'])
-            with zipfile.ZipFile(archive) as bundle:
-                if sum(i.file_size for i in bundle.infolist())>1024**3:raise ValueError('Application archive exceeds the size limit.')
-            extracted=stage/'source';extract_checked(archive,extracted)
-            hashes=verify_bundle(extracted)
-            verify_tag_files(layout.root,release['tag'],hashes,stage/'git-source.zip')
-            apply_staged(layout,extracted,release['tag'],previous)
-        print('Foundry maintenance completed.',flush=True)
+        print(f'Repairing deployment software under {layout.software} and {layout.state / "envs"}. Saved assets, settings and model weights are preserved.',flush=True)
+        install(layout.root,repair=True)
+        (layout.state/'repair-required.json').unlink(missing_ok=True)
+    print('Foundry maintenance completed.',flush=True)
 
 
 if __name__=='__main__':
@@ -225,6 +239,10 @@ if __name__=='__main__':
     parser.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[2])
     parser.add_argument('--release-tag')
     args=parser.parse_args()
-    try:maintain(args.root,args.action,args.release_tag)
+    try:
+        installed=maintain(args.root,args.action,args.release_tag)
+        if args.action=='update':
+            result='installed' if installed else 'current'
+            print(f'Foundry update result: {result} [done]',flush=True)
     except (OSError,ValueError,RuntimeError,subprocess.CalledProcessError) as error:
         print(f'Foundry maintenance stopped: {error}',file=sys.stderr,flush=True);sys.exit(1)

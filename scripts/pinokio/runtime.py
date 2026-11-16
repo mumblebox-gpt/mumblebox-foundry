@@ -174,7 +174,9 @@ def launch(root):
             # A new version gets a distinct pane URL on the same origin, so
             # the browser opens new code while keeping its saved drafts.
             workspace = f"http://localhost:{comfy_port}/mumblebox-foundry/?version={capabilities['version']}"
-            print(f'Foundry ready: {url} {workspace}',flush=True)
+            # The terminal may deliver this line in chunks. Match the marker
+            # after the URL so Pinokio cannot capture a partial version.
+            print(f'Foundry ready: {url} {workspace} [ready]',flush=True)
             while all(process.poll() is None for process in processes):time.sleep(1)
             raise RuntimeError('A Foundry service stopped unexpectedly. Your saved files are preserved; inspect logs/pinokio and restart.')
         finally:
