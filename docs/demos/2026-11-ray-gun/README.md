@@ -2,10 +2,20 @@
 
 Preview 32 turns the included Red Comet reference into a textured GLB. This example follows a real run from the Foundry wizard through MCP and into Blender. Red Comet is an original retro ray-gun design inspired by 1930s space serials.
 
-![The Red Comet Foundry export under Blender studio lights](red-comet-poster.jpg)
+## Blender turntable
 
-- [Watch or download the 44-second walkthrough](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-walkthrough.mp4)
-- [Watch or download the six-second Blender turntable](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
+
+## Foundry-to-Blender walkthrough
+
+https://github.com/user-attachments/assets/5e3e3fbf-c77c-4e94-970c-20117032dae4
+
+## Original reference
+
+![Original Red Comet reference image, showing a retro ray gun in red, brass and chrome](https://github.com/user-attachments/assets/075da917-73a1-4915-8d18-6308ef4c7c89)
+
+- [Download the 44-second walkthrough](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-walkthrough.mp4)
+- [Download the six-second Blender turntable](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
 - [Download the original PNG reference](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png)
 - [Download the raw Foundry GLB](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 - [Verify the demo files](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-SHA256SUMS.txt) · [Read the production record](provenance.json)

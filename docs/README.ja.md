@@ -25,9 +25,9 @@ Foundry は、ローカルで動く AI ワークフローを、手順に沿っ�
 
 **単一画像またはテキスト**で **サンプル画像を使う** を選び、下のレトロな光線銃を読み込みます。**初回使用に必要なファイル**を開くと、必要となる見込みのファイルを確認できます。詳細 GLB を選んで処理を完了し、ZIP をダウンロードします。GLB を Blender にインポートし、メッシュ、縮尺、マテリアルを確認してください。
 
-**実際の出力。** Foundry で 816,292 三角形と 2 枚の埋め込み 4K テクスチャを含む GLB を生成しました。下の画像は同じモデルに Blender でスタジオ照明を当てたものです。
+**実際の出力。** Foundry で 816,292 三角形と 2 枚の埋め込み 4K テクスチャを含む GLB を生成しました。同じモデルが Blender のスタジオ照明の下で回転する様子をご覧ください。
 
-[![Foundry が書き出し、Blender でレンダリングした光線銃](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 [操作手順と使用した設定](demos/2026-11-ray-gun/README.md) · [元の PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [GLB をダウンロード](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 

@@ -25,9 +25,9 @@ Falls du ComfyUI schon installiert hast, folge der [manuellen Anleitung](../INST
 
 Wähle unter **Einzelbild oder Text** die Option **Beispielbild verwenden**, um die Retro-Strahlenpistole unten zu laden. Unter **Dateien für die erste Verwendung** siehst du die voraussichtlich benötigten Dateien. Wähle die detaillierte GLB-Ausgabe, schließe den Ablauf ab und lade die ZIP-Datei herunter. Importiere die GLB-Datei in Blender, um Mesh, Maßstab und Materialien zu prüfen.
 
-**Tatsächliches Ergebnis.** Foundry erzeugte eine GLB-Datei mit 816.292 Dreiecken und zwei eingebetteten 4K-Texturen. Das Bild zeigt diesen Export mit Studiobeleuchtung in Blender.
+**Tatsächliches Ergebnis.** Foundry erzeugte eine GLB-Datei mit 816.292 Dreiecken und zwei eingebetteten 4K-Texturen. Im Video dreht sich derselbe Export unter Studiobeleuchtung in Blender.
 
-[![In Blender gerenderte Strahlenpistole aus Foundry](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 [Anleitung und genaue Einstellungen](demos/2026-11-ray-gun/README.md) · [Original-PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [GLB herunterladen](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 

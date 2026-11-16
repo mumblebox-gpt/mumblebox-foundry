@@ -25,9 +25,9 @@ Foundry 把实用的 AI 工作流整理成一步步的向导，提供合适的�
 
 打开“单图或文字”，选择“使用示例图片”，载入下方的复古射线枪。打开“首次使用所需文件”查看预计需要的文件。选择高细节 GLB 输出，完成后下载 ZIP。将 GLB 导入 Blender，检查网格、比例和材质。
 
-**实际效果。** 用示例图片生成的 GLB 含 816,292 个三角面和两张内嵌 4K 纹理。下图使用 Blender 灯光展示同一个导出模型。
+**实际效果。** 用示例图片生成的 GLB 含 816,292 个三角面和两张内嵌 4K 纹理。观看同一个导出模型在 Blender 灯光下旋转。
 
-[![Blender 灯光下的 Foundry 射线枪模型](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 [演示与完整设置](demos/2026-11-ray-gun/README.md) · [原始 PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [下载 GLB](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 

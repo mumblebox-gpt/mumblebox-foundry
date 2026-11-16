@@ -25,9 +25,9 @@ Foundry는 로컬 AI 작업을 단계별 워크플로로 묶어 둔 도구입니
 
 **단일 이미지 또는 텍스트**에서 **예제 이미지 사용**을 눌러 아래의 레트로 광선총을 불러옵니다. **처음 실행에 필요한 파일**을 열면 필요한 파일의 예상 목록을 볼 수 있습니다. 상세 GLB를 선택해 처리를 마친 다음 ZIP을 다운로드하세요. GLB를 Blender로 가져와 메시, 크기, 재질을 확인합니다.
 
-**실제 결과.** Foundry가 삼각형 816,292개와 4K 텍스처 2개가 포함된 GLB를 생성했습니다. 아래 이미지는 같은 모델을 Blender에서 스튜디오 조명으로 렌더링한 것입니다.
+**실제 결과.** Foundry가 삼각형 816,292개와 4K 텍스처 2개가 포함된 GLB를 생성했습니다. 같은 모델이 Blender의 스튜디오 조명 아래에서 회전하는 모습을 확인할 수 있습니다.
 
-[![Foundry에서 내보내고 Blender에서 렌더링한 광선총](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 [작업 과정과 실제 설정](demos/2026-11-ray-gun/README.md) · [원본 PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [GLB 다운로드](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 

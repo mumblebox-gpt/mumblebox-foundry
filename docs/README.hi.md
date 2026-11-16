@@ -25,9 +25,9 @@ Foundry लोकल AI वर्कफ़्लो को आसान चर�
 
 **एक इमेज या टेक्स्ट** में **नमूना चित्र इस्तेमाल करें** चुनकर नीचे की रेट्रो रे गन लोड करें। **पहली बार इस्तेमाल की फ़ाइलें** खोलकर देखें कि कौन सी फ़ाइलें चाहिए हो सकती हैं। विस्तृत GLB चुनें, काम पूरा करें और ZIP डाउनलोड करें। मेश, आकार और मटेरियल जाँचने के लिए GLB को Blender में इम्पोर्ट करें।
 
-**वास्तविक नतीजा।** Foundry ने 816,292 त्रिकोण और दो 4K टेक्सचर वाला GLB बनाया। नीचे Blender की स्टूडियो लाइटिंग में उसी मॉडल का रेंडर है।
+**वास्तविक नतीजा।** Foundry ने 816,292 त्रिकोण और दो 4K टेक्सचर वाला GLB बनाया। Blender की स्टूडियो लाइटिंग में उसी मॉडल को घूमते हुए देखें।
 
-[![Foundry से निर्यात की गई रे गन का Blender रेंडर](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 [वीडियो और इस्तेमाल की गई सेटिंग](demos/2026-11-ray-gun/README.md) · [मूल PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [GLB डाउनलोड करें](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 

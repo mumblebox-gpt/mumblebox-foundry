@@ -25,9 +25,9 @@ Se você já usa ComfyUI, siga a [instalação manual](../INSTALL.md) e abra `Mu
 
 Em **Imagem única ou texto**, escolha **Usar imagem de exemplo** para carregar a pistola de raios retrô abaixo. Abra **Arquivos do primeiro uso** para ver quais arquivos serão necessários. Escolha a saída GLB detalhada, conclua o processo e baixe o ZIP. Importe o GLB no Blender para conferir a malha, a escala e os materiais.
 
-**Resultado do exemplo.** O Foundry gerou um GLB com 816.292 triângulos e duas texturas 4K incorporadas. A imagem mostra esse mesmo arquivo com iluminação de estúdio no Blender.
+**Resultado do exemplo.** O Foundry gerou um GLB com 816.292 triângulos e duas texturas 4K incorporadas. Veja esse mesmo arquivo girar com iluminação de estúdio no Blender.
 
-[![Pistola de raios exportada pelo Foundry e renderizada no Blender](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 [Tutorial e configurações exatas](demos/2026-11-ray-gun/README.md) · [PNG original](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [Baixar o GLB](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 

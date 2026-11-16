@@ -25,9 +25,9 @@ Si ya tienes ComfyUI, sigue [INSTALL.md](../INSTALL.md) y abre Mumblebox 3D Asse
 
 En **Imagen única o texto**, elige **Usar imagen de ejemplo** para cargar la pistola de rayos retro de abajo. Abre **Archivos del primer uso** para conocer los archivos previstos. Elige la salida GLB detallada, termina la generación y descarga el ZIP. Importa el GLB en Blender para revisar la malla, la escala y los materiales.
 
-**Resultado real.** Foundry generó un GLB con 816,292 triángulos y dos mapas 4K integrados. La imagen muestra ese archivo con iluminación de estudio en Blender.
+**Resultado real.** Foundry generó un GLB con 816,292 triángulos y dos mapas 4K integrados. Mira cómo gira ese archivo con iluminación de estudio en Blender.
 
-[![Pistola de rayos exportada por Foundry y renderizada en Blender](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 [Tutorial y ajustes exactos](demos/2026-11-ray-gun/README.md) · [PNG original](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [Descargar GLB](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 

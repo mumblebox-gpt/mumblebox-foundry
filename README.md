@@ -27,9 +27,9 @@ For an existing ComfyUI installation, follow [INSTALL.md](INSTALL.md), then open
 
 In **Single Image or Text**, choose **Use sample image** for the retro ray gun below. Open **First-use files** to see which files Foundry expects to need. Select the Detailed GLB output, finish and download the ZIP. Import the GLB into Blender to check the mesh, scale and materials.
 
-**Working result.** Foundry turned this sample into a textured GLB with 816,292 triangles and two embedded 4K maps. The image below shows that same export under Blender studio lights.
+**Working result.** Foundry turned this sample into a textured GLB with 816,292 triangles and two embedded 4K maps. Watch the same export rotate under Blender studio lights.
 
-[![Red Comet, the Foundry GLB rendered in Blender](docs/demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 [Walkthrough and exact settings](docs/demos/2026-11-ray-gun/README.md) · [Original PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [Download the GLB](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 
