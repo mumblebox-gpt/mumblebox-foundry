@@ -17,6 +17,14 @@ Use this checklist for the release commit and publication. Keep verification pro
 - Update the GitHub repository description for every release. Verify the public About text reflects the current workflows, integrations and supported languages.
 - Verify the public GitHub release, then refresh Recent commits on the public Pinokio listing and verify the release commit appears. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
 
+# Preview 0.1.0-preview.33 validation
+
+Preview 32 installed and restarted correctly through the normal Windows Pinokio Update button. An open Foundry pane still displayed Preview 31 until it was reopened. The pane reads its version at initial load, and Pinokio had kept the same open URL through the restart.
+
+The updated startup script waits for a ready server, records its versioned workspace URL and reopens the project through Pinokio. The version comes from the server bootstrap, and the workspace keeps its original browser origin. A live isolated launcher test used the previous Update script's nested start call with an old pane open. Pinokio selected the new Preview 33 pane at the same port, kept its menu and displayed the saved draft value without a manual refresh. The original installation was separate from this test.
+
+The public GitHub README and demo guide were checked in a browser. The native turntable and walkthrough controls played the two videos, and the original reference rendered in the guide.
+
 # Preview 0.1.0-preview.32 validation
 
 The previous Single Image or Text implementation reproduced `setText is not defined` at the transition to Mesh and refinement. The repaired path opened in the installed Windows Comfy Desktop candidate. Loading the bundled Red Comet image, using Back and Next, changing and restoring the geometry seed, checking first-use files, and using the error panel all worked without starting an unintended job. Keyboard Enter activated the sample control. An invalid text upload stayed on the input page and offered Copy details. The live sample, settings and package controls were checked in all nine languages at 200% text. The installed tip component was also exercised with a temporary refinement status in each language. The original language and text size were restored. A physical webcam was outside this check.

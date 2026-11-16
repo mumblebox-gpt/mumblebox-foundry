@@ -12,6 +12,28 @@ test('running menu embeds Foundry on the same site as Pinokio Desktop',async()=>
   assert.equal(menu.find(item=>item.text==='Update')?.href,'update.js');
 });
 
+test('start hands Pinokio the ready workspace URL and opens it in the launcher',async()=>{
+  const start=require('../../start.js');
+  const launch=start.run[0].params.on.find(rule=>rule.done);
+  const origin='http://127.0.0.1:49226';
+  const workspace='http://localhost:49226/mumblebox-foundry/?version=0.1.0-preview.33';
+  const ready=new RegExp(launch.event.slice(1,-1)).exec(`Foundry ready: ${origin} ${workspace}`);
+  assert.deepEqual(ready?.slice(1),[origin,workspace]);
+  assert.deepEqual(start.run[1],{
+    method:'local.set',
+    params:{url:'{{input.event[1]}}',workspace:'{{input.event[2]}}'},
+  });
+  assert.deepEqual(start.run[2],{
+    method:'web.open',
+    params:{uri:'{{cwd}}',target:'_top'},
+  });
+  const menu=await launcher.menu({},{
+    exists:()=>true, running:script=>script==='start.js',
+    local:()=>({url:origin,workspace}),
+  });
+  assert.equal(menu[0].href,workspace);
+});
+
 test('updater checks jobs before stopping and restarts after installing',()=>{
   const update=require('../../update.js');
   assert.match(update.run[0].params.message,/check-idle/);

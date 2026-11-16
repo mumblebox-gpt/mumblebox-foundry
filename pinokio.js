@@ -13,7 +13,7 @@ module.exports = {
       // Pinokio Desktop is served from localhost. Match that site so ComfyUI's
       // cross-site request protection permits its embedded workspace. Backend
       // and MCP endpoints remain bound to 127.0.0.1; do not weaken CORS checks.
-      const workspace=runtime?.url?new URL('/mumblebox-foundry/',runtime.url):null;
+      const workspace=runtime?.url?new URL(runtime.workspace??'/mumblebox-foundry/',runtime.url):null;
       if(workspace?.hostname==='127.0.0.1')workspace.hostname='localhost';
       return [...(workspace?[{default:true,text:"Open Foundry",icon:"fa-solid fa-cubes",href:workspace.href}]:[]),
         {default:!runtime?.url,text:"Startup logs",icon:"fa-solid fa-terminal",href:"start.js"},

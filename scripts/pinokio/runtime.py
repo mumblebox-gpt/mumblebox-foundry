@@ -171,7 +171,10 @@ def launch(root):
             atomic_json(runtime_path,{'schema':1,'pid':os.getpid(),'instance':str(uuid.uuid4()),
                 'comfy_url':url,'hi3d_url':f'http://127.0.0.1:{hi3d_port}','version':capabilities['version']})
             write_mcp_configuration(layout)
-            print(f'Foundry ready: {url}',flush=True)
+            # A new version gets a distinct pane URL on the same origin, so
+            # the browser opens new code while keeping its saved drafts.
+            workspace = f"http://localhost:{comfy_port}/mumblebox-foundry/?version={capabilities['version']}"
+            print(f'Foundry ready: {url} {workspace}',flush=True)
             while all(process.poll() is None for process in processes):time.sleep(1)
             raise RuntimeError('A Foundry service stopped unexpectedly. Your saved files are preserved; inspect logs/pinokio and restart.')
         finally:

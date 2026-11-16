@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.0-preview.33 — Refresh the Pinokio workspace after Update
+
+- Open the current Foundry workspace when the restarted server is ready, so an open pane can pick up the new version and interface.
+- Put a playable Red Comet turntable in all nine GitHub READMEs and the playable walkthrough and original reference in the demo guide.
+
 ## 0.1.0-preview.32 — Single Image and updater fixes
 
 - Fixed the error that stopped **Single Image or Text** from advancing to Mesh and refinement. Thanks to @rgdesign for the Pinokio report and to @SibioJak for the reproduction in [issue #1](https://github.com/mumblebox-gpt/mumblebox-foundry/issues/1).
