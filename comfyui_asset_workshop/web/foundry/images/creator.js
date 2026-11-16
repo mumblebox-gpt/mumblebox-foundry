@@ -4,6 +4,7 @@ import {modelAccessError} from "../connection-help.js";
 import {el,button,hint,field,link} from '../dom.js';
 import {request} from '../services.js';
 import {referenceControls} from './references.js';
+import {activityTip} from '../activity-tips.js';
 import {elapsedTime,workingStar} from '../activity.js';
 
 export function creator(c){
@@ -59,6 +60,7 @@ export function creator(c){
         busy?button(msg("images.cancel_generation"),()=>c.act(async()=>{c.run=await request('images/'+c.id+'/cancel',{});})):null,c.progressText),
         c.error?modelAccessError(c.shell,c.error):null,
         busy?el('div',{class:'creator-busy'},workingStar(),elapsedTime(c.run.started_at*1000),el('progress',{'aria-label':msg("images.image_generation_in_progress")})):null,
+        busy ? activityTip('images', c.id, c.run.stage) : null,
         el('div',{class:'creator-pair','data-paired':String(c.paired())},...frames),
         c.run?.pair_review?hint(c.run.pair_review):null,
         el('div',{class:'creator-finish actions'},button(msg("images.save_create_another"),()=>c.act(()=>c.save('another')),{disabled:!ready||busy}),

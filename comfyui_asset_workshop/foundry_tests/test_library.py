@@ -139,13 +139,14 @@ class LibraryTests(unittest.TestCase):
 
         archive, _ = self.package()
         asset = self.library.import_package(archive)
-        names = ("orbit_00001_.mp4", "orbit_00001_.mp4", "orbit/asset_00001_.mp4",
-                 "variant-0-aabbccdd/export_00001/motion_00001_.mp4")
+        names = ("orbit_00001_.mp4", "hybrid-001.mp4", "orbit_00001_.mp4", "orbit_00001_.mp4",
+                 "orbit/asset_00001_.mp4", "variant-0-aabbccdd/export_00001/motion_00001_.mp4")
+        self.assertEqual(len(SOURCES), len(names))
         paths = []
         for index, ((state, output, _, workflow), suffix) in enumerate(zip(SOURCES, names)):
             ident = str(index) * 32
             state_dir = self.library.root / state
-            state_dir.mkdir()
+            state_dir.mkdir(exist_ok=True)
             (state_dir / (ident + ".json")).write_text(json.dumps({"name": workflow}), encoding="utf-8")
             path = self.outputs / output / ident / suffix
             path.parent.mkdir(parents=True)
@@ -155,28 +156,31 @@ class LibraryTests(unittest.TestCase):
         stray.write_bytes(b"unmanaged")
         sync(self.library)
         entries = self.library.list("video")["items"]
-        self.assertEqual(len(entries), 4)
+        self.assertEqual(len(entries), 6)
         self.assertEqual({self.library.file(item["id"], "video") for item in entries}, {path.resolve() for path in paths})
         chosen = next(item for item in entries if item["name"] == "Orbit to Mesh")
         review = self.library.preview_removal("video", [chosen["id"]], True)
-        self.assertEqual(review["files"], [str(paths[0].relative_to(self.outputs))])
+        selected = paths[2]
+        self.assertEqual(review["files"], [str(selected.relative_to(self.outputs))])
         self.assertTrue(self.library.remove(review["token"])["ok"])
-        self.assertFalse(paths[0].exists())
+        self.assertFalse(selected.exists())
         self.assertTrue(stray.exists())
         self.assertTrue(archive.exists())
         self.assertEqual(self.library.list("mesh")["items"][0]["id"], asset["id"])
         sync(self.library)
-        self.assertEqual(len(self.library.list("video")["items"]), 3)
-        paths[0].write_bytes(b"regenerated video with a new identity")
+        self.assertEqual(len(self.library.list("video")["items"]), 5)
+        selected.write_bytes(b"regenerated video with a new identity")
         sync(self.library)
-        self.assertEqual(len(self.library.list("video")["items"]), 4)
+        self.assertEqual(len(self.library.list("video")["items"]), 6)
         self.assertNotIn(chosen["id"], {entry["id"] for entry in self.library.list("video")["items"]})
 
     def test_preferences_reject_tokens_and_inactive_profiles(self):
         prefs = Preferences(self.root / "prefs.json")
         prefs.update({"theme": "dark", "language": "en"})
         self.assertEqual(prefs.read()["theme"], "dark")
-        for patch in ({"token": "secret"}, {"memory_profile": "8gb"}, {"language": "de"}):
+        prefs.update({"language": "de"})
+        self.assertEqual(prefs.read()["language"], "de")
+        for patch in ({"token": "secret"}, {"profile": "low"}, {"language": "ru"}):
             with self.assertRaises(ValueError): prefs.update(patch)
         self.assertNotIn("secret", (self.root / "prefs.json").read_text())
 

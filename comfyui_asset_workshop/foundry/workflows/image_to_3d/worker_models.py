@@ -95,14 +95,25 @@ def texture_dependencies(lock, mode):
     return base + groups["trellis_smd_texture"] if mode == "smd" else base
 
 
+def texture_model_root():
+    from ....finishing.runtime import settings
+    path = settings().get("trellis_models")
+    if not path:
+        raise ValueError("Configure the texture model folder before texturing.")
+    return Path(path)
+
+
+def texture_model_files(mode):
+    if mode not in ("standard", "smd"):
+        raise ValueError("Choose Standard or SMD texturing.")
+    lock = json.loads((Path(__file__).resolve().parents[3] / "models.lock.json").read_text(encoding="utf-8"))
+    return texture_dependencies(lock, mode)
+
+
 def ensure_texture(state_root, cancelled=lambda:False, owner=None, progress=lambda value:None, *, texture_mode="standard"):
     from .... import models
-    from ....finishing.runtime import settings
-    root = Path(settings()["trellis_models"])
-    if texture_mode not in ("standard", "smd"):
-        raise ValueError("Choose Standard or SMD texturing.")
-    lock = json.loads((Path(models.__file__).parent/"models.lock.json").read_text(encoding="utf-8"))
-    items = texture_dependencies(lock, texture_mode)
+    root = texture_model_root()
+    items = texture_model_files(texture_mode)
     if not models.DOWNLOAD_LOCK.acquire(blocking=False):
         raise ValueError("Another model download is running. Retry after it finishes.")
     try:

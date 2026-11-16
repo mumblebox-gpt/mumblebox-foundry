@@ -6,6 +6,7 @@ import {dialog} from '../dialogs.js';
 import {orbitSettings,ux} from './settings.js';
 import {firstChangedStage,operations,settingsProblem} from './review-state.js';
 import {request} from '../services.js';
+import {activityTip} from '../activity-tips.js';
 import {activity,elapsedTime} from '../activity.js';
 import {uploadReference,capturePhoto,inputURL} from '../images/references.js';
 import {exportChoices,validateExports} from '../wizard/export-choices.js';
@@ -535,7 +536,8 @@ export class VirtualTurntableWizard{
         const feedback=active?activity():null;
         feedback?.update({busy:true,label:translated(this.run?.stage_label||'Preparing')});
         const status=active?el('div',{class:'turntable-progress'},
-            feedback.element,elapsedTime(this.run.started_at*1000),el('progress',{'aria-label':translated('Stage progress')})):null;
+            feedback.element, elapsedTime(this.run.started_at*1000), el('progress', {'aria-label': translated('Stage progress')}),
+            activityTip(this.key, this.run.id, this.run.dependency?.name === 'Brush' ? 'splat' : this.run.stage)):null;
         for(const detail of this.host.querySelectorAll('[data-disclosure]')){
             if(detail.open)this.disclosures.add(detail.dataset.disclosure);
             else this.disclosures.delete(detail.dataset.disclosure);

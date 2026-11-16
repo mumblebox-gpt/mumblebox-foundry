@@ -10,9 +10,11 @@ import {initialState,copyRunConfiguration} from "./session.js";
 import {exportChoices,validateExports} from "./export-choices.js";
 import {FIRST_USE_MESSAGE} from "../activity-state.js";
 import {overallProgress} from "../overall-progress.js";
+import {activityTip} from '../activity-tips.js';
 import {elapsedTime} from "../activity.js";
 import {inputPage,reviewPage,optionsPage,finishingPage,resultPage} from "./pages.js";
-import {singleInputPage,singleOptionsPage} from '../single/pages.js';
+import {cancelSampleReference,singleInputPage,singleOptionsPage} from '../single/pages.js';
+import {PreparationPreview} from "./preparation-preview.js";
 import {syncSingleGraph,syncSingleOutputs} from '../single/graph.js';
 const singleTitles=[msg("mesh.your_starting_image"),msg("mesh.mesh_and_refinement"),msg("mesh.refined_mesh_and_exports"),msg("mesh.your_asset_package")];
 const clone=value=>JSON.parse(JSON.stringify(value));
@@ -24,10 +26,12 @@ const stageNames={turnaround:msg("mesh.qwen_image_2_1_creating_four_views"),geom
  refinement:msg("mesh.hi3d_refining_and_cleaning_the_geometry"),texture:msg("mesh.trellis_2_texturing_the_finished_geometry"),
  balanced:msg("mesh.baking_the_balanced_game_mesh"),compact:msg("mesh.baking_the_compact_game_mesh"),quads:msg("mesh.retopology_uvs_and_detail_baking"),
  print:msg("mesh.preparing_and_measuring_the_print_mesh"),package:msg("mesh.writing_exports_readme_and_zip"),cleanup:msg("mesh.releasing_models_and_temporary_work")};
+const preparationStageLabel=stage=>stageNames[stage.id==="single_geometry"?"geometry":stage.id]??stage.label;
 export class Wizard {
     constructor(shell,{resume=false,runId=null,method="turnaround"}={}) {
         this.shell=shell;this.node=shell.node;this.page=1;this.disposed=false;this.previewDispose=null;
         this.method=method;this.single=method==="single-image";
+        this.preparationPreview=new PreparationPreview(preparationStageLabel);
         const saved=this.single?clone(savedSingleWizardState(this.node)):savedWizardState(this.node);
         if(!resume&&!this.single)rememberPreviousSession(this.node);
         const state=initialState(saved,resume);
@@ -63,7 +67,7 @@ export class Wizard {
                 }
                 this.applyRun();
             }
-            catch(error){this.error=error.message;this.runId=null;this.page=1;}
+            catch(error){this.error=error.message;this.errorCode=error.code||error.name;this.runId=null;this.page=1;}
         }
         this.shell.message(msg("mesh.local_workspace_image_to_3d_workflow"));
         this.render();this.poll();
@@ -80,8 +84,10 @@ export class Wizard {
         if(!this.run.geometry_audit&&this.run.outputs?.["2015"]?.text?.[0]){
             try{this.run.geometry_audit=JSON.parse(this.run.outputs["2015"].text[0]);}catch{}
         }
-        if(this.run.status==="complete")this.error="";
-        else if(this.run.error)this.error=this.run.error;
+        if(this.run.status==="complete"||this.run.error){
+            this.error=this.run.status==="complete"?"":this.run.error;
+            this.errorCode=undefined;
+        }
     }
     async poll(){
         if(this.disposed)return;
@@ -104,9 +110,9 @@ export class Wizard {
     }
     async act(fn){
         if(this.working)return;
-        this.working=true;this.error="";
+        this.working=true;this.error="";this.errorCode=undefined;
         try{await fn();this.shell.message(msg("mesh.local_workspace_image_to_3d_workflow"));}
-        catch(error){this.error=error.message;this.shell.message(sourceMessage(error.message),true);}
+        catch(error){this.error=error.message;this.errorCode=error.code||error.name;this.shell.message(sourceMessage(error.message),true);}
         finally{this.working=false;if(!this.disposed)this.render();}
     }
     async save(){
@@ -117,12 +123,13 @@ export class Wizard {
         else {const branch=await request("wizard/runs/"+this.runId+"/turnaround-graph");syncWizardGraph(this.run,this.node,branch);}
     }
     async start(operation){
+        if(this.single)cancelSampleReference(this);
         await this.save();
         this.run=await request("wizard/runs/"+this.runId+"/start",{operation,client_id:api.clientId||"",request_id:crypto.randomUUID()});
         this.page=this.single?(operation==="mesh"?3:4):operation==="turnaround"?2:operation==="mesh"?4:5;
         this.remember();this.render();
     }
-    go(page){this.page=page;this.remember();this.render();this.shell.content.scrollTop=0;}
+    go(page){if(this.single&&page!==1)cancelSampleReference(this);this.page=page;this.remember();this.render();this.shell.content.scrollTop=0;}
     quadChoice(overrides=this.draft.overrides){
         const remember=()=>{if(overrides===this.draft.overrides)this.remember();};
         return {
@@ -142,15 +149,18 @@ export class Wizard {
         const overrides=structuredClone(this.draft.overrides);
         const quad=this.quadChoice(overrides);
         quad.name+="-rocket";
+        const preview=new PreparationPreview(preparationStageLabel);
+        const refresh=()=>preview.update({...this.draft,selection,overrides},this.method,"rocket");
         const error=el("p",{class:"error-panel",role:"alert",hidden:true});
-        dialog(this.shell,msg("mesh.finish_this_asset_with_rocket_mode"),el("div",{class:"rocket-confirmation"},
+        const modal=dialog(this.shell,msg("mesh.finish_this_asset_with_rocket_mode"),el("div",{class:"rocket-confirmation"},
             hint(msg("mesh.continue_from_this_point_using_your_current_settings_saved_unchanged_stages")),
-            exportChoices(this.cap.exports,selection,undefined,quad),error),[
+            exportChoices(this.cap.exports,selection,refresh,quad),refresh(),error),[
             {label:msg("mesh.keep_working_manually"),run:close=>close()},
             {label:msg("mesh.start_rocket_mode"),primary:true,run:close=>{
                 try{validateExports(selection,quad);}catch(e){setText(error, sourceMessage(e.message));error.hidden=false;return;}
                 this.draft.overrides=overrides;this.draft.selection=selection;this.remember();close();this.act(()=>this.start("rocket"));
             }}]);
+        modal.surface.addEventListener("foundry-close",()=>preview.cancel(),{once:true});
     }
     confirmReset(){
         dialog(this.shell,msg("mesh.start_over"),hint(msg("mesh.return_to_workflow_selection_your_saved_images_meshes_and_packages_will_rema")),
@@ -194,6 +204,7 @@ export class Wizard {
             el("img",{src:new URL("../../assets/foundry-chaos-star.svg",import.meta.url).href,alt:"",class:"working-star"}),
             el("div",{class:"stage-progress"},this.overallText,this.overallMeter,this.overallCount,
                 el("strong",{},this.run.dependency?msg("mesh.preparing_required_models"):this.run.stage==="turnaround"?msg("mesh.creating_four_views", {value1: this.run.turnaround?.name||"Image model"}):stageNames[this.run.progress?.current||this.run.stage]||"Preparing the next stage"),this.sampleProgress,elapsed,
+                activityTip(this.method, this.run.id, this.run.progress?.current || this.run.stage),
                 hint(this.run.dependency?FIRST_USE_MESSAGE:this.run.stage==="quads"?((this.cap.quad_methods||[]).find(m=>m.id===(this.run.settings?.quad_method||"quadriflow"))?.description||"Preparing editable quads."):this.run.stage==="refinement"?msg("mesh.refinement_can_take_several_minutes_the_saved_initial_mesh_is_retained"):msg("mesh.your_completed_stages_are_saved_as_the_workflow_progresses")),stages));
     }
     updateOverall(sample=0){
@@ -204,6 +215,13 @@ export class Wizard {
         this.overallMeter.value=this.overallValue;
         setText(this.overallText, msg("mesh.overall_completion_2", {value1: Math.floor(this.overallValue*100)}));
         setText(this.overallCount, msg("mesh.of_selected_stages_complete_measures_work_not_time", {value1: p.completed.length, total: p.total}));
+    }
+    updatePreparationPreview(){
+        let operation=null;
+        if(!this.run?.active&&!this.working&&this.draft.references.length){
+            operation=(this.single?{2:"mesh",3:"finish"}:{1:"turnaround",3:"mesh",4:"finish"})[this.page];
+        }
+        return this.preparationPreview.update(this.draft,this.method,operation);
     }
     render(){
         if(this.disposed)return;
@@ -220,15 +238,24 @@ export class Wizard {
         const header=el("div",{class:"page-head"},el("div",{},el("span",{class:"eyebrow"},msg("mesh.page_of", {page: this.page, value2: this.single?4:5})),
             el("h2",{tabindex:-1},(this.single?singleTitles:titles)[this.page-1])));
         const pages=this.single?[singleInputPage,singleOptionsPage,finishingPage,resultPage]:[inputPage,reviewPage,optionsPage,finishingPage,resultPage];
-        const problem=this.error?modelAccessError(this.shell,this.error):null;
-        if(problem&&!this.run?.active&&this.runId)appendContent(problem, el('div',{class:'actions'},
-            button(msg("mesh.retry_remaining_stages"),()=>this.act(()=>this.start(this.run.operation||'mesh')),{class:'primary'}),
+        let page, renderError;
+        try{page=pages[this.page-1](this);}
+        catch(error){renderError=error;page=this.nav();}
+        const preparation=renderError?this.preparationPreview.update(null,null,null):this.updatePreparationPreview();
+        if(preparation&&page.lastChild)page.insertBefore(preparation,page.lastChild);
+        const error=renderError?.message||this.error;
+        const problem=error?modelAccessError(this.shell,error,{
+            version:this.shell.data?.version,workflow:this.method,step:this.page,
+            code:renderError?.name||this.errorCode,
+        }):null;
+        if(problem&&!renderError&&!this.run?.active&&this.runId)appendContent(problem, el('div',{class:'actions'},
+            button(msg("mesh.retry_remaining_stages"),()=>this.act(()=>this.start(this.run?.operation||'mesh')),{class:'primary'}),
             button(msg("mesh.review_output_choices"),()=>this.go(this.single?3:4))));
-        const panel=el("div",{class:"wizard-panel"},header,problem,this.busy(),pages[this.page-1](this));
+        const panel=el("div",{class:"wizard-panel"},header,problem,this.busy(),page);
         this.host.replaceChildren(rail,panel);
         // Native DOM append does not accept null. Filtered via the shared helper.
         this.host.querySelector("h2")?.scrollIntoView({block:"nearest"});
         this.remember();
     }
-    dispose(){this.disposed=true;clearTimeout(this.timer);this.previewDispose?.();api.removeEventListener("progress",this.progressHandler);}
+    dispose(){this.disposed=true;if(this.single)cancelSampleReference(this);this.preparationPreview.cancel();clearTimeout(this.timer);this.previewDispose?.();api.removeEventListener("progress",this.progressHandler);}
 }

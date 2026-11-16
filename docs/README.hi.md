@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry वर्शन 0.1.0-preview.31**
+**Foundry वर्शन 0.1.0-preview.32**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -12,11 +12,24 @@ Foundry लोकल AI वर्कफ़्लो को आसान चर�
 
 [Pinokio से इंस्टॉल करें](PINOKIO.md) · [जारी वर्शन डाउनलोड करें](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [एजेंट का सेटअप](AGENT-SETUP.md) · [बदलावों की सूची](../CHANGELOG.md)
 
-## आधिकारिक प्रोजेक्ट और Pinokio समुदाय
+## शुरू कैसे करें
 
-मूल Foundry प्रोजेक्ट को **mumblebox-gpt** GitHub पर सँभालता है। नए बदलाव, रिलीज़ की जानकारी और डाउनलोड वहीं मिलेंगे। अगर आप किसी फ़ोर्क या README की कॉपी पर हैं, तो नीचे दिए लिंक से मूल प्रोजेक्ट खोलें। [आधिकारिक GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry) · [जारी वर्शन](https://github.com/mumblebox-gpt/mumblebox-foundry/releases)
+1. [Pinokio](https://pinokio.co/) इंस्टॉल करें और [Foundry की इंस्टॉलेशन गाइड](PINOKIO.md) के हिसाब से रिपॉज़िटरी जोड़ें।
+2. Pinokio में पहले **Install**, फिर **Start Foundry**, और आखिर में **Open Foundry** चुनें।
+3. **एक इमेज या टेक्स्ट** खोलें। इमेज अपलोड करें या खींचकर छोड़ें, वेबकैम से लें, गैलरी से चुनें या विवरण से नई इमेज बनाएँ।
+4. प्रीव्यू देखें और आउटपुट चुनें। **Rocket Mode** से चुने हुए बाकी चरण बीच की वैकल्पिक समीक्षा पर रुके बिना चल सकते हैं।
 
-Pinokio की मदद से लोकल टूल इंस्टॉल करना और दूसरों के साथ शेयर करना आसान हो जाता है। अपने प्रोजेक्ट और अनुभव बाँटने वाले सभी लोगों और cocktail peanut का धन्यवाद। [Pinokio पर Foundry](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
+अगर ComfyUI पहले से इंस्टॉल है, तो [मैन्युअल इंस्टॉलेशन गाइड](../INSTALL.md) देखें और फिर `Mumblebox 3D Asset Foundry.json` खोलें। इंस्टॉलेशन सॉफ़्टवेयर तैयार करता है। कोई ज़रूरी मॉडल मौजूद न हो तो वर्कफ़्लो पहली बार उसे डाउनलोड करता है। मॉडल, काम की फ़ाइलें और नतीजे रखने के लिए डिस्क पर जगह रखें।
+
+### एक चित्र से Blender तक
+
+**एक इमेज या टेक्स्ट** में **नमूना चित्र इस्तेमाल करें** चुनकर नीचे की रेट्रो रे गन लोड करें। **पहली बार इस्तेमाल की फ़ाइलें** खोलकर देखें कि कौन सी फ़ाइलें चाहिए हो सकती हैं। विस्तृत GLB चुनें, काम पूरा करें और ZIP डाउनलोड करें। मेश, आकार और मटेरियल जाँचने के लिए GLB को Blender में इम्पोर्ट करें।
+
+**वास्तविक नतीजा।** Foundry ने 816,292 त्रिकोण और दो 4K टेक्सचर वाला GLB बनाया। नीचे Blender की स्टूडियो लाइटिंग में उसी मॉडल का रेंडर है।
+
+[![Foundry से निर्यात की गई रे गन का Blender रेंडर](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+
+[वीडियो और इस्तेमाल की गई सेटिंग](demos/2026-11-ray-gun/README.md) · [मूल PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [GLB डाउनलोड करें](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 
 ## अपने कोडिंग एजेंट को शुरुआत दें
 
@@ -46,15 +59,6 @@ Pinokio की मदद से लोकल टूल इंस्टॉल क
 | **इमेज बनाएँ** | एक इमेज या सामने और पीछे की जोड़ी बनाएँ। एडिटिंग, संगत LoRA और गैलरी में सेव करने की सुविधा है। | दूसरे वर्कफ़्लो के लिए रेफ़रेंस तैयार करने या इमेज अपने आप इस्तेमाल करने के लिए। |
 
 हर वर्कफ़्लो का अपना विज़ार्ड और नोड ग्राफ़ में अलग हिस्सा है। **जल्द आ रहा है** वाले कार्ड आगे के काम की जानकारी देते हैं।
-
-## शुरू कैसे करें
-
-1. [Pinokio](https://pinokio.co/) इंस्टॉल करें और [Foundry की इंस्टॉलेशन गाइड](PINOKIO.md) के हिसाब से रिपॉज़िटरी जोड़ें।
-2. Pinokio में पहले **Install**, फिर **Start Foundry**, और आखिर में **Open Foundry** चुनें।
-3. **एक इमेज या टेक्स्ट** खोलें। इमेज अपलोड करें या खींचकर छोड़ें, वेबकैम से लें, गैलरी से चुनें या विवरण से नई इमेज बनाएँ।
-4. प्रीव्यू देखें और आउटपुट चुनें। **Rocket Mode** से चुने हुए बाकी चरण बीच की वैकल्पिक समीक्षा पर रुके बिना चल सकते हैं।
-
-अगर ComfyUI पहले से इंस्टॉल है, तो [मैन्युअल इंस्टॉलेशन गाइड](../INSTALL.md) देखें और फिर `Mumblebox 3D Asset Foundry.json` खोलें। इंस्टॉलेशन सॉफ़्टवेयर तैयार करता है। कोई ज़रूरी मॉडल मौजूद न हो तो वर्कफ़्लो पहली बार उसे डाउनलोड करता है। मॉडल, काम की फ़ाइलें और नतीजे रखने के लिए डिस्क पर जगह रखें।
 
 ## प्रीव्यू और एक्सपोर्ट
 
@@ -104,3 +108,11 @@ Foundry रिसर्च करने वालों, मॉडल लेख�
 - [दूसरे Mumblebox प्रोजेक्ट](https://github.com/mumblebox-gpt?tab=repositories)
 
 आगे का काम ऐप के रोडमैप में देखें। इंस्टॉल करने के लिए जारी वर्शन के पेज पर जाएँ।
+
+## आधिकारिक प्रोजेक्ट और Pinokio समुदाय
+
+मूल Foundry प्रोजेक्ट को **mumblebox-gpt** GitHub पर सँभालता है। नए बदलाव, रिलीज़ की जानकारी और डाउनलोड वहीं मिलेंगे। अगर आप किसी फ़ोर्क या README की कॉपी पर हैं, तो नीचे दिए लिंक से मूल प्रोजेक्ट खोलें। [आधिकारिक GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry) · [जारी वर्शन](https://github.com/mumblebox-gpt/mumblebox-foundry/releases)
+
+Pinokio की मदद से लोकल टूल इंस्टॉल करना और दूसरों के साथ शेयर करना आसान हो जाता है। अपने प्रोजेक्ट और अनुभव बाँटने वाले सभी लोगों और cocktail peanut का धन्यवाद। [Pinokio पर Foundry](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
+
+अगर Foundry आपके काम आया, तो स्टार देने से दूसरे क्रिएटर भी इसे आसानी से ढूँढ पाएँगे।

@@ -1,5 +1,11 @@
 # Mumblebox 3D Asset Foundry — ComfyUI node pack
 
+## Official project and Pinokio community
+
+The original project, maintained by **mumblebox-gpt**, is [Mumblebox Foundry on GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry). Follow that repository for ongoing development and use its [published releases](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) for release notes and available downloads. If you are reading a fork or a copied README, follow these links back to the original project; a fork may have different changes or an older version.
+
+We are proud to build alongside the [Pinokio](https://pinokio.co/) creator community. Pinokio makes local tools easier to install and share, and we value a community where creators can discover each other's projects, exchange useful feedback and learn together. Thank you to cocktail peanut and everyone contributing to that creative ecosystem. [Find Foundry on Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
+
 This folder contains the Foundry interface, independent workflow branches and shared runtime services. For current features and installation, read the [product README](../README.md), [installation guide](../INSTALL.md) and [validation notes](../docs/RELEASE-VALIDATION.md).
 
 Open **Mumblebox 3D Asset Foundry.json** for the current GUI. Single Image or Text is the direct one-image route; Turnaround, 3D-Guided, Splat & Solid and HairDeck retain separate owners. The older Asset Workshop graph and the technical notes below describe the original node interface.

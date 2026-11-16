@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry 버전 0.1.0-preview.31**
+**Foundry 버전 0.1.0-preview.32**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -12,11 +12,24 @@ Foundry는 로컬 AI 작업을 단계별 워크플로로 묶어 둔 도구입니
 
 [Pinokio로 설치](PINOKIO.md) · [공개 릴리스](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [에이전트 설정](AGENT-SETUP.md) · [변경 내역](../CHANGELOG.md)
 
-## 공식 프로젝트와 Pinokio 커뮤니티
+## 시작하기
 
-오리지널 Foundry는 **mumblebox-gpt**가 GitHub에서 관리합니다. 공식 저장소에서 개발 상황과 새 버전, 다운로드를 확인할 수 있습니다. 포크나 복사된 README를 보고 있다면 아래 링크를 이용해 원본으로 이동하세요. [공식 GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry) · [공개 릴리스](https://github.com/mumblebox-gpt/mumblebox-foundry/releases)
+1. [Pinokio](https://pinokio.co/)를 설치하고 [Foundry 설치 안내](PINOKIO.md)에 따라 저장소를 추가합니다.
+2. **Install**, **Start Foundry**, **Open Foundry** 순서로 선택합니다.
+3. **단일 이미지 또는 텍스트**를 엽니다. 파일을 올리거나 끌어다 놓고, 웹캠으로 찍거나 갤러리에서 골라도 됩니다. 설명으로 이미지를 바로 만들 수도 있습니다.
+4. 미리 보기를 확인하고 필요한 결과를 고릅니다. **Rocket Mode**는 중간에 직접 확인하는 선택 단계를 건너뛰고 선택한 나머지 작업을 실행합니다.
 
-Pinokio 덕분에 로컬 도구를 쉽게 설치하고 공유할 수 있습니다. 프로젝트를 나누고 피드백을 주시는 분들과 cocktail peanut에게 감사드립니다. [Pinokio의 Foundry 페이지](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
+기존 ComfyUI에 설치하려면 [수동 설치 안내](../INSTALL.md)를 따른 뒤 `Mumblebox 3D Asset Foundry.json`을 여세요. 설치할 때는 소프트웨어를 준비합니다. 모델 파일이 부족하면 해당 워크플로를 처음 사용할 때 받습니다. 모델, 작업 파일, 결과물에 필요한 디스크 공간을 확보해 주세요.
+
+### 이미지 한 장에서 Blender까지
+
+**단일 이미지 또는 텍스트**에서 **예제 이미지 사용**을 눌러 아래의 레트로 광선총을 불러옵니다. **처음 실행에 필요한 파일**을 열면 필요한 파일의 예상 목록을 볼 수 있습니다. 상세 GLB를 선택해 처리를 마친 다음 ZIP을 다운로드하세요. GLB를 Blender로 가져와 메시, 크기, 재질을 확인합니다.
+
+**실제 결과.** Foundry가 삼각형 816,292개와 4K 텍스처 2개가 포함된 GLB를 생성했습니다. 아래 이미지는 같은 모델을 Blender에서 스튜디오 조명으로 렌더링한 것입니다.
+
+[![Foundry에서 내보내고 Blender에서 렌더링한 광선총](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+
+[작업 과정과 실제 설정](demos/2026-11-ray-gun/README.md) · [원본 PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [GLB 다운로드](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 
 ## 코딩 에이전트와 함께 쓰기
 
@@ -46,15 +59,6 @@ Pinokio 덕분에 로컬 도구를 쉽게 설치하고 공유할 수 있습니�
 | **이미지 만들기** | 한 장 또는 앞뒤 이미지 한 쌍을 만들 수 있습니다. 편집, 호환 LoRA, 갤러리 저장을 지원합니다. | 다른 워크플로의 참고 이미지를 준비하거나 이미지만 따로 쓸 때 좋습니다. |
 
 워크플로마다 전용 마법사와 독립된 노드 그래프 구역이 있습니다. **추가 예정** 카드에는 앞으로 개발할 내용이 표시됩니다.
-
-## 시작하기
-
-1. [Pinokio](https://pinokio.co/)를 설치하고 [Foundry 설치 안내](PINOKIO.md)에 따라 저장소를 추가합니다.
-2. **Install**, **Start Foundry**, **Open Foundry** 순서로 선택합니다.
-3. **단일 이미지 또는 텍스트**를 엽니다. 파일을 올리거나 끌어다 놓고, 웹캠으로 찍거나 갤러리에서 골라도 됩니다. 설명으로 이미지를 바로 만들 수도 있습니다.
-4. 미리 보기를 확인하고 필요한 결과를 고릅니다. **Rocket Mode**는 중간에 직접 확인하는 선택 단계를 건너뛰고 선택한 나머지 작업을 실행합니다.
-
-기존 ComfyUI에 설치하려면 [수동 설치 안내](../INSTALL.md)를 따른 뒤 `Mumblebox 3D Asset Foundry.json`을 여세요. 설치할 때는 소프트웨어를 준비합니다. 모델 파일이 부족하면 해당 워크플로를 처음 사용할 때 받습니다. 모델, 작업 파일, 결과물에 필요한 디스크 공간을 확보해 주세요.
 
 ## 미리 보기와 내보내기
 
@@ -104,3 +108,11 @@ Foundry는 연구자와 모델 제작자, 워크플로 개발자가 공유한 �
 - [다른 Mumblebox 프로젝트](https://github.com/mumblebox-gpt?tab=repositories)
 
 앞으로 개발할 기능은 앱 안의 로드맵에서, 설치할 수 있는 버전은 공개 릴리스에서 확인하세요.
+
+## 공식 프로젝트와 Pinokio 커뮤니티
+
+오리지널 Foundry는 **mumblebox-gpt**가 GitHub에서 관리합니다. 공식 저장소에서 개발 상황과 새 버전, 다운로드를 확인할 수 있습니다. 포크나 복사된 README를 보고 있다면 아래 링크를 이용해 원본으로 이동하세요. [공식 GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry) · [공개 릴리스](https://github.com/mumblebox-gpt/mumblebox-foundry/releases)
+
+Pinokio 덕분에 로컬 도구를 쉽게 설치하고 공유할 수 있습니다. 프로젝트를 나누고 피드백을 주시는 분들과 cocktail peanut에게 감사드립니다. [Pinokio의 Foundry 페이지](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
+
+Foundry가 유용했다면 별을 눌러 다른 제작자가 프로젝트를 찾을 수 있도록 도와주세요.

@@ -1,6 +1,7 @@
 import {sourceMessage} from "../i18n.js";
 import {msg, setText, replaceContent} from "../i18n.js";
 import {problemPanel} from '../problem-panel.js';
+import {activityTip} from '../activity-tips.js';
 import {elapsedTime} from '../activity.js';
 import {api} from '/scripts/api.js';
 import {app} from '/scripts/app.js';
@@ -159,6 +160,7 @@ export class GuidedWizard{
             error?problemPanel(error):null,
             active?el('section',{class:'wizard-busy',role:'status','aria-live':'polite'},el('strong',{},this.job?.preparing?msg("guided.preparing_required_resources"):stageNames[this.job?.finishing?.stage||this.job?.current_stage]||'Starting selected stage'),this.busyText,
                 elapsedTime((this.job?.started_at||this.job?.finishing?.started_at)*1000),
+                activityTip('guided', this.id, this.job?.finishing?.stage || this.job?.current_stage),
                 hint(msg("guided.of_10_generation_stages_saved_completed_files_remain_available", {value1: Object.keys(this.job?.completed||{}).length}))):null,
             pages[this.page-1](this)));
         this.remember();

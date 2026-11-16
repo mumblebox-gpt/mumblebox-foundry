@@ -1,13 +1,15 @@
 """Discoverable MCP actions backed by the same service routes as Foundry's GUI."""
 from dataclasses import dataclass
-from typing import Any
+from typing import Annotated, Any
 from urllib.parse import quote, urlencode, urlsplit
 
 import base64
 
 from mcp.types import ImageContent
+from pydantic import Field
 
 from client import identifier
+from tool_contracts import DISPATCH, InputPath, LOCAL, READ, RunId, tool_registration
 
 
 @dataclass(frozen=True)
@@ -39,6 +41,9 @@ LIBRARY = ("asset_id",)
 GROUPS = {
     "mesh": {
         "capabilities": read("/wizard/capabilities", "Single Image and Turnaround defaults, supported models, export formats and all quad solver controls."),
+        "preparation_preview": write("/wizard/preparation-preview",
+            "Read projected model files, known download sizes and unknowns for the chosen operation. Starts no run or download.",
+            "configuration (method, profile, turnaround_model, overrides, selection), operation"),
         "create": write("/wizard/runs", "Save a draft without generating.", "method, name, references, category, profile, overrides, selection, turnaround_model, image_creation"),
         "update": write("/wizard/runs/{run_id}", "Replace the idle run configuration.", "Full configuration from create", RUN, "PATCH"),
         "status": read("/wizard/runs/{run_id}", "Progress, checkpoints, settings, previews and export metadata.", RUN),
@@ -305,30 +310,32 @@ def image_preview(client, url):
 
 
 def register(server, client, checked):
-    def tool(function):
-        return server.tool(structured_output=True)(checked(function))
+    tool = tool_registration(server, checked)
 
-    @tool
-    def foundry_workflows(workflow: str | None = None) -> dict[str, Any]:
-        """List Foundry workflow groups, or describe all actions and parameters for one group."""
+    @tool(READ)
+    def foundry_workflows(workflow: Annotated[str | None, Field(description="Workflow ID from the list; omit it to list all groups.")] = None) -> dict[str, Any]:
+        """Discover Foundry workflow groups and the actions and fields for each one. This catalog is available without a running backend."""
         return describe(workflow)
 
-    @tool
-    def foundry_workflow_action(workflow: str, action: str, params: dict[str, str] | None = None,
-                               body: dict[str, Any] | None = None,
-                               query: dict[str, str | int | bool] | None = None) -> dict[str, Any]:
-        """Call a documented workflow action. Read foundry_workflows and the group's capabilities first."""
+    @tool(DISPATCH)
+    def foundry_workflow_action(
+        workflow: Annotated[str, Field(description="Group ID returned by foundry_workflows.")],
+        action: Annotated[str, Field(description="Action ID from the selected group's catalog.")],
+        params: Annotated[dict[str, str] | None, Field(description="Exact path identifiers documented for this action.")] = None,
+        body: Annotated[dict[str, Any] | None, Field(description="Configuration or controls documented as the action's body fields.")] = None,
+        query: Annotated[dict[str, str | int | bool] | None, Field(description="Optional query fields listed in the action catalog.")] = None,
+    ) -> dict[str, Any]:
+        """Call a specific action from foundry_workflows. Effects vary by action and include reads, downloads, generation and explicit maintenance or deletion."""
         return call(client, workflow, action, params, body, query)
 
-    @server.tool(structured_output=False)
-    @checked
-    def foundry_read_image_preview(url: str):
-        """Read a small Foundry PNG, JPEG or WebP as actual image content for review."""
+    @tool(LOCAL, structured_output=False)
+    def foundry_read_image_preview(url: Annotated[str, Field(description="Local image URL returned by this Foundry installation.")]):
+        """View a Foundry PNG, JPEG or WebP of up to 4 MiB. Use an artifact link for larger images or other file formats."""
         return image_preview(client, url)
 
-    @tool
-    def foundry_garment_upload_character(run_id: str, path: str) -> dict[str, Any]:
-        """Upload an authorized rigged GLB to a sewn garment run. Returns the character ID for drape."""
+    @tool(LOCAL)
+    def foundry_garment_upload_character(run_id: RunId, path: InputPath) -> dict[str, Any]:
+        """Copy an authorized rigged GLB into a sewn Garment Particles run. Return the character ID to use for draping."""
         source = client.allowed_input(path)
         if source.suffix.lower() != ".glb" or source.stat().st_size > 150 * 1024**2:
             raise ValueError("Choose a rigged GLB smaller than 150 MB.")

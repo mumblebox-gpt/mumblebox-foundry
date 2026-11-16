@@ -318,6 +318,13 @@ def register(routes, library, preferences, wizard_factory=None, resources=None, 
         async def wizard_create(request):
             return await asyncio.to_thread(wizard_factory().create,await body(request))
 
+        @routes.post(PREFIX + "/wizard/preparation-preview")
+        @endpoint
+        async def wizard_preparation_preview(request):
+            data = await body(request)
+            return await asyncio.to_thread(wizard_factory().preparation_preview,
+                                           data.get("configuration"), data.get("operation"))
+
         @routes.get(PREFIX + "/wizard/runs/{id}")
         @endpoint
         async def wizard_get(request):

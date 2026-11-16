@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry 版本 0.1.0-preview.31**
+**Foundry 版本 0.1.0-preview.32**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -12,11 +12,24 @@ Foundry 把实用的 AI 工作流整理成一步步的向导，提供合适的�
 
 [通过 Pinokio 安装](PINOKIO.md) · [已发布版本](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [MCP 与技能设置](AGENT-SETUP.md) · [更新记录](../CHANGELOG.md)
 
-## 原始项目与 Pinokio 创作者社区
+## 开始制作
 
-由 **mumblebox-gpt** 维护的原始项目是 [GitHub 上的 Mumblebox Foundry](https://github.com/mumblebox-gpt/mumblebox-foundry)。请关注该仓库以了解开发进展，并查看[已发布版本](https://github.com/mumblebox-gpt/mumblebox-foundry/releases)，获取版本说明和可用下载。如果你正在阅读分支仓库（fork）或本 README 的副本，请通过这些链接回到原始项目；分支仓库可能包含不同的修改，也可能仍是较旧的版本。
+1. 安装 [Pinokio](https://pinokio.co/)，按照 [Foundry 安装说明](PINOKIO.md) 添加此仓库。
+2. 依次选择 **Install**（安装）、**Start Foundry**（启动）和 **Open Foundry**（打开界面）。这些是 Pinokio 启动器里的按钮名称。
+3. 打开“单图或文字”向导。上传或拖入图片、用摄像头拍照、从图库选择，或根据描述创建一张图片。
+4. 检查预览并选择输出。**火箭模式**可以连续执行剩余的已选步骤，跳过可选的中途检查。
 
-我们很高兴能与 [Pinokio](https://pinokio.co/) 创作者社区一同创作。Pinokio 让本地工具更容易安装和分享。我们珍视这样一个社区：创作者可以发现彼此的项目、交流有用的反馈并共同学习。感谢 cocktail peanut 以及所有为这个创意生态做出贡献的人。[在 Pinokio 上查看 Foundry](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)。
+已有 ComfyUI 的用户可以按照 [INSTALL.md](../INSTALL.md) 手动安装，再打开 Mumblebox 3D Asset Foundry.json。安装阶段准备软件；首次运行所选工作流时，会在处理前下载缺少的模型权重。打开 Foundry 不会下载整个模型库。请为权重、临时文件和输出预留磁盘空间。
+
+### 从一张图片到 Blender
+
+打开“单图或文字”，选择“使用示例图片”，载入下方的复古射线枪。打开“首次使用所需文件”查看预计需要的文件。选择高细节 GLB 输出，完成后下载 ZIP。将 GLB 导入 Blender，检查网格、比例和材质。
+
+**实际效果。** 用示例图片生成的 GLB 含 816,292 个三角面和两张内嵌 4K 纹理。下图使用 Blender 灯光展示同一个导出模型。
+
+[![Blender 灯光下的 Foundry 射线枪模型](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+
+[演示与完整设置](demos/2026-11-ray-gun/README.md) · [原始 PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [下载 GLB](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 
 ## 给编程智能体一个好起点
 
@@ -46,15 +59,6 @@ Foundry 把实用的 AI 工作流整理成一步步的向导，提供合适的�
 | **创建图片** | 单张图片或正反面参考图，支持编辑、兼容的 LoRA 和图库保存。 | 为其他向导准备参考图，也可以只保留图片。 |
 
 每种工作流都有自己的向导和独立管理的节点图分支。标为“即将推出”的卡片属于后续计划。
-
-## 开始制作
-
-1. 安装 [Pinokio](https://pinokio.co/)，按照 [Foundry 安装说明](PINOKIO.md) 添加此仓库。
-2. 依次选择 **Install**（安装）、**Start Foundry**（启动）和 **Open Foundry**（打开界面）。这些是 Pinokio 启动器里的按钮名称。
-3. 打开“单图或文字”向导。上传或拖入图片、用摄像头拍照、从图库选择，或根据描述创建一张图片。
-4. 检查预览并选择输出。**火箭模式**可以连续执行剩余的已选步骤，跳过可选的中途检查。
-
-已有 ComfyUI 的用户可以按照 [INSTALL.md](../INSTALL.md) 手动安装，再打开 Mumblebox 3D Asset Foundry.json。安装阶段准备软件；首次运行所选工作流时，会在处理前下载缺少的模型权重。打开 Foundry 不会下载整个模型库。请为权重、临时文件和输出预留磁盘空间。
 
 ## 检查与导出
 
@@ -108,3 +112,11 @@ Foundry 把研究者、模型作者和工作流创作者的优秀成果连接起
 - [更多 Mumblebox 项目](https://github.com/mumblebox-gpt?tab=repositories)
 
 应用内“开发计划”列出后续功能。可安装的具体版本以已发布版本页面为准。
+
+## 原始项目与 Pinokio 创作者社区
+
+由 **mumblebox-gpt** 维护的原始项目是 [GitHub 上的 Mumblebox Foundry](https://github.com/mumblebox-gpt/mumblebox-foundry)。请关注该仓库以了解开发进展，并查看[已发布版本](https://github.com/mumblebox-gpt/mumblebox-foundry/releases)，获取版本说明和可用下载。如果你正在阅读分支仓库（fork）或本 README 的副本，请通过这些链接回到原始项目；分支仓库可能包含不同的修改，也可能仍是较旧的版本。
+
+我们很高兴能与 [Pinokio](https://pinokio.co/) 创作者社区一同创作。Pinokio 让本地工具更容易安装和分享。我们珍视这样一个社区：创作者可以发现彼此的项目、交流有用的反馈并共同学习。感谢 cocktail peanut 以及所有为这个创意生态做出贡献的人。[在 Pinokio 上查看 Foundry](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)。
+
+如果 Foundry 帮到了你，欢迎加星，让更多创作者发现它。

@@ -5,6 +5,7 @@ import {app} from '/scripts/app.js';
 import {el,button,hint,field} from '../dom.js';
 import {request} from '../services.js';
 import {dialog} from '../dialogs.js';
+import {activityTip} from '../activity-tips.js';
 import {activity,elapsedTime} from '../activity.js';
 import {uploadReference,capturePhoto,galleryReference,inputURL} from '../images/references.js';
 import {hairFileURL,displayFiles,imageSheet,hairViewer,variationCards,preprocessingWarnings} from './review.js';
@@ -215,7 +216,8 @@ export class HairWizard {
         const busy=!!this.run?.active||this.working;
         const rail=el('aside',{class:'wizard-rail'},el('span',{class:'eyebrow'},msg("hair.hairdeck_hair")),el('h3',{},msg("hair.hairdeck_stylized_hair")),el('ol',{class:'wizard-steps'},...titles.map((title,i)=>el('li',{class:i+1===this.page?'current':''},el('span',{},String(i+1)),el('div',{},el('strong',{},title),el('small',{},blurbs[i]))))),hint(msg("hair.one_image_hair_cards_matching_spring_bones")));
         const panel=el('div',{class:'wizard-panel'},el('header',{class:'page-head'},el('span',{class:'eyebrow'},msg("hair.page_of_6", {page: this.page})),el('h2',{},titles[this.page-1])));
-        if(this.run?.active){const a=activity();a.update({busy:true,label:msg("hair.hairdeck", {stage: this.run.stage}),detail:this.run.dependency?.message||this.run.dependency?.name||'Completed hair variations remain saved.'});this.progress=el('progress',{max:100,value:this.run.progress||0,'aria-label':msg("hair.overall_hairdeck_workflow_progress")});this.progressText=el('strong',{},'');panel.append(el('div',{class:'hair-progress'},a.element,elapsedTime(this.run.started_at*1000),this.progress,this.progressText));}
+        if(this.run?.active){const a=activity();a.update({busy:true,label:msg("hair.hairdeck", {stage: this.run.stage}),detail:this.run.dependency?.message||this.run.dependency?.name||'Completed hair variations remain saved.'});this.progress=el('progress',{max:100,value:this.run.progress||0,'aria-label':msg("hair.overall_hairdeck_workflow_progress")});this.progressText=el('strong',{},'');panel.append(el('div',{class:'hair-progress'},a.element,elapsedTime(this.run.started_at*1000),this.progress,this.progressText,
+            activityTip('hair', this.run.id || this.runId, this.run.stage)));}
         const error=this.error||this.run?.error;if(error)panel.append(problemPanel(error));
         const navigation=()=>el('footer',{class:'wizard-footer actions'},this.page>1?button(msg("hair.back"),()=>this.go(this.page-1),{disabled:busy}):null,
             this.page<6?button(msg("hair.next"),()=>this.act(async()=>{

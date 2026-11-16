@@ -18,6 +18,13 @@ const contributors=[{
     name:"Obbz",handle:"obbz",profile:"https://pinokio.co/u/obbz",
     contribution:msg("common.contributor_obbz_install_report"),
     changes:[[msg("common.original_bug_report"),"https://pinokio.co/posts/01m7ap9neb694thy3gyr1608kk"]]
+},{
+    name:"@rgdesign",
+    contribution:msg("common.contributor_rgdesign_single_report")
+},{
+    name:"SibioJak",handle:"SibioJak",profile:"https://github.com/SibioJak",
+    contribution:msg("common.contributor_sibiojak_single_report"),
+    changes:[[msg("common.original_bug_report"),"https://github.com/mumblebox-gpt/mumblebox-foundry/issues/1"]]
 }];
 
 export async function render(shell) {
@@ -42,7 +49,7 @@ export async function render(shell) {
             el("h3",{id:"foundry-thank-you",style:"margin:30px 0 18px"},msg("common.thank_you")),
             el("p",{},msg("common.to_the_people_who_share_fixes_useful_workflows_thoughtful_feedback_and_their")),
             el("div",{class:"credit-list"},contributors.map(person=>el("article",{class:"credit"},
-                el("h3",{},person.name),link("@"+person.handle,person.profile),el("p",{},person.contribution),
-                el("div",{class:"actions"},person.changes.map(([label,url])=>link(label,url))))))),
+                el("h3",{},person.name),person.profile?link("@"+person.handle,person.profile):null,el("p",{},person.contribution),
+                person.changes?el("div",{class:"actions"},person.changes.map(([label,url])=>link(label,url))):null)))),
         el("div",{class:"note-panel"},hint(msg("common.package_specific_resources_measurements_and_license_notices_are_recorded_in"))));
 }

@@ -7,7 +7,7 @@ const manifestUrl = new URL("./locales/manifest.json", import.meta.url);
 async function loadCatalog(language, read) {
     const domains = await Promise.all(Object.entries(manifest.domains).map(async ([domain, directory]) => {
         const url = new URL(directory + "/" + language + ".json", manifestUrl);
-        url.searchParams.set("catalog", "5");
+        url.searchParams.set("catalog", "10");
         const messages = await read(url);
         return Object.entries(messages).map(([key, value]) => [domain + "." + key, value]);
     }));
@@ -195,7 +195,7 @@ function sourceMessages() {
     const exact = new Map();
     const templates = [];
     for (const [key, source] of Object.entries(english)) {
-        if (key.startsWith("ccore.preset_")) continue;
+        if (key.startsWith("ccore.preset_") || key.startsWith("tips.")) continue;
         const names = [...source.matchAll(parameters)].map(match => match[1]);
         if (!names.length) {
             if (!exact.has(source)) exact.set(source, key);

@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry version 0.1.0-preview.31**
+**Foundry version 0.1.0-preview.32**
 
 [English](README.md) · [简体中文](docs/README.zh-CN.md) · [Español (Latinoamérica)](docs/README.es-419.md) · [Français](docs/README.fr.md) · [Português (Brasil)](docs/README.pt-BR.md) · [Deutsch](docs/README.de.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md) · [हिन्दी](docs/README.hi.md)
 
@@ -14,11 +14,24 @@ Explore game props, character parts, hair, splats and assets for creative projec
 
 [Install with Pinokio](docs/PINOKIO.md) · [Published downloads](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [Agent setup](docs/AGENT-SETUP.md) · [Changelog](CHANGELOG.md)
 
-## Official project and Pinokio community
+## Start creating
 
-The original project, maintained by **mumblebox-gpt**, is [Mumblebox Foundry on GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry). Follow that repository for ongoing development and use its [published releases](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) for release notes and available downloads. If you are reading a fork or a copied README, follow these links back to the original project; a fork may have different changes or an older version.
+1. Install [Pinokio](https://pinokio.co/) and follow the [Foundry install guide](docs/PINOKIO.md) to add this repository.
+2. Choose **Install**, then **Start Foundry** and **Open Foundry**.
+3. Open **Single Image or Text**. Upload or drop an image, use your webcam, choose from Gallery, or create an image from a description.
+4. Review previews and choose outputs. **Rocket Mode** can run the remaining selected stages without optional review stops.
 
-We are proud to build alongside the [Pinokio](https://pinokio.co/) creator community. Pinokio makes local tools easier to install and share, and we value a community where creators can discover each other's projects, exchange useful feedback and learn together. Thank you to cocktail peanut and everyone contributing to that creative ecosystem. [Find Foundry on Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
+For an existing ComfyUI installation, follow [INSTALL.md](INSTALL.md), then open Mumblebox 3D Asset Foundry.json. Installation prepares software. The selected workflow prepares missing weights before processing on first use. Opening Foundry does not download the whole library. Allow disk space for weights, working files and outputs.
+
+### From one image to Blender
+
+In **Single Image or Text**, choose **Use sample image** for the retro ray gun below. Open **First-use files** to see which files Foundry expects to need. Select the Detailed GLB output, finish and download the ZIP. Import the GLB into Blender to check the mesh, scale and materials.
+
+**Working result.** Foundry turned this sample into a textured GLB with 816,292 triangles and two embedded 4K maps. The image below shows that same export under Blender studio lights.
+
+[![Red Comet, the Foundry GLB rendered in Blender](docs/demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+
+[Walkthrough and exact settings](docs/demos/2026-11-ray-gun/README.md) · [Original PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [Download the GLB](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 
 ## Give your coding agent a head start
 
@@ -48,15 +61,6 @@ Our aim is to reduce repetitive modeling and save time and agent tokens. Actual 
 | **Create Images** | Single images or front/back pairs, editing, compatible LoRAs and a saved Gallery. | Prepare a reference for another wizard or keep the image itself. |
 
 Each workflow has its own wizard and independently owned graph section. Cards marked Coming soon describe future work.
-
-## Start creating
-
-1. Install [Pinokio](https://pinokio.co/) and follow the [Foundry install guide](docs/PINOKIO.md) to add this repository.
-2. Choose **Install**, then **Start Foundry** and **Open Foundry**.
-3. Open **Single Image or Text**. Upload or drop an image, use your webcam, choose from Gallery, or create an image from a description.
-4. Review previews and choose outputs. **Rocket Mode** can run the remaining selected stages without optional review stops.
-
-For an existing ComfyUI installation, follow [INSTALL.md](INSTALL.md), then open Mumblebox 3D Asset Foundry.json. Installation prepares software. The selected workflow prepares missing weights before processing on first use. Opening Foundry does not download the whole library. Allow disk space for weights, working files and outputs.
 
 ## Review and export
 
@@ -110,3 +114,11 @@ About includes model credits and a growing contributor Thank You section. Workfl
 - [More Mumblebox projects](https://github.com/mumblebox-gpt?tab=repositories)
 
 The in-app Roadmap lists planned features. Published releases identify the builds available to install.
+
+## Official project and Pinokio community
+
+The original project, maintained by **mumblebox-gpt**, is [Mumblebox Foundry on GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry). Follow that repository for ongoing development and use its [published releases](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) for release notes and available downloads. If you are reading a fork or a copied README, follow these links back to the original project; a fork may have different changes or an older version.
+
+We are proud to build alongside the [Pinokio](https://pinokio.co/) creator community. Pinokio makes local tools easier to install and share, and we value a community where creators can discover each other's projects, exchange useful feedback and learn together. Thank you to cocktail peanut and everyone contributing to that creative ecosystem. [Find Foundry on Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
+
+If Foundry helps with your project, a star helps other creators find it.

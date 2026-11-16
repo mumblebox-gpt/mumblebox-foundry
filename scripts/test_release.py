@@ -1,9 +1,65 @@
 """Portable install contract: no downloads, preserved state, repeatability, rollback."""
-import argparse, hashlib, importlib.util, json, tempfile, unittest
+import argparse, hashlib, importlib.util, io, json, subprocess, tempfile, unittest, zipfile
 from unittest.mock import patch
 from pathlib import Path
 spec=importlib.util.spec_from_file_location("installer",Path(__file__).with_name("install_foundry.py"))
 installer=importlib.util.module_from_spec(spec);spec.loader.exec_module(installer)
+
+class ReleaseSourceTests(unittest.TestCase):
+    def test_public_archive_matches_tag_despite_windows_checkout_line_endings(self):
+        spec = importlib.util.spec_from_file_location("builder", Path(__file__).with_name("build_release.py"))
+        builder = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(builder)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            repo = root / "repo"
+            repo.mkdir()
+            version = "0.1.0-preview.900"
+            pack = repo / "comfyui_asset_workshop"
+            files = {
+                repo / ".gitattributes": (builder.ROOT / ".gitattributes").read_bytes(),
+                repo / "README.md": f"Foundry {version}\n".encode(),
+                repo / "dependencies.json": json.dumps({"version": version}).encode(),
+                pack / "foundry/__init__.py": f'VERSION = "{version}"\n'.encode(),
+                pack / "web/foundry/locales/manifest.json": b'{"languages":[{"id":"en"}]}',
+                pack / "skills/mumblebox-assets/SKILL.md": f"Foundry {version}\n".encode(),
+                pack / "skills/mumblebox-assets/compatibility.json":
+                    json.dumps({"reviewed_foundry_version": version}).encode(),
+            }
+            for file, data in files.items():
+                file.parent.mkdir(parents=True, exist_ok=True)
+                file.write_bytes(data)
+            for file in builder.inventory(repo):
+                if not file.exists():
+                    file.parent.mkdir(parents=True, exist_ok=True)
+                    file.write_bytes(b"Fixture\n")
+
+            def git(*args, autocrlf="true"):
+                return subprocess.check_output(
+                    ["git", "-c", "user.name=Foundry Test", "-c", "user.email=foundry-test@example.invalid",
+                     "-c", "core.autocrlf=" + autocrlf, *args], cwd=repo, stderr=subprocess.PIPE)
+
+            git("init")
+            git("add", ".")
+            git("commit", "-m", "Synthetic release payload")
+            git("tag", "v" + version)
+            (repo / "CHANGELOG.md").write_bytes(b"Fixture\r\n")
+            untracked = pack / "web/local-only.js"
+            untracked.parent.mkdir(parents=True, exist_ok=True)
+            untracked.write_bytes(b"local only\n")
+
+            destination = root / "distribution"
+            builder.build(destination, ref="v" + version, repository=repo)
+            with zipfile.ZipFile(destination.with_suffix(".zip")) as bundle:
+                hashes = json.loads(bundle.read("SHA256SUMS.json"))
+                self.assertEqual(bundle.read("CHANGELOG.md"), b"Fixture\n")
+                self.assertNotIn("comfyui_asset_workshop/web/local-only.js", hashes)
+                for setting in ("true", "false"):
+                    with zipfile.ZipFile(io.BytesIO(
+                            git("archive", "--format=zip", "v" + version, autocrlf=setting))) as tagged:
+                        for name, digest in hashes.items():
+                            self.assertEqual(bundle.read(name), tagged.read(name), (setting, name))
+                            self.assertEqual(hashlib.sha256(tagged.read(name)).hexdigest(), digest, name)
 
 class InstallTests(unittest.TestCase):
     def test_release_rejects_corrupted_interface_text(self):

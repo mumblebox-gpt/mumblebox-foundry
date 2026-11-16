@@ -1,0 +1,308 @@
+{
+  "demo": "Red Comet",
+  "tested_on": "2026-11-15",
+  "foundry_version": "0.1.0-preview.32",
+  "workflow": "single-image",
+  "reference_sha256": "d008622cde27d75759f42215c8e7a4899fb2705f84b2e85d152bc406c3fe7248",
+  "settings": {
+    "turnaround_seed": 939810832464276,
+    "shape_resolution": 1024,
+    "refine_resolution": 1536,
+    "refine_steps": 25,
+    "refine_seed": 42,
+    "cpu_offload": true,
+    "attention": "sdpa",
+    "texture_seed": 42,
+    "texture_mode": "standard",
+    "texture_steps": 20,
+    "texture_size": 4096,
+    "texture_guidance": 3.0,
+    "balanced_triangles": 250000,
+    "compact_triangles": 100000,
+    "quad_count": 25000,
+    "quad_method": "quadriflow",
+    "quad_options": {},
+    "print_height_mm": 100.0,
+    "shape_seed": 42,
+    "geometry_model": "pixal3d",
+    "export_grounding": "level"
+  },
+  "selection": {
+    "schema": "mumblebox.export-selection/1",
+    "variants": {
+      "detailed": {
+        "formats": [
+          "glb"
+        ]
+      }
+    }
+  },
+  "models": {
+    "pixal_single": {
+      "repo": "Comfy-Org/Pixal3D",
+      "file": "diffusion_models/pixal3d_bf16.safetensors",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "sha256": "5f3cd67b7ff9104d810754bcd89e47a6c2393e41f8c0a808d0dead37802d85fe",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/Pixal3D/blob/f37641be376725d324c56626007cc477f1249a69/README.md"
+    },
+    "shape_vae": {
+      "repo": "Comfy-Org/Pixal3D",
+      "file": "vae/trellis_2_shape_vae_bf16.safetensors",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "sha256": "de0cb4949a76c59ee5c091a995a69bcc8c51d5aeda939f0c641a50d2a72341f4",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/Pixal3D/blob/f37641be376725d324c56626007cc477f1249a69/README.md"
+    },
+    "dino": {
+      "repo": "Comfy-Org/Pixal3D",
+      "file": "clip_vision/dino_v3_L_naf_fp32.safetensors",
+      "revision": "f37641be376725d324c56626007cc477f1249a69",
+      "sha256": "4ad2ec4e0879a5b5b04cd97325cc37da954a7b6edca5170b86510f17f2b2290f",
+      "license": "dinov3-license",
+      "license_url": "https://github.com/facebookresearch/dinov3/blob/ffb4bb89c6558ca3244655c25a3955d01788b732/LICENSE.md"
+    },
+    "moge2_fp16": {
+      "repo": "Comfy-Org/MoGe",
+      "file": "geometry_estimation/moge_2_vitl_normal_fp16.safetensors",
+      "revision": "7f19f325949e1e7bb31c720333936f03cf932f57",
+      "sha256": "cb1a692d03235671e959e81360d7b4d9f44aefadb1f852d6ca6aa17799d5e31f",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/MoGe/blob/7f19f325949e1e7bb31c720333936f03cf932f57/README.md"
+    },
+    "birefnet": {
+      "repo": "Comfy-Org/BiRefNet",
+      "file": "background_removal/birefnet.safetensors",
+      "revision": "25511f8787e51912e1480706b4e47b8f467fbf72",
+      "sha256": "9ab37426bf4de0567af6b5d21b16151357149139362e6e8992021b8ce356a154",
+      "license": "mit",
+      "license_url": "https://huggingface.co/Comfy-Org/BiRefNet/blob/25511f8787e51912e1480706b4e47b8f467fbf72/README.md"
+    }
+  },
+  "texture_models": [
+    {
+      "name": "microsoft/TRELLIS.2-4B/ckpts/shape_enc_next_dc_f16c32_fp16.json",
+      "category": "worker",
+      "repo": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "file": "ckpts/shape_enc_next_dc_f16c32_fp16.json",
+      "size": 653,
+      "sha256": "5a960a5c419d70f8d4a7a6b6e52ae689cd948c88bd7ed92346adfbf82cd12007",
+      "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+    },
+    {
+      "name": "microsoft/TRELLIS.2-4B/ckpts/shape_enc_next_dc_f16c32_fp16.safetensors",
+      "category": "worker",
+      "repo": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "file": "ckpts/shape_enc_next_dc_f16c32_fp16.safetensors",
+      "size": 708797208,
+      "sha256": "f37c5ff5b983b68e9946060000f09bc131f3e84318a2c8b7430a81e4b4636c41",
+      "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+    },
+    {
+      "name": "microsoft/TRELLIS.2-4B/ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.json",
+      "category": "worker",
+      "repo": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "file": "ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.json",
+      "size": 458,
+      "sha256": "31f4fdad9974930e5e9324ac9dfb6ef7de6b30cea51854ba515ef827a8d353b2",
+      "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+    },
+    {
+      "name": "microsoft/TRELLIS.2-4B/ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.safetensors",
+      "category": "worker",
+      "repo": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "file": "ckpts/slat_flow_imgshape2tex_dit_1_3B_1024_bf16.safetensors",
+      "size": 2584672728,
+      "sha256": "580401269059a339b8318ab9ced459a13ba63391721c83a6c383198c29e77686",
+      "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+    },
+    {
+      "name": "microsoft/TRELLIS.2-4B/ckpts/tex_dec_next_dc_f16c32_fp16.json",
+      "category": "worker",
+      "repo": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "file": "ckpts/tex_dec_next_dc_f16c32_fp16.json",
+      "size": 705,
+      "sha256": "22074e4ab5b28e2b72d33a3fe61bf416134b89e12d0fc5c729f37da75da0c4d1",
+      "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+    },
+    {
+      "name": "microsoft/TRELLIS.2-4B/ckpts/tex_dec_next_dc_f16c32_fp16.safetensors",
+      "category": "worker",
+      "repo": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "file": "ckpts/tex_dec_next_dc_f16c32_fp16.safetensors",
+      "size": 948458812,
+      "sha256": "97ea69addea2ecd9312910f5f548234665eef51c088386180b7cd5b258645e3c",
+      "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+    },
+    {
+      "name": "microsoft/TRELLIS.2-4B/pipeline.json",
+      "category": "worker",
+      "repo": "microsoft/TRELLIS.2-4B",
+      "revision": "af44b45f2e35a493886929c6d786e563ec68364d",
+      "file": "pipeline.json",
+      "size": 4186,
+      "sha256": "222c359ab1ed9bc6735a640a34f95d47f8681b9bc4aaa101bfb80274676253c6",
+      "license_url": "https://huggingface.co/microsoft/TRELLIS.2-4B/blob/af44b45f2e35a493886929c6d786e563ec68364d/README.md"
+    },
+    {
+      "name": "facebook/dinov3-vitl16-pretrain-lvd1689m/config.json",
+      "category": "worker",
+      "repo": "visualbruno/dinov3-vitl16-pretrain-lvd1689m",
+      "revision": "8463e34549282813c2cbf67241b27c6fe8fa6321",
+      "file": "config.json",
+      "size": 745,
+      "sha256": "135ecd23e34a70b6fbed8b083fdecb319b7e3a54e3d849258bbe4ddcf1783bb5",
+      "license_url": "https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m/blob/ea8dc2863c51be0a264bab82070e3e8836b02d51/README.md"
+    },
+    {
+      "name": "facebook/dinov3-vitl16-pretrain-lvd1689m/model.safetensors",
+      "category": "worker",
+      "repo": "visualbruno/dinov3-vitl16-pretrain-lvd1689m",
+      "revision": "8463e34549282813c2cbf67241b27c6fe8fa6321",
+      "file": "model.safetensors",
+      "size": 1212559808,
+      "sha256": "dcb2e45127cccbf1601e5f42fef165eea275c8e5213197e8dcf3f48822718179",
+      "license_url": "https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m/blob/ea8dc2863c51be0a264bab82070e3e8836b02d51/README.md"
+    },
+    {
+      "name": "facebook/dinov3-vitl16-pretrain-lvd1689m/preprocessor_config.json",
+      "category": "worker",
+      "repo": "visualbruno/dinov3-vitl16-pretrain-lvd1689m",
+      "revision": "8463e34549282813c2cbf67241b27c6fe8fa6321",
+      "file": "preprocessor_config.json",
+      "size": 585,
+      "sha256": "960c41d1f3a7778b936365769a2d90550b318a6c0a53a0296957adacfe5e0dd7",
+      "license_url": "https://huggingface.co/facebook/dinov3-vitl16-pretrain-lvd1689m/blob/ea8dc2863c51be0a264bab82070e3e8836b02d51/README.md"
+    }
+  ],
+  "resources": [
+    {
+      "id": "birefnet",
+      "stage": "Background removal and prepared reference masks",
+      "name": "BiRefNet",
+      "version": "25511f8787e51912e1480706b4e47b8f467fbf72",
+      "source": "https://huggingface.co/Comfy-Org/BiRefNet",
+      "license": "MIT",
+      "license_url": "https://github.com/ZhengPeng7/BiRefNet/blob/2713d1293ce8a923d5878f1f30177b78770bf24c/LICENSE"
+    },
+    {
+      "id": "blender",
+      "stage": "UVs, authoring exports, FBX conversion and relocated import checks",
+      "name": "Blender",
+      "version": "5.2.2 LTS",
+      "source": "https://www.blender.org/about/license/",
+      "license": "GPL-3.0",
+      "license_url": "https://www.blender.org/about/license/"
+    },
+    {
+      "id": "comfyui",
+      "stage": "Workflow execution, native mesh conversion and detail baking",
+      "name": "ComfyUI",
+      "version": "0.42.5 (this installed workflow)",
+      "source": "https://github.com/Comfy-Org/ComfyUI",
+      "license": "GPL-3.0",
+      "license_url": "https://github.com/Comfy-Org/ComfyUI/blob/master/LICENSE"
+    },
+    {
+      "id": "dinov3",
+      "stage": "Image features for geometry",
+      "name": "DINOv3",
+      "version": "f37641be376725d324c56626007cc477f1249a69",
+      "source": "https://huggingface.co/Comfy-Org/Pixal3D",
+      "license": "DINOv3 License",
+      "license_url": "https://github.com/facebookresearch/dinov3/blob/ffb4bb89c6558ca3244655c25a3955d01788b732/LICENSE.md"
+    },
+    {
+      "id": "hi3d",
+      "stage": "Mesh refinement",
+      "name": "Powered by Hi3D 1.0",
+      "version": "1.0",
+      "source": "https://www.hi3d.ai/",
+      "license": "Hi3D Open License v1",
+      "license_url": "https://github.com/hi3d-official/Hi3Dv1.0/blob/main/LICENSE"
+    },
+    {
+      "id": "moge2_fp16",
+      "stage": "Single-image camera estimation",
+      "name": "MoGe 2",
+      "version": "ComfyUI FP16 normal checkpoint; exact revision in production metadata",
+      "source": "https://huggingface.co/Comfy-Org/MoGe",
+      "license": "MIT",
+      "license_url": "https://github.com/microsoft/MoGe/blob/main/LICENSE"
+    },
+    {
+      "id": "pixal3d_single",
+      "stage": "Single-image geometry",
+      "name": "Pixal3D",
+      "version": "Single-image BF16 weights; pinned checkpoint in production metadata",
+      "source": "https://ldyang694.github.io/projects/pixal3d/",
+      "license": "MIT",
+      "license_url": "https://github.com/TencentARC/Pixal3D/blob/main/LICENSE"
+    },
+    {
+      "id": "pymeshlab",
+      "stage": "Reduction, material transfer and geometry checks",
+      "name": "PyMeshLab",
+      "version": "2025.7.post1",
+      "source": "https://github.com/cnr-isti-vclab/PyMeshLab",
+      "license": "GPL-3.0",
+      "license_url": "https://github.com/cnr-isti-vclab/PyMeshLab/blob/master/LICENSE"
+    },
+    {
+      "id": "trellis2",
+      "stage": "Shape decoding and post-refinement texture generation",
+      "name": "TRELLIS.2",
+      "version": "Shape VAE BF16; 4K texture stage",
+      "source": "https://github.com/microsoft/TRELLIS.2",
+      "license": "MIT",
+      "license_url": "https://github.com/microsoft/TRELLIS.2/blob/main/LICENSE"
+    },
+    {
+      "id": "trellis_wrapper",
+      "stage": "Existing-mesh texture integration",
+      "name": "ComfyUI-Trellis2 by visualbruno",
+      "version": "b0e84c0f29857a444e8bcb5b9be2ea218e96efd0",
+      "source": "https://github.com/visualbruno/ComfyUI-Trellis2",
+      "license": "MIT",
+      "license_url": "https://github.com/visualbruno/ComfyUI-Trellis2/blob/b0e84c0f29857a444e8bcb5b9be2ea218e96efd0/LICENSE"
+    }
+  ],
+  "bench": {
+    "os": "Windows 11",
+    "gpu": "NVIDIA GeForce RTX 4080 SUPER",
+    "vram_gib": 16,
+    "installed_ram_gib": 64,
+    "geometry_seconds": 27.87,
+    "refinement_seconds": 516.0,
+    "texture_seconds_after_retry": 87.02,
+    "package_seconds": 22.43,
+    "cached_preparation_seconds_upper_bound": 1,
+    "cold_download_measured": false,
+    "mcp_adapter": "0.2.0",
+    "mcp_sdk": "2.3.0",
+    "mcp_protocol": "2025-11-25"
+  },
+  "blender": {
+    "version": "5.2.2 LTS",
+    "engine": "Cycles, NVIDIA OptiX",
+    "render_resolution": [
+      1600,
+      1000
+    ],
+    "frames": 144,
+    "fps": 24,
+    "edit": "Studio softboxes, floor, camera and a full turn under fixed lights. The separately downloadable GLB keeps its original mesh and textures."
+  },
+  "sha256": {
+    "red-comet-original.png": "7107817722a1be0f36ffacfa9265abb9ffd823444b882df84c7f5fedc62ecaa4",
+    "red-comet.glb": "d8cf943aa089b8ff93408ec8e6e1426bc32fb7bea3f3929298463cab87d0ad77",
+    "red-comet-walkthrough.mp4": "30cddc25d130b8183433de82801aca83a5812cbf796b6733048008481d1f75c8",
+    "red-comet-studio-turntable.mp4": "9a5b24c9f63aa88f83c4d6d1571cb763f769326fa1255c985d16737b34af1790"
+  }
+}

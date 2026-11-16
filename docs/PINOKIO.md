@@ -16,6 +16,8 @@ Have a workflow that produces great results locally? Share it through [GitHub Is
 4. Select **Start Foundry**. **Open Foundry** opens the interface in the Pinokio application pane. It does not require Chrome.
 5. Choose an image workflow, or supply reference images in **Open Wizard**.
 
+For a first mesh, choose **Single Image or Text → Use sample image**. Open **First-use files** on the mesh settings page to see the model files and download estimates for your selections. Prepare the mesh, choose Detailed GLB, then inspect the export in Blender.
+
 The reference system is Windows with an NVIDIA RTX 4080 SUPER, 16 GB VRAM and 64 GB system RAM. This is not an independently tested 8 GB compatibility claim. Keep the installation outside OneDrive and other synchronized directories. See `dependencies.json` for pinned software versions and `RELEASE-VALIDATION.md` for evidence and limitations.
 
 ## Models and access

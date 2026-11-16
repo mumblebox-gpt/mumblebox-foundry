@@ -10,8 +10,8 @@ export function modelAccessUrl(message) {
     return match?`https://huggingface.co/${encodeURIComponent(match[1])}/${encodeURIComponent(match[2])}`:null;
 }
 
-export function modelAccessError(shell,message) {
-    const panel=problemPanel(message);
+export function modelAccessError(shell,message,context) {
+    const panel=problemPanel(message,context);
     const url=modelAccessUrl(message);
     if(url)appendContent(panel, el("div",{class:"actions"},link(msg("common.open_model_access_page"),url),
         button(msg("common.open_hugging_face_settings"),()=>shell.settings({service:"hugging-face"}))));

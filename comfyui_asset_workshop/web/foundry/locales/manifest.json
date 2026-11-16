@@ -39,6 +39,7 @@
   ],
   "domains": {
     "common": ".",
+    "tips": "../tips/locales",
     "mesh": "../wizard/locales",
     "guided": "../guided/locales",
     "splat": "../splat/locales",

@@ -2,20 +2,23 @@
 import argparse
 import json
 from functools import wraps
-from typing import Any
+from typing import Annotated, Any
 from urllib.error import URLError
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
+from pydantic import Field
 from client import APIError
 from foundry_client import FoundryAPI
 from connection import AgentConnection
+from tool_contracts import InputPath, LOCAL, READ, RequestId, RunId, START, tool_registration
 
 def checked(function):
     @wraps(function)
     def call(*args,**kwargs):
         try:return function(*args,**kwargs)
         except APIError as error:raise ToolError(json.dumps({"status":error.status,**error.details})) from None
-        except (ValueError,OSError,URLError) as error:raise ToolError(str(error)) from None
+        except URLError:raise ToolError("Could not reach the local Foundry service. Start Foundry and retry.") from None
+        except (ValueError,OSError) as error:raise ToolError(str(error)) from None
     return call
 
 def create_server(client):
@@ -40,60 +43,62 @@ def create_server(client):
         "For hair use foundry_hair_capabilities/create/start/status. HairDeck is a separate hair-card workflow: generate, preview, motion_preview and export. "
         "Static GLB is not rigged; VRM includes skinning and spring data. Inspect previews and package metadata; do not claim animation/print suitability solely from file format."))
 
-    @server.tool(structured_output=True)
-    @checked
+    tool = tool_registration(server, checked)
+
+    @tool(READ)
     def foundry_capabilities()->dict[str,Any]:
-        """Get exact model/category/profile/settings/export choices and defaults."""
+        """Read supported Single Image and Turnaround inputs, defaults and export choices before saving a mesh run."""
         return client.capabilities()
 
-    @server.tool(structured_output=True)
-    @checked
-    def foundry_import_reference(path:str,role:str="primary",description:str="",target:str="")->dict[str,Any]:
-        """Upload an authorized image; returns its reference card. Set target='ccore' for Image + Text."""
+    @tool(LOCAL)
+    def foundry_import_reference(
+        path: InputPath,
+        role: Annotated[str, Field(description="Reference purpose: primary, back, face, component, style or detail.")] = "primary",
+        description: Annotated[str, Field(description="Optional role or detail to preserve in the reference card (up to 800 characters).")] = "",
+        target: Annotated[str, Field(description="Empty for the default input folder; ccore for CCORE Image + Text.")] = "",
+    )->dict[str,Any]:
+        """Copy a PNG, JPEG or WebP into Foundry's local inputs and return its reference card."""
         return client.import_reference(path,role,description,target)
 
-    @server.tool(structured_output=True)
-    @checked
-    def foundry_create_run(configuration:dict[str,Any])->dict[str,Any]:
-        """Save method (single-image or turnaround), name, references, category, profile, overrides and export selection. Single-image accepts exactly one reference; no turnaround model is used. Does not generate."""
+    @tool(LOCAL)
+    def foundry_create_run(configuration: Annotated[dict[str,Any], Field(description="Mesh draft with method, name, imported reference cards, category, profile, overrides and export selection.")])->dict[str,Any]:
+        """Save a draft and return its run ID. Choose single-image for exactly one reference or turnaround for four-view generation."""
         return client.create_run(configuration)
 
-    @server.tool(structured_output=True)
-    @checked
-    def foundry_update_run(run_id:str,configuration:dict[str,Any])->dict[str,Any]:
-        """Replace the idle run configuration with a full configuration; stale dependent checkpoints are invalidated."""
+    @tool(LOCAL)
+    def foundry_update_run(run_id: RunId, configuration: Annotated[dict[str,Any], Field(description="Full replacement draft in the same shape as create_run; retain the original workflow method.")])->dict[str,Any]:
+        """Replace an idle mesh draft. Changed settings invalidate dependent checkpoints and keep previously saved files."""
         return client.update_run(run_id,configuration)
 
-    @server.tool(structured_output=True)
-    @checked
-    def foundry_run_status(run_id:str)->dict[str,Any]:
-        """Read stage, progress, download state, completed checkpoints, errors and preview links."""
+    @tool(LOCAL)
+    def foundry_run_status(run_id: RunId)->dict[str,Any]:
+        """Check mesh progress, errors, saved checkpoints and preview URLs. Checking an interrupted run reconciles its saved status."""
         return client.get_run(run_id)
 
-    @server.tool(structured_output=True)
-    @checked
-    def foundry_start(run_id:str,operation:str,request_id:str)->dict[str,Any]:
-        """Run turnaround, mesh, finish or rocket through the wizard's queue. Same request_id is retry-safe."""
+    @tool(START)
+    def foundry_start(
+        run_id: RunId,
+        operation: Annotated[str, Field(description="mesh builds and refines; finish exports; rocket runs all stages. turnaround is available for the Turnaround method.")],
+        request_id: RequestId,
+    )->dict[str,Any]:
+        """Queue the selected stage on the local GPU. First use can download models. Check status for progress and result links."""
         client.start(run_id,operation,request_id)
         return client.get_run(run_id)
 
-    @server.tool(structured_output=True)
-    @checked
-    def foundry_cancel(run_id:str)->dict[str,Any]:
-        """Cancel only this Foundry run while preserving completed files."""
+    @tool(LOCAL)
+    def foundry_cancel(run_id: RunId)->dict[str,Any]:
+        """Request cancellation and keep completed checkpoints. An independent Hi3D download can continue."""
         client.cancel(run_id)
         return client.get_run(run_id)
 
-    @server.tool(structured_output=True)
-    @checked
-    def foundry_show_run(run_id:str)->dict[str,Any]:
-        """Request display in the already-open Foundry interface, without changing desktop focus."""
+    @tool(LOCAL)
+    def foundry_show_run(run_id: RunId)->dict[str,Any]:
+        """Ask the existing Foundry interface to display the saved mesh run without taking desktop focus."""
         return client.show(run_id)
 
-    @server.tool(structured_output=True)
-    @checked
-    def foundry_package(run_id:str)->dict[str,Any]:
-        """Get completed package metadata and its local download URL, not a large binary response."""
+    @tool(LOCAL)
+    def foundry_package(run_id: RunId)->dict[str,Any]:
+        """Get metadata and a local ZIP download URL for a completed mesh run. Use status until packaging finishes."""
         return client.package(run_id)
 
     from image_tools import register as register_images

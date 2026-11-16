@@ -1,6 +1,7 @@
 import {el,button,field,hint} from '../dom.js';
 import {setText,sourceMessage} from '../i18n.js';
 import {request} from '../services.js';
+import {activityTip} from '../activity-tips.js';
 import {label} from './pair-preview.js';
 
 function loadImage(source) {
@@ -75,6 +76,7 @@ export function hybridPanel(wizard) {
     const canvas=el('canvas',{width:640,height:360,hidden:true,'aria-label':label('preview')});
     const status=el('p',{role:'status',class:'muted'});
     const progress=el('progress',{hidden:true,'aria-label':label('encoding')});
+    const tips=el('div');
     const saved=wizard.hybridSettings??={low:30,high:67,amount:80};
     const controls=[];
     let pair,controller,closed=false;
@@ -98,7 +100,7 @@ export function hybridPanel(wizard) {
     root.append(el('h3',{},label('hybrid')),hint(label('hybrid_help')),status,
         el('div',{class:'orbit-hybrid-settings'},adjust('low',0,90),adjust('high',10,100),adjust('amount',0,100)),
         el('div',{class:'actions'},preview,start,stop),
-        progress,canvas,
+        progress,tips,canvas,
         videoUrl?el('video',{class:'orbit-hybrid-video',src:videoUrl,controls:true,playsInline:true,preload:'metadata','aria-label':label('hybrid')}):null,
         videoUrl?el('a',{href:videoUrl,download:'hybrid-orbit.mp4'},label('download_video')):null);
     const endpoint=()=>wizard.path('/hybrid');
@@ -125,6 +127,8 @@ export function hybridPanel(wizard) {
             session=await request(endpoint(),{});
             const frameCanvas=el('canvas',{width:session.width,height:session.height});
             progress.hidden=false;progress.max=session.frames;progress.value=0;
+            const tip = activityTip('orbit-with-splats', wizard.runId, 'export');
+            if (tip) tips.append(tip);
             setText(status,label('encoding'));
             for(let index=0;index<session.frames;index++){
                 abort.signal.throwIfAborted();
@@ -145,6 +149,7 @@ export function hybridPanel(wizard) {
             if(session&&!finished)await request(endpoint()+'/'+session.id,undefined,{method:'DELETE'}).catch(()=>{});
             restore();
             controller=null;
+            tips.replaceChildren();
             if(!closed){
                 pair.select(mode||'both');
                 pair.setLocked(false);

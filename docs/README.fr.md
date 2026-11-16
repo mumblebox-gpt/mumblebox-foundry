@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Version de Foundry 0.1.0-preview.31**
+**Version de Foundry 0.1.0-preview.32**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -12,11 +12,24 @@ Créez des accessoires de jeu, des éléments de personnage, des coiffures, des 
 
 [Installer avec Pinokio](PINOKIO.md) · [Versions à télécharger](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [Connecter un agent](AGENT-SETUP.md) · [Historique des versions](../CHANGELOG.md)
 
-## Projet original et communauté Pinokio
+## Lancez votre premier projet
 
-Le projet original, maintenu par **mumblebox-gpt**, est [Mumblebox Foundry sur GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry). Suivez ce dépôt pour le développement en cours et consultez ses [versions publiées](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) pour les notes de version et les téléchargements disponibles. Si vous lisez un fork ou une copie de ce README, ces liens vous ramènent au projet original ; un fork peut contenir des modifications différentes ou une version plus ancienne.
+1. Installez [Pinokio](https://pinokio.co/) et suivez le [guide d’installation de Foundry](PINOKIO.md) pour ajouter le dépôt.
+2. Choisissez **Install**, puis **Start Foundry** et **Open Foundry**.
+3. Ouvrez **Image unique ou texte**. Importez ou déposez une image, prenez une photo avec votre webcam, choisissez une image dans la galerie ou créez-la à partir d’une description.
+4. Regardez les aperçus et choisissez les fichiers à exporter. **Rocket Mode** peut enchaîner les étapes sélectionnées en passant les vérifications facultatives.
 
-Nous sommes fiers de créer aux côtés de la communauté de créateurs de [Pinokio](https://pinokio.co/). Pinokio facilite l'installation et le partage d'outils locaux. Nous apprécions cette communauté où les créateurs peuvent découvrir leurs projets respectifs, échanger des retours utiles et apprendre ensemble. Merci à cocktail peanut et à toutes les personnes qui contribuent à cet écosystème créatif. [Retrouvez Foundry sur Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
+Si vous utilisez déjà ComfyUI, suivez [l’installation manuelle](../INSTALL.md), puis ouvrez `Mumblebox 3D Asset Foundry.json`. L’installation prépare le logiciel. Les poids manquants sont récupérés au premier lancement du flux qui en a besoin. Prévoyez de la place pour les modèles, les fichiers de travail et les exports.
+
+### D’une image à Blender
+
+Dans **Image unique ou texte**, choisissez **Utiliser l’image d’exemple** pour charger le pistolet à rayons rétro ci-dessous. Ouvrez **Fichiers de la première utilisation** pour voir les fichiers prévus. Choisissez le GLB détaillé, terminez le traitement et téléchargez le ZIP. Importez le GLB dans Blender pour vérifier le maillage, l’échelle et les matériaux.
+
+**Résultat obtenu.** Foundry a généré un GLB de 816 292 triangles avec deux textures 4K intégrées. L’image montre ce même export avec un éclairage de studio dans Blender.
+
+[![Pistolet à rayons exporté par Foundry et rendu dans Blender](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+
+[Tutoriel et réglages exacts](demos/2026-11-ray-gun/README.md) · [PNG d’origine](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [Télécharger le GLB](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 
 ## Donnez une longueur d’avance à votre agent de codage
 
@@ -46,15 +59,6 @@ Le but est de gagner du temps, d’économiser des tokens et d’éviter de refa
 | **Créer des images** | Créez une image ou une paire face/dos, retouchez le résultat, utilisez des LoRA compatibles et retrouvez vos images dans la galerie. | Pour préparer une référence ou conserver l’image elle-même. |
 
 Chaque flux a son propre assistant et sa propre section dans le graphe. Les cartes **À venir** présentent des idées encore en développement.
-
-## Lancez votre premier projet
-
-1. Installez [Pinokio](https://pinokio.co/) et suivez le [guide d’installation de Foundry](PINOKIO.md) pour ajouter le dépôt.
-2. Choisissez **Install**, puis **Start Foundry** et **Open Foundry**.
-3. Ouvrez **Image unique ou texte**. Importez ou déposez une image, prenez une photo avec votre webcam, choisissez une image dans la galerie ou créez-la à partir d’une description.
-4. Regardez les aperçus et choisissez les fichiers à exporter. **Rocket Mode** peut enchaîner les étapes sélectionnées en passant les vérifications facultatives.
-
-Si vous utilisez déjà ComfyUI, suivez [l’installation manuelle](../INSTALL.md), puis ouvrez `Mumblebox 3D Asset Foundry.json`. L’installation prépare le logiciel. Les poids manquants sont récupérés au premier lancement du flux qui en a besoin. Prévoyez de la place pour les modèles, les fichiers de travail et les exports.
 
 ## Vérifiez et exportez le résultat
 
@@ -108,3 +112,11 @@ La section **À propos** présente les crédits et remercie les personnes qui on
 - [Autres projets Mumblebox](https://github.com/mumblebox-gpt?tab=repositories)
 
 La feuille de route dans l’application présente les idées à venir. Les versions publiées indiquent ce que vous pouvez installer.
+
+## Projet original et communauté Pinokio
+
+Le projet original, maintenu par **mumblebox-gpt**, est [Mumblebox Foundry sur GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry). Suivez ce dépôt pour le développement en cours et consultez ses [versions publiées](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) pour les notes de version et les téléchargements disponibles. Si vous lisez un fork ou une copie de ce README, ces liens vous ramènent au projet original ; un fork peut contenir des modifications différentes ou une version plus ancienne.
+
+Nous sommes fiers de créer aux côtés de la communauté de créateurs de [Pinokio](https://pinokio.co/). Pinokio facilite l'installation et le partage d'outils locaux. Nous apprécions cette communauté où les créateurs peuvent découvrir leurs projets respectifs, échanger des retours utiles et apprendre ensemble. Merci à cocktail peanut et à toutes les personnes qui contribuent à cet écosystème créatif. [Retrouvez Foundry sur Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
+
+Si Foundry vous est utile, une étoile peut aider d’autres créateurs à le découvrir.

@@ -1,0 +1,3 @@
+# Pinokio verifies release ZIP contents with git archive. Pin text line
+# endings so archive bytes agree on Windows and other platforms.
+* text=auto eol=lf

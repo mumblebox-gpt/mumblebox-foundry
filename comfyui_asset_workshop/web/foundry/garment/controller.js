@@ -1,6 +1,7 @@
 import {sourceMessage} from "../i18n.js";
 import {msg, setText, replaceContent} from "../i18n.js";
 import {api} from '/scripts/api.js';
+import {activityTip} from '../activity-tips.js';
 import {elapsedTime, workingStar} from '../activity.js';
 import {el, button, field, hint, link} from '../dom.js';
 import {capturePhoto, inputURL, uploadReference} from '../images/references.js';
@@ -261,9 +262,11 @@ export class GarmentWizard {
 
     busy() {
         this.phase = el('strong', {}, sourceMessage(this.run.phase));
-        return el('div', {class: 'activity-feedback', 'data-busy': 'true', role: 'status'}, workingStar(),
-            el('div', {}, sourceMessage(this.phase), elapsedTime(this.run.started_at * 1000)),
-            button(msg("garment.stop_this_stage"), () => this.stage('cancel'), {disabled: this.pending}));
+        return el('div', {},
+            el('div', {class: 'activity-feedback', 'data-busy': 'true', role: 'status'}, workingStar(),
+                el('div', {}, this.phase, elapsedTime(this.run.started_at * 1000)),
+                button(msg("garment.stop_this_stage"), () => this.stage('cancel'), {disabled: this.pending})),
+            activityTip('garment', this.id, this.run.stage));
     }
 
     preview(filename, label, id = this.id) {

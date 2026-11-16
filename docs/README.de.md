@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry-Version 0.1.0-preview.31**
+**Foundry-Version 0.1.0-preview.32**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -12,11 +12,24 @@ Erstelle Spielobjekte, Teile für Figuren, Haare, Gaussian Splats oder Modelle f
 
 [Mit Pinokio installieren](PINOKIO.md) · [Veröffentlichte Downloads](https://github.com/mumblebox-gpt/mumblebox-foundry/releases) · [Coding-Agent verbinden](AGENT-SETUP.md) · [Änderungen](../CHANGELOG.md)
 
-## Das Projekt und die Pinokio-Community
+## So legst du los
 
-Das Originalprojekt wird von **mumblebox-gpt** auf GitHub gepflegt. Dort findest du aktuelle Änderungen, Versionshinweise und Downloads. Auch wenn du diese Anleitung in einem Fork liest, führen dich diese Links zum Original. [Projekt auf GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry) · [Veröffentlichte Versionen](https://github.com/mumblebox-gpt/mumblebox-foundry/releases)
+1. Installiere [Pinokio](https://pinokio.co/) und füge das Repository über die [Foundry-Installationsanleitung](PINOKIO.md) hinzu.
+2. Wähle **Install**, dann **Start Foundry** und **Open Foundry**.
+3. Öffne **Einzelbild oder Text**. Lade ein Bild hoch, ziehe es ins Fenster, nutze deine Webcam oder wähle ein Bild aus der Galerie. Du kannst auch direkt ein Bild aus einer Beschreibung erstellen.
+4. Prüfe die Vorschauen und wähle deine Ausgaben. Im **Rocket Mode** läuft Foundry durch die restlichen gewählten Schritte, ohne an optionalen Kontrollpunkten anzuhalten.
 
-Pinokio macht es leichter, lokale Tools zu installieren und zu teilen. Danke an cocktail peanut und alle, die ihre Projekte, Rückmeldungen und Erfahrungen in der Community teilen. [Foundry auf Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
+Falls du ComfyUI schon installiert hast, folge der [manuellen Anleitung](../INSTALL.md) und öffne anschließend `Mumblebox 3D Asset Foundry.json`. Bei der Installation wird die Software eingerichtet. Fehlende Modellgewichte lädt der gewählte Workflow beim ersten Einsatz. Plane Platz für Modelle, Arbeitsdateien und Ergebnisse ein.
+
+### Von einem Bild zu Blender
+
+Wähle unter **Einzelbild oder Text** die Option **Beispielbild verwenden**, um die Retro-Strahlenpistole unten zu laden. Unter **Dateien für die erste Verwendung** siehst du die voraussichtlich benötigten Dateien. Wähle die detaillierte GLB-Ausgabe, schließe den Ablauf ab und lade die ZIP-Datei herunter. Importiere die GLB-Datei in Blender, um Mesh, Maßstab und Materialien zu prüfen.
+
+**Tatsächliches Ergebnis.** Foundry erzeugte eine GLB-Datei mit 816.292 Dreiecken und zwei eingebetteten 4K-Texturen. Das Bild zeigt diesen Export mit Studiobeleuchtung in Blender.
+
+[![In Blender gerenderte Strahlenpistole aus Foundry](demos/2026-11-ray-gun/red-comet-poster.jpg)](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-studio-turntable.mp4)
+
+[Anleitung und genaue Einstellungen](demos/2026-11-ray-gun/README.md) · [Original-PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [GLB herunterladen](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 
 ## Gib deinem Coding-Agenten einen guten Startpunkt
 
@@ -46,15 +59,6 @@ So können dein Agent und du Zeit bei wiederkehrenden Modellieraufgaben sparen u
 | **Bilder erstellen** | Einzelbilder oder Vorder- und Rückansichten, Bearbeitung, passende LoRAs und eine Galerie. | Für Referenzbilder oder Bilder, die du eigenständig verwenden willst. |
 
 Jeder Workflow hat einen eigenen Assistenten und einen eigenen Bereich im Knotengraphen. Karten mit **Kommt bald** zeigen geplante Funktionen.
-
-## So legst du los
-
-1. Installiere [Pinokio](https://pinokio.co/) und füge das Repository über die [Foundry-Installationsanleitung](PINOKIO.md) hinzu.
-2. Wähle **Install**, dann **Start Foundry** und **Open Foundry**.
-3. Öffne **Einzelbild oder Text**. Lade ein Bild hoch, ziehe es ins Fenster, nutze deine Webcam oder wähle ein Bild aus der Galerie. Du kannst auch direkt ein Bild aus einer Beschreibung erstellen.
-4. Prüfe die Vorschauen und wähle deine Ausgaben. Im **Rocket Mode** läuft Foundry durch die restlichen gewählten Schritte, ohne an optionalen Kontrollpunkten anzuhalten.
-
-Falls du ComfyUI schon installiert hast, folge der [manuellen Anleitung](../INSTALL.md) und öffne anschließend `Mumblebox 3D Asset Foundry.json`. Bei der Installation wird die Software eingerichtet. Fehlende Modellgewichte lädt der gewählte Workflow beim ersten Einsatz. Plane Platz für Modelle, Arbeitsdateien und Ergebnisse ein.
 
 ## Vorschau und Export
 
@@ -104,3 +108,11 @@ Unter **Über Foundry** findest du Modellnachweise und ein Dankeschön an Mitwir
 - [Weitere Mumblebox-Projekte](https://github.com/mumblebox-gpt?tab=repositories)
 
 Die Roadmap in der App zeigt, was geplant ist. Zum Installieren stehen die veröffentlichten Versionen bereit.
+
+## Das Projekt und die Pinokio-Community
+
+Das Originalprojekt wird von **mumblebox-gpt** auf GitHub gepflegt. Dort findest du aktuelle Änderungen, Versionshinweise und Downloads. Auch wenn du diese Anleitung in einem Fork liest, führen dich diese Links zum Original. [Projekt auf GitHub](https://github.com/mumblebox-gpt/mumblebox-foundry) · [Veröffentlichte Versionen](https://github.com/mumblebox-gpt/mumblebox-foundry/releases)
+
+Pinokio macht es leichter, lokale Tools zu installieren und zu teilen. Danke an cocktail peanut und alle, die ihre Projekte, Rückmeldungen und Erfahrungen in der Community teilen. [Foundry auf Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
+
+Wenn Foundry dir hilft, macht ein Stern das Projekt für andere leichter auffindbar.

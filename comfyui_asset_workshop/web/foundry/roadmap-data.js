@@ -3,20 +3,6 @@ import {msg} from "./i18n.js";
 // Update the existing entry when work ships; do not leave completed repairs pending.
 export const roadmap = [
     {
-        id: "interface", title: msg("common.gui_usability"), summary: msg("common.clearer_feedback_and_controls_throughout_the_interface"),
-        items: [
-            {title: msg("common.did_you_know_tips_during_busy_stages"), status: "Planned", description: msg("common.rotate_short_useful_tips_while_foundry_works_cover_reference_images_workflow")},
-            {title: msg("common.more_translations"), description: msg("common.add_carefully_reviewed_interface_translations_while_keeping_model_names_cont")},
-        ],
-    },
-    {
-        id: "models", title: msg("common.model_management"), summary: msg("common.make_installed_models_easier_to_find_and_manage_in_settings"),
-        items: [
-            {title: msg("common.sort_installed_models_by_name_date_added_and_size"), status: "Available", description: msg("common.settings_remembers_your_sort_order_date_added_is_the_file_creation_date_on_t")},
-            {title: msg("common.open_models_folder"), status: "Available", description: msg("common.open_comfyui_s_primary_models_folder_in_windows_explorer")},
-        ],
-    },
-    {
         id: "workflow", title: msg("common.current_workflow_improvements"), summary: msg("common.build_on_the_image_creation_and_image_to_3d_workflows_already_in_use"),
         items: [
             {title: msg("common.better_vehicle_prop_and_creature_turnarounds"), status: "Evaluate", description: msg("common.revisit_the_original_turnaround_recipe_and_published_guidance_for_each_categ")},
@@ -27,6 +13,10 @@ export const roadmap = [
             {title: msg("common.anima_support_for_image_creation"), status: "Planned", description: msg("common.add_anima_as_a_model_choice_in_create_images_with_guidance_for_its_supported")},
             {title: msg("common.enhance_prompt_in_image_creation"), description: msg("common.add_an_optional_language_model_prompt_enhancement_button_that_preserves_the")},
             {title: msg("common.refinement_comparisons"), status: "Evaluate", description: msg("common.keep_one_refinement_pass_recommended_compare_optional_rear_then_front_passes")},
+            {title: msg("common.lato2_triangle_remeshing"), status: "Evaluate", description: msg("common.lato2_triangle_remeshing_description"), source: "https://github.com/sakalond/ComfyUI-LATO2", sourceLabel: "Official project"},
+            {title: msg("common.orbit_texture_baking"), status: "Evaluate", description: msg("common.orbit_texture_baking_description"), source: "https://github.com/hliuw/TextureConsolidation", sourceLabel: "Official project"},
+            {title: msg("common.reuse_settings_from_history"), status: "Planned", description: msg("common.reuse_settings_from_history_description")},
+            {title: msg("common.splat_extraction_solid_mode"), status: "Evaluate", description: msg("common.splat_extraction_solid_mode_description"), source: "https://github.com/Comfy-Org/ComfyUI/pull/17497", sourceLabel: "Official project"},
         ],
     },
     {
@@ -55,15 +45,10 @@ export const roadmap = [
     {
         id: "integration", title: msg("common.architecture_integration"), summary: msg("common.shared_requirements_for_future_workflow_additions_and_releases"),
         items: [
-            {title: msg("common.independent_workflows_shared_services"), description: msg("common.give_each_workflow_a_dedicated_graph_section_and_cohesive_code_ownership_reu")},
             {title: msg("common.memory_profiles_that_affect_the_workflow"), description: msg("common.keep_the_working_default_profile_including_the_tested_splat_solid_path_quali")},
-            {title: msg("common.mcp_and_export_documentation_parity"), description: msg("common.expose_new_workflow_choices_to_agents_and_keep_package_readme_contents_file")},
-            {title: msg("common.foundry_mcp_workflow_access"), status: "Available", description: msg("common.discover_workflow_controls_run_stages_inspect_comfyui_graphs_and_retrieve_as")},
-            {title: msg("common.foundry_skill_for_claude_and_codex"), status: "Available", description: msg("common.use_the_bundled_companion_skill_to_choose_a_workflow_let_foundry_work_locall")},
-            {title: msg("common.connect_your_agent"), status: "Available", description: msg("agent_setup.how_to")},
+            {title: msg("common.lower_gpu_memory_options"), status: "Evaluate", description: msg("common.lower_gpu_memory_candidates")},
             {title: msg("common.tripo_and_meshy_integrations"), status: "Planned", description: msg("common.evaluate_optional_asset_creation_and_handoffs_with_tripo_and_meshy")},
             {title: msg("common.expanded_hi3d_integration"), status: "Planned", description: msg("common.explore_more_ways_to_use_hi3d_alongside_the_existing_refinement_stages")},
-            {title: msg("common.portable_updates_and_first_use_preparation"), description: msg("common.trace_dependencies_for_every_runtime_when_adding_features_check_access_and_p")},
         ],
     },
 ];

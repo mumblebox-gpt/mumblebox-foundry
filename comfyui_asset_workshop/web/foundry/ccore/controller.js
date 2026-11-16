@@ -3,6 +3,7 @@ import {sourceMessage} from "../i18n.js";
 import {msg, setText, replaceContent} from "../i18n.js";
 import {api} from '/scripts/api.js';
 import {el, button, field, hint, link} from '../dom.js';
+import {activityTip} from '../activity-tips.js';
 import {elapsedTime, workingStar} from '../activity.js';
 import {inputURL, uploadReference} from '../images/references.js';
 import {pollResources, request} from '../services.js';
@@ -345,6 +346,7 @@ export class CcoreWizard {
                 !working && this.originalDescription !== undefined
                     ? button(msg("ccore.restore_original"), () => this.restoreDescription()) : null),
             this.enhanceStatus,
+            working ? activityTip(this.withImage ? 'ccore-image' : 'ccore', this.enhancing.startedAt, 'description') : null,
             precision,
             el('details', {}, el('summary', {}, msg("ccore.advanced")), field(msg("ccore.seed"), seed),
                 field(msg("ccore.generation_budget"), budget, msg("ccore.this_limits_how_much_ccore_can_generate_higher_budgets_reserve_more_vram_and"))),
@@ -362,6 +364,7 @@ export class CcoreWizard {
             this.progress();
             return [el('div', {class: 'wizard-busy'}, workingStar(),
                 el('div', {class: 'stage-progress'}, sourceMessage(this.phase), elapsed, this.transfer, this.meter,
+                    activityTip(this.withImage ? 'ccore-image' : 'ccore', this.id, this.run.stage),
                     el('div', {class: 'actions'}, this.stop)))];
         }
         if (!this.run?.result) {

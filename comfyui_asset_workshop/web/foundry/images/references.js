@@ -9,11 +9,11 @@ export function galleryReference(creationId, side, revisionId) {
 
 export const inputURL=name=>{const parts=name.split('/');return '/view?'+new URLSearchParams({filename:parts.pop(),subfolder:parts.join('/'),type:'input'});};
 
-export async function uploadReference(file){
+export async function uploadReference(file,{signal}={}){
     if(!file||!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error(msg("images.use_png_jpeg_or_webp"));
     if(file.size>20*1024**2)throw Error(msg("images.use_an_image_smaller_than_20_mb"));
     const body=new FormData();body.append('image',file);body.append('subfolder','foundry-references');body.append('overwrite','false');
-    const response=await fetch('/upload/image',{method:'POST',body});const data=await response.json();
+    const response=await fetch('/upload/image',{method:'POST',body,signal});const data=await response.json();
     if(!response.ok)throw Error(data.error||'The image could not be uploaded.');
     return {id:crypto.randomUUID(),filename:(data.subfolder?data.subfolder+'/':'')+data.name,role:'detail',description:''};
 }

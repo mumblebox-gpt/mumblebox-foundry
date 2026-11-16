@@ -141,7 +141,7 @@ function exports(w){
     const quad=w.quadChoice();
     const change=quad.change;
     quad.change=value=>{change(value);w.remember();};
-    return el("div",{},exportChoices(w.cap.exports,w.draft.selection,()=>w.remember(),quad),
+    return el("div",{},exportChoices(w.cap.exports,w.draft.selection,()=>{w.remember();w.updatePreparationPreview();},quad),
         el("details",{},el("summary",{},msg("mesh.advanced_output_settings")),el("div",{class:"wizard-columns"},
             number(w,"balanced_triangles",msg("mesh.balanced_triangle_budget"),msg("mesh.a_starting_budget_not_a_guarantee_of_suitability_for_every_game")),
             number(w,"compact_triangles",msg("mesh.compact_triangle_budget"),msg("mesh.the_normal_map_carries_some_of_the_master_s_surface_detail")),

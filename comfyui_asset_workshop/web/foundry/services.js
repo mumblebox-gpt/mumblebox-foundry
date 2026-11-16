@@ -17,6 +17,7 @@ export async function request(path, data, options = {}) {
     catch { throw Error(msg("common.the_foundry_service_is_unavailable_check_that_the_installed_extension_is_loa")); }
     if (!response.ok) {
         const error = new Error(String(sourceMessage(result.error || result.message || msg("common.request_failed"), result.error_i18n)));
+        error.code = "FOUNDRY_HTTP_" + response.status;
         error.i18n = result.error_i18n;
         throw error;
     }

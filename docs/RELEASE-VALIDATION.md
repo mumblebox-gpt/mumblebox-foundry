@@ -13,9 +13,19 @@ Use this checklist for the release commit and publication. Keep verification pro
 
 ## Publish and verify
 
-- Build the release archive from the verified commit. Confirm the tag, release notes, archive integrity and checksum, and intended GitHub release assets.
+- Build the public release archive with `python -B scripts/build_release.py <unused-staging-directory> --ref <verified-commit>`. Before uploading, confirm every inventory entry matches the bytes Pinokio verifies with `git archive` for the release tag. Use `--working-tree` for unpublished candidates. Confirm the tag, release notes, archive integrity and checksum, and intended GitHub release assets.
 - Update the GitHub repository description for every release. Verify the public About text reflects the current workflows, integrations and supported languages.
 - Verify the public GitHub release, then refresh Recent commits on the public Pinokio listing and verify the release commit appears. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
+
+# Preview 0.1.0-preview.32 validation
+
+The previous Single Image or Text implementation reproduced `setText is not defined` at the transition to Mesh and refinement. The repaired path opened in the installed Windows Comfy Desktop candidate. Loading the bundled Red Comet image, using Back and Next, changing and restoring the geometry seed, checking first-use files, and using the error panel all worked without starting an unintended job. Keyboard Enter activated the sample control. An invalid text upload stayed on the input page and offered Copy details. The live sample, settings and package controls were checked in all nine languages at 200% text. The installed tip component was also exercised with a temporary refinement status in each language. The original language and text size were restored. A physical webcam was outside this check.
+
+A separate fresh software installation ran the actual entry-point probes and started with the Pinokio launcher runtime. Its loopback wizard returned Preview 32 and served the workspace. Its generated MCP configuration connected over stdio and listed 40 tools. The fresh install acquired no model files. The candidate's GPU demo used a separate existing Comfy Desktop installation and an already populated model cache.
+
+The installed adapter reported the same Red Comet run as the graphical wizard. It rejected an unsupported action with a message pointing to the workflow catalog. Cancelling at the start of texturing retained geometry and refinement. Retrying resumed the finish operation, and replaying the request ID did not start another run. The wizard displayed the completed package, and the MCP download matched the reported SHA-256. The archive passed CRC and all 19 recorded member hashes. The 816,292-triangle Detailed GLB opened in Blender 5.2.2 with both embedded 4K maps. History still served an older complete asset, and the older camper-van draft reopened with its original reference and refined preview. See the [Red Comet demonstration](demos/2026-11-ray-gun/README.md) for timings, settings, resource revisions and media.
+
+The reported Preview 31 updater rejection was traced to 35 files whose ZIP bytes differed from the Windows Git tag archive in line endings. Preview 32 pins LF for text in Git and builds the public ZIP from the selected commit. A regression fixture checks exact tag-archive parity with both values of `core.autocrlf`. The Preview 31 public asset was kept intact.
 
 # Preview 0.1.0-preview.31 validation
 

@@ -1,6 +1,7 @@
 """Resolve selected native model dependencies through the existing download owner."""
 import json
 from pathlib import Path
+from stat import S_ISREG
 from ...artifacts import digest
 from ..single_image.definition import MOGE_MODEL_KEY
 
@@ -21,23 +22,82 @@ def required_stages(operation, selection):
     first = {"turnaround": 0, "rocket": 0, "mesh": 1, "finish": 3}[operation]
     return stages[first:]
 
-def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambda value:None, turnaround_model="qwen21",geometry_model="pixal3d",texture_mode="standard"):
+def native_model_keys(stage, turnaround_model, geometry_model):
+    from .turnaround import dependency_keys
+    required = dependency_keys(turnaround_model) if stage == "turnaround" else MODELS.get(stage, ())
+    if stage == "splat_turbo":
+        from ..splat_solid.definition import TURBO_MODELS
+        return MODELS["splat"] + TURBO_MODELS
+    if stage == "single_geometry" and geometry_model == "trellis2":
+        return tuple("trellis_single" if key == "pixal_single" else key for key in required)
+    return required
+
+
+def native_model_path(model):
     import folder_paths
+    return folder_paths.get_full_path(model["category"], model["name"])
+
+
+def resource_estimate(ident, stage, model, path):
+    status = "access_required" if model.get("gated") else "missing"
+    size = model.get("size")
+    if path is not None:
+        try:
+            stat = Path(path).stat()
+        except FileNotFoundError:
+            pass
+        except OSError:
+            status, size = "unknown", None
+        else:
+            if S_ISREG(stat.st_mode) and stat.st_size == size:
+                status, size = "present", 0
+            else:
+                status, size = "unknown", None
+    return {"id": ident, "label": model["name"], "stage": stage, "status": status,
+            "download_bytes": size, "storage_bytes": size}
+
+
+def preview_resources(stages, turnaround_model, geometry_model, texture_mode):
+    from .turnaround import model_lock
+    from .worker_models import texture_model_files, texture_model_root
+    models = model_lock() if stages else {}
+    resources = {}
+    for stage in stages:
+        for key in native_model_keys(stage, turnaround_model, geometry_model):
+            if key not in resources:
+                model = models[key]
+                resources[key] = resource_estimate(key, stage, model, native_model_path(model))
+        if stage == "refinement":
+            # Hi3D owns these files and verifies their revision on demand.
+            # A preview never starts the service or calls its verification API.
+            resources["hi3d"] = {"id": "hi3d", "label": "Hi3D", "stage": stage,
+                                 "status": "unknown", "download_bytes": None, "storage_bytes": None}
+        elif stage == "texture":
+            try:
+                root = texture_model_root()
+            except (KeyError, ValueError, OSError):
+                root = None
+            for model in texture_model_files(texture_mode):
+                key = "texture:" + model["name"]
+                if key in resources:
+                    continue
+                estimate = resource_estimate(key, stage, model, root / model["name"] if root else None)
+                if root is None:
+                    estimate.update(status="unknown", download_bytes=None, storage_bytes=None)
+                resources[key] = estimate
+    return list(resources.values())
+
+
+def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambda value:None, turnaround_model="qwen21",geometry_model="pixal3d",texture_mode="standard"):
     from .... import models
     path=Path(state_root)/"verified-models.json"
     try:receipts=json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError,ValueError):receipts={}
-    from .turnaround import dependency_keys
-    required = dependency_keys(turnaround_model) if stage == "turnaround" else MODELS.get(stage,())
-    if stage=='splat_turbo':
-        from ..splat_solid.definition import TURBO_MODELS
-        required=MODELS['splat']+TURBO_MODELS
-    if stage=='single_geometry' and geometry_model=='trellis2':required=tuple('trellis_single' if k=='pixal_single' else k for k in required)
-    for key in required:
+    for key in native_model_keys(stage, turnaround_model, geometry_model):
         if cancelled():raise InterruptedError("Cancelled before model loading.")
         model=models.MODELS[key]
         progress({"name":model["name"],"phase":"verifying required model"})
-        local=folder_paths.get_full_path(model["category"],model["name"])
+        local=native_model_path(model)
         if not local:
             if not models.DOWNLOAD_LOCK.acquire(blocking=False):
                 raise ValueError("Another model download is running. Retry after it finishes.")
@@ -50,7 +110,7 @@ def ensure(stage, state_root, cancelled=lambda:False, owner=None, progress=lambd
                 models.DOWNLOAD.update(status="failed",error=str(error))
                 raise
             finally:models.DOWNLOAD_LOCK.release()
-            local=folder_paths.get_full_path(model["category"],model["name"])
+            local=native_model_path(model)
         if not local:raise ValueError("The selected model was not found: "+model["name"])
         file=Path(local);stat=file.stat()
         identity=[str(file.resolve()),stat.st_size,stat.st_mtime_ns,model["sha256"]]

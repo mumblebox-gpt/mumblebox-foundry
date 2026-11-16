@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0-preview.32 — Single Image and updater fixes
+
+- Fixed the error that stopped **Single Image or Text** from advancing to Mesh and refinement. Thanks to @rgdesign for the Pinokio report and to @SibioJak for the reproduction in [issue #1](https://github.com/mumblebox-gpt/mumblebox-foundry/issues/1).
+- Build the release ZIP from the tagged Git source and keep line endings consistent across platforms so Pinokio can verify the download.
+- Try the included ray-gun reference, check estimated first-use files and disk space, and copy shareable error details from the wizard.
+- Rotate 65 workflow and Pinokio tips in each supported language, with Pause and Resume.
+- Clarify the companion MCP tool descriptions and setup. The MCP can read the same selected model-file estimates as the wizard.
+- Put a practical quickstart and worked example near the top of all nine READMEs.
+
 ## 0.1.0-preview.31 — Automatic Brush setup
 
 - Orbit with Splats downloads and verifies Brush on first use in the wizard, Rocket Mode, and MCP. A failed download can be retried from the saved run.

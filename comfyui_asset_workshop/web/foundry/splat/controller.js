@@ -6,6 +6,7 @@ import {app} from '/scripts/app.js';
 import {el,button,hint,field,link} from '../dom.js';
 import {request} from '../services.js';
 import {dialog} from '../dialogs.js';
+import {activityTip} from '../activity-tips.js';
 import {activity,elapsedTime} from '../activity.js';
 import {uploadReference,capturePhoto,galleryReference,inputURL} from '../images/references.js';
 import {mountMesh} from '../wizard/preview.js';
@@ -106,7 +107,8 @@ export class SplatWizard{
         const rail=el('aside',{class:'wizard-rail'},el('span',{class:'eyebrow'},msg("splat.idol_splat_solid")),el('h3',{},msg("splat.splat_solid")),el('ol',{class:'wizard-steps'},...titles.map((title,i)=>el('li',{class:i+1===this.page?'current':''},el('span',{},String(i+1)),el('div',{},el('strong',{},title),el('small',{},blurbs[i]))))),hint(msg("splat.visual_detail_from_idol_separate_companion_geometry")));
         const panel=el('div',{class:'wizard-panel'},el('header',{class:'page-head'},el('span',{class:'eyebrow'},msg("splat.page_of_6", {page: this.page})),el('h2',{},this.page===6&&this.active()?msg("splat.creating_your_asset"):titles[this.page-1])));
         if(this.error||this.run?.error)panel.append(problemPanel(this.error||this.run.error));
-        if(this.run?.active){const a=activity();a.update({busy:true,label:this.run.stage,detail:this.run.dependency?.name||'Completed stages remain saved.'});this.progress=el('progress',{max:100,value:this.run.progress||0,'aria-label':msg("splat.overall_splat_solid_progress")});this.progressText=el('strong',{},'');panel.append(a.element,elapsedTime(this.run.started_at*1000),this.progress,this.progressText);}
+        if(this.run?.active){const a=activity();a.update({busy:true,label:this.run.stage,detail:this.run.dependency?.name||'Completed stages remain saved.'});this.progress=el('progress',{max:100,value:this.run.progress||0,'aria-label':msg("splat.overall_splat_solid_progress")});this.progressText=el('strong',{},'');panel.append(a.element,elapsedTime(this.run.started_at*1000),this.progress,this.progressText,
+            activityTip('splat-solid', this.run.id || this.runId, this.run.stage));}
         panel.append(page(this));this.host.append(rail,panel);this.updateProgress();
     }
     dispose(){this.disposed=true;clearTimeout(this.timer);api.removeEventListener('progress',this.sampleProgress);this.disposers.splice(0).forEach(d=>d());this.remember();}

@@ -1,0 +1,18 @@
+{
+  "file": "ray-gun-reference.webp",
+  "title": "Original 1930s space serial ray gun",
+  "purpose": "Bundled reference for the Single Image or Text workflow",
+  "source": "OpenAI built-in image generation in Codex",
+  "created": "2026-11-15",
+  "prompt": "Use case: stylized-concept. Create a single, original retro-futurist ray-gun prop for a local image-to-3D demonstration. The design should feel like a lovingly made miniature for a 1930s space serial, with Art Deco curves and theatrical pulp proportions. Show one object, fully visible from a broad side three-quarter angle with a little of the front and top visible and no extreme foreshortening. A rounded polished chrome body with brass bands tapers toward a bright red finned barrel. Use three substantial red radial fins attached to the barrel, an ornamental solid brass emitter at the front, and a sculpted dark oxblood Bakelite grip that reads clearly in silhouette. Keep small details sparse, all parts visibly attached, and materials distinct. Make a striking sculptural silhouette with a stylized prop shape. Place it centered on a completely plain light neutral gray background with soft studio lighting and faint ambient shadow. Leave generous clean margins around the whole object. No text, branding, logos, hands, muzzle effect, extra accessories, recognizable franchise prop, or realistic firearm markings. One reference image only.",
+  "input_images": [],
+  "model_revision": "The built-in tool did not expose a model revision",
+  "original_sha256": "7107817722a1be0f36ffacfa9265abb9ffd823444b882df84c7f5fedc62ecaa4",
+  "sha256": "d008622cde27d75759f42215c8e7a4899fb2705f84b2e85d152bc406c3fe7248",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 110566,
+  "encoding": "FFmpeg libwebp, quality 91, unchanged frame",
+  "terms_url": "https://openai.com/policies/terms-of-use/",
+  "usage": "Bundled by Mumblebox Foundry for use as the example workflow input."
+}

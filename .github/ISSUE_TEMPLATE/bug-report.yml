@@ -1,0 +1,33 @@
+name: Report a bug
+description: Help the community reproduce and fix a Foundry problem
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Foundry. If the wizard offers **Copy details**, paste that report below. Keep keys, private prompts, and private files out of the issue.
+  - type: input
+    id: version
+    attributes:
+      label: Foundry version
+      description: Use the version shown in About. Include Pinokio or standalone ComfyUI.
+      placeholder: "0.1.0-preview.32, Pinokio"
+    validations:
+      required: true
+  - type: input
+    id: workflow
+    attributes:
+      label: Workflow and step
+      placeholder: "Single Image or Text, Mesh and refinement"
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How to reproduce it
+      description: Describe what you did, what you expected, and what happened. A screenshot is optional.
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Copied details
+      description: Paste the wizard's Copy details result, if available.

@@ -21,6 +21,20 @@ from .progress import snapshot as progress_snapshot
 from ...artifacts import digest, owned_path
 
 ACTIVE = None
+PREPARATION_LABELS = {"turnaround": "Turnaround views", "single_geometry": "Initial mesh",
+                      "geometry": "Initial mesh", "refinement": "Refinement", "texture": "Texturing"}
+
+
+def preparation_stages(method, operation, selection):
+    if operation not in ("turnaround", "mesh", "finish", "rocket"):
+        raise ValueError("Choose a wizard stage.")
+    if method == "single-image":
+        if operation == "turnaround":
+            raise ValueError("Single Image does not use turnaround generation.")
+        from ..single_image.definition import required_stages
+    else:
+        from .readiness import required_stages
+    return required_stages(operation, selection)
 
 def busy():
     return ACTIVE is not None and bool(ACTIVE.tasks)
@@ -77,6 +91,37 @@ class WizardRuns:
     def selection(self, value):
         chosen=self.selection_parser(json.dumps(value),{k:set(v[1]) for k,v in self.variants.items() if k!="quad_detail"})
         return {"schema":"mumblebox.export-selection/1","variants":{k:{"formats":list(v)} for k,v in chosen.variants.items()}}
+
+    def preparation_preview(self, configuration, operation):
+        """Project selected requirements using bounded metadata and file stats."""
+        if not isinstance(configuration, dict):
+            raise ValueError("Send one Foundry operation.")
+        method = configuration.get("method", "turnaround")
+        if method not in ("turnaround", "single-image"):
+            raise ValueError("Choose an available mesh method.")
+        selection = self.selection(configuration.get("selection", DEFAULT_SELECTION))
+        stages = preparation_stages(method, operation, selection)
+        overrides = configuration.get("overrides", {})
+        if not isinstance(overrides, dict):
+            raise ValueError("An unsupported workflow setting was supplied.")
+        resolver = resolve_settings
+        if method == "single-image":
+            from ..single_image.definition import resolve_settings as resolver
+        settings = resolver(configuration.get("profile", "default"), overrides)
+        from .readiness import preview_resources
+        resources = preview_resources(stages, configuration.get("turnaround_model", "qwen21"),
+                                      settings.get("geometry_model", "pixal3d"), settings["texture_mode"])
+        result = {
+            "operation": operation,
+            "stages": [{"id": stage, "label": PREPARATION_LABELS[stage]} for stage in stages],
+            "resources": resources,
+            "warnings": ["Preparation verifies files before generation and may reuse saved stages."],
+        }
+        for kind in ("download", "storage"):
+            amounts = [item[kind + "_bytes"] for item in resources]
+            result["known_" + kind + "_bytes"] = sum(value for value in amounts if value is not None)
+            result["unknown_" + kind + "_count"] = amounts.count(None)
+        return result
 
     def validate(self, data):
         if not isinstance(data,dict) or not isinstance(data.get("name",""),str):
@@ -297,16 +342,14 @@ class WizardRuns:
             self.save(run)
 
     async def prepare_dependencies(self, run, operation):
-        from .readiness import ensure, required_stages
+        from .readiness import ensure
         self.require_not_cancelled(run)
         run["stage"] = "preparing"
         self.event(run, "Preparing models for the remaining selected workflow before generation.")
         loop = asyncio.get_running_loop()
         def progress(value):
             loop.call_soon_threadsafe(lambda: run.update(dependency=value))
-        if run.get('method')=='single-image':
-            from ..single_image.definition import required_stages
-        for stage in required_stages(operation, run["selection"]):
+        for stage in preparation_stages(run.get("method"), operation, run["selection"]):
             if await asyncio.to_thread(self.fresh, run, "geometry" if stage=="single_geometry" else stage):
                 continue
             self.require_not_cancelled(run)
