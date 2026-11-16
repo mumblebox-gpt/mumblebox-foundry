@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0-preview.34 — Stop the Pinokio Update loop
+
+- Keep Update available as an explicit action. During a running update, show progress and route to the ready Foundry workspace without starting another update.
+
 ## 0.1.0-preview.33 — Refresh the Pinokio workspace after Update
 
 - Open the current Foundry workspace when the restarted server is ready, so an open pane can pick up the new version and interface.

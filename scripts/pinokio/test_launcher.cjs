@@ -12,6 +12,19 @@ test('running menu embeds Foundry on the same site as Pinokio Desktop',async()=>
   assert.equal(menu.find(item=>item.text==='Update')?.href,'update.js');
 });
 
+test('reopening Foundry during an update cannot run the updater again',async()=>{
+  for(const starting of [false,true]){
+    const menu=await launcher.menu({}, {
+      exists:()=>true,
+      running:script=>script==='update.js'||(starting&&script==='start.js'),
+      local:()=>({}),
+    });
+    assert.ok(menu.some(item=>item.text==='Updating Foundry'));
+    assert.equal(menu.some(item=>item.href==='update.js'),false);
+    assert.equal(menu.some(item=>item.default),false);
+  }
+});
+
 test('start hands Pinokio the ready workspace URL and opens it in the launcher',async()=>{
   const start=require('../../start.js');
   const launch=start.run[0].params.on.find(rule=>rule.done);
@@ -27,11 +40,15 @@ test('start hands Pinokio the ready workspace URL and opens it in the launcher',
     method:'web.open',
     params:{uri:'{{cwd}}',target:'_top'},
   });
-  const menu=await launcher.menu({},{
-    exists:()=>true, running:script=>script==='start.js',
-    local:()=>({url:origin,workspace}),
-  });
-  assert.equal(menu[0].href,workspace);
+  for(const updating of [true,false]){
+    const menu=await launcher.menu({}, {
+      exists:()=>true,
+      running:script=>script==='start.js'||(updating&&script==='update.js'),
+      local:()=>({url:origin,workspace}),
+    });
+    assert.deepEqual(menu.filter(item=>item.default).map(item=>item.href),[workspace]);
+    assert.equal(menu.some(item=>item.href==='update.js'),!updating);
+  }
 });
 
 test('updater checks jobs before stopping and restarts after installing',()=>{

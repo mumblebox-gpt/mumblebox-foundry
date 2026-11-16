@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry version 0.1.0-preview.33**
+**Foundry version 0.1.0-preview.34**
 
 [English](README.md) · [简体中文](docs/README.zh-CN.md) · [Español (Latinoamérica)](docs/README.es-419.md) · [Français](docs/README.fr.md) · [Português (Brasil)](docs/README.pt-BR.md) · [Deutsch](docs/README.de.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md) · [हिन्दी](docs/README.hi.md)
 

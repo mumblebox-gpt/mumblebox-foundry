@@ -17,11 +17,17 @@ Use this checklist for the release commit and publication. Keep verification pro
 - Update the GitHub repository description for every release. Verify the public About text reflects the current workflows, integrations and supported languages.
 - Verify the public GitHub release, then refresh Recent commits on the public Pinokio listing and verify the release commit appears. Where an installed Pinokio update is part of the work, use its normal updater and verify the installed version and launch. Record published verification in the release entry.
 
+# Preview 0.1.0-preview.34 validation
+
+The Preview 33 menu made the running Update script the default item, even after the replacement server was ready. Reopening the project from Start could then select Update again. The shipped menu now shows a status while Update runs and selects the ready workspace when Start provides it. The Update action returns after maintenance finishes.
+
+Launcher regressions exercised the real menu with Update active, with Start stopped, starting, and ready, and after Update exits. The opening URL stays on the same browser origin so saved wizard drafts remain reachable. These tests exercise the launcher code.
+
 # Preview 0.1.0-preview.33 validation
 
 Preview 32 installed and restarted correctly through the normal Windows Pinokio Update button. An open Foundry pane still displayed Preview 31 until it was reopened. The pane reads its version at initial load, and Pinokio had kept the same open URL through the restart.
 
-The updated startup script waits for a ready server, records its versioned workspace URL and reopens the project through Pinokio. The version comes from the server bootstrap, and the workspace keeps its original browser origin. A live isolated launcher test used the previous Update script's nested start call with an old pane open. Pinokio selected the new Preview 33 pane at the same port, kept its menu and displayed the saved draft value without a manual refresh. The original installation was separate from this test.
+The updated startup script waits for a ready server, records its versioned workspace URL and reopens the project through Pinokio. The version comes from the server bootstrap, and the workspace keeps its original browser origin. An isolated launcher test verified that navigation and draft preservation. It omitted the active Update item from its menu and missed the loop subsequently observed with the published release.
 
 The public GitHub README and demo guide were checked in a browser. The native turntable and walkthrough controls played the two videos, and the original reference rendered in the guide.
 
