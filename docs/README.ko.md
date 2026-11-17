@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry 버전 0.1.0-preview.35**
+**Foundry 버전 0.1.0-preview.36**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -64,7 +64,7 @@ https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 지원되는 출력은 워크플로마다 다릅니다. GLB, FBX, OBJ, BLEND, STL, SPZ와 텍스처, 미리 보기, ZIP 등 필요한 항목을 고를 수 있습니다. 고해상도 메시와 간소화된 메시에는 UV와 베이크한 텍스처를 포함할 수 있습니다.
 
-**쿼드(사각형 면)는 선택 사항입니다.** 단일 이미지와 다중 시점에서는 CPU의 QuadriFlow와 Instant Meshes, NVIDIA CUDA의 CyberRemesher를 쓸 수 있습니다. 각 솔버의 상세 설정과 설명은 마법사에 있습니다. QuadriFlow 실행 중 CPU 사용량이 치솟는 것은 정상이며 처리에 시간이 걸릴 수 있습니다. 쿼드를 끄면 텍스처가 적용된 삼각형 메시를 얻습니다. GLB 미리 보기 역시 삼각형으로 표시하며, 지원되는 편집용 형식에는 쿼드 면이 유지됩니다.
+**쿼드(사각형 면)는 선택 사항입니다.** 단일 이미지와 다중 시점에서는 CPU의 QuadriFlow와 Instant Meshes, NVIDIA CUDA의 CyberRemesher를 쓸 수 있습니다. 각 솔버의 상세 설정과 설명은 마법사에 있습니다. QuadriFlow 실행 중 CPU 사용량이 치솟는 것은 정상이며 처리에 시간이 걸릴 수 있습니다. 쿼드를 끄면 텍스처가 적용된 삼각형 메시를 얻습니다. GLB 미리 보기 역시 삼각형으로 표시하며, 지원되는 편집용 형식에는 쿼드 면이 유지됩니다. 초기 관절 배치에는 가이드 템플릿 또는 로컬 AI(TokenRig)를 선택하세요. 맞춤과 가중치에 프리셋과 사용자 지정 설정을 사용할 수 있습니다.
 
 사용할 편집기나 엔진에서 애니메이션용 토폴로지, 인쇄와 충돌용 메시, 재질을 살펴보세요. HairDeck의 정적 GLB와 스프링 본이 든 VRM은 각각 별도의 파일입니다. 회전 미리 보기에서 머리카락 움직임을 확인할 수 있습니다. Garment Particles의 캐릭터 맞춤과 드레이핑은 실험 기능입니다.
 
@@ -116,3 +116,5 @@ Foundry는 연구자와 모델 제작자, 워크플로 개발자가 공유한 �
 Pinokio 덕분에 로컬 도구를 쉽게 설치하고 공유할 수 있습니다. 프로젝트를 나누고 피드백을 주시는 분들과 cocktail peanut에게 감사드립니다. [Pinokio의 Foundry 페이지](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
 
 Foundry가 유용했다면 별을 눌러 다른 제작자가 프로젝트를 찾을 수 있도록 도와주세요.
+
+**캐릭터 리깅.** 기록이나 내보내기 완료 화면에서 정적 GLB를 엽니다. 가이드 템플릿으로 기본 뼈대를 배치할 수 있습니다. 로컬 AI(TokenRig)는 감지한 손가락을 포함한 전체 뼈대와 학습된 스킨 가중치를 유지합니다. 확대 보기와 축 핸들로 관절을 조정하고 필요에 따라 본 체인을 추가하세요. 동작을 테스트하고 히트맵과 브러시로 가중치를 보정할 수 있습니다. MCP는 같은 세션을 사용합니다. ZIP에는 Blender에서 열 수 있는 스킨 적용 GLB와 편집 가능한 뼈대 데이터가 포함됩니다.

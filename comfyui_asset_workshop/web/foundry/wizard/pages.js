@@ -176,6 +176,8 @@ export function finishingPage(w){
         w.nav({next:async()=>{if(!ready)throw Error(msg("mesh.finish_refinement_first"));validateExports(w.draft.selection,w.quadChoice());await w.start("finish");},
             note:msg("mesh.clicking_next_creates_the_selected_textures_mesh_versions_exports_and_zip_pa")}));
 }
+import {afterExport} from "../rigging/entry.js";
+
 export function resultPage(w){
     const complete=!w.run?.active&&w.run?.status==="complete"&&w.run?.package;
     if(!complete)return el("div",{},hint(w.run?.status==="failed"?msg("mesh.completed_stages_are_saved_choose_how_to_continue_above"):msg("mesh.preparing_your_selected_mesh_versions_and_exports")),
@@ -193,6 +195,8 @@ export function resultPage(w){
         ["print",msg("mesh.print_mesh_stl"),"print"],["clean",msg("mesh.original_clean_geometry_before_floor_placement"),null]]
         .filter(([key,label,variant])=>w.run.previews[key]&&(!variant||selectedVariants[variant]));
     const selected=options.some(([k])=>k===w.finalPreview)?w.finalPreview:options[0]?.[0];
+    const variant=options.find(([key])=>key===selected)?.[2];
+    const exportFormats=selectedVariants[variant]?.formats||[];
     const picker=el("select",{"aria-label":msg("mesh.finished_mesh_version"),onchange:e=>{w.finalPreview=e.target.value;w.render();}},
         ...options.map(([value,text])=>el("option",{value,selected:value===selected},text)));
     return el("div",{},resultActions(w,"top"),el("div",{class:"complete-panel"},el("h3",{},msg("mesh.is_ready", {name: w.run.name})),
@@ -201,6 +205,7 @@ export function resultPage(w){
         picker,w.run.package.grounding?hint(msg("mesh.floor_placement_saved_generation_checkpoints_are_unchanged", {value1: w.run.package.grounding.applied==='level'?'leveled '+w.run.package.grounding.correction_degrees.toFixed(1)+'°':w.run.package.grounding.applied==='place'?'placed on floor':'original orientation'})):null,mesh(w,selected),measurements(w),el("div",{class:"actions"},
             el("a",{href:p.download,download:"",class:"download-link primary"},msg("mesh.download_zip")),
             button(msg("mesh.open_output_folder"),()=>w.act(()=>request("wizard/runs/"+w.runId+"/open-folder",{})))),
+        afterExport(w.shell,{exportId:p.export_id},variant,exportFormats.some(format=>format==="glb"||format==="runtime_glb")),
         ...(p.warnings||[]).map(text=>el("p",{class:"note-panel"},text)),
         hint(w.run.cleanup?.status==="released"?msg("mesh.loaded_models_and_reusable_execution_memory_were_released_saved_previews_mas"):msg("mesh.package_saved_memory_release_status", {value1: w.run.cleanup?.status||"finishing"})),
         resultActions(w,"bottom"));

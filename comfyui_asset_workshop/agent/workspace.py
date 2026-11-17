@@ -39,6 +39,22 @@ RUN = ("run_id",)
 IMAGE = ("creation_id",)
 LIBRARY = ("asset_id",)
 GROUPS = {
+    "rigging": {
+        "capabilities": read("/rigging/capabilities","Supported meshes, Guided Template and Local AI methods, preset values, Custom limits, readiness and poses."),
+        "sources": read("/rigging/sources/{asset_id}","Choose an exact GLB from one History asset.",LIBRARY),
+        "create": write("/rigging/runs","Open or recover a draft for an owned asset and file.","record_id, file_id"),
+        "show": write("/rigging/runs/{run_id}/show","Show this saved rig in the open Foundry interface.",params=RUN),
+        "status": read("/rigging/runs/{run_id}","Read the selected mesh, current skeleton revision, and artifact URLs.",RUN),
+        "fit": write("/rigging/runs/{run_id}/fit","Fit the guided template or queue an optional local TokenRig prediction. Applies to the same editable skeleton. Local AI may download pinned dependencies on first use.","revision, method (guided_template or local_ai), orientation (0–3), preset, custom, request_id (Local AI)",RUN),
+        "fit_status": read("/rigging/runs/{run_id}/fit","Read Local AI setup, prediction, outcome or recovery information.",RUN),
+        "cancel_fit": write("/rigging/runs/{run_id}/fit-cancel","Cancel the matching Local AI request and keep the previous joints.","request_id",RUN),
+        "bind": write("/rigging/runs/{run_id}/bind","Bind the current revision using local Blender CPU and the selected proxy resolution.","revision, request_id, preset, custom",RUN),
+        "bind_start": write("/rigging/runs/{run_id}/bind-start","Start binding with the recommended method or request learned, conditioned, or voxel binding. Poll bind_status.","revision, request_id, preset, custom, binding_method",RUN),
+        "bind_status": read("/rigging/runs/{run_id}/bind-status","Read binding progress and its complete, failed or cancelled result.",RUN),
+        "cancel_bind": write("/rigging/runs/{run_id}/bind-cancel","Stop only the matching binding worker and preserve the source, joints and previous completed binding.","request_id",RUN),
+        "open_blender": write("/rigging/runs/{run_id}/open-blender","Open the current bound mesh in the installed Blender integration.","revision",RUN),
+        "export": write("/rigging/runs/{run_id}/export","Save the bound result to a separate History package.","revision",RUN),
+    },
     "mesh": {
         "capabilities": read("/wizard/capabilities", "Single Image and Turnaround defaults, supported models, export formats and all quad solver controls."),
         "preparation_preview": write("/wizard/preparation-preview",
@@ -236,6 +252,9 @@ def describe(workflow=None):
         related.append("foundry_image_prepare_edit")
     if workflow == "garment":
         related.append("foundry_garment_upload_character")
+    if workflow == "rigging":
+        related.extend(("foundry_rig_capabilities","foundry_rig_current","foundry_rig_view","foundry_rig_probe",
+                        "foundry_rig_command","foundry_rig_batch","foundry_rig_edit","foundry_rig_check"))
     related.append("foundry_read_image_preview")
     return {"workflow": workflow, "related_tools": related, "actions": {
         name: {"description": action.help, "path_parameters": list(action.params),

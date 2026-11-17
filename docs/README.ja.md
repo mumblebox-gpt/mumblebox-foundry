@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry バージョン 0.1.0-preview.35**
+**Foundry バージョン 0.1.0-preview.36**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -116,3 +116,5 @@ Foundry は、研究者やモデル作者、ワークフローの開発者が公
 Pinokio があるおかげで、ローカルツールのインストールや共有が手軽になりました。プロジェクトや感想を共有してくださる皆さん、そして cocktail peanut に感謝します。 [Pinokio の Foundry ページ](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
 
 Foundry が役立ったら、スターを付けると他のクリエイターにも見つけてもらいやすくなります。
+
+**キャラクターをリギング。** 履歴またはエクスポート完了画面から、静的な GLB を開きます。ガイド付きテンプレートで基本の骨格を作れます。ローカル AI（TokenRig）は検出した指を含む骨格全体と学習済みのスキンウェイトを保持します。拡大表示と軸ハンドルで関節を調整し、必要に応じてボーンチェーンを追加できます。動作をテストし、ヒートマップとブラシでウェイトを補正できます。MCP は同じセッションを操作します。ZIP には Blender 用のスキン付き GLB と編集可能な骨格データが含まれます。

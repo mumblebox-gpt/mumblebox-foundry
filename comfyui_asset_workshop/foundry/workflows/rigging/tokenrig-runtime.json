@@ -1,0 +1,16 @@
+{
+  "source": {
+    "revision": "fee91dc18b97ee7d6f9a81ec863be321bdd5c123",
+    "url": "https://codeload.github.com/HugoTed/SkinTokens-ComfyUI/zip/fee91dc18b97ee7d6f9a81ec863be321bdd5c123",
+    "size": 13739882,
+    "sha256": "48b5a82cb863564f65fd0d631690d4d27a0d11c35fc2a829279bf8bc735d227f"
+  },
+  "uv": {
+    "url": "https://github.com/astral-sh/uv/releases/download/0.11.26/uv-x86_64-pc-windows-msvc.zip",
+    "size": 24928660,
+    "sha256": "4e1278ede866be6c0bf32d2f466cc6de7a9fb399ecf20c9ce2d186e52424be47"
+  },
+  "python": "3.11.15",
+  "torch": "2.7.0+cu128",
+  "torch_index": "https://download.pytorch.org/whl/cu128"
+}

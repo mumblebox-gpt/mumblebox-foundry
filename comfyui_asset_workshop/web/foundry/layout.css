@@ -221,6 +221,7 @@ dl {display:grid;grid-template-columns:140px 1fr;gap:8px 16px;}dt {color:var(--m
 .method-disclosure{display:inline-block;font-weight:600;margin-top:7px}
 .mesh-category[open] .method-disclosure{color:var(--accent)}
 .mesh-methods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:8px;border-top:1px solid var(--border)}
+.mesh-methods>.mesh-method:last-child:nth-child(odd){grid-column:1/-1}
 .mesh-method{display:grid;grid-template-columns:112px minmax(0,1fr);border:1px solid var(--border);border-radius:10px;padding:0;overflow:hidden;background:var(--panel)}
 .mesh-method h3{font-size:calc(20px * var(--font-scale));margin:10px 0}
 .mesh-method .actions{flex-wrap:wrap}.mesh-method button{min-height:44px;padding:5px 8px;font-size:calc(13px * var(--font-scale));white-space:normal;}

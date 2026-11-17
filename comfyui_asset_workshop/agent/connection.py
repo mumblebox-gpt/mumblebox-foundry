@@ -14,6 +14,10 @@ class AgentConnection:
     def __init__(self, client):
         self.client = client
         self.session = uuid4().hex
+        # Request identity is available even to clients that do not route
+        # initialization notifications through this middleware.
+        client.headers[SESSION_HEADER] = self.session
+        client.upload_api.headers[SESSION_HEADER] = self.session
         self.initialized = False
         self.calls = 0
 
@@ -51,8 +55,6 @@ class AgentConnection:
         if context.method == "notifications/initialized":
             result = await call_next(context)
             self.initialized = True
-            self.client.headers[SESSION_HEADER] = self.session
-            self.client.upload_api.headers[SESSION_HEADER] = self.session
             await self.send()
             return result
         if not self.initialized or context.method != "tools/call":

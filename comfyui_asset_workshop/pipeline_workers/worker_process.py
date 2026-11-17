@@ -3,10 +3,10 @@ import os
 import subprocess
 
 class OwnedWorker:
-    def __init__(self,command,log):
+    def __init__(self,command,log,*,env=None):
         self.job=None;self.kernel=None
         flags=(subprocess.CREATE_NO_WINDOW|0x00000004) if os.name=='nt' else 0
-        self.process=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,creationflags=flags)
+        self.process=subprocess.Popen(command,stdout=log,stderr=subprocess.STDOUT,creationflags=flags,env=env)
         try:
             if os.name=='nt':self._attach_windows_job()
         except BaseException:

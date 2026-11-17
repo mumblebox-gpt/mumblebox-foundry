@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Versión de Foundry 0.1.0-preview.35**
+**Versión de Foundry 0.1.0-preview.36**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -120,3 +120,5 @@ El proyecto original, mantenido por **mumblebox-gpt**, es [Mumblebox Foundry en 
 Nos enorgullece crear junto a la comunidad de creadores de [Pinokio](https://pinokio.co/). Pinokio facilita la instalación y el intercambio de herramientas locales, y valoramos una comunidad donde podemos descubrir los proyectos de otros creadores, compartir comentarios útiles y aprender juntos. Gracias a cocktail peanut y a todas las personas que contribuyen a este ecosistema creativo. [Encuentra Foundry en Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
 
 Si Foundry te resulta útil, darle una estrella ayuda a que otros creadores lo encuentren.
+
+**Colocar un esqueleto.** Abre un GLB estático desde el historial o al terminar la exportación. La plantilla guiada ofrece un esqueleto inicial. La IA local (TokenRig) conserva el esqueleto completo que predice, incluidos los dedos detectados, y genera pesos de piel. Usa acercamientos y controles de eje para ajustar articulaciones, y agrega cadenas de huesos cuando sea necesario. Prueba el movimiento y corrige los pesos con el mapa de calor y el pincel. MCP usa la misma sesión abierta. El ZIP incluye el GLB vinculado y los datos editables del esqueleto para Blender.

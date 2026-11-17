@@ -37,7 +37,11 @@ def bundled_skill():
 
 
 def connection_details():
-    return {"version": VERSION, "skill_path": str(SKILL / "SKILL.md"), "skill": bundled_skill()}
+    rigging = SKILL.parent / "foundry-rigging"
+    return {"version": VERSION, "skill_path": str(SKILL / "SKILL.md"), "skill": bundled_skill(),
+            "rigging_skill_path": str(rigging / "SKILL.md"),
+            "rigging_skill_references": {name: str(rigging / "references" / f"{name}.md")
+                for name in ("rigging-judgment", "spatial-inspection", "mcp-workflow")}}
 
 
 def installation(port, user_directory, blender):

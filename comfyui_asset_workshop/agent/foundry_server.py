@@ -29,7 +29,8 @@ def create_server(client):
         "On each connection, read workspace.agent_connection for its local path and revision, the installed app version, and update status. "
         "If checking is true, check back once. Report available updates and refresh an older copied skill from the bundled version. "
         "List workflow groups with foundry_workflows and request one group's actions and capabilities before use. "
-        "The catalog exposes Guided, Virtual Turntable, Orbit to Mesh, Orbit with Splats, both CCORE modes, Garment, graph reads and shared workspace controls. "
+        "The catalog exposes Guided, Virtual Turntable, Orbit to Mesh, Orbit with Splats, both CCORE modes, Garment, Rig a Character, graph reads and shared workspace controls. "
+        "For rigging, inspect the current wizard state and captured front and side views before choosing joint positions. Verify the live result after edits. "
         "Use current capability defaults unless the user specifies otherwise. "
         "Use the existing ComfyUI Foundry workflow. Read capabilities first. Upload only authorized references, "
         "label the first primary and describe each additional reference's purpose. Select the model, category, "
@@ -107,6 +108,8 @@ def create_server(client):
     register_hair(server,client,checked)
     from splat_tools import register as register_splat
     register_splat(server,client,checked)
+    from rigging_tools import register as register_rigging
+    register_rigging(server,client,checked)
     from workspace import register as register_workspace
     register_workspace(server,client,checked)
     return server

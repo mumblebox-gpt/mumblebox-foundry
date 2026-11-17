@@ -1,6 +1,7 @@
 import {msg, sourceMessage, appendContent} from "../i18n.js";
 import {el,button,hint} from "../dom.js";
 import {savedWizardState,savedSingleWizardState} from "../graph-adapter.js";
+import {rigText} from "../rigging/entry.js";
 
 const planned=[
 ["repair",msg("common.refine_and_repair_an_existing_mesh"),msg("common.supply_an_existing_mesh_and_a_matching_image_for_refinement_and_new_output_v")],
@@ -11,7 +12,7 @@ const planned=[
 const artwork=(id,alt)=>{
     const url=new URL("../../assets/foundry/"+id+(id.startsWith("method-")?".webp":".png"),import.meta.url);
     // New artwork must not reuse a cached failed response from an older install.
-    url.searchParams.set('v','single-image-1');
+    url.searchParams.set('v',id==='method-rigging'?'woodsman-1':'single-image-1');
     return el("img",{src:url.href,alt,loading:"lazy",decoding:"async",width:512,height:512});
 };
 
@@ -115,5 +116,16 @@ export function home(shell) {
                     ? button(msg("common.resume"), () => shell.openGarmentWizard({resume:true}), {title:msg("common.resume_garment")}) : null)),
         el('h3', {}, msg("common.create_clothing_with_garment_particles")),
         hint(msg("common.powered_by_garment_particles_from_kiyohiro_nakayama_and_collaborators_design"))));
+    const rigCard=el("article",{class:"mesh-method","data-method":"rigging","data-workflow":"rigging"},
+        artwork("method-rigging",rigText("artwork")),el("div",{},
+            el("span",{class:"badge"},rigText("experimental")),
+            el("h3",{},rigText("title")),hint(rigText("card_description")),
+            hint(rigText("card_experimental")),
+            el("div",{class:"actions"},
+                button(rigText("open"),()=>shell.openRigWizard(),{class:"primary"}),
+                shell.node.properties.foundryRigging?.id?button(msg("common.resume"),()=>shell.openRigWizard({resume:true})):null),
+            el("div",{class:"formats"},...["GLB","ZIP"].map(format=>el("span",{class:"badge"},format)))));
+    // The two cards share the last row on wide screens.
+    methods.append(methods.querySelector('[data-method="virtual-turntable"]'),rigCard);
     return el("div",{},card,el("div",{class:"future-workflows"},ccoreCard(false),ccoreCard(true),hairCard,garmentCard,imageCard,...planned.map(([id,name,description])=>el("article",{class:"planned-workflow"},artwork(id,name),el("div",{},el("span",{class:"badge"},msg("common.coming_soon_2")),el("h3",{},name),hint(description))))));
 }

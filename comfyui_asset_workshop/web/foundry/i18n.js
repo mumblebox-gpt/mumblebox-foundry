@@ -1,13 +1,13 @@
 // One owner for Foundry language, message resolution and live text bindings.
 let locale = "en";
-import manifest from "./locales/manifest.json" with {type: "json"};
-
-const manifestUrl = new URL("./locales/manifest.json", import.meta.url);
+const manifestUrl = new URL("./locales/manifest.json?catalog=12", import.meta.url);
+const {default: manifest} = await import(manifestUrl.href, {with: {type: "json"}});
 
 async function loadCatalog(language, read) {
     const domains = await Promise.all(Object.entries(manifest.domains).map(async ([domain, directory]) => {
         const url = new URL(directory + "/" + language + ".json", manifestUrl);
-        url.searchParams.set("catalog", "10");
+        // The manifest and its domain catalogs belong to the same revision.
+        url.searchParams.set("catalog", manifestUrl.searchParams.get("catalog"));
         const messages = await read(url);
         return Object.entries(messages).map(([key, value]) => [domain + "." + key, value]);
     }));

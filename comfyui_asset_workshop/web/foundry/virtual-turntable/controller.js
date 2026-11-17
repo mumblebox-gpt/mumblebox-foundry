@@ -16,6 +16,8 @@ import {syncTurntableGraph,syncTurntableOutputs} from './graph.js';
 
 const KEY='virtual-turntable';
 const TITLES=['Choose an engine','Set up your reference','Review the orbit','Review the mesh','Finish and export'];
+import {afterExport} from "../rigging/entry.js";
+
 const STAGE_PAGES={preparing:3,turnaround:3,orbit:3,frames:3,geometry:4,texture:5,balanced:5,compact:5,quads:5,print:5,package:5};
 const LABELS={
     width:'Video width',height:'Video height',length:'Video frames',fps:'Frames per second',prompt:'Prompt',
@@ -456,7 +458,9 @@ export class VirtualTurntableWizard{
                 {visible:appearance==='openmvs_finish'?['texture_triangle_target']:[]}),
             this.exportSettings(true),
             this.preview('clean','Clean geometry'),this.preview('texture','Finished textured mesh'),
-            this.run?.package?.download?link(translated('Download asset ZIP'),this.run.package.download,{download:true}):null);
+            this.run?.package?.download?link(translated('Download asset ZIP'),this.run.package.download,{download:true}):null,
+            afterExport(this.shell,{exportId:this.run?.package?.export_id},null,
+                Object.values(this.run?.selection?.variants||{}).some(v=>v.formats?.some(f=>f==="glb"||f==="runtime_glb"))));
     }
     exportSettings(includeTextureSize,change=()=>this.refreshActions()){
         const names={texture_size:'Baked texture size',balanced_triangles:'Balanced triangle target',compact_triangles:'Compact triangle target',

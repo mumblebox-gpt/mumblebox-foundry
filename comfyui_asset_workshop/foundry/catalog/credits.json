@@ -64,6 +64,14 @@
     "observation": "Visible, connected stages make it possible to preserve successful work and improve one part at a time."
   },
   {
+    "id": "rig_tokenrig",
+    "name": "SkinTokens / TokenRig",
+    "creator": "VAST AI and the SkinTokens authors, with upstream integration by HugoTed",
+    "stage": "Optional local skeleton and skin prediction",
+    "source": "https://zjp-shadow.github.io/works/SkinTokens/",
+    "observation": "A predicted skeleton and learned skin give artists and agents a starting point for fitting and movement checks."
+  },
+  {
     "id": "blender",
     "name": "Blender",
     "creator": "Blender Foundation and contributors",

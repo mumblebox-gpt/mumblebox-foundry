@@ -1,4 +1,14 @@
 {
+  "rig_tokenrig": {
+    "id": "rig_tokenrig",
+    "name": "SkinTokens / TokenRig",
+    "stage": "Local humanoid joint prediction",
+    "source": "https://huggingface.co/VAST-AI/SkinTokens/tree/79736cad0fd84de384d5eede659b4ebd24effe33",
+    "license": "MIT",
+    "license_url": "https://github.com/VAST-AI-Research/SkinTokens/blob/main/LICENSE",
+    "notices": ["SkinTokens-MIT.txt"],
+    "license_summary": "Joint suggestions from the pinned TokenRig and SkinVAE checkpoints. Foundry binds the reviewed skeleton using Blender."
+  },
   "ccore_prop": {
     "id": "ccore_prop",
     "name": "CCORE GLB-3D-Coder (Qwen3.5-4B)",

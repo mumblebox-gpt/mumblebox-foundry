@@ -1,12 +1,14 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry version 0.1.0-preview.35**
+**Foundry version 0.1.0-preview.36**
 
 [English](README.md) · [简体中文](docs/README.zh-CN.md) · [Español (Latinoamérica)](docs/README.es-419.md) · [Français](docs/README.fr.md) · [Português (Brasil)](docs/README.pt-BR.md) · [Deutsch](docs/README.de.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md) · [हिन्दी](docs/README.hi.md)
 
 **Make 3D gaming assets on your GPU, from quick blockouts to finished textured models for Blender.**
 
 Give Codex, Claude Code, or your MCP-enabled coding agent a head start with locally generated assets. Use preview meshes to block out a scene and bring finished exports into Blender for the next pass.
+
+**Local AI auto-rigging with agent-driven refinement.** Open **Rig a Character** to fit a skeleton to a saved GLB. Inspect the mesh from multiple angles, place joints, adjust weights, test a bend and export a skinned GLB to Blender. Foundry’s local MCP lets an agent assist inside the open wizard.
 
 Foundry brings practical AI workflows into guided wizards with useful defaults, previews and saved results. You can start without knowing ComfyUI. The Pinokio installer configures the software and dependencies. The underlying graphs stay available when you want more control.
 
@@ -33,12 +35,21 @@ https://github.com/user-attachments/assets/a23e9c28-ff69-4db1-aa6e-548c4295ecae
 
 [Walkthrough and exact settings](docs/demos/2026-11-ray-gun/README.md) · [Original PNG](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet-original.png) · [Download the GLB](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.32/red-comet.glb)
 
+### Local AI rigging demo
+
+Codex followed voice directions to build Wood Man in Foundry, refine his 49-bone rig through MCP, then animate and render him in Blender. In **The Big Lift**, he wrestles with a giant acorn made in Foundry. The leaf has its own three-joint rig authored in Blender.
+
+https://github.com/user-attachments/assets/7b8d1e52-c32e-42be-b030-fa32e28969de
+
+[The Big Lift MP4](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.36/wood-man-the-big-lift.mp4) · [The Leaf Gag MP4](https://github.com/mumblebox-gpt/mumblebox-foundry/releases/download/v0.1.0-preview.36/wood-man-the-leaf-gag.mp4) · [Agent-assisted rigging guide](docs/AGENT-SETUP.md#live-rigging-in-the-wizard)
+
 ## Give your coding agent a head start
 
 Ask an agent to use Foundry to generate a starting asset, then continue together in Blender or another 3D editor.
 
 - **The MCP gives the agent tools.** Discover workflows and settings, submit jobs, follow progress, inspect previews and retrieve exports through the same services as the GUI.
 - **The companion skill provides guidance.** It helps the agent choose a workflow, respect inputs and memory limits, review results and bring an asset into the next tool.
+- **The rigging tools give the agent spatial evidence.** Capture a named view, probe a visible surface for depth, mark a landmark, preview a joint edit and test movement after binding. The wizard shows the same rig and provides Undo and Stop agent editing.
 - **Generation runs locally.** The agent can work on independent tasks while Foundry processes a job. People can review results in the wizard and continue from the same saved work.
 
 Our aim is to reduce repetitive modeling and save time and agent tokens. Actual savings depend on the asset, workflow and amount of finishing required. Start with the [MCP and companion skill guide](docs/AGENT-SETUP.md). The skill is a growing foundation, informed by real projects and community feedback.
@@ -58,9 +69,10 @@ Our aim is to reduce repetitive modeling and save time and agent tokens. Actual 
 | **CCORE Image + Text** | One image and a description through CCORE's vision projector and generation path. Create a reference inside the wizard if needed. | Keep or change features from a photo, sketch or render. |
 | **HairDeck** | Hair cards, variations, processing sheets, fitting, materials, optional spring chains, motion preview and selected GLB/VRM exports. | Clear hairstyle references. Powered by HairDeck and FengLairh's ComfyUI integration. |
 | **Garment Particles — experimental** | Clothing generation, author-supported editing, sewing patterns, mesh preparation, experimental Blender draping and character handoff. | Explore clothing designs. Fit and deformation require careful inspection and further work. |
+| **Rig a Character** | Guided or local AI fitting, detailed joint editing and weight corrections, movement tests, and a skinned GLB and ZIP for Blender. | Select a static mesh in History or choose **Rig this mesh** after exporting. |
 | **Create Images** | Single images or front/back pairs, editing, compatible LoRAs and a saved Gallery. | Prepare a reference for another wizard or keep the image itself. |
 
-Each workflow has its own wizard and independently owned graph section. Cards marked Coming soon describe future work.
+Each workflow has its own wizard. Generation workflows expose their graph sections in ComfyUI. Cards marked Coming soon describe future work.
 
 ## Review and export
 
@@ -71,6 +83,8 @@ Available outputs depend on the workflow. Wizards expose supported choices such 
 Review topology for deformation, geometry for printing and collision, and materials in the target editor or engine. HairDeck's static GLB and spring-bone VRM are different outputs. Its head-turn preview demonstrates hair motion. Garment Particles remains experimental, especially character fitting and draping.
 
 Packages include selected files, a README, measurements, checksums, provenance and applicable notices. Ordinary packages exclude private source images, prompts and working files. History keeps saved results available for review and resuming supported operations. In **History → Videos**, play, download or delete separately saved workflow videos.
+
+In **Rig a Character**, choose **Guided Template** for hands-on fitting or **Local AI (TokenRig)** for automatic placement and learned weights. Local AI prepares its isolated environment and verified model files on first use on compatible Windows NVIDIA systems. It keeps the complete prediction, including finger branches it finds. Frame a part, check joint placement in two views and use the axis handles or numeric coordinates to refine it. The wizard can add hands, fingers, toes, tails, wings and custom chains. Bind the edited rig, test movement and use the weight heat map and brush to correct problem areas. The companion MCP and its [rigging skill](comfyui_asset_workshop/skills/foundry-rigging/SKILL.md) work with the same open session. The ZIP stores the skinned GLB and detailed skeleton metadata alongside the original asset in History.
 
 ## Language and accessibility
 

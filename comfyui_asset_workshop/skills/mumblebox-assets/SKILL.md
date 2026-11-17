@@ -1,11 +1,11 @@
 ---
 name: mumblebox-assets
-description: Use Mumblebox 3D Asset Foundry and its local MCP to create or recover starting meshes, props, reference images, hair, garments, or splats for Blender, game development, and other 3D work.
+description: Use Mumblebox 3D Asset Foundry and its local MCP to create or recover assets, fit and inspect a humanoid rig in the open wizard, and prepare results for Blender or game development.
 ---
 
 # Mumblebox Foundry assets
 
-**Foundry version 0.1.0-preview.35**
+**Foundry version 0.1.0-preview.36**
 
 Use Foundry for a new asset or reference when local generation can save modeling work. Use Blender directly for edits to existing scene objects, assembly, and precise modeling. Preserve the user's design, dimensions, intended use, and chosen reference. Start fresh unless asked to resume a saved result.
 
@@ -29,6 +29,13 @@ For one image to a Blender starting asset, import the authorized image, save a `
 - **Orbit with Splats:** Use this when you need a textured polygon mesh and a Gaussian splat in a shared Y-up frame. Read `orbit_with_splats.capabilities` for Brush readiness, defaults and export choices. On Windows, `start` automatically prepares the verified Brush build before splat training. A status of Preparing Brush is expected on first use. If setup fails, retry the saved run. Choose Quick, Balanced or High detail and run the Orbit to Mesh stages or Rocket Mode. Inspect both previews with the linked camera and download `pair_zip` for the aligned GLB, Gaussian PLY, alignment report and terms. Use `show` to bring up the run in Foundry for interactive hybrid blending and MP4 export.
 - **CCORE:** Use text for a described prop. Add an image with Image + Text when visual guidance matters. Call `foundry_import_reference` with target `ccore` for a local reference. Respect returned GPU budget limits and offer the reported fallback.
 - **Hair, garment and splat:** Use these groups for their specialized outputs. Review hair variations or garment drape before exporting. A splat stores appearance, and the companion mesh supplies separate geometry.
+- **Rig a Character:** Use the `rigging` group when a saved static humanoid GLB needs a skeleton and weights. Choose Guided Template for manual placement or Local AI (TokenRig) for an initial guess on a supported Windows NVIDIA system. Use the exact version selected in History or after export. For an existing armature, facial controls, or animation retargeting, use the appropriate Blender workflow.
+
+## Assist inside the Rig a Character wizard
+
+Read `rigging_skill_path` from the running app's `agent_connection` result. Open that bundled skill with its local references, or use the [Foundry rigging skill](../foundry-rigging/SKILL.md) when both skill folders are present. Discover the connected app's capabilities and keep the exact source variant that the user opened in History or handed off from export.
+
+Use `foundry_rig_current` to locate the session and `foundry_rig_view` to inspect the actual viewport. When available, `foundry_rig_command` applies edits through the same shared history as the wizard. Review the changed joint from a second angle and test the affected bend after binding. Keep the original rig detail and report any visible defects when you verify the exported GLB in Blender.
 
 Use authorized files only. Import local references through the MCP. For an image made in Foundry, review the visible pixels and use the image handoff action to retain its provenance. Select export formats and any quad or advanced options from the live capabilities. For the default case, use the wizard's returned choices.
 

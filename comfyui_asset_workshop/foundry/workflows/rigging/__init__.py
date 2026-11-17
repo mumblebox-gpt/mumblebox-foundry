@@ -1,0 +1,1 @@
+"""Local humanoid rigging workflow."""

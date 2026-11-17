@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry वर्शन 0.1.0-preview.35**
+**Foundry वर्शन 0.1.0-preview.36**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -116,3 +116,5 @@ Foundry रिसर्च करने वालों, मॉडल लेख�
 Pinokio की मदद से लोकल टूल इंस्टॉल करना और दूसरों के साथ शेयर करना आसान हो जाता है। अपने प्रोजेक्ट और अनुभव बाँटने वाले सभी लोगों और cocktail peanut का धन्यवाद। [Pinokio पर Foundry](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
 
 अगर Foundry आपके काम आया, तो स्टार देने से दूसरे क्रिएटर भी इसे आसानी से ढूँढ पाएँगे।
+
+**किरदार की रिगिंग।** इतिहास या निर्यात पूरा होने पर स्थिर GLB खोलें। निर्देशित टेम्पलेट शुरुआती कंकाल देता है। स्थानीय AI (TokenRig) अपनी पूरी भविष्यवाणी, पहचानी गई उँगलियाँ और सीखे गए स्किन वज़न रखता है। पास से देखकर और अक्ष हैंडल से जोड़ ठीक करें। ज़रूरत हो तो हड्डियों की चेन जोड़ें। गति जाँचें और हीटमैप व ब्रश से वज़न सुधारें। MCP उसी खुले सत्र में काम करता है। ZIP में Blender के लिए बाइंड किया गया GLB और संपादन योग्य कंकाल डेटा मिलता है।

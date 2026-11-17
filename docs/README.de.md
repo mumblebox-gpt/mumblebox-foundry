@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry-Version 0.1.0-preview.35**
+**Foundry-Version 0.1.0-preview.36**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -116,3 +116,5 @@ Das Originalprojekt wird von **mumblebox-gpt** auf GitHub gepflegt. Dort findest
 Pinokio macht es leichter, lokale Tools zu installieren und zu teilen. Danke an cocktail peanut und alle, die ihre Projekte, Rückmeldungen und Erfahrungen in der Community teilen. [Foundry auf Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)
 
 Wenn Foundry dir hilft, macht ein Stern das Projekt für andere leichter auffindbar.
+
+**Charakter riggen.** Öffne ein statisches GLB aus dem Verlauf oder direkt nach dem Export. Die geführte Vorlage liefert ein Grundgerüst. Lokale KI (TokenRig) erhält das vollständige vorhergesagte Skelett einschließlich erkannter Finger und gelernter Hautgewichte. Nutze Nahansichten und Achsengriffe, um Gelenke anzupassen, und ergänze bei Bedarf Knochenketten. Teste die Bewegung und korrigiere Gewichte mit der Heatmap und dem Pinsel. MCP arbeitet mit derselben geöffneten Sitzung. Das ZIP enthält die gebundene GLB-Datei und die bearbeitbaren Skelettdaten für Blender.

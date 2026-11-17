@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Foundry 版本 0.1.0-preview.35**
+**Foundry 版本 0.1.0-preview.36**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -120,3 +120,5 @@ Foundry 把研究者、模型作者和工作流创作者的优秀成果连接起
 我们很高兴能与 [Pinokio](https://pinokio.co/) 创作者社区一同创作。Pinokio 让本地工具更容易安装和分享。我们珍视这样一个社区：创作者可以发现彼此的项目、交流有用的反馈并共同学习。感谢 cocktail peanut 以及所有为这个创意生态做出贡献的人。[在 Pinokio 上查看 Foundry](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry)。
 
 如果 Foundry 帮到了你，欢迎加星，让更多创作者发现它。
+
+**绑定角色。** 从历史记录或导出完成页面打开静态 GLB。引导模板提供基础骨架。本地 AI（TokenRig）保留完整预测骨架，包括检测到的手指，并生成学习得到的蒙皮权重。使用局部放大视图和轴向手柄调整关节，也可按需添加骨骼链。测试动作，再用热力图和画笔修正权重。MCP 可操作同一个打开的会话。ZIP 包含可在 Blender 中打开的蒙皮 GLB 和可编辑的骨架数据。

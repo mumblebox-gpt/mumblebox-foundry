@@ -117,7 +117,8 @@ def idle():
     from .foundry.workflows.splat_solid.runs import busy as splat_busy
     from .foundry.workflows.ccore_prop.runs import busy as ccore_busy
     from .foundry.workflows.garment_particles.runs import busy as garment_busy
-    if single_image_jobs_active() or foundry_busy() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy():
+    from .foundry.workflows.rigging.routes import busy as rigging_busy
+    if rigging_busy() or single_image_jobs_active() or foundry_busy() or image_busy() or hair_busy() or guided_busy() or splat_busy() or ccore_busy() or garment_busy():
         raise JobConflict("A Mumblebox job is still active. Wait for it to finish or stop it before changing the library or History.")
     if description_helper.STATE.get("running"):
         raise ValueError("The description assistant is working. Wait for it or stop it before generating an image.")

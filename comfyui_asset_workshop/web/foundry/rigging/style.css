@@ -1,0 +1,76 @@
+.rig-workflow .rig-workbench {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(250px,300px);
+  align-items:start;
+  gap:18px;
+}
+.rig-workflow .rig-viewport {
+  height:min(58vh,640px);
+  min-height:300px;
+  background:#202832;
+  overflow:hidden;
+  border-radius:10px;
+  position:relative;
+  touch-action:none;
+}
+.rig-workflow .rig-native,.rig-workflow .rig-joints {position:absolute;inset:0;width:100%;height:100%}
+.rig-workflow .rig-joints {pointer-events:none}
+.rig-workflow .rig-with-parts {grid-template-columns:minmax(140px,180px) minmax(0,1fr) minmax(240px,285px)}
+.rig-workflow .rig-parts {
+  min-width:0;max-height:64vh;overflow:auto;
+  padding:10px;border:1px solid var(--border);border-radius:10px;
+}
+.rig-workflow .rig-parts > summary {font-weight:700;cursor:pointer;margin-block-end:8px}
+.rig-workflow .rig-viewport:focus-visible {outline:3px solid var(--accent,#318b80);outline-offset:3px}
+.rig-workflow .rig-with-parts:has(.rig-parts:not([open])) {grid-template-columns:minmax(110px,135px) minmax(0,1fr) minmax(240px,285px)}
+.rig-workflow .rig-part summary {cursor:pointer;padding:7px;overflow-wrap:anywhere}
+.rig-workflow .rig-part button {display:block;width:100%;text-align:start;margin-block:4px}
+.rig-workflow .rig-sidebar {display:grid;gap:12px;min-width:0}
+.rig-workflow .rig-sidebar section {display:grid;gap:12px;border:1px solid var(--border);border-radius:10px;padding:16px;min-width:0}
+.rig-workflow .rig-sidebar h3,.rig-workflow .rig-sidebar p {margin:0}
+.rig-workflow .rig-sidebar details {border-block:1px solid var(--border);padding-block:10px}
+.rig-workflow .rig-sidebar summary {cursor:pointer;margin-bottom:8px}
+.rig-workflow .rig-agent-control {position:sticky;top:0;z-index:4;display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;padding:8px;background:var(--panel);border-bottom:1px solid var(--border);overflow-wrap:anywhere}
+.rig-workflow .rig-agent-control label {display:inline-flex;align-items:center;gap:6px}
+.rig-workflow .rig-agent-control .rig-agent-toggle {font-weight:700}
+.rig-workflow .rig-steps {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-block:14px 18px;counter-reset:rig-step;background:var(--panel);padding-block:8px}
+.rig-workflow .rig-steps button {text-align:start;padding:12px;counter-increment:rig-step;display:flex;align-items:center;gap:10px;min-width:0;overflow-wrap:anywhere}
+.rig-workflow .rig-steps button:before {content:counter(rig-step);border:1px solid currentColor;border-radius:50%;min-width:1.8em;line-height:1.8;text-align:center}
+.rig-workflow .rig-steps [aria-current="step"] {font-weight:700;box-shadow:inset 0 -3px currentColor}
+.rig-workflow .rig-navigation {display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--border);margin-top:18px;padding:12px 8px;position:sticky;bottom:0;z-index:3;background:var(--panel)}
+.rig-workflow .rig-tools {margin-top:12px}
+.rig-workflow .rig-tools [aria-pressed="true"] {box-shadow:inset 0 -2px currentColor;font-weight:700}
+.rig-history-choice {display:flex;flex-wrap:wrap;align-items:end;gap:8px;width:100%}
+.rig-history-choice label {display:grid;gap:4px;max-width:100%;min-width:0}
+.rig-history-choice select {max-width:100%}
+.rig-workflow .rig-sidebar input[type="number"],.rig-workflow .rig-sidebar select {width:100%;min-width:0}
+.rig-workflow input[type="range"] {max-inline-size:100%;margin-inline:0}
+.rig-workflow .rig-axis-fields {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.rig-workflow .rig-axis-fields label {display:grid;gap:4px}
+.rig-workflow .rig-note {min-height:2em;overflow-wrap:anywhere}
+.rig-workflow .rig-note:empty {display:none}
+.rig-workflow .rig-source {overflow-wrap:anywhere}
+.rig-workflow .rig-method-settings {border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-block:12px;display:grid;gap:8px}
+.rig-workflow .rig-fit-receipt,.rig-workflow .rig-preset-summary {margin:0;overflow-wrap:anywhere}
+.rig-workflow .rig-method-fields,.rig-workflow .rig-custom-fields {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13em),1fr));gap:8px 14px}
+.rig-workflow .rig-presets {border:0;min-width:0;margin:0;padding:0}
+.rig-workflow .rig-presets .field {margin:0}
+.rig-workflow .rig-presets input,.rig-workflow .rig-method-fields select {min-width:0;width:100%}
+.rig-workflow .rig-custom-fields .muted {margin:4px 0}
+.rig-workflow [hidden] {display:none!important}
+.rig-workflow .rig-pose-actions {margin-block:12px}
+.rig-next-step {display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-block:12px}
+@container foundry (max-width:950px){
+  .rig-workflow .rig-workbench,.rig-workflow .rig-with-parts:has(.rig-parts:not([open])) {grid-template-columns:1fr}
+  .rig-workflow .rig-parts {max-height:190px}
+  .rig-workflow .rig-viewport {min-height:260px}
+}
+@container foundry (max-width:730px){
+  .rig-workflow .rig-steps {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@container foundry (max-width:540px){
+  .rig-workflow .rig-steps {grid-template-columns:1fr}
+  .rig-workflow .rig-steps button {padding:8px}
+  .rig-workflow .rig-steps {position:static}
+  .rig-workflow .rig-navigation {flex-wrap:wrap}
+}

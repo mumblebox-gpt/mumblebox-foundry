@@ -44,10 +44,13 @@ function review(w){return el('div',{},hint(msg("splat.compare_the_preserved_spla
     comparison(w),
     w.run?.quality?el('details',{},el('summary',{},msg("splat.recorded_geometry_checks")),el('pre',{},JSON.stringify(w.run.quality,null,2))):null,
     w.nav({next:()=>w.start('export'),nextText:msg("splat.save_selected_package")}));}
+import {afterExport} from "../rigging/entry.js";
+
 function result(w){
     const actions=el('div',{class:'actions'},button(msg("splat.review_meshes"),()=>w.go(5)),button(msg("splat.new_splat_asset"),()=>w.shell.openSplatWizard()),button(msg("splat.choose_a_workflow"),()=>w.shell.open('Choose a Workflow')));
     return el('div',{},w.run?.package?hint(msg("splat.your_selected_files_are_saved_with_a_readable_catalog_model_credits_and_a_hi")):hint(msg("splat.the_selected_stages_are_processing_completed_results_remain_saved_as_the_wor")),
     w.run?.artifacts?.companion?comparison(w):w.artifact('orbit',msg("splat.splat_orbit")),
         w.run?.package?.zip_selected?link(msg("splat.download_asset_zip"),fileURL(w.runId,w.run.package.path,true)):null,
+        afterExport(w.shell,{recordId:w.run?.package?.history_id},"companion",Boolean(w.run?.config?.outputs?.companion)),
         el('div',{class:'actions'},...Object.keys(w.run?.artifacts||{}).map(role=>link(msg("splat.download_2", {value1: role.replaceAll('_',' ')}),fileURL(w.runId,w.run.artifacts[role].relative,true)))),actions,w.nav({back:5}));
 }

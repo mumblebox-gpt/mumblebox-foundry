@@ -1,6 +1,6 @@
 # Mumblebox 3D Asset Foundry
 
-**Version de Foundry 0.1.0-preview.35**
+**Version de Foundry 0.1.0-preview.36**
 
 [English](../README.md) · [简体中文](README.zh-CN.md) · [Español (Latinoamérica)](README.es-419.md) · [Français](README.fr.md) · [Português (Brasil)](README.pt-BR.md) · [Deutsch](README.de.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [हिन्दी](README.hi.md)
 
@@ -120,3 +120,5 @@ Le projet original, maintenu par **mumblebox-gpt**, est [Mumblebox Foundry sur G
 Nous sommes fiers de créer aux côtés de la communauté de créateurs de [Pinokio](https://pinokio.co/). Pinokio facilite l'installation et le partage d'outils locaux. Nous apprécions cette communauté où les créateurs peuvent découvrir leurs projets respectifs, échanger des retours utiles et apprendre ensemble. Merci à cocktail peanut et à toutes les personnes qui contribuent à cet écosystème créatif. [Retrouvez Foundry sur Pinokio](https://pinokio.co/apps/github-com-mumblebox-gpt-mumblebox-foundry).
 
 Si Foundry vous est utile, une étoile peut aider d’autres créateurs à le découvrir.
+
+**Rigger un personnage.** Ouvrez un GLB statique depuis l’historique ou après l’export. Le gabarit guidé propose un squelette de départ. L’IA locale (TokenRig) conserve sa prédiction complète, y compris les doigts détectés, et produit des poids de déformation. Utilisez les vues rapprochées et les poignées d’axe pour ajuster les articulations, puis ajoutez des chaînes d’os au besoin. Testez le mouvement et corrigez les poids avec la carte thermique et le pinceau. Le MCP utilise la même session ouverte. Le ZIP contient le GLB lié et les données modifiables du squelette pour Blender.

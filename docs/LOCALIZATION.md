@@ -20,6 +20,7 @@ Keep model and researcher names recognizable, distinguish VRAM from system RAM, 
 - web/foundry/i18n.js owns browser resolution, named parameters and in-place text/attribute bindings. dom.js uses those bindings. preferences.py owns the saved language.
 - foundry/localization.py reads the same manifest and JSON for server message metadata and the shared package README renderer. There is no second set of Python translations.
 - finishing/package_readme.py owns human package documentation. The archive publisher selects the saved interface language at publication. Existing packages, machine catalogs, checksums and retained licenses are unchanged.
+- The rigging domain covers fitting methods, AI and binding presets, Custom fields, setup progress, joint names, view controls and export. Coordinate axes, joint IDs, sampler keys and preset IDs remain consistent between the wizard, package and MCP.
 
 ## Loading and switching
 

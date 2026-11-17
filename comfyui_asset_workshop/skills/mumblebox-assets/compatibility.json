@@ -1,8 +1,8 @@
 {
-  "skill_revision": "preview-32-single-image-and-preparation",
+  "skill_revision": "rigging-spatial-editor-v3",
   "agent_protocol": 1,
   "minimum_foundry_version": "0.1.0-preview.21",
-  "reviewed_foundry_version": "0.1.0-preview.35",
+  "reviewed_foundry_version": "0.1.0-preview.36",
   "languages": "Explain guidance and update notices in the user's language.",
-  "capabilities": "Use the running app's workflow capabilities for available settings and exports."
+  "capabilities": "Use the running app's workflow capabilities for available settings and exports. Discover detailed rigging, spatial inspection and agent control on the connected build before using those operations."
 }

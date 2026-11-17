@@ -51,6 +51,7 @@
     "virtual_turntable": "../virtual-turntable/locales",
     "agent_setup": "../agent-setup/locales",
     "orbit": "../orbit-to-mesh/locales",
-    "orbit_splats": "../orbit-with-splats/locales"
+    "orbit_splats": "../orbit-with-splats/locales",
+    "rigging": "../rigging/locales"
   }
 }

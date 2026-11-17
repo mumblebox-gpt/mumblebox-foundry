@@ -2,6 +2,8 @@
 
 This Windows/NVIDIA beta installs an isolated copy of ComfyUI, Foundry, the Hi3D service, the texture/finishing worker, Blender and the companion MCP. It opens the Foundry interface inside Pinokio. Existing ComfyUI installations are not replaced.
 
+To rig a static mesh, choose **Rig a Character** and select a saved GLB variant in History, or choose **Rig this mesh** after exporting. **Guided Template** and Blender CPU binding use the installed tools. **Local AI (TokenRig)** prepares its isolated software and verified model files on first use on a compatible NVIDIA GPU. The [Foundry MCP guide](AGENT-SETUP.md#live-rigging-in-the-wizard) covers agent-assisted fitting and review.
+
 ## Community workflows and contributions
 
 Foundry is a growing toolbox of local image and 3D workflows, shaped by practical use, learning and community contributions. The aim is to bring together the best practical local approaches and make them easier to use through guided wizards and automatic software setup. Credit stays with the researchers, model authors and workflow contributors whose work makes it possible.

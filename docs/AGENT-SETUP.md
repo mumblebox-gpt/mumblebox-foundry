@@ -18,7 +18,19 @@ For a first mesh, select `mesh` and use `single-image` with one imported referen
 
 For Orbit with Splats, inspect `orbit_with_splats.capabilities` for Brush readiness. Start the workflow normally. On Windows, Foundry downloads and verifies Brush before the first splat training stage. Poll the run for preparation status and retry the same run if setup fails.
 
-The groups are `mesh` (Single Image and Turnaround), `guided`, `virtual_turntable`, `orbit_to_mesh`, `orbit_with_splats`, `splat`, `hair`, `ccore` (Text and Image + Text), `garment`, `images`, and `workspace`. Workspace includes the packaged graph, History, preferences, model management, integration and maintenance controls. Model and file removal use the same preview tokens as the GUI and require the user's authorization for the listed items.
+The groups are `mesh` (Single Image and Turnaround), `guided`, `virtual_turntable`, `orbit_to_mesh`, `orbit_with_splats`, `splat`, `hair`, `ccore` (Text and Image + Text), `garment`, `rigging`, `images`, and `workspace`. Workspace includes the packaged graph, History, preferences, model management, integration and maintenance controls. Model and file removal use the same preview tokens as the GUI and require the user's authorization for the listed items.
+
+## Live rigging in the wizard
+
+Discover the `rigging` group, then open **Rig a Character** in Foundry. Its card leads to the existing History screen, where a mesh variant is selected. A completed export can hand over its exact variant. Read the bundled [Foundry Rigging skill](../comfyui_asset_workshop/skills/foundry-rigging/SKILL.md) and follow its references. Use the capability and skill paths returned by the running app so the instructions match the installed build.
+
+The rigging skill links to placement and deformation judgment, spatial inspection, and the MCP workflow. On the spatial editor, an agent can capture independent views, probe depth, preview related changes and test movement with the current binding. Use **Stop agent editing** in the wizard to block edits and reject late results. Resume from the wizard when ready. Camera following is an option in the same toolbar.
+
+The wizard runs through **Build rig**, **Fit and refine**, **Test movement** and **Export**. `foundry_rig_current` returns the open source, selected joint, rig revision and skeleton coordinates in glTF Y-up. Schema 3 keeps stable bone IDs, hierarchy, rest orientation, detailed branches and surface landmarks. `foundry_rig_view` returns viewport pixels with matching source, run, rig, camera and view details on supported builds. Pass its capture ID to `foundry_rig_probe` for surface hits and uncertainty. Use `foundry_rig_command` to preview and apply the advertised revision-aware edits. After a conflict or active human drag, re-read the current state and inspect the relevant view again before proposing another change.
+
+Read `rigging.capabilities` for the Guided Template and Local AI methods, setup status, exact preset settings and Custom ranges. `rigging.fit` applies a template immediately or queues a TokenRig joint prediction. Send the current `revision`, `orientation`, `method`, and, for Local AI, `preset` and a unique `request_id`. Pass `custom` values only with the Custom preset. Check `fit_status` until review is available. Use `cancel_fit` with that request ID to stop the matching job. First use downloads the optional software and models on supported Windows NVIDIA systems. After either method, inspect the joints before binding. `rigging.bind` accepts a separate binding preset or Custom `proxy_resolution` for Blender CPU weighting.
+
+For example, ask “Fit the right elbow of the mesh I’m looking at. Check the front and side views, then show me the elbow bend in Foundry.” Use `bind_start` and poll `bind_status` before posing a changed skeleton. `cancel_bind` stops only the matching worker and retains prior edits and results. Reopening the wizard resumes progress. Local AI keeps its complete prediction and learned weights, including the finger branches it finds. For edited anatomy, discover whether the running app offers verified conditioned binding or Blender CPU binding. Verify placement, roll and the skin in the intended pose. The `export` action saves a skinned GLB and rig metadata as a separate local History package.
 
 ## Keep the app and companion skill aligned
 
@@ -49,7 +61,7 @@ claude mcp add --transport stdio mumblebox-foundry -- $entry.command @launchArgs
 claude mcp list
 ```
 
-Copy the whole `mumblebox-assets` skill folder so its `SKILL.md` and `compatibility.json` stay together. Use the client's own skills directory and reload the session after registering the server. Start with `foundry_workflows`, then call the selected group's capabilities to confirm that the app also responds. The standalone adapter can enumerate tools while the local HTTP service is offline. Capability and generation calls need the running app. See the [Claude Code MCP guide](https://code.claude.com/docs/en/mcp) for its configuration scopes.
+Copy the whole `mumblebox-assets` skill folder so its `SKILL.md` and `compatibility.json` stay together. Keep the `foundry-rigging` skill and its three reference files together. Use the client's skills directory and reload the session after registering the server. Start with `foundry_workflows`, then call the selected group's capabilities to confirm that the app also responds. The standalone adapter can enumerate tools while the local HTTP service is offline. Capability and generation calls need the running app. See the [Claude Code MCP guide](https://code.claude.com/docs/en/mcp) for its configuration scopes.
 
 **Existing ComfyUI installation:**
 

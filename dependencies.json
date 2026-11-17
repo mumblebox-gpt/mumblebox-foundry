@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0-preview.35",
+  "version": "0.1.0-preview.36",
   "platform": "Windows NVIDIA",
   "reference_hardware": {
     "gpu": "RTX 4080 SUPER",
@@ -59,6 +59,13 @@
     "download_models_during_install": false
   },
   "blender": "5.2.2 LTS",
+  "rigging_ai": {
+    "platform": "Windows x64 NVIDIA with native bfloat16",
+    "runtime_manifest": "comfyui_asset_workshop/foundry/workflows/rigging/tokenrig-runtime.json",
+    "requirements": "comfyui_asset_workshop/foundry/workflows/rigging/requirements-tokenrig.txt",
+    "entrypoint": "comfyui_asset_workshop/foundry/workflows/rigging/tokenrig_worker.py",
+    "setup": "Optional, when the user runs Local AI fitting for the first time"
+  },
   "weights": {
     "included": false,
     "download": "selected workflow dependencies before its first generation",

@@ -3,6 +3,7 @@ import {msg, appendContent, replaceContent} from "../i18n.js";
 import {el,button,hint,icon,link} from "../dom.js";
 import {request,fileUrl} from "../services.js";
 import {dialog} from "../dialogs.js";
+import {rigText} from "../rigging/entry.js";
 
 const formatSize=n=>n>=1024**3?(n/1024**3).toFixed(2)+" GB":(n/1024**2).toFixed(1)+" MB";
 const label = value => sourceMessage(value.replaceAll("_", " ").replace(/\b\w/g, c => c.toUpperCase()));
@@ -130,12 +131,16 @@ export async function render(shell,initialKind) {
             purge.disabled=!items.length;more.hidden=!cursor;
             replaceContent(list,...items.map(item=>{
                 if(video)return videoCard(shell,item,()=>load(false));
+                const rigSource=mesh&&item.rig_sources?.length?el('select',{'aria-label':rigText('choose_mesh')},
+                    ...item.rig_sources.map(file=>el('option',{value:file.id},file.name))):null;
                 const thumb=el("div",{class:"thumbnail"},item.preview_id?el("img",{src:fileUrl(item.id,item.preview_id),alt:item.name}):icon(mesh?"cube":"image",42));
                 return el("article",{class:"library-card"},thumb,el("div",{},el("h3",{},item.name),
                     el("p",{class:"muted"},new Date(item.created).toLocaleString()+" · ",sourceMessage(item.workflow)),
                     el("div",{class:"formats"},...item.formats.filter(Boolean).map(f=>el("span",{class:"badge"},f.toUpperCase()))),
                     hint(msg("common.files_3",{value1:item.file_count,value2:formatSize(item.bytes),value3:item.variants.map(v=>v.id.replaceAll("_"," ")).join(", ")})),
                     el("div",{class:"actions"},button(msg("common.view_details"),()=>details(shell,item).catch(e=>shell.message(sourceMessage(e.message),true))),
+                        rigSource?el('div',{class:'rig-history-choice'},el('label',{},rigText('choose_mesh'),rigSource),
+                            button(rigText("rig_mesh"),()=>shell.openRigWizard({recordId:item.id,fileId:rigSource.value}))):null,
                         button(msg("common.open_output_folder"),async()=>{try{const result=await request("library/"+item.id+"/open-folder",{});shell.message(result.location);}catch(e){shell.message(sourceMessage(e.message),true);}}),
                         el("a",{href:fileUrl(item.id,"archive"),download:"",class:"download-link"},msg("common.download_zip")),
                         button(msg("common.delete"),()=>confirmRemoval(shell,kind,[item.id],()=>load(false)),{class:"danger"}))));

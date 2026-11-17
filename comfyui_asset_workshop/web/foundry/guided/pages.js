@@ -126,11 +126,15 @@ export function exportPage(w){
         w.nav({next:async()=>{validateExports(w.draft.selection);await w.finish();},label:msg("guided.prepare_selected_outputs_and_package")}));
 }
 
+import {afterExport} from "../rigging/entry.js";
+
 export function resultPage(w){
     const f=w.job?.finishing;const packageURL='guided/runs/'+w.id+'/package';
     const options=[['texture',msg("guided.detailed_master"),'detailed'],['balanced',msg("guided.balanced_game_mesh"),'game_balanced'],['compact',msg("guided.compact_game_mesh"),'game_compact'],['quads',msg("guided.editable_quad_runtime_preview"),'quad_light'],['print',msg("guided.print_mesh_stl"),'print'],['clean',msg("guided.clean_geometry"),null]]
         .filter(([key,label,variant])=>f?.previews?.[key]&&(!variant||f.selection.variants[variant])&&(key!=='quads'||w.cap.quad_retopology_enabled));
     const selected=options.some(([key])=>key===w.finalPreview)?w.finalPreview:options[0]?.[0];
+    const variant=options.find(([key])=>key===selected)?.[2];
+    const exportFormats=f?.selection?.variants?.[variant]?.formats||[];
     const picker=el('select',{'aria-label':msg("guided.finished_mesh_version"),onchange:e=>{w.finalPreview=e.target.value;w.render();}},...options.map(([value,label])=>el('option',{value,selected:value===selected},label)));
     const actions=()=>el('nav',{class:'actions result-actions','aria-label':msg("guided.finished_asset_actions")},button(msg("guided.make_a_new_asset"),()=>w.shell.openGuidedWizard(),{class:'primary'}),button(msg("guided.back_to_export_choices"),()=>w.go(5)),button(msg("guided.choose_another_workflow"),()=>w.shell.open('Choose a Workflow')));
     return el('div',{},f?.package?actions():null,options.length?picker:null,
@@ -138,6 +142,7 @@ export function resultPage(w){
         f?.package?el('section',{},el('h3',{},msg("guided.your_selected_asset_package_is_ready")),
             el('a',{class:'download-link',href:'/mumblebox-foundry/v1/'+packageURL,download:w.draft.name+'.zip'},msg("guided.download_asset_zip")),
             button(msg("guided.open_output_folder"),()=>w.act(()=>request('guided/runs/'+w.id+'/open-package-folder',{}))),
+            afterExport(w.shell,{exportId:f.package.export_id},variant,exportFormats.some(format=>format==="glb"||format==="runtime_glb")),
             hint(msg("guided.includes_the_selected_meshes_matching_material_maps_measurements_production"))):
             el('div',{},hint(f?.active?msg("guided.preparing_the_selected_exports_and_package_this_can_take_several_minutes"):msg("guided.select_your_output_versions_on_the_previous_page")),
                 f&&!f.active&&!f.package?button(msg("guided.retry_remaining_stages"),()=>w.act(()=>w.finish()),{class:'primary'}):null),

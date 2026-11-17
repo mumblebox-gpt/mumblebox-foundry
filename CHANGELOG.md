@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.0-preview.36 — Local AI auto-rigging and agent-driven refinement
+
+- Add the **Rig a Character** wizard to Choose a Workflow, History and finished mesh exports. The source variant stays intact and the rigged GLB and editable skeleton metadata save to a separate ZIP in History.
+- Choose **Guided Template** or **Local AI (TokenRig)**. Local AI prepares a pinned, isolated runtime and downloads verified weights on first use on supported Windows NVIDIA systems. Both methods support editable fitting, presets, Custom settings and cancelable jobs.
+- Preserve the full predicted hierarchy, rest orientations, finger branches and learned skin. Fit joints by dragging an axis handle or editing its coordinates. Frame a part, pin a joint, and add hands, fingers, toes, tails, wings or custom chains.
+- Inspect front, side and part views, measure surface depth, save landmarks and preview related joint edits together. The local MCP and the wizard share the active rigging session, revisions and undo history.
+- Test a single joint or related joints in motion, inspect the affected region and weights, apply a local weight brush and rebind. Use learned binding for supported skeletons or the Blender CPU option.
+- Choose whether to follow an agent’s camera. Taking over the camera turns Follow off. Stop agent editing blocks writes and late results while preserving the saved rig and read-only inspection.
+- Update the MCP setup and bundled rigging skill, including spatial interpretation, scoped edits, deformation review and Blender handoff. Support the new wizard in Foundry’s nine interface languages.
+- Mark rigging Experimental on the workflow card, explain what to check before export and pair it with Virtual Turntable in the workflow grid.
+
 ## 0.1.0-preview.35 — Check for updates before restarting
 
 - Show **Foundry is already up to date** when there is no newer release. Keep Foundry running during the release check and package verification. Restart only after a newer release is installed.

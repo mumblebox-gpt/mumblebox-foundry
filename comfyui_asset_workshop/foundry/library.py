@@ -1,5 +1,5 @@
 """Catalog-backed history, bounded paging and reviewed removal with persistent tombstones."""
-from contextlib import contextmanager
+from contextlib import contextmanager, nullcontext
 import hashlib
 import json
 import secrets
@@ -47,7 +47,7 @@ class Library:
         if value not in ("mesh", "image", "video"): raise ValueError("Choose mesh history, video history or the image gallery.")
         return value
 
-    def import_package(self, archive):
+    def import_package(self, archive, *, commit_scope=nullcontext):
         archive = owned_path(self.output_root, archive)
         if archive.suffix.lower() != ".zip" or not archive.is_file():
             raise ValueError("Choose an existing Foundry asset package.")
@@ -100,7 +100,7 @@ class Library:
                   "bytes": archive.stat().st_size, "archive": str(archive), "folder": str(folder),
                   "revision": revision, "preview_id": hashlib.sha256(previews[0].encode()).hexdigest()[:24] if previews else None,
                   "catalog": catalog}
-        with self.lock, self.connect() as db:
+        with commit_scope(), self.lock, self.connect() as db:
             db.execute("INSERT OR IGNORE INTO records VALUES(?,?,?,?,0,?)",
                        (record_id, "mesh", record["created"], revision, json.dumps(record)))
             db.executemany("INSERT OR IGNORE INTO files VALUES(?,?,?,?)",
@@ -160,6 +160,9 @@ class Library:
         keys = ("id", "kind", "name", "created", "workflow", "variants", "formats", "warnings",
                 "file_count", "bytes", "preview_id")
         result = {k: record.get(k) for k in keys}
+        if record["kind"] == "mesh":
+            from .workflows.rigging.sessions import source_files
+            result["rig_sources"] = source_files(record)
         if record["kind"] == "video": result["filename"] = record["filename"]
         if detail: result["catalog"] = record["catalog"]
         return result

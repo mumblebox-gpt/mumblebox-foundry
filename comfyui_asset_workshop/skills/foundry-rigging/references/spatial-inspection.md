@@ -1,0 +1,9 @@
+# Spatial inspection in Foundry
+
+Frame the whole part before zooming in. Use front plus side or oblique views of the same run, source hash and rig revision. Camera matrices describe the captured image. Source positions use the GLB's Y-up frame, which may differ from the viewer's normalized display frame. Calibrate scale before describing displacement as a real-world distance.
+
+A depth probe returns ordered surface hits. An open, nested or overlapping surface, an uncertain topology flag or a truncated hit list makes the interior ambiguous. Confirm a suggested span from another view before proposing an anatomical pivot. For a narrow hand, visually confirm the hits belong to the same finger. A surface marker identifies its primitive, triangle and barycentric position. Keep its location separate from the pivot and only anchor hits from the matching source mesh.
+
+Use the bone frame for a local-axis move and source coordinates for the resulting command. Check the reported X/Y/Z basis, especially after rotation or mirroring. Preserve connected endpoints and pinned attachments. Compare any planned movement on the other side against its actual surface before applying symmetry.
+
+In Review, test the intended bone and compare nearby regions using the current binding. Findings name the frame, sample coverage, comparison region and movement threshold. Read the skin weight sample for unweighted vertices, invalid weights, weight sums and the largest number of influencing bones. Movement excludes unusable vertices, and the sample describes the mounted skin. Dominant-weight groups can help locate leakage and still miss anatomy that was already weighted to the wrong bone. Pair the measurements with visual review. See [rigging judgment](rigging-judgment.md) for placement and [MCP workflow](mcp-workflow.md) for tool calls.

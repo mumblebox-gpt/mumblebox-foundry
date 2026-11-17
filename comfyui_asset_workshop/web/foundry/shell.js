@@ -22,7 +22,7 @@ export class FoundryShell {
         this.statusListeners=new Set();this.node=node; this.host=host; this.tab="Choose a Workflow";
         this.shadow=host.shadowRoot||host.attachShadow({mode:"open"});
         this.shadow.replaceChildren();
-        for (const file of ["theme.css","layout.css","images.css","roadmap.css","agent-setup/style.css","virtual-turntable/style.css","orbit-with-splats/style.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
+        for (const file of ["theme.css","layout.css","images.css","roadmap.css","agent-setup/style.css","virtual-turntable/style.css","orbit-with-splats/style.css","rigging/style.css"]) this.shadow.append(el("link",{rel:"stylesheet",href:new URL(file,import.meta.url).href}));
         this.root=el("div",{class:"foundry","data-theme":matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"});
         this.shadow.append(this.root);
         this.root.lang=currentLanguage();
@@ -67,6 +67,7 @@ export class FoundryShell {
             'mumblebox-foundry-orbit': data => this.openOrbitToMesh({runId:data.id}),
             'mumblebox-foundry-orbit-splats': data => this.openOrbitWithSplats({runId:data.id}),
             'mumblebox-foundry-garment': data => this.openGarmentWizard({runId:data.id}),
+            'mumblebox-foundry-rig-open': data => this.openRigWizard({id:data.id}),
             'mumblebox-foundry-guided': data => this.openGuidedWizard({runId:data.id,binding:data.request_id}),
             'mumblebox-foundry-workspace': data => this.openAgentSection(data.section),
         };
@@ -443,6 +444,37 @@ export class FoundryShell {
         } catch (error) {
             wizard?.dispose();
             if (sequence === this.sequence) this.content.replaceChildren(el('p', {role:'alert'}, sourceMessage(error.message)));
+        }
+    }
+
+    async openRigWizard(options={}) {
+        if(!options.id&&!options.resume&&!options.recordId&&!options.exportId){
+            await this.open('History');
+            this.message(msg('rigging.from_history'));
+            return;
+        }
+        this.viewDispose?.();this.viewDispose=null;
+        this.message('');
+        const sequence=this.sequence=(this.sequence||0)+1;
+        this.tab='Choose a Workflow';
+        const {RigWizard}=await import('./rigging/controller.js');
+        if(sequence!==this.sequence)return;
+        const wizard=new RigWizard(this,options);
+        this.rigWizard=wizard;
+        this.viewDispose=()=>{wizard.dispose();if(this.rigWizard===wizard)this.rigWizard=null;};
+        this.retryView=()=>this.openRigWizard(options);
+        this.content.replaceChildren(wizard.root);
+        this.content.scrollTop=0;
+        [...this.nav.children].forEach((node,index)=>{node.setAttribute('aria-selected',String(index===0));node.tabIndex=index===0?0:-1;});
+        bindAttribute(this.content,'aria-label',msg('rigging.title'));
+        try{await wizard.init();}
+        catch(error){
+            if(sequence!==this.sequence)return;
+            const offline=error.code==='FOUNDRY_OFFLINE';
+            this.viewDispose();
+            this.viewDispose=null;
+            replaceContent(this.content,el('p',{role:'alert','data-connection-error':String(offline)},
+                sourceMessage(error.message,error.i18n)));
         }
     }
 

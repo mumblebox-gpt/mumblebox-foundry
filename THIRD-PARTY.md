@@ -19,6 +19,8 @@ The texture worker downloads DINOv3 from https://huggingface.co/visualbruno/dino
 
 Powered by Hi3D 1.0 - http://hi3d.ai/
 
+Optional local rig fitting uses the [SkinTokens checkpoints](https://huggingface.co/VAST-AI/SkinTokens/tree/79736cad0fd84de384d5eede659b4ebd24effe33) and [HugoTed’s SkinTokens integration](https://github.com/HugoTed/SkinTokens-ComfyUI/tree/fee91dc18b97ee7d6f9a81ec863be321bdd5c123), both MIT. The pinned worker also reads two Apache-2.0 Qwen3 configuration files. Foundry downloads the verified worker source and model files on first use. Asset packages identify the selected binding and applicable notices.
+
 Hair creation uses FengLairh/ComfyUI-HairDeck at `ad27f3433169ca6e1f61396525d30d6ca55428be`, which vendors HairDeck at `5f1c18a32e622cb8d1acec2a856694fb43375c1a`. Both declare Apache-2.0 for their own code. SAM 3 and DINOv3 retain their Meta licenses; BiRefNet and pyrender retain their own notices. The node pack keeps these notices. Hair asset packages copy them and record the actual selected model hashes. Model weights are not bundled. First workflow use acquires pinned public model files with SHA-256 verification; rigged output additionally prepares Blender 4.2.23 and VRM Add-on 4.10.2 in a separate tool directory. A static GLB is not a rig; VRM 0.x carries skinning and spring groups. HairDeck does not produce Alembic strand Groom.
 
 Workflow illustrations and the approved product logo were generated/edited for this project. Their role and provenance are described in `comfyui_asset_workshop/web/assets/foundry/ARTWORK.md`. They are interface artwork, not examples proving model output quality.
